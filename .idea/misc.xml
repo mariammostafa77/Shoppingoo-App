@@ -3,31 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/elshamey/OneDrive/Desktop/MCommerce-App/app/src/main/res/layout/activity_main.xml" value="0.25" />
-        <entry key="..\:/Users/elshamey/OneDrive/Desktop/MCommerce-App/app/src/main/res/layout/ads_layout.xml" value="0.25" />
-        <entry key="..\:/Users/elshamey/OneDrive/Desktop/MCommerce-App/app/src/main/res/layout/brand_layout.xml" value="0.25" />
-        <entry key="..\:/Users/elshamey/OneDrive/Desktop/MCommerce-App/app/src/main/res/layout/brands_layout.xml" value="1.2" />
-        <entry key="..\:/Users/elshamey/OneDrive/Desktop/MCommerce-App/app/src/main/res/layout/fragment_home.xml" value="0.2359375" />
-      </map>
-    </option>
-  </component>
-  <component name="DesignSurface">
-    <option name="filePathToZoomLevelMap">
-      <map>
-        <entry key="..\:/ITI/GraduationProject/app/src/main/res/drawable/circle_image.xml" value="0.1640625" />
-        <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/activity_main.xml" value="0.1" />
-        <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/favourite_item.xml" value="0.22" />
-        <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/fragment_me_with_login.xml" value="0.12771739130434784" />
-        <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/fragment_me_without_login.xml" value="0.18" />
-        <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/order_item.xml" value="0.25" />
-      </map>
-    </option>
-  </component>
-  <component name="DesignSurface">
-    <option name="filePathToZoomLevelMap">
-      <map>
         <entry key="..\:/Work Files/My projects/ITI Projects/Graduation Project/app/src/main/res/layout/category_cell.xml" value="0.27291666666666664" />
         <entry key="..\:/Work Files/My projects/ITI Projects/Graduation Project/app/src/main/res/layout/fragment_category.xml" value="0.16203703703703703" />
+        <entry key="..\:/Work Files/My projects/ITI Projects/Graduation Project/app/src/main/res/layout/fragment_me_with_login.xml" value="0.14270833333333333" />
+        <entry key="..\:/Work Files/My projects/ITI Projects/Graduation Project/app/src/main/res/layout/fragment_me_without_login.xml" value="0.14270833333333333" />
       </map>
     </option>
   </component>
