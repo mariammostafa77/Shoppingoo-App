@@ -5,4 +5,15 @@
     <string name="brandname">Brand Name</string>
     <string name="brand">Brands</string>
     <string name="home">Home</string>
+
+    <!-- Mariam -->
+    <string name="Me">Me</string>
+    <string name="Welcome">Welcome</string>
+    <string name="Others">Others</string>
+    <string name="More">more</string>
+    <string name="pleaseLogin">Please Login</string>
+    <string name="Login">Login</string>
+    <string name="WishList">WishList</string>
+    <string name="Price">Price: </string>
+    <string name="CreatedBy">Created by: </string>
 </resources>

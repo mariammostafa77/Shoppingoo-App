@@ -11,6 +11,18 @@
       </map>
     </option>
   </component>
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/ITI/GraduationProject/app/src/main/res/drawable/circle_image.xml" value="0.1640625" />
+        <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/favourite_item.xml" value="0.22" />
+        <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/fragment_me_with_login.xml" value="0.12771739130434784" />
+        <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/fragment_me_without_login.xml" value="0.18" />
+        <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/order_item.xml" value="0.25" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
