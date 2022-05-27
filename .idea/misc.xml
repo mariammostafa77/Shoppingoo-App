@@ -23,6 +23,14 @@
       </map>
     </option>
   </component>
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Work Files/My projects/ITI Projects/Graduation Project/app/src/main/res/layout/category_cell.xml" value="0.27291666666666664" />
+        <entry key="..\:/Work Files/My projects/ITI Projects/Graduation Project/app/src/main/res/layout/fragment_category.xml" value="0.16203703703703703" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>

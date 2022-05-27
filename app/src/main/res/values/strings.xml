@@ -16,4 +16,14 @@
     <string name="WishList">WishList</string>
     <string name="Price">Price: </string>
     <string name="CreatedBy">Created by: </string>
+
+    <!-- Asmaa   -->
+    <string name="product_name">Product Name</string>
+    <string name="category">Category</string>
+    <string name="women">Women</string>
+    <string name="men">Men</string>
+    <string name="kids">Kids</string>
+    <string name="sales">Sales</string>
+
+
 </resources>
