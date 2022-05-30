@@ -24,6 +24,33 @@
     <string name="men">Men</string>
     <string name="kids">Kids</string>
     <string name="sales">Sales</string>
+    <string name="settings">Settings</string>
+    <string name="email">Email</string>
+    <string name="language">Language</string>
+    <string name="english">English</string>
+    <string name="arabic">Arabic</string>
+    <string name="currency">Currency</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="eur_t_u20ac">EUR \t€</string>
+    <string name="usd_t">USD \t$</string>
+    <string name="egp">EGP</string>
+    <string name="your_profile">Your Profile</string>
+    <string name="edit">Edit</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="phone">Phone</string>
+    <string name="address">Address</string>
+    <string name="alex">Alex</string>
+    <string name="add_new_address">Add New Address</string>
+    <string name="country">Country: </string>
+    <string name="city">City:</string>
+    <string name="area">Area:</string>
+    <string name="phone1">phone:</string>
+    <string name="save_address">Save Address</string>
+    <string name="shpping_cart">Shpping Cart</string>
+    <string name="sub_total">Sub Total:</string>
+    <string name="sub_total_value">0.0 $</string>
+    <string name="proceed_to_checkout">Proceed To Checkout</string>
 
 
 </resources>
