@@ -5,6 +5,17 @@
     <string name="brandname">Brand Name</string>
     <string name="brand">Brands</string>
     <string name="home">Home</string>
+    <string name="details">Details</string>
+    <string name="number">0</string>
+    <string name="favourite">Favourite</string>
+    <string name="AddToCard">Add To Card</string>
+    <string name="registration">Registration</string>
+    <string name="register">Register</string>
+    <string name="forgetPass">Forget Password?</string>
+    <string name="login">Login</string>
+    <string name="createNewAcc">If you do not have an account pleas click here</string>
+    <string name="haveAcc">If you  already have an account pleas click here</string>
+    <string name="search">Search</string>
 
     <!-- Mariam -->
     <string name="Me">Me</string>
