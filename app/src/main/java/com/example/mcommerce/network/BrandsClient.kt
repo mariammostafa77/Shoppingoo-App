@@ -3,12 +3,12 @@ package com.example.mcommerce.network
 import com.example.mcommerce.home.model.BrandsModel
 import com.example.mcommerce.model.AllProductsModel
 
-class BrandsClient : RemoteSourceInterface {
+class BrandsClient private constructor(var id:String) : RemoteSourceInterface {
 
     companion object {
         private var instance: BrandsClient? = null
-        fun getInstance(): BrandsClient {
-            return instance ?: BrandsClient()
+        fun getInstance(id:String): BrandsClient {
+            return instance ?: BrandsClient(id)
         }
     }
 
@@ -21,6 +21,12 @@ class BrandsClient : RemoteSourceInterface {
     override suspend fun getAllBrands(): BrandsModel {
         val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
         val response = service?.getBrands()
+        return response!!
+    }
+
+    override suspend fun getBrandProducts(): AllProductsModel {
+        val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
+        val response = service?.getBrandProducts(id)
         return response!!
     }
 
