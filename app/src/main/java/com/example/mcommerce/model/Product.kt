@@ -1,5 +1,7 @@
 package com.example.mcommerce.model
 
+import java.io.Serializable
+
 data class Product(
     val admin_graphql_api_id: String,
     val body_html: String,
@@ -19,4 +21,4 @@ data class Product(
     val updated_at: String,
     val variants: List<Variant>,
     val vendor: String
-)
+):Serializable

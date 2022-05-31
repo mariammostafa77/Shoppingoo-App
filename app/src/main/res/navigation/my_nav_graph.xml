@@ -19,8 +19,21 @@
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.example.mcommerce.SearchFragment"
+        android:name="com.example.mcommerce.search.view.MysearchFragment"
         android:label="fragment_search"
+        tools:layout="@layout/fragment_mysearch" >
+        <action
+            android:id="@+id/action_searchFragment_to_productFragment2"
+            app:destination="@id/productFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/productFragment"
+        android:name="com.example.mcommerce.ProductInfo.view.ProductInfoFragment"
+        android:label="fragment_product_info"
+        tools:layout="@layout/fragment_product_info" />
+
+
         tools:layout="@layout/fragment_search" />
     <fragment
         android:id="@+id/brandProductsFragment"
