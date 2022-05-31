@@ -28,10 +28,8 @@ class BrandAdapter : RecyclerView.Adapter<BrandAdapter.ViewHolder>(){
     }
     inner class ViewHolder(private val itemView: View): RecyclerView.ViewHolder(itemView){
         val brandImg: ImageView = itemView.findViewById(R.id.brandImg)
-        val tvBrandName: TextView = itemView.findViewById(R.id.tvBrandName)
         fun bind(data: SmartCollection){
             Log.i("TAG","from onBind ${allBrands[position]}")
-            tvBrandName.text=allBrands[position].title
             Glide.with(context).load(allBrands[position].image.src).into(brandImg)
         }
 

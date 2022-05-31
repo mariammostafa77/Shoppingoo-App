@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="160dp"
+    android:layout_width="120dp"
     android:layout_height="wrap_content"
     android:layout_marginStart="10dp"
     android:layout_marginTop="15dp"
@@ -18,28 +18,15 @@
 
         <ImageView
             android:id="@+id/brandImg"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="100dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/adidas"
-            android:contentDescription="@string/brand" />
-
-        <TextView
-            android:id="@+id/tvBrandName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="10dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:text="@string/brandname"
-            android:textSize="16sp"
-            android:textStyle="bold"
+            android:contentDescription="@string/brand"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/brandImg" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/adidas" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
