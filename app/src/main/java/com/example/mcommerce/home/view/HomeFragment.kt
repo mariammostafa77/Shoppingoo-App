@@ -71,7 +71,7 @@ class HomeFragment : Fragment() {
         bradsRecyclerView.setAdapter(brandAdapter)
         homeFactory = HomeViewModelFactory(
             Repository.getInstance(
-                BrandsClient.getInstance(),
+                BrandsClient.getInstance(""),
                 requireContext()))
         homeViewModel = ViewModelProvider(this, homeFactory).get(HomeViewModel::class.java)
 
