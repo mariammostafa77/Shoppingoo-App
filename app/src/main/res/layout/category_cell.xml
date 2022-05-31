@@ -9,6 +9,7 @@
     android:layout_marginHorizontal="8dp"
     app:cardCornerRadius="10dp"
     android:id="@+id/cardViewCategoryItem"
+
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,37 +19,37 @@
 
         <ImageView
             android:id="@+id/productImage"
-            android:layout_width="140dp"
-            android:layout_height="200dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:src="@drawable/x"
+            android:src="@drawable/ic_shopping_cart"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/productName"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="16dp"
             android:text="@string/product_name"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toStartOf="@+id/favIconImage"
+            android:textSize="10sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/productImage" />
 
         <ImageView
             android:id="@+id/favIconImage"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginEnd="4dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
             android:src="@drawable/ic_favorite"
-            app:layout_constraintBottom_toBottomOf="@+id/productName"
+            app:layout_constraintStart_toEndOf="@id/productName"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/productName" />
+            app:layout_constraintTop_toBottomOf="@id/productImage" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

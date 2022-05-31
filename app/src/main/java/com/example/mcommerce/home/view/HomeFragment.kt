@@ -8,8 +8,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.coroutineScope
+import androidx.navigation.NavController
+import androidx.navigation.NavDirections
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
@@ -76,6 +80,12 @@ class HomeFragment : Fragment() {
             Log.i("TAG","hello from home fragment ${homeViewModel.onlineBrands.value?.get(1)?.id}")
             homeViewModel.onlineBrands.value?.let { brandAdapter.setUpdatedData(it,requireContext()) }
 
+        }
+        var img: ImageView =view.findViewById(R.id.searchImg);
+        img.setOnClickListener {
+            var navController: NavController = Navigation.findNavController(it)
+            var navDir: NavDirections =HomeFragmentDirections.actionHomeFragmentToSearchFragment()
+            navController.navigate(navDir)
         }
 
 
