@@ -23,9 +23,20 @@
         <entry key="..\:/Users/elshamey/OneDrive/Desktop/MCommerce-App/app/src/main/res/layout/fragment_register.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/elshamey/OneDrive/Desktop/MCommerce-App/app/src/main/res/layout/fragment_search.xml" value="0.25416666666666665" />
         <entry key="..\:/Work Files/My projects/ITI Projects/Graduation Project/app/src/main/res/layout/category_cell.xml" value="0.27291666666666664" />
+        <entry key="..\:/Work Files/My projects/ITI Projects/Graduation Project/app/src/main/res/layout/fragment_add_new_address.xml" value="0.16510416666666666" />
         <entry key="..\:/Work Files/My projects/ITI Projects/Graduation Project/app/src/main/res/layout/fragment_category.xml" value="0.16203703703703703" />
+        <entry key="..\:/Work Files/My projects/ITI Projects/Graduation Project/app/src/main/res/layout/fragment_favourite.xml" value="0.16510416666666666" />
+        <entry key="..\:/Work Files/My projects/ITI Projects/Graduation Project/app/src/main/res/layout/fragment_home.xml" value="0.16510416666666666" />
         <entry key="..\:/Work Files/My projects/ITI Projects/Graduation Project/app/src/main/res/layout/fragment_me_with_login.xml" value="0.14270833333333333" />
         <entry key="..\:/Work Files/My projects/ITI Projects/Graduation Project/app/src/main/res/layout/fragment_me_without_login.xml" value="0.14270833333333333" />
+        <entry key="..\:/Work Files/My projects/ITI Projects/Graduation Project/app/src/main/res/layout/fragment_my_login.xml" value="0.16510416666666666" />
+        <entry key="..\:/Work Files/My projects/ITI Projects/Graduation Project/app/src/main/res/layout/fragment_product_info.xml" value="0.16510416666666666" />
+        <entry key="..\:/Work Files/My projects/ITI Projects/Graduation Project/app/src/main/res/layout/fragment_register.xml" value="0.16510416666666666" />
+        <entry key="..\:/Work Files/My projects/ITI Projects/Graduation Project/app/src/main/res/layout/fragment_search.xml" value="0.16510416666666666" />
+        <entry key="..\:/Work Files/My projects/ITI Projects/Graduation Project/app/src/main/res/layout/fragment_shopping_cart.xml" value="0.16510416666666666" />
+        <entry key="..\:/Work Files/My projects/ITI Projects/Graduation Project/app/src/main/res/layout/fragment_user_addresses.xml" value="0.16510416666666666" />
+        <entry key="..\:/Work Files/My projects/ITI Projects/Graduation Project/app/src/main/res/layout/image_container.xml" value="0.18489583333333334" />
+        <entry key="..\:/Work Files/My projects/ITI Projects/Graduation Project/app/src/main/res/layout/shopping_cart_item.xml" value="0.19427083333333334" />
       </map>
     </option>
   </component>
