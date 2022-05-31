@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ProductInfoFragment">
+    tools:context=".ProductInfo.view.ProductInfoFragment"
+    android:background="@color/white">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/detailsBarID"
@@ -69,7 +70,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:textStyle="bold"
-        android:textSize="20dp"/>
+        android:textSize="12dp"/>
 
     <Button
         android:id="@+id/btnMins"

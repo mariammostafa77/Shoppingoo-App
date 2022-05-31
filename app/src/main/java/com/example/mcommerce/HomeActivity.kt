@@ -6,10 +6,13 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph
 import androidx.navigation.fragment.NavHostFragment
+import com.example.mcommerce.ProductInfo.view.Communicator
+import com.example.mcommerce.ProductInfo.view.ProductInfoFragment
 import com.example.mcommerce.home.view.HomeFragment
+import com.example.mcommerce.model.Product
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : AppCompatActivity(),Communicator {
     private val homeFragment = HomeFragment()
     private val meWithLogin = MeWithLogin()
     private val categoryFragment = CategoryFragment()
@@ -50,6 +53,8 @@ class HomeActivity : AppCompatActivity() {
                 else -> false
             }
         }
+        //from search to productInfo
+
 
     }
 
@@ -61,4 +66,15 @@ class HomeActivity : AppCompatActivity() {
             transaction.commit()
         }
     }
+
+    override fun passProductData(product: Product) {
+       val bundle=Bundle()
+        bundle.putSerializable("productInfo",product)
+        val transaction=this.supportFragmentManager.beginTransaction()
+        val productInfoFragment=ProductInfoFragment()
+        productInfoFragment.arguments=bundle
+        transaction.replace(R.id.frameLayout,productInfoFragment).commit()
+    }
+
+
 }
