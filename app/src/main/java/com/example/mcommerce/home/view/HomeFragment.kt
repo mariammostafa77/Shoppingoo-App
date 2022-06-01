@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
@@ -67,11 +68,11 @@ class HomeFragment : Fragment() {
 
         bradsRecyclerView=view.findViewById(R.id.bradsRecyclerView)
         couponsRecyclerView = view.findViewById(R.id.couponsRecyclerView)
-        linearLayoutManager=LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
+        //linearLayoutManager=LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
        // linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL)
         couponsLayoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
 
-        bradsRecyclerView.setLayoutManager(linearLayoutManager)
+        //bradsRecyclerView.setLayoutManager(linearLayoutManager)
         couponsRecyclerView.setLayoutManager(couponsLayoutManager)
         brandAdapter= BrandAdapter()
         discountCodeAdapter = DiscountCodeAdapter()
@@ -81,7 +82,7 @@ class HomeFragment : Fragment() {
                 AppClient.getInstance(),
                 requireContext()))
         couponsRecyclerView.setAdapter(discountCodeAdapter)
-        homeFactory = HomeViewModelFactory( Repository.getInstance(AppClient.getInstance(""), requireContext()))
+        homeFactory = HomeViewModelFactory( Repository.getInstance(AppClient.getInstance(), requireContext()))
         homeViewModel = ViewModelProvider(this, homeFactory).get(HomeViewModel::class.java)
         ////
 
