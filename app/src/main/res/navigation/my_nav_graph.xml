@@ -21,6 +21,7 @@
         android:id="@+id/searchFragment"
         android:name="com.example.mcommerce.search.view.MysearchFragment"
         android:label="fragment_search"
+<<<<<<<<< Temporary merge branch 1
         tools:layout="@layout/fragment_mysearch" >
         <action
             android:id="@+id/action_searchFragment_to_productFragment2"
@@ -35,6 +36,9 @@
 
 
         tools:layout="@layout/fragment_search" />
+
+
+    tools:layout="@layout/fragment_search" />
     <fragment
         android:id="@+id/brandProductsFragment"
         android:name="com.example.mcommerce.brandProducts.view.BrandProductsFragment"

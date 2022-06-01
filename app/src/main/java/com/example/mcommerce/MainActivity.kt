@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
 
         CoroutineScope(Dispatchers.Main).launch {
             delay(5000L)
-            startActivity(Intent(this@MainActivity,HomeActivity::class.java))
+            startActivity(Intent(this@MainActivity,AuthActivity::class.java))
             finish()
         }
 

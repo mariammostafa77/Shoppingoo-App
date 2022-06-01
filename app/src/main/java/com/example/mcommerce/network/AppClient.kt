@@ -2,6 +2,7 @@ package com.example.mcommerce.network
 
 import com.example.mcommerce.home.model.BrandsModel
 import com.example.mcommerce.model.AllProductsModel
+import com.example.mcommerce.model.ProductDetails
 
 class AppClient : RemoteSourceInterface {
 
@@ -27,6 +28,12 @@ class AppClient : RemoteSourceInterface {
     override suspend fun getBrandProducts(id:String): AllProductsModel {
         val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
         val response = service?.getBrandProducts(id)
+        return response!!
+    }
+
+    override suspend fun getSpecificProduct(id:String): ProductDetails {
+        val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
+        val response = service?.getSpecificProduct(id)
         return response!!
     }
 

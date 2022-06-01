@@ -30,6 +30,13 @@ class Repository private constructor(var remoteSource: RemoteSourceInterface, va
 
     override suspend fun getBrandProducts(id:String): AllProductsModel {
         return remoteSource.getBrandProducts(id)
+    override suspend fun getBrandProducts(id:String): AllProductsModel {
+        return remoteSource.getBrandProducts(id)
+    }
+
+    override suspend fun getSpecificProduct(id:String): ProductDetails {
+
+        return remoteSource.getSpecificProduct(id)
     }
 
 }
