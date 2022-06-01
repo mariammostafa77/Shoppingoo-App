@@ -31,6 +31,9 @@ class HomeFragment : Fragment() {
 
     lateinit var bradsRecyclerView: RecyclerView
     lateinit var brandAdapter: BrandAdapter
+    lateinit var discountCodeAdapter: DiscountCodeAdapter
+    lateinit var couponsRecyclerView: RecyclerView
+
     lateinit var homeFactory: HomeViewModelFactory
     lateinit var homeViewModel: HomeViewModel
     lateinit var communicator: Communicator
@@ -39,6 +42,7 @@ class HomeFragment : Fragment() {
     private lateinit var handler : Handler
     private lateinit var adsImageList:ArrayList<Int>
     private lateinit var adsAdapter: AdsAdapter
+    lateinit var couponsLayoutManager: LinearLayoutManager
 
     private val runnable = Runnable {
         adsViewPager.currentItem = adsViewPager.currentItem + 1
@@ -62,14 +66,31 @@ class HomeFragment : Fragment() {
         })
 
         bradsRecyclerView=view.findViewById(R.id.bradsRecyclerView)
+        couponsRecyclerView = view.findViewById(R.id.couponsRecyclerView)
+        linearLayoutManager=LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
+       // linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL)
+        couponsLayoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
+
+        bradsRecyclerView.setLayoutManager(linearLayoutManager)
+        couponsRecyclerView.setLayoutManager(couponsLayoutManager)
         brandAdapter= BrandAdapter()
+        discountCodeAdapter = DiscountCodeAdapter()
         bradsRecyclerView.setAdapter(brandAdapter)
         homeFactory = HomeViewModelFactory(
             Repository.getInstance(
                 AppClient.getInstance(),
                 requireContext()))
+        couponsRecyclerView.setAdapter(discountCodeAdapter)
+        homeFactory = HomeViewModelFactory( Repository.getInstance(AppClient.getInstance(""), requireContext()))
         homeViewModel = ViewModelProvider(this, homeFactory).get(HomeViewModel::class.java)
+        ////
 
+        homeViewModel.onlineDiscountCodes.observe(viewLifecycleOwner) { coupons ->
+            Log.i("getCodes","Get Discount Codes \n ${coupons.get(0)}")
+            if (coupons != null){
+                discountCodeAdapter.setCouponsData(requireContext(), coupons)
+            }
+        }
         homeViewModel.getAllProducts()
         homeViewModel.onlineBrands.observe(viewLifecycleOwner) { brands ->
             Log.i("TAG","hello from home fragment ${homeViewModel.onlineBrands.value?.get(1)?.id}")
