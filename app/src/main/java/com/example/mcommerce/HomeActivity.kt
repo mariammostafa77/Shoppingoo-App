@@ -82,9 +82,10 @@ class HomeActivity : AppCompatActivity(),Communicator {
         transaction.replace(R.id.frameLayout,productInfoFragment).commit()
     }
 
-    override fun goToProductInfo(id: String) {
+    override fun goToProductInfo(id: String,brandName:String) {
         val bundle=Bundle()
         bundle.putString("brandId",id)
+        bundle.putString("brandTitle",brandName)
         brandProductsFragment.arguments=bundle
         replaceFragment(brandProductsFragment)
     }

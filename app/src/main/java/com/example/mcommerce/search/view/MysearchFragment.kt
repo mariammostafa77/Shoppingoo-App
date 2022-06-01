@@ -27,7 +27,7 @@ lateinit var productSearchRecyclerview:RecyclerView
 lateinit var productSearchAdapter: SearchAdapter
 lateinit var searchFactor:SearchViewModelFactory
 lateinit var searchViewModel:SearchViewModel
-lateinit var linearLayoutManager:LinearLayoutManager
+//lateinit var linearLayoutManager:LinearLayoutManager
 lateinit var edtSearch:EditText
 lateinit var btnSearch:Button
     lateinit var allProductArrayList:ArrayList<Product>
@@ -50,8 +50,8 @@ lateinit var btnSearch:Button
         filterProductArrayList= ArrayList<Product>()
 
         productSearchRecyclerview=view.findViewById(R.id.searhProductRecyclerView)
-        linearLayoutManager= LinearLayoutManager(requireContext())
-        productSearchRecyclerview.setLayoutManager(linearLayoutManager)
+        //linearLayoutManager= LinearLayoutManager(requireContext())
+        //productSearchRecyclerview.setLayoutManager(linearLayoutManager)
         productSearchAdapter= SearchAdapter(communicator,filterProductArrayList,requireContext())
         productSearchRecyclerview.setAdapter(productSearchAdapter)
         searchFactor= SearchViewModelFactory(

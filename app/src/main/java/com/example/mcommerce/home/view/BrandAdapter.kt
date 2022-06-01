@@ -1,26 +1,37 @@
 package com.example.mcommerce.home.view
 
+import android.R.attr
 import android.content.Context
-import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.view.ViewGroup.LayoutParams
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat
-import androidx.navigation.NavController
-import androidx.navigation.Navigation.findNavController
+import androidx.core.view.marginStart
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.R
 import com.example.mcommerce.home.model.SmartCollection
-import com.example.mcommerce.home.viewModel.HomeViewModel
-import com.example.mcommerce.model.Product
-import kotlin.math.log
+import android.R.attr.right
+
+import android.R.attr.left
+import android.widget.LinearLayout
+
+
+
+
+
+
+
+
+
+
 
 class BrandAdapter() : RecyclerView.Adapter<BrandAdapter.ViewHolder>(){
     var allBrands:List<SmartCollection> = ArrayList<SmartCollection>()
@@ -39,9 +50,8 @@ class BrandAdapter() : RecyclerView.Adapter<BrandAdapter.ViewHolder>(){
         fun bind(data: SmartCollection){
             Log.i("TAG","from onBind ${allBrands[position]}")
             Glide.with(context).load(allBrands[position].image.src).into(brandImg)
-
             brandCard.setOnClickListener(View.OnClickListener {
-                communicator.goToProductInfo(allBrands[position].id.toString())
+                communicator.goToProductInfo(allBrands[position].id.toString(),allBrands[position].title.toString())
 
 
             })
@@ -50,6 +60,12 @@ class BrandAdapter() : RecyclerView.Adapter<BrandAdapter.ViewHolder>(){
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.brand_layout,parent,false);
+        val layoutParams = LinearLayout.LayoutParams(
+            (parent.height * 0.5).toInt(),
+            LinearLayout.LayoutParams.MATCH_PARENT
+        )
+        layoutParams.setMargins(20, 10, 10, 0)
+        view.layoutParams = layoutParams
         return ViewHolder(view)
     }
     override fun getItemCount(): Int {

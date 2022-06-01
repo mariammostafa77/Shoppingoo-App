@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mcommerce.R
@@ -21,6 +22,7 @@ class BrandProductsFragment : Fragment() {
     lateinit var brandProductsAdapter: BrandProductsAdapter
     lateinit var brandProductsFactory: BrandProductsViewFactory
     lateinit var brandProductsViewModel: BrandProductsViewModel
+    lateinit var tvBrandNameBarTitle:TextView
     var id:String=""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,13 +37,14 @@ class BrandProductsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         var view:View=inflater.inflate(R.layout.fragment_brand_products, container, false)
-
-       if(arguments != null){
-           id= arguments?.getString("brandId").toString()
-       }
-
+        tvBrandNameBarTitle=view.findViewById(R.id.tvBrandNameBarTitle)
         bradProductsRecyclerView=view.findViewById(R.id.brandProductsRecycleView)
         brandProductsAdapter= BrandProductsAdapter()
+       if(arguments != null){
+           id= arguments?.getString("brandId").toString()
+           tvBrandNameBarTitle.text=arguments?.getString("brandTitle").toString()
+       }
+
         bradProductsRecyclerView.setAdapter(brandProductsAdapter)
         Log.i("TAG","From bradProductsRecyclerView ${id}")
         brandProductsFactory = BrandProductsViewFactory(

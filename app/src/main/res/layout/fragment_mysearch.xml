@@ -10,33 +10,36 @@
 
     <EditText
         android:id="@+id/edtSearch"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
+        android:drawableLeft="@drawable/ic_search"
         android:ems="10"
+        android:hint="@string/search"
         android:inputType="textPersonName"
         android:minHeight="48dp"
-        android:hint="@string/search"
-        android:drawableLeft="@drawable/ic_search"
+        app:layout_constraintEnd_toStartOf="@+id/btnSearch"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btnSearch"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/ic_search"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/my_search_24"
         android:text="Button"
-        app:layout_constraintStart_toEndOf="@+id/edtSearch"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@+id/edtSearch"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/edtSearch" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
         android:id="@+id/searhProductRecyclerView"
+        android:layout_width="0dp"
         android:layout_height="0dp"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="2"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

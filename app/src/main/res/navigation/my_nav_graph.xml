@@ -16,6 +16,9 @@
         <action
             android:id="@+id/getProducts"
             app:destination="@+id/brandProductsFragment"/>
+        <action
+            android:id="@+id/goToCart"
+            app:destination="@+id/cartFragment"/>
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -44,6 +47,10 @@
             android:name="brandId"
             android:defaultValue="0"
             app:argType="string"/>
+        <argument
+            android:name="brandTitle"
+            android:defaultValue="Brand"
+            app:argType="string"/>
 
     </fragment>
 
@@ -59,6 +66,12 @@
         android:name="com.example.mcommerce.MeWithoutLoginFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_me_without_login" >
+    </fragment>
+    <fragment
+        android:id="@+id/cartFragment"
+        android:name="com.example.mcommerce.ShoppingCartFragment"
+        android:label="fragment_cart"
+        tools:layout="@layout/shopping_cart_item" >
     </fragment>
 
 </navigation>

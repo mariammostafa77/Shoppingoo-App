@@ -27,13 +27,13 @@ import com.example.mcommerce.network.AppClient
 import kotlinx.coroutines.*
 import kotlin.math.abs
 
-
 class HomeFragment : Fragment() {
 
     lateinit var bradsRecyclerView: RecyclerView
     lateinit var brandAdapter: BrandAdapter
     lateinit var discountCodeAdapter: DiscountCodeAdapter
     lateinit var couponsRecyclerView: RecyclerView
+    lateinit var cardImg:ImageView
 
     lateinit var homeFactory: HomeViewModelFactory
     lateinit var homeViewModel: HomeViewModel
@@ -55,7 +55,6 @@ class HomeFragment : Fragment() {
     ): View? {
         var view:View = inflater.inflate(R.layout.fragment_home, container, false)
         communicator = activity as Communicator
-
         initAdsViewPager(view)
         setUpTransformer()
         adsViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
@@ -68,11 +67,8 @@ class HomeFragment : Fragment() {
 
         bradsRecyclerView=view.findViewById(R.id.bradsRecyclerView)
         couponsRecyclerView = view.findViewById(R.id.couponsRecyclerView)
-        //linearLayoutManager=LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
-       // linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL)
+        cardImg=view.findViewById(R.id.cardImg)
         couponsLayoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
-
-        //bradsRecyclerView.setLayoutManager(linearLayoutManager)
         couponsRecyclerView.setLayoutManager(couponsLayoutManager)
         brandAdapter= BrandAdapter()
         discountCodeAdapter = DiscountCodeAdapter()
@@ -85,6 +81,12 @@ class HomeFragment : Fragment() {
         homeFactory = HomeViewModelFactory( Repository.getInstance(AppClient.getInstance(), requireContext()))
         homeViewModel = ViewModelProvider(this, homeFactory).get(HomeViewModel::class.java)
         ////
+
+        cardImg.setOnClickListener {
+            var navController: NavController = Navigation.findNavController(it)
+            var navDir: NavDirections =HomeFragmentDirections.goToCart()
+            navController.navigate(navDir)
+        }
 
         homeViewModel.onlineDiscountCodes.observe(viewLifecycleOwner) { coupons ->
             Log.i("getCodes","Get Discount Codes \n ${coupons.get(0)}")

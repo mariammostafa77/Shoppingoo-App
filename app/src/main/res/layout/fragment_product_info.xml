@@ -78,13 +78,13 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
 
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detailsRecyclerView"
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
-        android:textSize="25dp"
         android:background="@drawable/mins_24"
-        />
+        android:textSize="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/detailsRecyclerView"
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <TextView
         android:id="@+id/txtQuantity"
@@ -103,13 +103,12 @@
         android:id="@+id/btnAdd"
         android:layout_width="48dp"
         android:layout_height="48dp"
-
-        app:layout_constraintEnd_toStartOf="@+id/txtQuantity"
-        app:layout_constraintTop_toBottomOf="@+id/detailsRecyclerView"
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
         android:background="@drawable/ic_add"
-        />
+        app:layout_constraintEnd_toStartOf="@+id/txtQuantity"
+        app:layout_constraintTop_toBottomOf="@+id/detailsRecyclerView"
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <TextView
         android:id="@+id/textView17"
