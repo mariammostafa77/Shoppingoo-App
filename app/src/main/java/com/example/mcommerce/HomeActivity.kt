@@ -2,12 +2,16 @@ package com.example.mcommerce
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
 import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.ProductInfo.view.ProductInfoFragment
+import com.example.mcommerce.brandProducts.view.BrandProductsFragment
+import com.example.mcommerce.categories.view.CategoryFragment
 import com.example.mcommerce.home.view.HomeFragment
 import com.example.mcommerce.model.Product
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -16,8 +20,10 @@ class HomeActivity : AppCompatActivity(),Communicator {
     private val homeFragment = HomeFragment()
     private val meWithLogin = MeWithLogin()
     private val categoryFragment = CategoryFragment()
+    private  val brandProductsFragment = BrandProductsFragment()
     private val meWithoutLoginFragment = MeWithoutLoginFragment()
     lateinit var bottomNavigationView: BottomNavigationView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,6 +80,13 @@ class HomeActivity : AppCompatActivity(),Communicator {
         val productInfoFragment=ProductInfoFragment()
         productInfoFragment.arguments=bundle
         transaction.replace(R.id.frameLayout,productInfoFragment).commit()
+    }
+
+    override fun goToProductInfo(id: String) {
+        val bundle=Bundle()
+        bundle.putString("brandId",id)
+        brandProductsFragment.arguments=bundle
+        replaceFragment(brandProductsFragment)
     }
 
 

@@ -10,22 +10,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.coroutineScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.Navigation
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
+import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.R
-import com.example.mcommerce.network.RetrofitHelper
-import com.example.mcommerce.network.ServiceApi
 import com.example.mcommerce.home.viewModel.HomeViewModel
 import com.example.mcommerce.home.viewModel.HomeViewModelFactory
 import com.example.mcommerce.model.Repository
-import com.example.mcommerce.network.BrandsClient
+import com.example.mcommerce.network.AppClient
 import kotlinx.coroutines.*
 import kotlin.math.abs
 
@@ -36,7 +33,7 @@ class HomeFragment : Fragment() {
     lateinit var brandAdapter: BrandAdapter
     lateinit var homeFactory: HomeViewModelFactory
     lateinit var homeViewModel: HomeViewModel
-    lateinit var linearLayoutManager: LinearLayoutManager
+    lateinit var communicator: Communicator
 
     private lateinit var  adsViewPager: ViewPager2
     private lateinit var handler : Handler
@@ -52,6 +49,7 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View? {
         var view:View = inflater.inflate(R.layout.fragment_home, container, false)
+        communicator = activity as Communicator
 
         initAdsViewPager(view)
         setUpTransformer()
@@ -64,22 +62,18 @@ class HomeFragment : Fragment() {
         })
 
         bradsRecyclerView=view.findViewById(R.id.bradsRecyclerView)
-        linearLayoutManager=LinearLayoutManager(requireContext())
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL)
-        bradsRecyclerView.setLayoutManager(linearLayoutManager)
         brandAdapter= BrandAdapter()
         bradsRecyclerView.setAdapter(brandAdapter)
         homeFactory = HomeViewModelFactory(
             Repository.getInstance(
-                BrandsClient.getInstance(""),
+                AppClient.getInstance(),
                 requireContext()))
         homeViewModel = ViewModelProvider(this, homeFactory).get(HomeViewModel::class.java)
 
         homeViewModel.getAllProducts()
-        homeViewModel.onlineBrands.observe(viewLifecycleOwner) { movies ->
+        homeViewModel.onlineBrands.observe(viewLifecycleOwner) { brands ->
             Log.i("TAG","hello from home fragment ${homeViewModel.onlineBrands.value?.get(1)?.id}")
-            homeViewModel.onlineBrands.value?.let { brandAdapter.setUpdatedData(it,requireContext()) }
-
+            homeViewModel.onlineBrands.value?.let { brandAdapter.setUpdatedData(it,requireContext(),communicator) }
         }
         var img: ImageView =view.findViewById(R.id.searchImg);
         img.setOnClickListener {

@@ -26,6 +26,7 @@ import retrofit2.http.Query
     @GET("collections/"+"{id}"+"/products.json")
     suspend fun getBrandProducts(@Path("id") id: String?): AllProductsModel
 
+
+
 }
 
-//https://madalex20220.myshopify.com/admin/api/2022-04/collections/273053319307/products.json

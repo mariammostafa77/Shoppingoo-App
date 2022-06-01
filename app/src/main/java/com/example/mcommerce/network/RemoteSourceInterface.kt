@@ -5,5 +5,5 @@ import com.example.mcommerce.model.AllProductsModel
 interface RemoteSourceInterface {
     suspend fun getAllProducts():AllProductsModel
     suspend fun getAllBrands():BrandsModel
-    suspend fun getBrandProducts():AllProductsModel
+    suspend fun getBrandProducts(id:String):AllProductsModel
 }
