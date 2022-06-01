@@ -62,6 +62,7 @@
     <string name="sub_total">Sub Total:</string>
     <string name="sub_total_value">0.0 $</string>
     <string name="proceed_to_checkout">Proceed To Checkout</string>
+    <string name="no_available_coupons">No Available Coupons</string>
 
 
 </resources>

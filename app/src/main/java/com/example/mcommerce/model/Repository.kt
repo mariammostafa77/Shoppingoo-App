@@ -37,4 +37,8 @@ class Repository private constructor(var remoteSource: RemoteSourceInterface, va
         return remoteSource.getSpecificProduct(id)
     }
 
+    override suspend fun getDiscountsCods(): DiscountCodesModel {
+        return  remoteSource.getDiscountCodes()
+    }
+
 }

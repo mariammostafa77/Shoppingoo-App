@@ -3,8 +3,10 @@ package com.example.mcommerce.network
 import com.example.mcommerce.home.model.BrandsModel
 import com.example.mcommerce.model.AllProductsModel
 import com.example.mcommerce.model.ProductDetails
+import com.example.mcommerce.model.DiscountCodesModel
 
 class AppClient : RemoteSourceInterface {
+class AppClient private constructor(var id:String) : RemoteSourceInterface {
 
     companion object {
         private var instance: AppClient? = null
@@ -34,6 +36,12 @@ class AppClient : RemoteSourceInterface {
     override suspend fun getSpecificProduct(id:String): ProductDetails {
         val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
         val response = service?.getSpecificProduct(id)
+        return response!!
+    }
+
+    override suspend fun getDiscountCodes(): DiscountCodesModel {
+        val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
+        val response = service?.getDiscountCodesFromNetwork()
         return response!!
     }
 
