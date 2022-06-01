@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/my_nav_graph"
     app:startDestination="@id/homeFragment">
@@ -21,21 +21,6 @@
         android:id="@+id/searchFragment"
         android:name="com.example.mcommerce.search.view.MysearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
-    <fragment
-        android:id="@+id/brandProductsFragment"
-        android:name="com.example.mcommerce.brandProducts.view.BrandProductsFragment"
-        android:label="fragment_brandProducts"
-        tools:layout="@layout/fragment_brand_products">
-        <argument
-            android:name="brandId"
-            android:defaultValue="0"
-            app:argType="string"/>
-
-    </fragment>
-
-
-
         tools:layout="@layout/fragment_mysearch" >
         <action
             android:id="@+id/action_searchFragment_to_productFragment2"
@@ -47,6 +32,20 @@
         android:name="com.example.mcommerce.ProductInfo.view.ProductInfoFragment"
         android:label="fragment_product_info"
         tools:layout="@layout/fragment_product_info" />
+
+
+    tools:layout="@layout/fragment_search" />
+    <fragment
+        android:id="@+id/brandProductsFragment"
+        android:name="com.example.mcommerce.brandProducts.view.BrandProductsFragment"
+        android:label="fragment_brandProducts"
+        tools:layout="@layout/fragment_brand_products">
+        <argument
+            android:name="brandId"
+            android:defaultValue="0"
+            app:argType="string"/>
+
+    </fragment>
 
 
 </navigation>

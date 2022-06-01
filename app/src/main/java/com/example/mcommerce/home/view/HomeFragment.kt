@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.coroutineScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.Navigation
@@ -20,12 +19,10 @@ import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.example.mcommerce.R
-import com.example.mcommerce.network.RetrofitHelper
-import com.example.mcommerce.network.ServiceApi
 import com.example.mcommerce.home.viewModel.HomeViewModel
 import com.example.mcommerce.home.viewModel.HomeViewModelFactory
 import com.example.mcommerce.model.Repository
-import com.example.mcommerce.network.BrandsClient
+import com.example.mcommerce.network.AppClient
 import kotlinx.coroutines.*
 import kotlin.math.abs
 
@@ -71,7 +68,7 @@ class HomeFragment : Fragment() {
         bradsRecyclerView.setAdapter(brandAdapter)
         homeFactory = HomeViewModelFactory(
             Repository.getInstance(
-                BrandsClient.getInstance(""),
+                AppClient.getInstance(),
                 requireContext()))
         homeViewModel = ViewModelProvider(this, homeFactory).get(HomeViewModel::class.java)
 

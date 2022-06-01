@@ -18,10 +18,6 @@ class HomeViewModel(repo: RepositoryInterface) : ViewModel(){
     private val iRepo: RepositoryInterface = repo
     private val allBrands = MutableLiveData<List<SmartCollection>>()
 
-    init {
-        getAllProducts()
-    }
-
     //Expose returned online Data
     val onlineBrands: LiveData<List<SmartCollection>> = allBrands
     fun getAllProducts(){

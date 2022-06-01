@@ -12,11 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mcommerce.R
 import com.example.mcommerce.brandProducts.viewModel.BrandProductsViewFactory
 import com.example.mcommerce.brandProducts.viewModel.BrandProductsViewModel
-import com.example.mcommerce.home.view.BrandAdapter
-import com.example.mcommerce.home.viewModel.HomeViewModel
-import com.example.mcommerce.home.viewModel.HomeViewModelFactory
 import com.example.mcommerce.model.Repository
-import com.example.mcommerce.network.BrandsClient
+import com.example.mcommerce.network.AppClient
 
 class BrandProductsFragment : Fragment() {
 
@@ -55,11 +52,11 @@ class BrandProductsFragment : Fragment() {
         Log.i("TAG","From bradProductsRecyclerView ${id}")
         brandProductsFactory = BrandProductsViewFactory(
             Repository.getInstance(
-                BrandsClient.getInstance(id),
+                AppClient.getInstance(),
                 requireContext()))
         brandProductsViewModel = ViewModelProvider(this, brandProductsFactory).get(BrandProductsViewModel::class.java)
 
-        brandProductsViewModel.getAllProducts()
+        brandProductsViewModel.getAllProducts(id)
         brandProductsViewModel.onlineBrandProducts.observe(viewLifecycleOwner) { movies ->
             Log.i("TAG","hello from home fragment ${brandProductsViewModel.onlineBrandProducts.value?.get(1)?.id}")
             brandProductsViewModel.onlineBrandProducts.value?.let { brandProductsAdapter.setUpdatedData(it,requireContext()) }

@@ -1,29 +1,30 @@
-package com.example.mcommerce.brandProducts.viewModel
+package com.example.mcommerce.ProductInfo.viewModel
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.mcommerce.home.model.SmartCollection
 import com.example.mcommerce.model.Product
 import com.example.mcommerce.model.RepositoryInterface
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class BrandProductsViewModel(repo: RepositoryInterface) : ViewModel(){
+class ProductInfoViewModel (repo: RepositoryInterface) : ViewModel(){
     private val iRepo: RepositoryInterface = repo
-    private val allBrandProducts = MutableLiveData<List<Product>>()
+    private val specificProducts = MutableLiveData<Product>()
+
 
     //Expose returned online Data
-    val onlineBrandProducts: LiveData<List<Product>> = allBrandProducts
-    fun getAllProducts(id:String){
+    val onlineSpecificProducts: LiveData<Product> = specificProducts
+    fun getSpecificProducts(id:String){
         viewModelScope.launch{
-            val result = iRepo.getBrandProducts(id)
+            val result = iRepo.getSpecificProduct(id)
+            //Log.i("pro","from model"+result)
             withContext(Dispatchers.Main){
-                Log.i("TAG","from home model view ${result.products[1].id}")
-                allBrandProducts.postValue(result.products)
+
+                specificProducts.postValue(result.product)
 
             }
         }
