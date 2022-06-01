@@ -8,6 +8,8 @@ import com.example.mcommerce.model.DiscountCodesModel
 class AppClient : RemoteSourceInterface {
 class AppClient private constructor(var id:String) : RemoteSourceInterface {
 
+class AppClient : RemoteSourceInterface {
+
     companion object {
         private var instance: AppClient? = null
         fun getInstance(): AppClient {

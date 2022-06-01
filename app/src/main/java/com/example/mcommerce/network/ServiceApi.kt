@@ -44,6 +44,7 @@ import retrofit2.http.Query
       @GET("price_rules/1089622311051/discount_codes.json")
       suspend fun getDiscountCodesFromNetwork(): DiscountCodesModel
 
+
+
 }
 
-//https://madalex20220.myshopify.com/admin/api/2022-04/collections/273053319307/products.json

@@ -34,7 +34,7 @@
         tools:layout="@layout/fragment_product_info" />
 
 
-    tools:layout="@layout/fragment_search" />
+
     <fragment
         android:id="@+id/brandProductsFragment"
         android:name="com.example.mcommerce.brandProducts.view.BrandProductsFragment"
@@ -47,7 +47,18 @@
 
     </fragment>
 
->>>>>>>>> Temporary merge branch 2
+    <fragment
+        android:id="@+id/categoryFragment"
+        android:name="com.example.mcommerce.categories.view.CategoryFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_category" >
+    </fragment>
 
+    <fragment
+        android:id="@+id/meFragment"
+        android:name="com.example.mcommerce.MeWithoutLoginFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_me_without_login" >
+    </fragment>
 
 </navigation>

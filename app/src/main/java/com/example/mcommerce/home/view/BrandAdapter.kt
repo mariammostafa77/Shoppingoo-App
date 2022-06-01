@@ -15,19 +15,22 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.R
 import com.example.mcommerce.home.model.SmartCollection
 import com.example.mcommerce.home.viewModel.HomeViewModel
 import com.example.mcommerce.model.Product
 import kotlin.math.log
 
-class BrandAdapter : RecyclerView.Adapter<BrandAdapter.ViewHolder>(){
+class BrandAdapter() : RecyclerView.Adapter<BrandAdapter.ViewHolder>(){
     var allBrands:List<SmartCollection> = ArrayList<SmartCollection>()
     lateinit var context: Context
+    lateinit var communicator: Communicator
 
-    fun setUpdatedData(allBrands:List<SmartCollection>, context: Context){
+    fun setUpdatedData(allBrands:List<SmartCollection>, context: Context,communicator: Communicator){
         this.allBrands=allBrands
         this.context=context
+        this.communicator=communicator
         notifyDataSetChanged()
     }
     inner class ViewHolder(private val itemView: View): RecyclerView.ViewHolder(itemView){
@@ -38,11 +41,8 @@ class BrandAdapter : RecyclerView.Adapter<BrandAdapter.ViewHolder>(){
             Glide.with(context).load(allBrands[position].image.src).into(brandImg)
 
             brandCard.setOnClickListener(View.OnClickListener {
-                val navController = findNavController(itemView)
-                val bundle = Bundle()
-                bundle.putString("brandId", allBrands[position].id.toString())
-                Log.i("TAG","from brandAdapter ${allBrands[position].id.toString()}")
-                navController.navigate(R.id.getProducts, bundle)
+                communicator.goToProductInfo(allBrands[position].id.toString())
+
 
             })
         }
