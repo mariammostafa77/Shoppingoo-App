@@ -1,7 +1,6 @@
 package com.example.mcommerce.search.view
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +14,7 @@ import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.R
 import com.example.mcommerce.model.Product
 import com.example.mcommerce.model.Repository
-import com.example.mcommerce.network.BrandsClient
+import com.example.mcommerce.network.AppClient
 import com.example.mcommerce.search.viewModel.SearchViewModel
 import com.example.mcommerce.search.viewModel.SearchViewModelFactory
 import java.util.*
@@ -56,7 +55,7 @@ lateinit var btnSearch:Button
         productSearchAdapter= SearchAdapter(communicator,filterProductArrayList,requireContext())
         productSearchRecyclerview.setAdapter(productSearchAdapter)
         searchFactor= SearchViewModelFactory(
-            Repository.getInstance(BrandsClient.getInstance(),requireContext())
+            Repository.getInstance(AppClient.getInstance(""),requireContext())
         )
         searchViewModel=ViewModelProvider(this,searchFactor).get(SearchViewModel::class.java)
         searchViewModel.getAllProducts()

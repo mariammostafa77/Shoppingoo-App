@@ -2,13 +2,14 @@ package com.example.mcommerce.network
 
 import com.example.mcommerce.home.model.BrandsModel
 import com.example.mcommerce.model.AllProductsModel
+import com.example.mcommerce.model.DiscountCodesModel
 
-class BrandsClient private constructor(var id:String) : RemoteSourceInterface {
+class AppClient private constructor(var id:String) : RemoteSourceInterface {
 
     companion object {
-        private var instance: BrandsClient? = null
-        fun getInstance(id:String): BrandsClient {
-            return instance ?: BrandsClient(id)
+        private var instance: AppClient? = null
+        fun getInstance(id:String): AppClient {
+            return instance ?: AppClient(id)
         }
     }
 
@@ -27,6 +28,12 @@ class BrandsClient private constructor(var id:String) : RemoteSourceInterface {
     override suspend fun getBrandProducts(): AllProductsModel {
         val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
         val response = service?.getBrandProducts(id)
+        return response!!
+    }
+
+    override suspend fun getDiscountCodes(): DiscountCodesModel {
+        val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
+        val response = service?.getDiscountCodesFromNetwork()
         return response!!
     }
 

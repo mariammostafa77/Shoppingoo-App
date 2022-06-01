@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.coroutineScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.Navigation
@@ -20,12 +19,10 @@ import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.example.mcommerce.R
-import com.example.mcommerce.network.RetrofitHelper
-import com.example.mcommerce.network.ServiceApi
 import com.example.mcommerce.home.viewModel.HomeViewModel
 import com.example.mcommerce.home.viewModel.HomeViewModelFactory
 import com.example.mcommerce.model.Repository
-import com.example.mcommerce.network.BrandsClient
+import com.example.mcommerce.network.AppClient
 import kotlinx.coroutines.*
 import kotlin.math.abs
 
@@ -34,6 +31,9 @@ class HomeFragment : Fragment() {
 
     lateinit var bradsRecyclerView: RecyclerView
     lateinit var brandAdapter: BrandAdapter
+    lateinit var discountCodeAdapter: DiscountCodeAdapter
+    lateinit var couponsRecyclerView: RecyclerView
+
     lateinit var homeFactory: HomeViewModelFactory
     lateinit var homeViewModel: HomeViewModel
     lateinit var linearLayoutManager: LinearLayoutManager
@@ -42,6 +42,7 @@ class HomeFragment : Fragment() {
     private lateinit var handler : Handler
     private lateinit var adsImageList:ArrayList<Int>
     private lateinit var adsAdapter: AdsAdapter
+    lateinit var couponsLayoutManager: LinearLayoutManager
 
     private val runnable = Runnable {
         adsViewPager.currentItem = adsViewPager.currentItem + 1
@@ -64,17 +65,27 @@ class HomeFragment : Fragment() {
         })
 
         bradsRecyclerView=view.findViewById(R.id.bradsRecyclerView)
-        linearLayoutManager=LinearLayoutManager(requireContext())
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL)
-        bradsRecyclerView.setLayoutManager(linearLayoutManager)
-        brandAdapter= BrandAdapter()
-        bradsRecyclerView.setAdapter(brandAdapter)
-        homeFactory = HomeViewModelFactory(
-            Repository.getInstance(
-                BrandsClient.getInstance(""),
-                requireContext()))
-        homeViewModel = ViewModelProvider(this, homeFactory).get(HomeViewModel::class.java)
+        couponsRecyclerView = view.findViewById(R.id.couponsRecyclerView)
+        linearLayoutManager=LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
+       // linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL)
+        couponsLayoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
 
+        bradsRecyclerView.setLayoutManager(linearLayoutManager)
+        couponsRecyclerView.setLayoutManager(couponsLayoutManager)
+        brandAdapter= BrandAdapter()
+        discountCodeAdapter = DiscountCodeAdapter()
+        bradsRecyclerView.setAdapter(brandAdapter)
+        couponsRecyclerView.setAdapter(discountCodeAdapter)
+        homeFactory = HomeViewModelFactory( Repository.getInstance(AppClient.getInstance(""), requireContext()))
+        homeViewModel = ViewModelProvider(this, homeFactory).get(HomeViewModel::class.java)
+        ////
+
+        homeViewModel.onlineDiscountCodes.observe(viewLifecycleOwner) { coupons ->
+            Log.i("getCodes","Get Discount Codes \n ${coupons.get(0)}")
+            if (coupons != null){
+                discountCodeAdapter.setCouponsData(requireContext(), coupons)
+            }
+        }
         homeViewModel.getAllProducts()
         homeViewModel.onlineBrands.observe(viewLifecycleOwner) { movies ->
             Log.i("TAG","hello from home fragment ${homeViewModel.onlineBrands.value?.get(1)?.id}")
@@ -87,8 +98,6 @@ class HomeFragment : Fragment() {
             var navDir: NavDirections =HomeFragmentDirections.actionHomeFragmentToSearchFragment()
             navController.navigate(navDir)
         }
-
-
         return view
     }
 

@@ -6,4 +6,5 @@ interface RepositoryInterface {
     suspend fun getAllProducts():AllProductsModel
     suspend fun getAllBrands():BrandsModel
     suspend fun getBrandProducts():AllProductsModel
+    suspend fun getDiscountsCods() : DiscountCodesModel
 }
