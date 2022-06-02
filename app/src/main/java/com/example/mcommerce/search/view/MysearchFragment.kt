@@ -1,6 +1,7 @@
 package com.example.mcommerce.search.view
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,8 +11,11 @@ import android.widget.EditText
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mcommerce.HomeActivity.Companion.mySearchFlag
 import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.R
+import com.example.mcommerce.categories.viewModel.CategoriesViewFactory
+import com.example.mcommerce.categories.viewModel.CategoriesViewModel
 import com.example.mcommerce.model.Product
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
@@ -22,14 +26,17 @@ import kotlin.collections.ArrayList
 
 
 class MysearchFragment : Fragment() {
-lateinit var communicator: Communicator
-lateinit var productSearchRecyclerview:RecyclerView
-lateinit var productSearchAdapter: SearchAdapter
-lateinit var searchFactor:SearchViewModelFactory
-lateinit var searchViewModel:SearchViewModel
+    lateinit var communicator: Communicator
+    lateinit var productSearchRecyclerview:RecyclerView
+    lateinit var productSearchAdapter: SearchAdapter
+    lateinit var searchFactor:SearchViewModelFactory
+    lateinit var searchViewModel:SearchViewModel
+    lateinit var categoriesProductFactory: CategoriesViewFactory
+    lateinit var categoriesProductViewModel: CategoriesViewModel
 //lateinit var linearLayoutManager:LinearLayoutManager
-lateinit var edtSearch:EditText
-lateinit var btnSearch:Button
+    lateinit var edtSearch:EditText
+    lateinit var btnSearch:Button
+    lateinit var output:String
     lateinit var allProductArrayList:ArrayList<Product>
     lateinit var filterProductArrayList:ArrayList<Product>
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,27 +61,49 @@ lateinit var btnSearch:Button
         //productSearchRecyclerview.setLayoutManager(linearLayoutManager)
         productSearchAdapter= SearchAdapter(communicator,filterProductArrayList,requireContext())
         productSearchRecyclerview.setAdapter(productSearchAdapter)
-        searchFactor= SearchViewModelFactory(
-            Repository.getInstance(AppClient.getInstance(),requireContext())
-        )
-        searchViewModel=ViewModelProvider(this,searchFactor).get(SearchViewModel::class.java)
-        searchViewModel.getAllProducts()
 
-        searchViewModel.onlineProducts.observe(viewLifecycleOwner){product ->
+            searchFactor = SearchViewModelFactory(
+                Repository.getInstance(AppClient.getInstance(), requireContext())
+            )
+           allProductArrayList = ArrayList<Product>()
+            searchViewModel = ViewModelProvider(this, searchFactor).get(SearchViewModel::class.java)
+            searchViewModel.getAllProducts()
+            if(mySearchFlag==1) {
+                searchViewModel.onlineProducts.observe(viewLifecycleOwner) { product ->
 
-            allProductArrayList= ArrayList<Product>()
-            if(allProductArrayList.size==0){
-            allProductArrayList.addAll(product)
+
+                    if (allProductArrayList.size == 0) {
+                        allProductArrayList.addAll(product)
+                    }
+
+                    // Log.i("filterPro","from product ${allProductArrayList.toString()}")
+
                 }
 
-           // Log.i("filterPro","from product ${allProductArrayList.toString()}")
+            }
+        else if(mySearchFlag==2){
+
+                output= arguments?.getString("catID").toString()
+                categoriesProductFactory = CategoriesViewFactory(
+                    Repository.getInstance(
+                        AppClient.getInstance(),
+                        requireContext()))
+                categoriesProductViewModel = ViewModelProvider(this, categoriesProductFactory).get(CategoriesViewModel::class.java)
+                categoriesProductViewModel.getAllProducts(output)
+                categoriesProductViewModel.onlineProducts.observe(viewLifecycleOwner) {
+
+                    Log.i("TAG","Count  ${it.size}")
+
+                    allProductArrayList.addAll(it)
+
+                }
+
 
         }
-
         btnSearch.setOnClickListener{
             filterProductArrayList.clear()
             var productName:String=edtSearch.text.toString().toLowerCase(Locale.getDefault())
-           // allProductArrayList.forEach{
+
 
                 if(productName.isNotEmpty()){
 
@@ -91,7 +120,7 @@ lateinit var btnSearch:Button
                 }
 
 
-          //  }
+
             productSearchAdapter.setProductData(filterProductArrayList,requireContext(),activity as Communicator)
 
 

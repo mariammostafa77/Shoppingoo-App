@@ -14,6 +14,7 @@ import com.example.mcommerce.brandProducts.view.BrandProductsFragment
 import com.example.mcommerce.categories.view.CategoryFragment
 import com.example.mcommerce.home.view.HomeFragment
 import com.example.mcommerce.model.Product
+import com.example.mcommerce.search.view.MysearchFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class HomeActivity : AppCompatActivity(),Communicator {
@@ -23,7 +24,10 @@ class HomeActivity : AppCompatActivity(),Communicator {
     private  val brandProductsFragment = BrandProductsFragment()
     private val meWithoutLoginFragment = MeWithoutLoginFragment()
     lateinit var bottomNavigationView: BottomNavigationView
-
+    companion object{
+        var mySearchFlag:Int=0
+        var myDetailsFlag:Int=0
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,6 +92,16 @@ class HomeActivity : AppCompatActivity(),Communicator {
         bundle.putString("brandTitle",brandName)
         brandProductsFragment.arguments=bundle
         replaceFragment(brandProductsFragment)
+    }
+
+
+    override fun goToSearchWithID(id: String) {
+        val bundle=Bundle()
+        bundle.putString("catID",id)
+        val transaction=this.supportFragmentManager.beginTransaction()
+        val searchFragment=MysearchFragment()
+        searchFragment.arguments=bundle
+        transaction.replace(R.id.frameLayout,searchFragment).commit()
     }
 
 

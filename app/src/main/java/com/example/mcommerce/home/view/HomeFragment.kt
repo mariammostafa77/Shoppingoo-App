@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
+
+import com.example.mcommerce.HomeActivity.Companion.mySearchFlag
 import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.R
 import com.example.mcommerce.home.viewModel.HomeViewModel
@@ -26,6 +28,11 @@ import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
 import kotlinx.coroutines.*
 import kotlin.math.abs
+
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
+import com.example.mcommerce.search.view.MysearchFragment
+
 
 class HomeFragment : Fragment() {
 
@@ -101,9 +108,16 @@ class HomeFragment : Fragment() {
         }
         var img: ImageView =view.findViewById(R.id.searchImg);
         img.setOnClickListener {
-            var navController: NavController = Navigation.findNavController(it)
-            var navDir: NavDirections =HomeFragmentDirections.actionHomeFragmentToSearchFragment()
-            navController.navigate(navDir)
+            mySearchFlag=1
+//            var navController: NavController = Navigation.findNavController(it)
+//            var navDir: NavDirections =HomeFragmentDirections.actionHomeFragmentToSearchFragment()
+//            navController.navigate(navDir)
+            val fragment: Fragment = MysearchFragment()
+            val fragmentManager: FragmentManager = activity!!.supportFragmentManager
+            val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
+            fragmentTransaction.replace(com.example.mcommerce.R.id.frameLayout, fragment)
+            fragmentTransaction.addToBackStack(null)
+            fragmentTransaction.commit()
         }
 
 

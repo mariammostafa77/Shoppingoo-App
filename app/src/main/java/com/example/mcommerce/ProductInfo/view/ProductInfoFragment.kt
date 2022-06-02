@@ -10,9 +10,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mcommerce.HomeActivity.Companion.mySearchFlag
 import com.example.mcommerce.ProductInfo.viewModel.ProductInfoViewModel
 import com.example.mcommerce.ProductInfo.viewModel.ProductInfoViewModelFactory
 import com.example.mcommerce.R
+import com.example.mcommerce.categories.view.CategoryFragment
 import com.example.mcommerce.model.Image
 import com.example.mcommerce.model.Product
 import com.example.mcommerce.model.Repository
@@ -114,9 +116,16 @@ class ProductInfoFragment : Fragment() {
 
         }
         backImg.setOnClickListener {
-            val manager = activity!!.supportFragmentManager
-            val trans = manager.beginTransaction()
-            trans.replace(R.id.frameLayout,MysearchFragment()).commit()
+            if(mySearchFlag==1) {
+                val manager = activity!!.supportFragmentManager
+                val trans = manager.beginTransaction()
+                trans.replace(R.id.frameLayout, MysearchFragment()).commit()
+            }
+            else {
+                val manager = activity!!.supportFragmentManager
+                val trans = manager.beginTransaction()
+                trans.replace(R.id.frameLayout, CategoryFragment()).commit()
+            }
         }
 
 

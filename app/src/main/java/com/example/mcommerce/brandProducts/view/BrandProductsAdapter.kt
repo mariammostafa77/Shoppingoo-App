@@ -7,8 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.R
 import com.example.mcommerce.home.model.SmartCollection
 import com.example.mcommerce.model.Product
@@ -16,19 +18,25 @@ import com.example.mcommerce.model.Product
 class BrandProductsAdapter : RecyclerView.Adapter<BrandProductsAdapter.ViewHolder>(){
     var allBrands:List<Product> = ArrayList<Product>()
     lateinit var context: Context
+    lateinit var comminucator:Communicator
 
-    fun setUpdatedData(allBrands:List<Product>, context: Context){
+    fun setUpdatedData(allBrands:List<Product>, context: Context,comminucator:Communicator){
         this.allBrands=allBrands
         this.context=context
+        this.comminucator=comminucator
         notifyDataSetChanged()
     }
     inner class ViewHolder(private val itemView: View): RecyclerView.ViewHolder(itemView){
         var productName:TextView=itemView.findViewById(R.id.productName)
         val productImage: ImageView = itemView.findViewById(R.id.productImage)
+        var catCardView:CardView=itemView.findViewById(R.id.cardViewCategoryItem)
         fun bind(data: Product){
             Log.i("TAG","from onBind ${allBrands[position]}")
             productName.text=allBrands[position].title
             Glide.with(context).load(allBrands[position].image.src).into(productImage)
+            catCardView.setOnClickListener {
+                comminucator.passProductData(allBrands[position])
+            }
 
         }
 
