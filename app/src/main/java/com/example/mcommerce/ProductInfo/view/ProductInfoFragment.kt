@@ -39,6 +39,8 @@ class ProductInfoFragment : Fragment() {
     lateinit var productCount:TextView
     lateinit var ratBar:RatingBar
     lateinit var backImg:ImageView
+    lateinit var sizeSpinner:Spinner
+    lateinit var colorSpinner:Spinner
     var count:Int=0
     var totalRate=0
     var price:String="EGP"
@@ -66,6 +68,8 @@ class ProductInfoFragment : Fragment() {
         productDesc=view.findViewById(R.id.txtProductDetails)
         ratBar=view.findViewById(R.id.productRatingBar)
         backImg=view.findViewById(R.id.backImg)
+        sizeSpinner=view.findViewById(R.id.sizeSpinner)
+        colorSpinner=view.findViewById(R.id.colorSpiner)
         //start
         Log.i("pro",output.id.toString())
         specificProductsFactory = ProductInfoViewModelFactory(
@@ -83,9 +87,9 @@ class ProductInfoFragment : Fragment() {
                 productName.text=product.title
                 productDesc.text=product.body_html
 
-                productPrice.text=""
+                productPrice.text=product.variants[0].price + "EGP"
                 for (i in 0..product.variants.size-1) {
-                    productPrice.append(product.variants[i].price+price+"/")
+
                     totalRate+=product.variants[i].inventory_quantity
                 }
 
@@ -94,6 +98,14 @@ class ProductInfoFragment : Fragment() {
                 ratBar.rating=totalRate.toFloat()/4
 
             }
+            //spinner of color and size
+            var sizeAdapter:ArrayAdapter<String> = ArrayAdapter<String>(requireContext(),android.R.layout.simple_spinner_item,product.options[0].values)
+            var colorAdapter:ArrayAdapter<String> = ArrayAdapter<String>(requireContext(),android.R.layout.simple_spinner_item,product.options[1].values)
+            sizeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            colorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            sizeSpinner.adapter=sizeAdapter
+            colorSpinner.adapter=colorAdapter
+
 
 
         }
@@ -127,6 +139,8 @@ class ProductInfoFragment : Fragment() {
                 trans.replace(R.id.frameLayout, CategoryFragment()).commit()
             }
         }
+
+
 
 
 
