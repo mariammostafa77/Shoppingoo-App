@@ -13,6 +13,8 @@ import com.example.mcommerce.ProductInfo.view.ProductInfoFragment
 import com.example.mcommerce.brandProducts.view.BrandProductsFragment
 import com.example.mcommerce.categories.view.CategoryFragment
 import com.example.mcommerce.home.view.HomeFragment
+import com.example.mcommerce.me.view.MeWithLogin
+import com.example.mcommerce.me.view.MeWithoutLoginFragment
 import com.example.mcommerce.model.Product
 import com.example.mcommerce.search.view.MysearchFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView

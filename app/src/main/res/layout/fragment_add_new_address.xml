@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".AddNewAddressFragment">
+    android:background="@color/white"
+    tools:context=".me.view.setting.AddNewAddressFragment">
 
     <ImageView
         android:id="@+id/chooseLocationImg"

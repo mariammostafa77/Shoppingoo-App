@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".UserAddressesFragment">
+    android:background="@color/white"
+    tools:context=".me.view.setting.UserAddressesFragment">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/AddressBar"
         android:layout_width="match_parent"
@@ -64,7 +65,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintWidth_percent="0.7" />
+        app:layout_constraintWidth_percent="0.85" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
