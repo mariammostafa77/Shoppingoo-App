@@ -19,13 +19,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/mapPin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:src="@drawable/ic_baseline_pin_d48"/>
-
     <androidx.appcompat.widget.SearchView
         android:id="@+id/map_search_bar"
         android:layout_width="match_parent"
@@ -38,9 +31,4 @@
         android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
         app:layout_constraintWidth_percent="0.9" />
-
-
-
-
-
 </RelativeLayout>

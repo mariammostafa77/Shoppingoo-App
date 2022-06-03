@@ -158,20 +158,38 @@
         app:layout_constraintTop_toBottomOf="@+id/userAddressCard"
         style="@style/Base.CardView">
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/language_fixed_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
             <TextView
                 android:id="@+id/txtLanguageText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="8dp"
                 android:text="@string/language"
                 android:textColor="@color/headers_color"
                 android:textSize="22sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <ImageButton
+                android:id="@+id/language_arrow_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
+                android:minHeight="48dp"
+                android:src="@drawable/ic_arrow_right_24"
+                app:layout_constraintEnd_toEndOf="@id/language_fixed_layout"
+                app:layout_constraintTop_toTopOf="@id/language_fixed_layout"
+                tools:ignore="SpeakableTextPresentCheck" />
+           <!--
             <RadioGroup
                 android:id="@+id/radioGroupLanguagesOptions"
                 android:layout_width="0dp"
@@ -202,6 +220,7 @@
                     android:textColor="@drawable/radio_text_color"
                     android:button="@android:color/transparent" />
             </RadioGroup>
+            -->
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
@@ -278,7 +297,7 @@
         style="@style/Base.CardView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintWidth_percent="0.95"
+        app:layout_constraintWidth_percent="0.9"
         android:layout_marginVertical="12dp"
         android:padding="4dp"
         app:layout_constraintEnd_toEndOf="parent"

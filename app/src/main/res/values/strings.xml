@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">MCommerce</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="brandname">Brand Name</string>
     <string name="brand">Brands</string>
     <string name="home">Home</string>
@@ -61,20 +61,21 @@
     <string name="save_address">Save Address</string>
     <string name="shpping_cart">Shpping Cart</string>
     <string name="sub_total">Sub Total:</string>
-    <string name="sub_total_value">0.0 $</string>
+    <string name="sub_total_value" translatable="false">0.0 $</string>
     <string name="proceed_to_checkout">Proceed To Checkout</string>
     <string name="no_available_coupons">No Available Coupons</string>
-    <string name="title_activity_map">MapActivity</string>
-    <string name="map_key">AIzaSyAaA_lkRjuS3w40Z-8Lufy_fZLfllSHCUg</string>
+    <string name="title_activity_map" translatable="false">MapActivity</string>
+    <string name="map_key" translatable="false">AIzaSyAaA_lkRjuS3w40Z-8Lufy_fZLfllSHCUg</string>
 
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
+    <string name="first_fragment_label" translatable="false">First Fragment</string>
+    <string name="second_fragment_label" translatable="false">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="hello_first_fragment" translatable="false">Hello first fragment</string>
+    <string name="hello_second_fragment" translatable="false">Hello second fragment. Arg: %1$s</string>
+    <string name="zip">Zip:</string>
 
 
 </resources>

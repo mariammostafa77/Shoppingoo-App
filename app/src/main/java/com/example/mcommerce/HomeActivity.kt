@@ -1,5 +1,7 @@
 package com.example.mcommerce
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -15,6 +17,7 @@ import com.example.mcommerce.categories.view.CategoryFragment
 import com.example.mcommerce.home.view.HomeFragment
 import com.example.mcommerce.me.view.MeWithLogin
 import com.example.mcommerce.me.view.MeWithoutLoginFragment
+import com.example.mcommerce.me.view.setting.AddNewAddressFragment
 import com.example.mcommerce.model.Product
 import com.example.mcommerce.search.view.MysearchFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -29,13 +32,19 @@ class HomeActivity : AppCompatActivity(),Communicator {
     companion object{
         var mySearchFlag:Int=0
         var myDetailsFlag:Int=0
+        lateinit var sharedPreferences: SharedPreferences
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
+      //  sharedPreferences = this.getSharedPreferences("settings", Context.MODE_PRIVATE)
+      //  sharedPreferences.getString("language", "")
+
         bottomNavigationView = findViewById(R.id.buttomNav)
+        passMapDataToFragment()
        // replaceFragment(homeFragment)
 
         //getSupportFragmentManager().beginTransaction().replace(R.id.viewLayout,new HomeFragment()).commit();
@@ -95,8 +104,6 @@ class HomeActivity : AppCompatActivity(),Communicator {
         brandProductsFragment.arguments=bundle
         replaceFragment(brandProductsFragment)
     }
-
-
     override fun goToSearchWithID(id: String) {
         val bundle=Bundle()
         bundle.putString("catID",id)
@@ -104,6 +111,21 @@ class HomeActivity : AppCompatActivity(),Communicator {
         val searchFragment=MysearchFragment()
         searchFragment.arguments=bundle
         transaction.replace(R.id.frameLayout,searchFragment).commit()
+    }
+
+    private fun passMapDataToFragment() {
+        val bundle: Bundle? = intent.extras
+        if (bundle != null) {
+            val userAdress = intent.getStringArrayListExtra("userAddress")
+            Log.i("Testttt","from Home Activity ${userAdress?.get(0)}")
+
+            val mBundle = Bundle()
+            var addressFragment = AddNewAddressFragment()
+            mBundle.putStringArrayList("adress",userAdress)
+            addressFragment.arguments = mBundle
+            replaceFragment(addressFragment)
+
+        }
     }
 
 

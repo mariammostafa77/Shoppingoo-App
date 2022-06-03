@@ -1,192 +1,124 @@
 package com.example.mcommerce.me.view.setting
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.IntentSender.SendIntentException
+import android.content.pm.PackageManager
+import android.location.Geocoder
 import android.location.Location
+import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Looper
-import android.util.Log
-import android.view.View
-import android.widget.RelativeLayout
+import android.provider.Settings
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import androidx.core.app.ActivityCompat
+import com.example.mcommerce.HomeActivity
 import com.example.mcommerce.R
-import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
-import com.google.android.libraries.places.api.Places
-import com.google.android.libraries.places.api.model.AutocompletePrediction
-import com.google.android.libraries.places.api.model.AutocompleteSessionToken
-import com.google.android.libraries.places.api.model.TypeFilter
-import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
-import com.google.android.libraries.places.api.net.PlacesClient
-import java.util.ArrayList
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MapActivity : AppCompatActivity() , OnMapReadyCallback {
 
-    private lateinit var mMap: GoogleMap
-    private lateinit var mFusedLocationProviderClient: FusedLocationProviderClient
-    private lateinit var placesClient: PlacesClient
-    private lateinit var predictionList: List<AutocompletePrediction>
-
-    private lateinit var mLastKnownLocation: Location
-    private lateinit var locationCallback: LocationCallback
+  private lateinit var mMap: GoogleMap
+    private var fusedLocationProviderClient: FusedLocationProviderClient? = null
+    var currentLocation : Location?= null
+    var currentMarker: Marker? = null
+    lateinit var lastLocation : Location
 
     private lateinit var map_search_bar : SearchView
-    private lateinit var mapView: View
-
-    private val DEFAULT_ZOOM = 15f
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
 
         map_search_bar = findViewById(R.id.map_search_bar)
-        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
-        mapFragment!!.getMapAsync(this)
-        mapView = mapFragment.view!!
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-        Places.initialize(this, getString(R.string.map_key))
-        placesClient = Places.createClient(this)
-        val token: AutocompleteSessionToken = AutocompleteSessionToken.newInstance()
-
-        map_search_bar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextChange(newText: String): Boolean {
-                val predictionsRequest = FindAutocompletePredictionsRequest.builder()
-                    .setTypeFilter(TypeFilter.ADDRESS)
-                    .setSessionToken(token)
-                    .setQuery(newText)
-                    .build()
-                placesClient!!.findAutocompletePredictions(predictionsRequest)
-                    .addOnCompleteListener(
-                        OnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                val predictionsResponse = task.result
-                                if (predictionsResponse != null) {
-                                    predictionList = predictionsResponse.autocompletePredictions
-                                    val suggestionsList: MutableList<String?> = ArrayList()
-                                    for (i in predictionList!!.indices) {
-                                        val prediction = predictionList!![i]
-                                        suggestionsList.add(prediction.getFullText(null).toString())
-                                    }
-                                    /*
-                                    map_search_bar.updateLastSuggestions(suggestionsList)
-                                    if (!map_search_bar.isSuggestionsVisible()) {
-                                        map_search_bar.showSuggestionsList()
-                                    }
-                                    */
-                                }
-                            } else {
-                                Log.i("mytag", "prediction fetching task unsuccessful")
-                            }
-                        })
-
-                return true
-            }
-            override fun onQueryTextSubmit(query: String): Boolean {
-                return false
-            }
-        })
-
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+        fetchLocation()
     }
 
     @SuppressLint("MissingPermission")
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        mMap.isMyLocationEnabled = true
-        mMap.uiSettings.isMyLocationButtonEnabled = true
-
-        if (mapView != null && mapView.findViewById<View?>("1".toInt()) != null) {
-            val locationButton =
-                (mapView.findViewById<View>("1".toInt()).parent as View).findViewById<View>("2".toInt())
-            val layoutParams = locationButton.layoutParams as RelativeLayout.LayoutParams
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0)
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE)
-            layoutParams.setMargins(0, 0, 40, 180)
-        }
-        val locationRequest = LocationRequest.create()
-        locationRequest.interval = 10000
-        locationRequest.fastestInterval = 5000
-        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-
-        val builder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
-
-        val settingsClient = LocationServices.getSettingsClient(this)
-        val task: Task<LocationSettingsResponse> = settingsClient.checkLocationSettings(builder.build())
-
-        task.addOnSuccessListener(this) {
-            getDeviceLocation()
-        }
-
-        task.addOnFailureListener(this) { e ->
-            if (e is ResolvableApiException) {
-                val resolvable = e
-                try {
-                    resolvable.startResolutionForResult(this, 51)
-                } catch (e1: SendIntentException) {
-                    e1.printStackTrace()
-                }
-            }
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 51) {
-            if (resultCode == RESULT_OK) {
-                getDeviceLocation()
-            }
-        }
-    }
-
-    @SuppressLint("MissingPermission")
-    private fun getDeviceLocation() {
-        mFusedLocationProviderClient.lastLocation.addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    mLastKnownLocation = task.result
-                    if (mLastKnownLocation != null) {
-                        mMap.moveCamera(
-                            CameraUpdateFactory.newLatLngZoom(
-                                LatLng(mLastKnownLocation.latitude, mLastKnownLocation.longitude)
-                                , DEFAULT_ZOOM)
-                        )
-                    } else {
-                        val locationRequest = LocationRequest.create()
-                        locationRequest.interval = 10000
-                        locationRequest.fastestInterval = 5000
-                        locationRequest.priority =
-                            LocationRequest.PRIORITY_HIGH_ACCURACY
-                        locationCallback = object : LocationCallback() {
-                            override fun onLocationResult(locationResult: LocationResult) {
-                                super.onLocationResult(locationResult)
-                              /*  if (locationResult == null) {
-                                    return
-                                }
-                               */
-                                mLastKnownLocation = locationResult.lastLocation
-                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                        LatLng(mLastKnownLocation.latitude, mLastKnownLocation.longitude)
-                                    , DEFAULT_ZOOM) )
-                                mFusedLocationProviderClient.removeLocationUpdates(locationCallback)
-                            }
-                        }
-                        mFusedLocationProviderClient.requestLocationUpdates(locationRequest,locationCallback,
-                            Looper.myLooper()!!)
+            val latLng = LatLng(currentLocation?.latitude!!,currentLocation?.longitude!!)
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,12f))
+            mMap.setOnMapClickListener(object : GoogleMap.OnMapClickListener{
+                override fun onMapClick(p0: LatLng) {
+                    if(currentMarker != null){
+                        currentMarker?.remove()
                     }
-                } else {
-                    Toast.makeText(this, "unable to get last location", Toast.LENGTH_SHORT).show()
+                    val newLatLng = LatLng(p0.latitude,p0.longitude)
+                    drawMarker(newLatLng)
                 }
-            }
+            })
     }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        when (requestCode) {
+            1000 -> if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                fetchLocation()
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
 
+    private fun fetchLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+            != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 100)
+            return
+        }
+        val task = fusedLocationProviderClient?.lastLocation
+        task?.addOnSuccessListener {location ->
+            if(location != null){
+                this.currentLocation = location
+                val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
+                mapFragment?.getMapAsync(this)
+            }
+        }
+    }
+
+    private fun drawMarker(latLng: LatLng){
+        val address = getAddress(latLng.latitude, latLng.longitude)
+        val markerOptions=  MarkerOptions().position(latLng).title("Your Location")
+                .snippet(address?.get(0)).draggable(true)
+        mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng))
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,15f))
+        currentMarker=  mMap.addMarker(markerOptions)
+        currentMarker?.showInfoWindow()
+        if (address != null) {
+            val intent = Intent(this, HomeActivity()::class.java)
+            intent.putStringArrayListExtra("userAddress",address)
+            startActivity(intent)
+        }
+    }
+
+    private fun getAddress(lat:Double, lon: Double): ArrayList<String>?{
+        val geocoder= Geocoder(this, Locale.getDefault())
+        val address = geocoder.getFromLocation(lat,lon,1)
+        val countryName = address[0].countryName
+        val cityName =  address[0].adminArea
+        val countryCode = address[0].countryCode
+        val zipCode = address[0].postalCode
+        val userAdress : ArrayList<String> = ArrayList()
+        userAdress.add(countryName)
+        userAdress.add(cityName)
+        userAdress.add(countryCode)
+        userAdress.add(zipCode)
+        userAdress.add(lat.toString())
+        userAdress.add(lon.toString())
+        return userAdress
+    }
 
 }
