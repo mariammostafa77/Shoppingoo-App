@@ -2,6 +2,7 @@ package com.example.mcommerce
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -18,9 +19,11 @@ import com.example.mcommerce.home.view.HomeFragment
 import com.example.mcommerce.me.view.MeWithLogin
 import com.example.mcommerce.me.view.MeWithoutLoginFragment
 import com.example.mcommerce.me.view.setting.AddNewAddressFragment
+import com.example.mcommerce.me.viewmodel.SavedSetting
 import com.example.mcommerce.model.Product
 import com.example.mcommerce.search.view.MysearchFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.util.*
 
 class HomeActivity : AppCompatActivity(),Communicator {
     private val homeFragment = HomeFragment()
@@ -32,16 +35,14 @@ class HomeActivity : AppCompatActivity(),Communicator {
     companion object{
         var mySearchFlag:Int=0
         var myDetailsFlag:Int=0
-        lateinit var sharedPreferences: SharedPreferences
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-      //  sharedPreferences = this.getSharedPreferences("settings", Context.MODE_PRIVATE)
-      //  sharedPreferences.getString("language", "")
+        SavedSetting.loadLocale(this)
+      //  SavedSetting.loadCurrency(this)
 
         bottomNavigationView = findViewById(R.id.buttomNav)
         passMapDataToFragment()

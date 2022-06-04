@@ -43,8 +43,8 @@
     <string name="arabic">Arabic</string>
     <string name="currency">Currency</string>
     <string name="sign_out">Sign Out</string>
-    <string name="eur_t_u20ac">EUR \t€</string>
-    <string name="usd_t">USD \t$</string>
+    <string name="eur_t_u20ac">EUR</string>
+    <string name="usd_t">USD</string>
     <string name="egp">EGP</string>
     <string name="your_profile">Your Profile</string>
     <string name="edit">Edit</string>
@@ -76,6 +76,24 @@
     <string name="hello_first_fragment" translatable="false">Hello first fragment</string>
     <string name="hello_second_fragment" translatable="false">Hello second fragment. Arg: %1$s</string>
     <string name="zip">Zip:</string>
+    <string name="system_default">System Default.</string>
+    <string name="contact_us">Contact Us!</string>
+    <string name="welcome_to_our_application">Welcome to our application.</string>
+    <string name="contact_us_dialog_text">If you found any problem, please send us an email to improve our services.</string>
+    <string name="send_email">Send Email</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- Arrays -->
+
+    <string-array name="currency_options">
+        <item>EGP</item>
+        <item>USD \t$</item>
+        <item>EUR \t€</item>
+
+
+    </string-array>
+
+
 
 
 </resources>

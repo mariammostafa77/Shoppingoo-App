@@ -13,7 +13,7 @@
     <string name="forgetPass">نسيت الباسورد</string>
     <string name="login">تسجيل الدخول</string>
     <string name="createNewAcc">إذا لم يكن لديك حساب يرجى الضغط هنا</string>
-    <string name="haveAcc">إذا كان لديك بالفعل حساب مناشدات انقر هنا</string>
+    <string name="haveAcc">إذا كان لديك بالفعل حساب انقر هنا</string>
     <string name="search">ابحث هنا</string>
     <string name="All">الكل</string>
     <string name="Me">أنا</string>
@@ -58,7 +58,22 @@
     <string name="no_available_coupons">"لا توجد قسائم متاحة "</string>
     <string name="sub_total">المجموع الفرعي:</string>
     <string name="your_profile">"ملفك الشخصي "</string>
-    <string name="usd_t">دولار أمريكي  $</string>
-    <string name="eur_t_u20ac">"يورو € "</string>
+    <string name="usd_t">دولار أمريكي</string>
+    <string name="eur_t_u20ac">"يورو"</string>
     <string name="email">"البريد الإلكتروني "</string>
+    <string name="system_default">الافتراضي</string>
+    <string name="contact_us">تواصل معنا!</string>
+    <string name="welcome_to_our_application">أهلا بك فى تطبيقنا</string>
+    <string name="contact_us_dialog_text">إذا وجدت أي مشكلة ، يرجى إرسال بريد إلكتروني إلينا لتحسين خدماتنا.</string>
+    <string name="send_email">أرسال بريد الكترونى</string>
+    <string name="cancel">الغاء</string>
+
+
+    <string-array name="currency_options">
+    <item>جنيه مصرى</item>
+    <item>دولار أمريكي  $</item>
+    <item>يورو €</item>
+    </string-array>
+
+
 </resources>

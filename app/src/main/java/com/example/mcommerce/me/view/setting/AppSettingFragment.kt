@@ -2,9 +2,8 @@ package com.example.mcommerce.me.view.setting
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.Context
-import android.content.SharedPreferences
-import android.content.res.Configuration
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,8 +12,14 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContentProviderCompat
 import com.example.mcommerce.R
-import java.util.*
+import com.example.mcommerce.me.viewmodel.SavedSetting
+import com.example.mcommerce.me.viewmodel.SavedSetting.Companion.loadCurrency
+import com.example.mcommerce.me.viewmodel.SavedSetting.Companion.setCurrency
+import com.example.mcommerce.me.viewmodel.SavedSetting.Companion.setLocale
+import kotlinx.android.synthetic.main.dialog_view.view.*
+
 
 
 class AppSettingFragment : Fragment() {
@@ -22,27 +27,49 @@ class AppSettingFragment : Fragment() {
     lateinit var setting_back_icon: ImageView
     lateinit var userAddressCard : CardView
     lateinit var languageCard : CardView
+    lateinit var currencyCard : CardView
+    lateinit var contactUsCard : CardView
+    lateinit var shareAppCard : CardView
 
-    lateinit var txtAppLanguage : TextView
+    lateinit var txtSelectedLanguage : TextView
+    lateinit var txtSelectedCurrency: TextView
+    lateinit var txtLastAddress: TextView
 
     companion object{
         var isUserLogin = true
-        var languageSelected: String = "English"
+        var languageSelected: String = ""
+        var currencySelected : String = ""
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_app_setting, container, false)
         initComponent(view)
-        loadLocale()
-      //  txtAppLanguage.text = languageSelected
+        SavedSetting.loadLocale(requireContext())
+        currencySelected = loadCurrency(requireContext())
+        if (currencySelected.isNullOrEmpty() || languageSelected.isNullOrEmpty()){
+            currencySelected = getResources().getString(R.string.egp)
+            languageSelected = resources.getString(R.string.system_default)
+        }
+        txtSelectedLanguage.text = languageSelected
+        txtSelectedCurrency.text = currencySelected
         userAddressCard.setOnClickListener {
             replaceFragment(UserAddressesFragment())
         }
         languageCard.setOnClickListener {
             showLanguagesList()
+        }
+        currencyCard.setOnClickListener {
+            showCurrencyList()
+        }
+        contactUsCard.setOnClickListener {
+            showContactUsDialog()
+        }
+        shareAppCard.setOnClickListener {
+            shareOurApp()
         }
         return view
     }
@@ -51,13 +78,20 @@ class AppSettingFragment : Fragment() {
         setting_back_icon = view.findViewById(R.id.setting_back_icon)
         userAddressCard = view.findViewById(R.id.userAddressCard)
         languageCard = view.findViewById(R.id.languageCard)
+        currencyCard = view.findViewById(R.id.currencyCard)
+        contactUsCard = view.findViewById(R.id.contactUsCard)
+        shareAppCard = view.findViewById(R.id.shareAppCard)
+
+        txtSelectedLanguage = view.findViewById(R.id.txtSelectedLanguage)
+        txtSelectedCurrency = view.findViewById(R.id.txtSelectedCurrency)
+        txtLastAddress = view.findViewById(R.id.txtLastAddress)
 
     }
 
     fun replaceFragment(fragment: Fragment) {
         val transaction = requireActivity().supportFragmentManager.beginTransaction()
         transaction.replace(R.id.frameLayout, fragment)
-        transaction.addToBackStack(null);
+        transaction.addToBackStack(null)
         transaction.commit()
     }
 
@@ -69,14 +103,14 @@ class AppSettingFragment : Fragment() {
         mBuilder.setSingleChoiceItems(languagesList,-1){ dialog, which ->
             when (which){
                 0 -> {
-                    setLocale("en")
+                    setLocale("en",requireContext())
                     replaceFragment(AppSettingFragment())
-                  // languageSelected = getResources().getStringArray(R.string.english).toString()
+                   languageSelected = getResources().getString(R.string.english)
                 }
                 1 -> {
-                    setLocale("ar")
+                    setLocale("ar",requireContext())
                     replaceFragment(AppSettingFragment())
-                 //   languageSelected = "العربية"
+                    languageSelected = getResources().getString(R.string.arabic)
                 }
             }
             dialog.dismiss()
@@ -85,20 +119,61 @@ class AppSettingFragment : Fragment() {
         mDialog.show()
     }
 
-    private fun setLocale(lang: String) {
-        var locale = Locale(lang)
-        Locale.setDefault(locale)
-        val config = Configuration()
-        config.locale = locale
-        requireContext().resources.updateConfiguration(config,requireContext().resources.displayMetrics)
-        val editor = requireActivity().getSharedPreferences("settings", Context.MODE_PRIVATE).edit()
-        editor.putString("language", lang)
-        editor.apply()
+    private fun showCurrencyList(){
+        val languagesList = getResources().getStringArray(R.array.currency_options)
+        val mBuilder = AlertDialog.Builder(requireContext())
+        mBuilder.setSingleChoiceItems(languagesList,-1){ dialog, which ->
+            when (which) {
+                0 ->{
+                    currencySelected  = getResources().getString(R.string.egp)
+                    setCurrency(currencySelected,requireContext())
+                    replaceFragment(AppSettingFragment())
+                }
+                1 ->{
+                    currencySelected = getResources().getString(R.string.usd_t)
+                    setCurrency(currencySelected,requireContext())
+                    replaceFragment(AppSettingFragment())
+                }
+                2 ->{
+                    currencySelected = getResources().getString(R.string.eur_t_u20ac)
+                    setCurrency(currencySelected,requireContext())
+                    replaceFragment(AppSettingFragment())
+                }
+            }
+            dialog.dismiss()
+        }
+        val mDialog = mBuilder.create()
+        mDialog.show()
     }
-    private  fun loadLocale() {
-        val sharedPreferences: SharedPreferences = requireActivity().getSharedPreferences("settings", Context.MODE_PRIVATE)
-        val languages: String? = sharedPreferences.getString("language", "")
-        setLocale(languages!!)
+
+    private fun showContactUsDialog(){
+        val view = View.inflate(requireContext(), R.layout.dialog_view, null)
+
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setView(view)
+
+        val dialog = builder.create()
+        dialog.show()
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.setCancelable(false)
+        view.btn_confirm.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("mailto:" + "asmaayousef786@gmail.com"))
+            intent.putExtra(Intent.EXTRA_SUBJECT,"mcommerce_contact_us")
+            startActivity(intent)
+
+        }
+        view.btn_cancel.setOnClickListener {
+            dialog.dismiss()
+        }
+    }
+
+    private fun shareOurApp() {
+        val txtShare = "M_Commerce App"
+        val shareLink = "http://play.google.com/store/apps/details?id=com.example.mcommerce"
+        val share = Intent(Intent.ACTION_SEND)
+        share.type = "text/plain"
+        share.putExtra(Intent.EXTRA_TEXT, "${txtShare} \n${shareLink}")
+        startActivity(share)
     }
 
 

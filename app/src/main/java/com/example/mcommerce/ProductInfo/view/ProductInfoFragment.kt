@@ -15,6 +15,7 @@ import com.example.mcommerce.ProductInfo.viewModel.ProductInfoViewModel
 import com.example.mcommerce.ProductInfo.viewModel.ProductInfoViewModelFactory
 import com.example.mcommerce.R
 import com.example.mcommerce.categories.view.CategoryFragment
+import com.example.mcommerce.me.viewmodel.SavedSetting.Companion.loadCurrency
 import com.example.mcommerce.model.Image
 import com.example.mcommerce.model.Product
 import com.example.mcommerce.model.Repository
@@ -43,14 +44,10 @@ class ProductInfoFragment : Fragment() {
     lateinit var colorSpinner:Spinner
     var count:Int=0
     var totalRate=0
-    var price:String="EGP"
+    var price : Double = 0.0
+    var currency : String = ""
 
-
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?, ): View? {
         // Inflate the layout for this fragment
         var view =inflater.inflate(R.layout.fragment_product_info, container, false)
         output= arguments?.getSerializable("productInfo") as Product
@@ -70,6 +67,8 @@ class ProductInfoFragment : Fragment() {
         backImg=view.findViewById(R.id.backImg)
         sizeSpinner=view.findViewById(R.id.sizeSpinner)
         colorSpinner=view.findViewById(R.id.colorSpiner)
+
+        currency = loadCurrency(requireContext())
         //start
         Log.i("pro",output.id.toString())
         specificProductsFactory = ProductInfoViewModelFactory(
@@ -87,12 +86,24 @@ class ProductInfoFragment : Fragment() {
                 productName.text=product.title
                 productDesc.text=product.body_html
 
-                productPrice.text=product.variants[0].price + "EGP"
-                for (i in 0..product.variants.size-1) {
-
-                    totalRate+=product.variants[i].inventory_quantity
+                if(currency == getResources().getString(R.string.egp)){
+                    productPrice.text = "${product.variants[0].price} ${currency}"
+                }
+                else if (currency == getResources().getString(R.string.usd_t)){
+                    price = (product.variants[0].price.toDouble()) * 0.053
+                    productPrice.text = "${price} ${currency}"
+                }
+                else if (currency == getResources().getString(R.string.eur_t_u20ac)){
+                    price = (product.variants[0].price.toDouble()) * 0.050
+                    productPrice.text = "${price} ${currency}"
+                }
+                else{
+                    productPrice.text = "${product.variants[0].price} ${getResources().getString(R.string.egp)}"
                 }
 
+                for (i in 0..product.variants.size-1) {
+                    totalRate+=product.variants[i].inventory_quantity
+                }
                 Log.i("totalRate",totalRate.toString())
                 totalRate=totalRate/(product.variants.size)
                 ratBar.rating=totalRate.toFloat()/4
