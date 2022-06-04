@@ -53,7 +53,6 @@ class AddNewAddressFragment : Fragment() {
             addressDataLayout.isVisible = true
             btnSaveNewAddress.isVisible = true
             val userAddress = bundle.getStringArrayList("adress")
-           // Log.i("Testttt","from Fragment  ${userAddress?.get(0)}")
             txtCountry.append(" ${userAddress?.get(0).toString()}")
             txtCity.append(" ${userAddress?.get(1).toString()}")
             txtZipCode.append(" ${userAddress?.get(3).toString()}")
