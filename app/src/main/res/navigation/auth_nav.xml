@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/myRegisterFragment"
-        android:name="com.example.mcommerce.auth.view.RegisterFormFragment"
+        android:name="com.example.mcommerce.auth.Register.view.RegisterFormFragment"
         android:label="fragment_Rgistration"
         tools:layout="@layout/fragment_register_form" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/myLoginFragment"
-        android:name="com.example.mcommerce.auth.view.LoginFormFragment"
+        android:name="com.example.mcommerce.auth.login.view.LoginFormFragment"
         android:label="fragment_my_login"
         tools:layout="@layout/fragment_login_form" >
         <action

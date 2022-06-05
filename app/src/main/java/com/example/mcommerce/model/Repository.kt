@@ -3,8 +3,11 @@ package com.example.mcommerce.model
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
+import com.example.mcommerce.auth.model.CustomerDetail
+import com.example.mcommerce.auth.model.CustomerX
 import com.example.mcommerce.home.model.BrandsModel
 import com.example.mcommerce.network.RemoteSourceInterface
+import retrofit2.Response
 
 class Repository private constructor(var remoteSource: RemoteSourceInterface, var context: Context)
     : RepositoryInterface {
@@ -39,6 +42,10 @@ class Repository private constructor(var remoteSource: RemoteSourceInterface, va
 
     override suspend fun getDiscountsCods(): DiscountCodesModel {
         return  remoteSource.getDiscountCodes()
+    }
+
+    override suspend fun postNewCustomer(customer: CustomerDetail): Response<CustomerDetail> {
+        return  remoteSource.postNewCustomer(customer)
     }
 
 }

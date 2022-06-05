@@ -1,13 +1,14 @@
   package com.example.mcommerce.network
+import com.example.mcommerce.auth.model.Customer
+import com.example.mcommerce.auth.model.CustomerDetail
+import com.example.mcommerce.auth.model.CustomerX
 import com.example.mcommerce.home.model.BrandsModel
 import com.example.mcommerce.model.AllProductsModel
 import com.example.mcommerce.model.Product
 import com.example.mcommerce.model.ProductDetails
 import com.example.mcommerce.model.DiscountCodesModel
-import retrofit2.http.GET
-import retrofit2.http.Headers
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.Response
+import retrofit2.http.*
 
   interface ServiceApi {
     @Headers(
@@ -45,6 +46,15 @@ import retrofit2.http.Query
       suspend fun getDiscountCodesFromNetwork(): DiscountCodesModel
 
 
+      @Headers(
+          "X-Shopify-Shop-Api-Call-Limit: 40/40",
+          "Retry-After: 2.0",
+          "Accept: application/json",
+          "X-Shopify-Access-Token: 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"
+      )
+      @POST("customers.json")
+
+      suspend fun postNewCustomer(@Body customer: CustomerDetail):Response<CustomerDetail>
 
 }
 

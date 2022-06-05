@@ -8,14 +8,16 @@
     android:background="@color/white">
 
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/edtSearch"
+        android:dropDownAnchor="@id/edtSearch"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:drawableLeft="@drawable/ic_search"
         android:ems="10"
+        android:textSize="10dp"
         android:hint="@string/search"
         android:inputType="textPersonName"
         android:minHeight="48dp"

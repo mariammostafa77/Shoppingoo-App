@@ -1,4 +1,4 @@
-package com.example.mcommerce.auth.view
+package com.example.mcommerce.auth.login.view
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

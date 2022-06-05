@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#021139"
-    tools:context=".auth.view.LoginFormFragment">
+    tools:context=".auth.login.view.LoginFormFragment">
 
 
     <androidx.cardview.widget.CardView

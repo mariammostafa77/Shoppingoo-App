@@ -1,8 +1,12 @@
 package com.example.mcommerce.network
+import com.example.mcommerce.auth.model.CustomerDetail
+import com.example.mcommerce.auth.model.CustomerX
 import com.example.mcommerce.home.model.BrandsModel
 import com.example.mcommerce.model.AllProductsModel
 import com.example.mcommerce.model.ProductDetails
 import com.example.mcommerce.model.DiscountCodesModel
+import retrofit2.Response
+import retrofit2.http.Body
 
 interface RemoteSourceInterface {
     suspend fun getAllProducts():AllProductsModel
@@ -12,4 +16,5 @@ interface RemoteSourceInterface {
 
     ///// Coupons
     suspend fun getDiscountCodes() : DiscountCodesModel
+    suspend fun postNewCustomer(customer: CustomerDetail):Response<CustomerDetail>
 }

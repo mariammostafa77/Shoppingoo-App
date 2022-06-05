@@ -6,8 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
+import android.widget.*
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -34,11 +33,12 @@ class MysearchFragment : Fragment() {
     lateinit var categoriesProductFactory: CategoriesViewFactory
     lateinit var categoriesProductViewModel: CategoriesViewModel
 //lateinit var linearLayoutManager:LinearLayoutManager
-    lateinit var edtSearch:EditText
+    lateinit var edtSearch:AutoCompleteTextView
     lateinit var btnSearch:Button
     lateinit var output:String
     lateinit var allProductArrayList:ArrayList<Product>
     lateinit var filterProductArrayList:ArrayList<Product>
+    var productsName:ArrayList<String> = ArrayList<String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -71,12 +71,42 @@ class MysearchFragment : Fragment() {
             if(mySearchFlag==1) {
                 searchViewModel.onlineProducts.observe(viewLifecycleOwner) { product ->
 
-
                     if (allProductArrayList.size == 0) {
                         allProductArrayList.addAll(product)
+
+                    }
+                    productsName.clear()
+                    for(i in 0..product.size-1) {
+                        productsName.add(product[i].title)
+                    }
+                    var adapter: ArrayAdapter<String> = ArrayAdapter<String>(requireContext(),android.R.layout.simple_dropdown_item_1line,productsName)
+                    edtSearch.threshold=1
+                    edtSearch.setAdapter(adapter)
+                    filterProductArrayList.clear()
+                    edtSearch.setOnItemClickListener { adapterView, view, i, l ->
+                        filterProductArrayList.clear()
+                        Toast.makeText(requireContext(),"clicked"+ adapter.getItem(i).toString(),Toast.LENGTH_LONG).show()
+                        var productName:String= adapter.getItem(i).toString()
+                        if(productName.isNotEmpty()){
+
+                            allProductArrayList.forEach{
+                                if(it.title.contains(productName))
+                                {
+                                    filterProductArrayList.add(it)
+                                }
+                            }
+
+                        }
+                        else{
+                            filterProductArrayList.clear()
+                        }
+
+                        productSearchAdapter.setProductData(filterProductArrayList,requireContext(),activity as Communicator)
+
+
+
                     }
 
-                    // Log.i("filterPro","from product ${allProductArrayList.toString()}")
 
                 }
 
@@ -95,11 +125,46 @@ class MysearchFragment : Fragment() {
                     Log.i("TAG","Count  ${it.size}")
 
                     allProductArrayList.addAll(it)
+                    productsName.clear()
+                    it.forEach {
+
+                        productsName.add(it.title)
+                    }
+                    var adapter: ArrayAdapter<String> = ArrayAdapter<String>(requireContext(),android.R.layout.simple_dropdown_item_1line,productsName)
+                    edtSearch.threshold=1
+                    edtSearch.setAdapter(adapter)
+
+                    filterProductArrayList.clear()
+                    edtSearch.setOnItemClickListener { adapterView, view, i, l ->
+                        filterProductArrayList.clear()
+                      //  Toast.makeText(requireContext(),"clicked"+ adapter.getItem(i).toString(),Toast.LENGTH_LONG).show()
+                        var productName:String= adapter.getItem(i).toString()
+                        if(productName.isNotEmpty()){
+
+                            allProductArrayList.forEach{
+                                if(it.title.contains(productName))
+                                {
+                                    filterProductArrayList.add(it)
+                                }
+                            }
+
+                        }
+                        else{
+                            filterProductArrayList.clear()
+                        }
+
+                        productSearchAdapter.setProductData(filterProductArrayList,requireContext(),activity as Communicator)
+
+
+
+                    }
+
 
                 }
 
 
-        }
+
+            }
         btnSearch.setOnClickListener{
             filterProductArrayList.clear()
             var productName:String=edtSearch.text.toString().toLowerCase(Locale.getDefault())
@@ -129,4 +194,5 @@ class MysearchFragment : Fragment() {
     }
 
 
+    
 }

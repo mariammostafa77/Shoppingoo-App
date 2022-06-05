@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#021139"
-    tools:context=".auth.view.RegisterFormFragment">
+    tools:context=".auth.Register.view.RegisterFormFragment">
 
 
     <Button
@@ -124,7 +124,7 @@
                 android:text="@string/register"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edtConfirmPass" />
+                app:layout_constraintTop_toBottomOf="@+id/edtPhone" />
 
             <TextView
                 android:id="@+id/txtHaveAcc"
@@ -146,12 +146,27 @@
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="10dp"
                 android:ems="10"
+                android:drawableLeft="@drawable/authpass_24"
                 android:hint="Please confirm Password"
                 android:inputType="textPassword"
                 android:minHeight="48dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/edtRegisterPassword" />
+
+            <EditText
+                android:id="@+id/edtPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:ems="15"
+                android:drawableLeft="@drawable/phone_24"
+                android:inputType="phone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edtConfirmPass" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

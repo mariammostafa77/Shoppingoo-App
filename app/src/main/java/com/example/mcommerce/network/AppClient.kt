@@ -1,9 +1,12 @@
 package com.example.mcommerce.network
 
+import com.example.mcommerce.auth.model.CustomerDetail
+import com.example.mcommerce.auth.model.CustomerX
 import com.example.mcommerce.home.model.BrandsModel
 import com.example.mcommerce.model.AllProductsModel
 import com.example.mcommerce.model.ProductDetails
 import com.example.mcommerce.model.DiscountCodesModel
+import retrofit2.Response
 
 class AppClient : RemoteSourceInterface {
 
@@ -46,5 +49,11 @@ class AppClient : RemoteSourceInterface {
             return response!!
         }
 
-
+    override suspend fun postNewCustomer(customer: CustomerDetail): Response<CustomerDetail> {
+        val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
+        val response = service?.postNewCustomer(customer)
+        return response!!
     }
+
+
+}
