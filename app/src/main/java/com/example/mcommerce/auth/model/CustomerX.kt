@@ -25,5 +25,7 @@ data class CustomerX(
     val tax_exemptions: List<Any>? = null,
     val total_spent: String? = null,
     val updated_at: String? = null,
-    var verified_email: Boolean? = null
+    var verified_email: Boolean? = null,
+    var password:String?=null,
+    var password_confirmation:String?=null
 )

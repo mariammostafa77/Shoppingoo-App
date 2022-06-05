@@ -78,6 +78,8 @@ class RegisterFormFragment : Fragment() {
             customer.first_name =edtFName.text.toString()
             customer.last_name =edtLName.text.toString()
             customer.email = edtEmail.text.toString()
+            customer.password = edtPassword.text.toString()
+            customer.password_confirmation = edtConfirmPASS.text.toString()
             customer.verified_email = true
             var phoneNumber:String = myEdtPhone.text.toString()
             customer.phone =phoneNumber
