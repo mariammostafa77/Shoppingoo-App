@@ -1,5 +1,7 @@
 package com.example.mcommerce.me.view
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -7,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -30,6 +33,9 @@ class MeWithLogin : Fragment() {
 
     lateinit var settingICon: ImageView
     lateinit var shoppingCartIcon : ImageView
+    lateinit var txtWelcomeUser : TextView
+
+    var userName : String = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,6 +45,11 @@ class MeWithLogin : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
        val view = inflater.inflate(R.layout.fragment_me_with_login, container, false)
         initComponent(view)
+        val sharedPreferences: SharedPreferences = context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
+        val fname: String? = sharedPreferences.getString("fname","")
+        val lname: String? = sharedPreferences.getString("lname","")
+
+        txtWelcomeUser.append(" ${fname} ${lname}. ")
         settingICon.setOnClickListener {
             replaceFragment(AppSettingFragment())
         }
@@ -51,6 +62,7 @@ class MeWithLogin : Fragment() {
     private fun initComponent(view : View){
         settingICon = view.findViewById(R.id.settingICon)
         shoppingCartIcon = view.findViewById(R.id.shoppingCartIcon)
+        txtWelcomeUser = view.findViewById(R.id.txtWelcomeUser)
 
 
     }

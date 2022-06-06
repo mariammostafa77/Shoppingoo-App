@@ -27,12 +27,11 @@ class CustomerAddressAdapter : RecyclerView.Adapter<CustomerAddressAdapter.ViewH
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.countryText.text = customerAddresses[position].country
-        holder.cityText.text = customerAddresses[position].city
-        holder.userAddressLine1.text = customerAddresses[position].address1
-        holder.phoneText.text = customerAddresses[position].phone
+        holder.countryText.append("  ${customerAddresses[position].country}")
+        holder.cityText.append("  ${customerAddresses[position].city}")
+        holder.userAddressLine1.append("  ${customerAddresses[position].address1}")
+        holder.phoneText.append("  ${customerAddresses[position].phone}")
     }
-
     override fun getItemCount(): Int {
         return customerAddresses.size
     }
@@ -43,7 +42,5 @@ class CustomerAddressAdapter : RecyclerView.Adapter<CustomerAddressAdapter.ViewH
         val userAddressLine1: TextView = itemView.findViewById(R.id.userAddressLine1)
         val phoneText: TextView = itemView.findViewById(R.id.userPhoneText)
     }
-
-
 
 }

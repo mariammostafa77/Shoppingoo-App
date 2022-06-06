@@ -2,7 +2,9 @@ package com.example.mcommerce.me.view.setting
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -15,6 +17,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContentProviderCompat
 import androidx.lifecycle.ViewModelProvider
+import com.example.mcommerce.AuthActivity
+import com.example.mcommerce.HomeActivity
 import com.example.mcommerce.R
 import com.example.mcommerce.me.viewmodel.CustomerViewModel
 import com.example.mcommerce.me.viewmodel.CustomerViewModelFactory
@@ -40,6 +44,7 @@ class AppSettingFragment : Fragment() {
     lateinit var txtSelectedLanguage : TextView
     lateinit var txtSelectedCurrency: TextView
     lateinit var txtLastAddress: TextView
+    lateinit var txtSignOutText : TextView
 
     lateinit var customerViewModel: CustomerViewModel
     lateinit var customerViewModelFactory: CustomerViewModelFactory
@@ -87,6 +92,26 @@ class AppSettingFragment : Fragment() {
         shareAppCard.setOnClickListener {
             shareOurApp()
         }
+        txtSignOutText.setOnClickListener {
+          /*
+            val sharedPreferences: SharedPreferences = context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
+            val editor = requireContext().getSharedPreferences("userAuth", Context.MODE_PRIVATE).edit()
+            val email: String? = sharedPreferences.getString("email","")
+            val pass: String? = sharedPreferences.getString("password","")
+            val fname: String? = sharedPreferences.getString("fname","")
+            val lname: String? = sharedPreferences.getString("lname","")
+            val phone: String? = sharedPreferences.getString("phone","")
+            val id: String? = sharedPreferences.getString("cusomerID","")
+            editor.remove(email)
+            editor.remove(pass)
+            editor.remove(fname)
+            editor.remove(lname)
+            editor.remove(phone)
+            editor.remove(id)
+            editor.commit()
+           */
+            startActivity(Intent(requireContext(), AuthActivity::class.java))
+        }
         return view
     }
 
@@ -101,7 +126,7 @@ class AppSettingFragment : Fragment() {
         txtSelectedLanguage = view.findViewById(R.id.txtSelectedLanguage)
         txtSelectedCurrency = view.findViewById(R.id.txtSelectedCurrency)
         txtLastAddress = view.findViewById(R.id.txtLastAddress)
-
+        txtSignOutText = view.findViewById(R.id.txtSignOutText)
     }
 
     fun replaceFragment(fragment: Fragment) {
