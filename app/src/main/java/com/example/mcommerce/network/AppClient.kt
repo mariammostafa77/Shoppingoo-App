@@ -62,5 +62,22 @@ class AppClient : RemoteSourceInterface {
         return response!!
     }
 
+    override suspend fun getUserDetails(id: String): CustomerDetail {
+        val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
+        val response = service?.getUserInfo(id)
+        return response!!
+    }
+
+    override suspend fun addNewAddress(id: String?, customer: CustomerDetail): Response<CustomerDetail> {
+        val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
+        val response = service?.addNewCustomerAddress(id,customer)
+        return response!!
+    }
+
+    override suspend fun changeCustomerCurrency(id: String? , customer: CustomerDetail): Response<CustomerDetail> {
+        val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
+        val response = service?.changeCustomerCurrency(id,customer)
+        return response!!
+    }
 
 }

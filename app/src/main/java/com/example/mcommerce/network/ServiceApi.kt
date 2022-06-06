@@ -10,6 +10,7 @@ import com.example.mcommerce.model.ProductDetails
 import com.example.mcommerce.model.DiscountCodesModel
 import retrofit2.Response
 import retrofit2.http.*
+import java.util.*
 
   interface ServiceApi {
     @Headers(
@@ -54,7 +55,6 @@ import retrofit2.http.*
           "X-Shopify-Access-Token: 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"
       )
       @POST("customers.json")
-
       suspend fun postNewCustomer(@Body customer: CustomerDetail):Response<CustomerDetail>
       @Headers(
           "X-Shopify-Shop-Api-Call-Limit: 40/40",
@@ -65,6 +65,34 @@ import retrofit2.http.*
       @POST("draft_orders.json")
 
       suspend fun postNewDraftOrder(@Body order: DraftOrder):Response<DraftOrder>
+
+      @Headers(
+          "X-Shopify-Shop-Api-Call-Limit: 40/40",
+          "Retry-After: 2.0",
+          "Accept: application/json",
+          "X-Shopify-Access-Token: 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"
+      )
+      @PUT("customers/"+"{id}"+".json")
+      suspend fun addNewCustomerAddress(@Path("id") id: String? , @Body customer: CustomerDetail): Response<CustomerDetail>
+
+      @Headers(
+          "X-Shopify-Shop-Api-Call-Limit: 40/40",
+          "Retry-After: 2.0",
+          "Accept: application/json",
+          "X-Shopify-Access-Token: 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"
+      )
+      @GET("customers/"+"{id}"+".json")
+      suspend fun getUserInfo(@Path("id")id: String?): CustomerDetail
+
+      @Headers(
+          "X-Shopify-Shop-Api-Call-Limit: 40/40",
+          "Retry-After: 2.0",
+          "Accept: application/json",
+          "X-Shopify-Access-Token: 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"
+      )
+      @PATCH("customers/"+"{id}"+".json")
+      suspend fun changeCustomerCurrency(@Path("id") id: String? ,@Body customer: CustomerDetail): Response<CustomerDetail>
+
 
 }
 

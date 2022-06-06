@@ -49,6 +49,18 @@ class Repository private constructor(var remoteSource: RemoteSourceInterface, va
         return  remoteSource.postNewCustomer(customer)
     }
 
+    override suspend fun getCustomerDetails(id: String): CustomerDetail {
+        return remoteSource.getUserDetails(id)
+    }
+
+    override suspend fun addNewAddress(id: String?, customer: CustomerDetail): Response<CustomerDetail> {
+        return remoteSource.addNewAddress(id,customer)
+    }
+
+    override suspend fun changeCustomerCurrency(id: String? , customer: CustomerDetail): Response<CustomerDetail> {
+        return remoteSource.changeCustomerCurrency(id,customer)
+    }
+
     override suspend fun postNewDraftOrder(order: DraftOrder): Response<DraftOrder> {
         return  remoteSource.postNewDraftOrder(order)
     }

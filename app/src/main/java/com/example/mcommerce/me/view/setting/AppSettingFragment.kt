@@ -11,13 +11,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContentProviderCompat
+import androidx.lifecycle.ViewModelProvider
 import com.example.mcommerce.R
+import com.example.mcommerce.me.viewmodel.CustomerViewModel
+import com.example.mcommerce.me.viewmodel.CustomerViewModelFactory
 import com.example.mcommerce.me.viewmodel.SavedSetting
 import com.example.mcommerce.me.viewmodel.SavedSetting.Companion.loadCurrency
 import com.example.mcommerce.me.viewmodel.SavedSetting.Companion.setCurrency
 import com.example.mcommerce.me.viewmodel.SavedSetting.Companion.setLocale
+import com.example.mcommerce.model.Repository
+import com.example.mcommerce.network.AppClient
 import kotlinx.android.synthetic.main.dialog_view.view.*
 
 
@@ -35,6 +41,10 @@ class AppSettingFragment : Fragment() {
     lateinit var txtSelectedCurrency: TextView
     lateinit var txtLastAddress: TextView
 
+    lateinit var customerViewModel: CustomerViewModel
+    lateinit var customerViewModelFactory: CustomerViewModelFactory
+
+
     companion object{
         var isUserLogin = true
         var languageSelected: String = ""
@@ -49,6 +59,12 @@ class AppSettingFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_app_setting, container, false)
         initComponent(view)
         SavedSetting.loadLocale(requireContext())
+
+        customerViewModelFactory = CustomerViewModelFactory(Repository.getInstance(AppClient.getInstance(), requireContext()))
+        customerViewModel = ViewModelProvider(this, customerViewModelFactory).get(CustomerViewModel::class.java)
+        val sharedPreferences = requireContext().getSharedPreferences("userAuth", AppCompatActivity.MODE_PRIVATE)
+        val customerId = sharedPreferences.getString("cusomerID",null).toString()
+
         currencySelected = loadCurrency(requireContext())
         if (currencySelected.isNullOrEmpty() || languageSelected.isNullOrEmpty()){
             currencySelected = getResources().getString(R.string.egp)
@@ -105,7 +121,7 @@ class AppSettingFragment : Fragment() {
                 0 -> {
                     setLocale("en",requireContext())
                     replaceFragment(AppSettingFragment())
-                   languageSelected = getResources().getString(R.string.english)
+                    languageSelected = getResources().getString(R.string.english)
                 }
                 1 -> {
                     setLocale("ar",requireContext())

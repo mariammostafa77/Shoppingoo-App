@@ -5,6 +5,8 @@ import com.example.mcommerce.auth.model.CustomerX
 import com.example.mcommerce.draftModel.DraftOrder
 import com.example.mcommerce.home.model.BrandsModel
 import retrofit2.Response
+import retrofit2.http.Field
+import retrofit2.http.Path
 
 interface RepositoryInterface {
     suspend fun getAllProducts():AllProductsModel
@@ -14,5 +16,11 @@ interface RepositoryInterface {
 
     suspend fun getDiscountsCods() : DiscountCodesModel
     suspend fun postNewCustomer(customer: CustomerDetail): Response<CustomerDetail>
+
+    suspend fun getCustomerDetails(id:String):CustomerDetail
+    suspend fun addNewAddress(id: String?, customer: CustomerDetail): Response<CustomerDetail>
+
+    suspend fun changeCustomerCurrency(id: String? , customer: CustomerDetail): Response<CustomerDetail>
+
     suspend fun postNewDraftOrder(order: DraftOrder):Response<DraftOrder>
 }

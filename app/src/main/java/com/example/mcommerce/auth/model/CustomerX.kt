@@ -6,7 +6,7 @@ data class CustomerX(
     var addresses: List<Addresse>? = null,
     val admin_graphql_api_id: String? = null,
     val created_at: String? = null,
-    val currency: String? = null,
+    var currency: String? = null,
     val default_address: DefaultAddress? = null,
     var email: String? = null,
     var first_name: String? = null,
