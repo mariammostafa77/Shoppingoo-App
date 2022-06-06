@@ -32,6 +32,7 @@ import kotlin.math.abs
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.example.mcommerce.search.view.MysearchFragment
+import com.example.mcommerce.shopping_cart.view.ShoppingCartFragment
 
 
 class HomeFragment : Fragment() {
@@ -90,9 +91,15 @@ class HomeFragment : Fragment() {
         ////
 
         cardImg.setOnClickListener {
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.frameLayout, ShoppingCartFragment())
+            transaction.addToBackStack(null);
+            transaction.commit()
+          /*
             var navController: NavController = Navigation.findNavController(it)
             var navDir: NavDirections =HomeFragmentDirections.goToCart()
             navController.navigate(navDir)
+           */
         }
 
         homeViewModel.onlineDiscountCodes.observe(viewLifecycleOwner) { coupons ->

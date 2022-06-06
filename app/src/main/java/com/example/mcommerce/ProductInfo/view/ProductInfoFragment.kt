@@ -146,11 +146,8 @@ class ProductInfoFragment : Fragment() {
                         lineItem.quantity=Integer.parseInt(productCount.text.toString())
                         lineItem.variant_id=variantId
                         order.line_items=listOf(lineItem)
-
                         break
-
                     }
-
                 }
                // order.line_items!![0].variant_id = 40335555395723
                 var productImage=NoteAttribute()

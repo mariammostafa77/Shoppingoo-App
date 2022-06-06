@@ -2,6 +2,8 @@ package com.example.mcommerce.network
 import com.example.mcommerce.auth.model.CustomerDetail
 import com.example.mcommerce.auth.model.CustomerX
 import com.example.mcommerce.draftModel.DraftOrder
+import com.example.mcommerce.draftModel.DraftOrderX
+import com.example.mcommerce.draftModel.DraftResponse
 import com.example.mcommerce.home.model.BrandsModel
 import com.example.mcommerce.model.AllProductsModel
 import com.example.mcommerce.model.ProductDetails
@@ -27,4 +29,6 @@ interface RemoteSourceInterface {
     suspend fun changeCustomerCurrency(id: String? , customer: CustomerDetail): Response<CustomerDetail>
 
     suspend fun postNewDraftOrder(order: DraftOrder):Response<DraftOrder>
+
+    suspend fun getShoppingCartProducts(): DraftResponse
 }

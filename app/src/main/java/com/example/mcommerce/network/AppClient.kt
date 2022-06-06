@@ -3,6 +3,8 @@ package com.example.mcommerce.network
 import com.example.mcommerce.auth.model.CustomerDetail
 import com.example.mcommerce.auth.model.CustomerX
 import com.example.mcommerce.draftModel.DraftOrder
+import com.example.mcommerce.draftModel.DraftOrderX
+import com.example.mcommerce.draftModel.DraftResponse
 import com.example.mcommerce.home.model.BrandsModel
 import com.example.mcommerce.model.AllProductsModel
 import com.example.mcommerce.model.ProductDetails
@@ -59,6 +61,12 @@ class AppClient : RemoteSourceInterface {
     override suspend fun postNewDraftOrder(order: DraftOrder): Response<DraftOrder> {
         val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
         val response = service?.postNewDraftOrder(order)
+        return response!!
+    }
+
+    override suspend fun getShoppingCartProducts(): DraftResponse {
+        val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
+        val response = service?.getShoppingCartProducts()
         return response!!
     }
 

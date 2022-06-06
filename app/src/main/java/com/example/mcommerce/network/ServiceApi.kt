@@ -3,6 +3,8 @@ import com.example.mcommerce.auth.model.Customer
 import com.example.mcommerce.auth.model.CustomerDetail
 import com.example.mcommerce.auth.model.CustomerX
 import com.example.mcommerce.draftModel.DraftOrder
+import com.example.mcommerce.draftModel.DraftOrderX
+import com.example.mcommerce.draftModel.DraftResponse
 import com.example.mcommerce.home.model.BrandsModel
 import com.example.mcommerce.model.AllProductsModel
 import com.example.mcommerce.model.Product
@@ -63,7 +65,6 @@ import java.util.*
           "X-Shopify-Access-Token: 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"
       )
       @POST("draft_orders.json")
-
       suspend fun postNewDraftOrder(@Body order: DraftOrder):Response<DraftOrder>
 
       @Headers(
@@ -93,6 +94,12 @@ import java.util.*
       @PATCH("customers/"+"{id}"+".json")
       suspend fun changeCustomerCurrency(@Path("id") id: String? ,@Body customer: CustomerDetail): Response<CustomerDetail>
 
+      @Headers(
+          "Accept: application/json",
+          "X-Shopify-Access-Token: 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",
+      )
+      @GET("draft_orders.json")
+      suspend fun getShoppingCartProducts(): DraftResponse
 
 }
 

@@ -3,6 +3,8 @@ package com.example.mcommerce.model
 import com.example.mcommerce.auth.model.CustomerDetail
 import com.example.mcommerce.auth.model.CustomerX
 import com.example.mcommerce.draftModel.DraftOrder
+import com.example.mcommerce.draftModel.DraftOrderX
+import com.example.mcommerce.draftModel.DraftResponse
 import com.example.mcommerce.home.model.BrandsModel
 import retrofit2.Response
 import retrofit2.http.Field
@@ -23,4 +25,7 @@ interface RepositoryInterface {
     suspend fun changeCustomerCurrency(id: String? , customer: CustomerDetail): Response<CustomerDetail>
 
     suspend fun postNewDraftOrder(order: DraftOrder):Response<DraftOrder>
+
+    suspend fun getShoppingCartProducts(): DraftResponse
+
 }

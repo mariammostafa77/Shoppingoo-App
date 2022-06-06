@@ -13,7 +13,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mcommerce.R
-import com.example.mcommerce.ShoppingCartFragment
 import com.example.mcommerce.auth.Register.viewModel.RegisterViewModel
 import com.example.mcommerce.auth.Register.viewModel.RegisterViewModelFactory
 import com.example.mcommerce.auth.model.CustomerDetail
@@ -25,6 +24,7 @@ import com.example.mcommerce.me.viewmodel.CustomerViewModel
 import com.example.mcommerce.me.viewmodel.CustomerViewModelFactory
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
+import com.example.mcommerce.shopping_cart.view.ShoppingCartFragment
 
 class MeWithLogin : Fragment() {
 

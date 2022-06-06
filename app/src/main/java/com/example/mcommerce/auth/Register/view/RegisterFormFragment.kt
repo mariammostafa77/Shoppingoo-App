@@ -96,8 +96,6 @@ class RegisterFormFragment : Fragment() {
                     Toast.makeText(requireContext(),"Register Successfull: "+response.code().toString(),Toast.LENGTH_LONG).show()
                     Log.i("Reg","messs from success: "+response.body().toString())
                     val editor = requireContext().getSharedPreferences("userAuth", Context.MODE_PRIVATE).edit()
-
-
                     editor.putString("email", response.body()!!.customer!!.email)
                     editor.putString("fname", response.body()!!.customer!!.first_name)
                     editor.putString("lname", response.body()!!.customer!!.last_name)
