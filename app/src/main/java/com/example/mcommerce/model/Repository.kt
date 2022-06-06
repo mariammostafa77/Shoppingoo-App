@@ -3,6 +3,8 @@ package com.example.mcommerce.model
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
+import com.example.mcommerce.auth.login.model.CustomerModel
+import com.example.mcommerce.auth.login.model.cust_details
 import com.example.mcommerce.auth.model.CustomerDetail
 import com.example.mcommerce.auth.model.CustomerX
 import com.example.mcommerce.draftModel.DraftOrder
@@ -51,6 +53,11 @@ class Repository private constructor(var remoteSource: RemoteSourceInterface, va
 
     override suspend fun postNewDraftOrder(order: DraftOrder): Response<DraftOrder> {
         return  remoteSource.postNewDraftOrder(order)
+    }
+
+    override suspend fun getCustomers(): cust_details {
+       // Log.i("login",remoteSource.getCustomers().toString())
+        return  remoteSource.getCustomers()
     }
 
 }

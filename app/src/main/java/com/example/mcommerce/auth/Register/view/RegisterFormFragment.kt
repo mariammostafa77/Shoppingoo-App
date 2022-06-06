@@ -78,8 +78,8 @@ class RegisterFormFragment : Fragment() {
             customer.first_name =edtFName.text.toString()
             customer.last_name =edtLName.text.toString()
             customer.email = edtEmail.text.toString()
-            customer.password = edtPassword.text.toString()
-            customer.password_confirmation = edtConfirmPASS.text.toString()
+           // customer.password = edtPassword.text.toString()
+           // customer.password_confirmation = edtConfirmPASS.text.toString()
             customer.verified_email = true
             var phoneNumber:String = myEdtPhone.text.toString()
             customer.phone =phoneNumber
@@ -99,6 +99,7 @@ class RegisterFormFragment : Fragment() {
 
 
                     editor.putString("email", response.body()!!.customer!!.email)
+                    editor.putString("password", response.body()!!.customer!!.tags)
                     editor.putString("fname", response.body()!!.customer!!.first_name)
                     editor.putString("lname", response.body()!!.customer!!.last_name)
                     editor.putString("phone", response.body()!!.customer!!.phone)

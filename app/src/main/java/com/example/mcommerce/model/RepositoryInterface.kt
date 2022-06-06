@@ -1,5 +1,7 @@
 package com.example.mcommerce.model
 
+import com.example.mcommerce.auth.login.model.CustomerModel
+import com.example.mcommerce.auth.login.model.cust_details
 import com.example.mcommerce.auth.model.CustomerDetail
 import com.example.mcommerce.auth.model.CustomerX
 import com.example.mcommerce.draftModel.DraftOrder
@@ -15,4 +17,5 @@ interface RepositoryInterface {
     suspend fun getDiscountsCods() : DiscountCodesModel
     suspend fun postNewCustomer(customer: CustomerDetail): Response<CustomerDetail>
     suspend fun postNewDraftOrder(order: DraftOrder):Response<DraftOrder>
+    suspend fun getCustomers(): cust_details
 }
