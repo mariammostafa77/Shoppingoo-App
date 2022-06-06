@@ -6,6 +6,8 @@ import com.example.mcommerce.auth.model.CustomerDetail
 import com.example.mcommerce.auth.model.CustomerX
 import com.example.mcommerce.draftModel.DraftOrder
 import com.example.mcommerce.home.model.BrandsModel
+import com.example.mcommerce.network.RetrofitHelper
+import com.example.mcommerce.network.ServiceApi
 import retrofit2.Response
 
 interface RepositoryInterface {
@@ -13,6 +15,9 @@ interface RepositoryInterface {
     suspend fun getAllBrands():BrandsModel
     suspend fun getBrandProducts(id:String):AllProductsModel
     suspend fun getSpecificProduct(id:String):ProductDetails
+    suspend fun getVariant(id:String): Variants
+    suspend fun getSubCategories(vendor: String,productType:String,collectionId:String):AllProductsModel
+
 
     suspend fun getDiscountsCods() : DiscountCodesModel
     suspend fun postNewCustomer(customer: CustomerDetail): Response<CustomerDetail>

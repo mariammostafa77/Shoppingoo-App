@@ -7,9 +7,7 @@ import com.example.mcommerce.auth.model.CustomerDetail
 import com.example.mcommerce.auth.model.CustomerX
 import com.example.mcommerce.draftModel.DraftOrder
 import com.example.mcommerce.home.model.BrandsModel
-import com.example.mcommerce.model.AllProductsModel
-import com.example.mcommerce.model.ProductDetails
-import com.example.mcommerce.model.DiscountCodesModel
+import com.example.mcommerce.model.*
 import retrofit2.Response
 import retrofit2.http.Path
 
@@ -48,7 +46,13 @@ class AppClient : RemoteSourceInterface {
             return response!!
         }
 
-        override suspend fun getDiscountCodes(): DiscountCodesModel {
+    override suspend fun getVariant(id: String): Variants {
+        val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
+        val response = service?.getVariant(id)
+        return response!!
+    }
+
+    override suspend fun getDiscountCodes(): DiscountCodesModel {
             val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
             val response = service?.getDiscountCodesFromNetwork()
             return response!!
@@ -71,6 +75,10 @@ class AppClient : RemoteSourceInterface {
         val response = service?.getCustomers()
         return response!!
     }
-
+    override suspend fun getSubCategories(vendor: String,productType:String,collectionId:String):AllProductsModel{
+        val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
+        val response = service?.getSubCategories(vendor,productType,collectionId)
+        return response!!
+    }
 
 }

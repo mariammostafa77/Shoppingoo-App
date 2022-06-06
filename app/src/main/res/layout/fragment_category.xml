@@ -13,46 +13,50 @@
         android:id="@+id/categoryBar"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@color/app_bar_color"
-        app:layout_constraintStart_toStartOf="parent"
+        android:background="#021139"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
         <TextView
             android:id="@+id/categoryBarTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/category"
-            android:textSize="22sp"
             android:textAlignment="center"
-            android:textColor="@color/tool_bar_title"
+            android:textColor="@color/white"
+            android:textSize="22sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
         <ImageView
             android:id="@+id/search_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_search"
             android:layout_marginStart="10dp"
+            android:src="@drawable/white_search"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
         <ImageView
             android:id="@+id/favorite_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_favorite"
             android:layout_marginEnd="10dp"
+            android:src="@drawable/white_favorite"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
         <ImageView
             android:id="@+id/shipping_bag_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_shopping_cart"
             android:layout_marginEnd="10dp"
+            android:src="@drawable/white_shopping_cart"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/favorite_icon"
             app:layout_constraintTop_toTopOf="parent" />
@@ -102,16 +106,68 @@
         app:spanCount="2" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton"
+        android:id="@+id/openOptionsBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:clickable="true"
         android:focusable="true"
+        app:tint="@android:color/white"
         android:src="@drawable/ic_baseline_add_48"
+        app:backgroundTint="#021139"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/accessoriesBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="10dp"
+        android:clickable="true"
+        android:src="@drawable/white_jewelry"
+        android:visibility="invisible"
+        app:backgroundTint="#021139"
+        app:tint="@android:color/white"
+        app:fabSize="mini"
+        app:layout_constraintBottom_toTopOf="@+id/openOptionsBtn"
+        app:layout_constraintEnd_toEndOf="@+id/openOptionsBtn"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/tshirtBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/white_tshirt"
+        app:backgroundTint="#021139"
+        app:tint="@android:color/white"
+        android:visibility="invisible"
+        app:fabSize="mini"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/accessoriesBtn"
+        app:layout_constraintEnd_toEndOf="@+id/accessoriesBtn"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/shoesBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:visibility="invisible"
+        app:tint="@android:color/white"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/shoe_white"
+        app:backgroundTint="#021139"
+        app:fabSize="mini"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/tshirtBtn"
+        app:layout_constraintEnd_toEndOf="@+id/tshirtBtn"
         tools:ignore="SpeakableTextPresentCheck" />
 
 

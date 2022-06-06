@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mcommerce.model.Product
 import com.example.mcommerce.model.RepositoryInterface
+import com.example.mcommerce.model.Variant
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -16,7 +17,7 @@ class BrandProductsViewModel(repo: RepositoryInterface) : ViewModel(){
     private val allBrandProducts = MutableLiveData<List<Product>>()
 
     val onlineBrandProducts: LiveData<List<Product>> = allBrandProducts
-    fun getAllProducts(id:String){
+    fun getBrandProducts(id:String){
         viewModelScope.launch{
             val result = iRepo.getBrandProducts(id)
             withContext(Dispatchers.Main){
@@ -27,5 +28,6 @@ class BrandProductsViewModel(repo: RepositoryInterface) : ViewModel(){
         }
 
     }
+
 
 }

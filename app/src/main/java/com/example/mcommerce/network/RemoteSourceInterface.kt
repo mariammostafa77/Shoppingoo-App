@@ -6,9 +6,7 @@ import com.example.mcommerce.auth.model.CustomerDetail
 
 import com.example.mcommerce.draftModel.DraftOrder
 import com.example.mcommerce.home.model.BrandsModel
-import com.example.mcommerce.model.AllProductsModel
-import com.example.mcommerce.model.ProductDetails
-import com.example.mcommerce.model.DiscountCodesModel
+import com.example.mcommerce.model.*
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Path
@@ -18,6 +16,8 @@ interface RemoteSourceInterface {
     suspend fun getAllBrands():BrandsModel
     suspend fun getBrandProducts(id:String):AllProductsModel
     suspend fun getSpecificProduct(id:String): ProductDetails
+    suspend fun getVariant(id:String): Variants
+    suspend fun getSubCategories(vendor: String,productType:String,collectionId:String):AllProductsModel
 
     ///// Coupons
     suspend fun getDiscountCodes() : DiscountCodesModel

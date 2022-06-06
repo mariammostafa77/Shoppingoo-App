@@ -13,7 +13,9 @@ import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.R
 import com.example.mcommerce.brandProducts.viewModel.BrandProductsViewFactory
 import com.example.mcommerce.brandProducts.viewModel.BrandProductsViewModel
+import com.example.mcommerce.model.Product
 import com.example.mcommerce.model.Repository
+import com.example.mcommerce.model.Variant
 import com.example.mcommerce.network.AppClient
 
 class BrandProductsFragment : Fragment() {
@@ -25,6 +27,7 @@ class BrandProductsFragment : Fragment() {
     lateinit var brandProductsViewModel: BrandProductsViewModel
     lateinit var tvBrandNameBarTitle:TextView
     lateinit var communicator: Communicator
+    lateinit var allVariant:ArrayList<Variant>
     var id:String=""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +46,7 @@ class BrandProductsFragment : Fragment() {
         tvBrandNameBarTitle=view.findViewById(R.id.tvBrandNameBarTitle)
         bradProductsRecyclerView=view.findViewById(R.id.brandProductsRecycleView)
         brandProductsAdapter= BrandProductsAdapter()
+        allVariant= ArrayList<Variant>()
        if(arguments != null){
            id= arguments?.getString("brandId").toString()
            tvBrandNameBarTitle.text=arguments?.getString("brandTitle").toString()
@@ -56,11 +60,13 @@ class BrandProductsFragment : Fragment() {
                 requireContext()))
         brandProductsViewModel = ViewModelProvider(this, brandProductsFactory).get(BrandProductsViewModel::class.java)
 
-        brandProductsViewModel.getAllProducts(id)
+        brandProductsViewModel.getBrandProducts(id)
+
         brandProductsViewModel.onlineBrandProducts.observe(viewLifecycleOwner) { products ->
-            brandProductsViewModel.onlineBrandProducts.value?.let { brandProductsAdapter.setUpdatedData(it,requireContext(),communicator) }
+            brandProductsAdapter.setUpdatedData(products,requireContext(),communicator)
 
         }
+       
 
         return view
     }

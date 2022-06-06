@@ -98,12 +98,12 @@ class HomeActivity : AppCompatActivity(),Communicator {
         transaction.replace(R.id.frameLayout,productInfoFragment).commit()
     }
 
-    override fun goToProductInfo(id: String,brandName:String) {
+    override fun goFromBrandToCategories(brandName:String) {
         val bundle=Bundle()
-        bundle.putString("brandId",id)
         bundle.putString("brandTitle",brandName)
-        brandProductsFragment.arguments=bundle
-        replaceFragment(brandProductsFragment)
+        categoryFragment.arguments=bundle
+        replaceFragment(categoryFragment)
+        Log.i("TAG","brandName from home $brandName")
     }
     override fun goToSearchWithID(id: String) {
         val bundle=Bundle()
