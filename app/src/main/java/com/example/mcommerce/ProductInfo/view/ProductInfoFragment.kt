@@ -1,20 +1,28 @@
 package com.example.mcommerce.ProductInfo.view
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mcommerce.HomeActivity
 import com.example.mcommerce.HomeActivity.Companion.mySearchFlag
 import com.example.mcommerce.ProductInfo.viewModel.ProductInfoViewModel
 import com.example.mcommerce.ProductInfo.viewModel.ProductInfoViewModelFactory
 import com.example.mcommerce.R
 import com.example.mcommerce.categories.view.CategoryFragment
+import com.example.mcommerce.draftModel.DraftOrder
+import com.example.mcommerce.draftModel.DraftOrderX
+import com.example.mcommerce.draftModel.LineItem
+import com.example.mcommerce.draftModel.NoteAttribute
 import com.example.mcommerce.me.viewmodel.SavedSetting.Companion.loadCurrency
 import com.example.mcommerce.model.Image
 import com.example.mcommerce.model.Product
@@ -42,6 +50,7 @@ class ProductInfoFragment : Fragment() {
     lateinit var backImg:ImageView
     lateinit var sizeSpinner:Spinner
     lateinit var colorSpinner:Spinner
+    lateinit var btnAddToCard:Button
     var count:Int=0
     var totalRate=0
     var price : Double = 0.0
@@ -67,6 +76,8 @@ class ProductInfoFragment : Fragment() {
         backImg=view.findViewById(R.id.backImg)
         sizeSpinner=view.findViewById(R.id.sizeSpinner)
         colorSpinner=view.findViewById(R.id.colorSpiner)
+        btnAddToCard=view.findViewById(R.id.btnAddToCard)
+
 
         currency = loadCurrency(requireContext())
         //start
@@ -117,12 +128,58 @@ class ProductInfoFragment : Fragment() {
             sizeSpinner.adapter=sizeAdapter
             colorSpinner.adapter=colorAdapter
 
+            val sharedPreferences = requireContext().getSharedPreferences("userAuth", AppCompatActivity.MODE_PRIVATE)
+            btnAddToCard.setOnClickListener {
+                var variantId:Long=0
+                val customerEmail = sharedPreferences.getString("email",null).toString()
+                var order=DraftOrderX()
+                order.note="card"
+                order.email=customerEmail
+
+                for(i in 0..product.variants.size-1){
+                    if(product.variants[i].option1==sizeSpinner.getSelectedItem().toString() &&
+                        product.variants[i].option2==colorSpinner.getSelectedItem().toString() ){
+                        variantId=  product.variants[i].id
+                        Log.i("Index","index: "+variantId.toString())
+                       // order.line_items!![0].variant_id = variantId
+                        var lineItem=LineItem()
+                        lineItem.quantity=Integer.parseInt(productCount.text.toString())
+                        lineItem.variant_id=variantId
+                        order.line_items=listOf(lineItem)
+
+                        break
+
+                    }
+
+                }
+               // order.line_items!![0].variant_id = 40335555395723
+                var productImage=NoteAttribute()
+                productImage.name="image"
+                productImage.value=product.images[0].src
+              order.note_attributes=listOf(productImage)
+
+                var draftOrder= DraftOrder(order)
+                specificProductsViewModel.getCardOrder(draftOrder)
+                specificProductsViewModel.onlineCardOrder.observe(viewLifecycleOwner) { cardOrder ->
+                    if(cardOrder.isSuccessful){
+                        Toast.makeText(requireContext(),"add to card successfull: "+cardOrder.code().toString(),Toast.LENGTH_LONG).show()
+                    }
+                    else{
+
+                        Toast.makeText(requireContext(),"add to card failed: "+cardOrder.code().toString(),Toast.LENGTH_LONG).show()
+
+                    }
+                }
+
+
+            }
+
 
 
         }
 
         //end
-        productCount.text=count.toString()
+        productCount.text="1"
         btnIncrease.setOnClickListener{
             //Toast.makeText(requireContext(),"test",Toast.LENGTH_LONG).show()
             count++
@@ -150,8 +207,6 @@ class ProductInfoFragment : Fragment() {
                 trans.replace(R.id.frameLayout, CategoryFragment()).commit()
             }
         }
-
-
 
 
 

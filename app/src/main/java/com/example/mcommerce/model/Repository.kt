@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.mcommerce.auth.model.CustomerDetail
 import com.example.mcommerce.auth.model.CustomerX
+import com.example.mcommerce.draftModel.DraftOrder
 import com.example.mcommerce.home.model.BrandsModel
 import com.example.mcommerce.network.RemoteSourceInterface
 import retrofit2.Response
@@ -46,6 +47,10 @@ class Repository private constructor(var remoteSource: RemoteSourceInterface, va
 
     override suspend fun postNewCustomer(customer: CustomerDetail): Response<CustomerDetail> {
         return  remoteSource.postNewCustomer(customer)
+    }
+
+    override suspend fun postNewDraftOrder(order: DraftOrder): Response<DraftOrder> {
+        return  remoteSource.postNewDraftOrder(order)
     }
 
 }

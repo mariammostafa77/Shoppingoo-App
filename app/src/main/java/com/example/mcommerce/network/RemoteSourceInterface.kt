@@ -1,6 +1,7 @@
 package com.example.mcommerce.network
 import com.example.mcommerce.auth.model.CustomerDetail
 import com.example.mcommerce.auth.model.CustomerX
+import com.example.mcommerce.draftModel.DraftOrder
 import com.example.mcommerce.home.model.BrandsModel
 import com.example.mcommerce.model.AllProductsModel
 import com.example.mcommerce.model.ProductDetails
@@ -17,4 +18,5 @@ interface RemoteSourceInterface {
     ///// Coupons
     suspend fun getDiscountCodes() : DiscountCodesModel
     suspend fun postNewCustomer(customer: CustomerDetail):Response<CustomerDetail>
+    suspend fun postNewDraftOrder(order: DraftOrder):Response<DraftOrder>
 }

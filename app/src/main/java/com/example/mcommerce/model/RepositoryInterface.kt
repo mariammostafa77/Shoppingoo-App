@@ -2,6 +2,7 @@ package com.example.mcommerce.model
 
 import com.example.mcommerce.auth.model.CustomerDetail
 import com.example.mcommerce.auth.model.CustomerX
+import com.example.mcommerce.draftModel.DraftOrder
 import com.example.mcommerce.home.model.BrandsModel
 import retrofit2.Response
 
@@ -13,4 +14,5 @@ interface RepositoryInterface {
 
     suspend fun getDiscountsCods() : DiscountCodesModel
     suspend fun postNewCustomer(customer: CustomerDetail): Response<CustomerDetail>
+    suspend fun postNewDraftOrder(order: DraftOrder):Response<DraftOrder>
 }
