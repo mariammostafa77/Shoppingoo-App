@@ -15,14 +15,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
         <TextView
             android:id="@+id/userProfileBarTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/your_profile"
-            android:textSize="22sp"
             android:textAlignment="center"
-            android:textColor="@color/tool_bar_title"
+            android:textColor="@color/white"
+            android:textSize="22sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -35,21 +36,23 @@
             android:layout_marginEnd="10dp"
             android:text="Done"
             android:textAlignment="center"
-            android:textColor="@color/tool_bar_title"
+            android:textColor="@color/white"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
         <ImageView
             android:id="@+id/user_profile_back_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/arrow_back_24"
             android:layout_marginStart="10dp"
+            android:contentDescription="TODO"
+            android:src="@drawable/arrow_back_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:contentDescription="TODO" />
+            app:tint="@color/white" />
     </androidx.constraintlayout.widget.ConstraintLayout>
     <TextView
         android:id="@+id/txtEditUserProfile"
