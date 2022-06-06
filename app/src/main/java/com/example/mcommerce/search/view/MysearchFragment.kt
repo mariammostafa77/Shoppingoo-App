@@ -119,7 +119,7 @@ class MysearchFragment : Fragment() {
                         AppClient.getInstance(),
                         requireContext()))
                 categoriesProductViewModel = ViewModelProvider(this, categoriesProductFactory).get(CategoriesViewModel::class.java)
-                categoriesProductViewModel.getAllProducts(output)
+                categoriesProductViewModel.getBrandProducts(output)
                 categoriesProductViewModel.onlineProducts.observe(viewLifecycleOwner) {
 
                     Log.i("TAG","Count  ${it.size}")

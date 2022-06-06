@@ -51,8 +51,8 @@ class BrandAdapter() : RecyclerView.Adapter<BrandAdapter.ViewHolder>(){
             Log.i("TAG","from onBind ${allBrands[position]}")
             Glide.with(context).load(allBrands[position].image.src).into(brandImg)
             brandCard.setOnClickListener(View.OnClickListener {
-                communicator.goToProductInfo(allBrands[position].id.toString(),allBrands[position].title.toString())
-
+                communicator.goFromBrandToCategories(allBrands[position].title)
+                Log.i("TAG","brand name from adapter ${allBrands[position].title}")
 
             })
         }

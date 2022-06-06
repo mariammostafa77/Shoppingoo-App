@@ -3,6 +3,8 @@ package com.example.mcommerce.model
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
+import com.example.mcommerce.auth.login.model.CustomerModel
+import com.example.mcommerce.auth.login.model.cust_details
 import com.example.mcommerce.auth.model.CustomerDetail
 import com.example.mcommerce.auth.model.CustomerX
 import com.example.mcommerce.draftModel.DraftOrder
@@ -10,6 +12,8 @@ import com.example.mcommerce.draftModel.DraftOrderX
 import com.example.mcommerce.draftModel.DraftResponse
 import com.example.mcommerce.home.model.BrandsModel
 import com.example.mcommerce.network.RemoteSourceInterface
+import com.example.mcommerce.network.RetrofitHelper
+import com.example.mcommerce.network.ServiceApi
 import retrofit2.Response
 
 class Repository private constructor(var remoteSource: RemoteSourceInterface, var context: Context)
@@ -43,12 +47,19 @@ class Repository private constructor(var remoteSource: RemoteSourceInterface, va
         return remoteSource.getSpecificProduct(id)
     }
 
+    override suspend fun getVariant(id: String):Variants{
+        return remoteSource.getVariant(id)
+    }
+
     override suspend fun getDiscountsCods(): DiscountCodesModel {
         return  remoteSource.getDiscountCodes()
     }
 
     override suspend fun postNewCustomer(customer: CustomerDetail): Response<CustomerDetail> {
         return  remoteSource.postNewCustomer(customer)
+    }
+    override suspend fun getSubCategories(vendor: String,productType:String,collectionId:String):AllProductsModel{
+        return  remoteSource.getSubCategories(vendor,productType,collectionId)
     }
 
     override suspend fun getCustomerDetails(id: String): CustomerDetail {
@@ -65,6 +76,11 @@ class Repository private constructor(var remoteSource: RemoteSourceInterface, va
 
     override suspend fun postNewDraftOrder(order: DraftOrder): Response<DraftOrder> {
         return  remoteSource.postNewDraftOrder(order)
+    }
+
+    override suspend fun getCustomers(): cust_details {
+       // Log.i("login",remoteSource.getCustomers().toString())
+        return  remoteSource.getCustomers()
     }
 
     override suspend fun getShoppingCartProducts(): DraftResponse {
