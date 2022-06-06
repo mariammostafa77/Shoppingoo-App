@@ -14,7 +14,7 @@
         android:layout_gravity="center"
         >
         <TextView
-            android:id="@+id/countryText"
+            android:id="@+id/userCountryText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/country"
@@ -23,33 +23,33 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
         <TextView
-            android:id="@+id/cityText"
+            android:id="@+id/userCityText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/city"
             android:textSize="21sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/countryText" />
+            app:layout_constraintTop_toBottomOf="@id/userCountryText" />
         <TextView
-            android:id="@+id/areaText"
+            android:id="@+id/userAddressLine1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/area"
             android:textSize="21sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cityText" />
+            app:layout_constraintTop_toBottomOf="@id/userCityText" />
 
         <TextView
-            android:id="@+id/phoneText"
+            android:id="@+id/userPhoneText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/phone1"
             android:textSize="21sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/areaText"/>
+            app:layout_constraintTop_toBottomOf="@id/userAddressLine1"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

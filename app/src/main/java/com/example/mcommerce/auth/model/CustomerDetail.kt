@@ -1,3 +1,3 @@
 package com.example.mcommerce.auth.model
 
-data class CustomerDetail ( val customer: CustomerX? = null)
+data class CustomerDetail ( var customer: CustomerX? = null)

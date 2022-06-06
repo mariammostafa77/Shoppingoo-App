@@ -1,6 +1,7 @@
 package com.example.mcommerce.me.view.setting
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.LocationManager
@@ -18,7 +19,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModelProvider
+import com.example.mcommerce.HomeActivity
 import com.example.mcommerce.R
+import com.example.mcommerce.auth.model.Addresse
+import com.example.mcommerce.auth.model.CustomerDetail
+import com.example.mcommerce.auth.model.CustomerX
+import com.example.mcommerce.me.viewmodel.CustomerViewModel
+import com.example.mcommerce.me.viewmodel.CustomerViewModelFactory
+import com.example.mcommerce.model.Repository
+import com.example.mcommerce.network.AppClient
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
@@ -38,6 +48,9 @@ class AddNewAddressFragment : Fragment() {
     lateinit var btnSaveNewAddress : Button
     lateinit var addressDataLayout: ConstraintLayout
 
+    lateinit var customerViewModel: CustomerViewModel
+    lateinit var customerViewModelFactory: CustomerViewModelFactory
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -45,14 +58,21 @@ class AddNewAddressFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
        val view = inflater.inflate(R.layout.fragment_add_new_address, container, false)
         initComponent(view)
+
+        customerViewModelFactory = CustomerViewModelFactory(Repository.getInstance(AppClient.getInstance(), requireContext()))
+        customerViewModel = ViewModelProvider(this, customerViewModelFactory).get(CustomerViewModel::class.java)
+        val sharedPreferences = requireContext().getSharedPreferences("userAuth", AppCompatActivity.MODE_PRIVATE)
+        val customerId = sharedPreferences.getString("cusomerID",null).toString()
+
             chooseLocationImg.setOnClickListener {
                 checkLocationPermission()
             }
         val bundle = arguments
+        var userAddress = emptyList<String>()
         if (bundle != null) {
             addressDataLayout.isVisible = true
             btnSaveNewAddress.isVisible = true
-            val userAddress = bundle.getStringArrayList("adress")
+            userAddress = bundle.getStringArrayList("adress")!!
             txtCountry.append(" ${userAddress?.get(0).toString()}")
             txtCity.append(" ${userAddress?.get(1).toString()}")
             txtZipCode.append(" ${userAddress?.get(3).toString()}")
@@ -61,7 +81,24 @@ class AddNewAddressFragment : Fragment() {
             btnSaveNewAddress.isVisible = false
         }
         btnSaveNewAddress.setOnClickListener {
-
+            val customer = CustomerX()
+            customer.addresses = listOf(Addresse(address1 =txtAddressLine1.text.toString(), address2 = txtAddressLine2.text.toString(),
+                phone = txtPhoneNumber.text.toString(),city = userAddress.get(1),province = "",zip = userAddress.get(3),country = userAddress.get(0) ))
+            val customDetail = CustomerDetail(customer)
+            customerViewModel.addNewCustomerAddress(customerId,customDetail)
+            customerViewModel.newCustomerAddress.observe(viewLifecycleOwner) { response ->
+                if(response.isSuccessful){
+                    Toast.makeText(requireContext(),"Updated Successfull: "+response.code().toString(),Toast.LENGTH_LONG).show()
+                    Log.i("update","messs from success: "+response.body().toString())
+                    val transaction = requireActivity().supportFragmentManager.beginTransaction()
+                    transaction.replace(R.id.frameLayout, UserAddressesFragment())
+                    transaction.addToBackStack(null);
+                    transaction.commit()
+                }
+                else{
+                    Toast.makeText(requireContext(),"Updated failed: "+response.code().toString(),Toast.LENGTH_LONG).show()
+                }
+            }
         }
         return view
     }

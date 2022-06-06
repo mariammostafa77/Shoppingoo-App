@@ -42,10 +42,9 @@ class HomeActivity : AppCompatActivity(),Communicator {
         setContentView(R.layout.activity_home)
 
         SavedSetting.loadLocale(this)
-      //  SavedSetting.loadCurrency(this)
 
         bottomNavigationView = findViewById(R.id.buttomNav)
-        passMapDataToFragment()
+
        // replaceFragment(homeFragment)
 
         //getSupportFragmentManager().beginTransaction().replace(R.id.viewLayout,new HomeFragment()).commit();
@@ -69,7 +68,7 @@ class HomeActivity : AppCompatActivity(),Communicator {
                     true
                 }
                 R.id.meTab -> {
-                    replaceFragment(meWithoutLoginFragment)
+                    replaceFragment(meWithLogin)
                     true
                 }
                 else -> false
@@ -77,7 +76,7 @@ class HomeActivity : AppCompatActivity(),Communicator {
         }
         //from search to productInfo
 
-
+        passMapDataToFragment()
     }
 
 
