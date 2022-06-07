@@ -153,10 +153,11 @@ class CategoryFragment : Fragment() {
         }
 
 
-        categoriesProductViewModel.onlineProducts.observe(viewLifecycleOwner){}
+        //categoriesProductViewModel.onlineProducts.observe(viewLifecycleOwner){}
         searchIcon.setOnClickListener {
             mySearchFlag=2
-            communicator.goToSearchWithID(id)
+            //communicator.goToSearchWithID(id)
+            communicator.goToSearchWithAllData(id,brandName,subCategorySelected)
 
         }
 

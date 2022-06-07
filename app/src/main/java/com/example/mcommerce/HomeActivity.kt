@@ -113,6 +113,17 @@ class HomeActivity : AppCompatActivity(),Communicator {
         transaction.replace(R.id.frameLayout,searchFragment).commit()
     }
 
+    override fun goToSearchWithAllData(id: String, brandName: String, subCatName: String) {
+        val bundle=Bundle()
+        bundle.putString("catID",id)
+        bundle.putString("brandName",brandName)
+        bundle.putString("subCatName",subCatName)
+        val transaction=this.supportFragmentManager.beginTransaction()
+        val searchFragment=MysearchFragment()
+        searchFragment.arguments=bundle
+        transaction.replace(R.id.frameLayout,searchFragment).commit()
+    }
+
     private fun passMapDataToFragment() {
         val bundle: Bundle? = intent.extras
         if (bundle != null) {

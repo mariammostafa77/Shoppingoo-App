@@ -36,6 +36,9 @@ class MysearchFragment : Fragment() {
     lateinit var edtSearch:AutoCompleteTextView
     lateinit var btnSearch:Button
     lateinit var output:String
+    var productID:String=""
+    var brandName:String=""
+    var subCatName:String=""
     lateinit var allProductArrayList:ArrayList<Product>
     lateinit var filterProductArrayList:ArrayList<Product>
     var productsName:ArrayList<String> = ArrayList<String>()
@@ -114,13 +117,16 @@ class MysearchFragment : Fragment() {
         else if(mySearchFlag==2){
 
                 output= arguments?.getString("catID").toString()
+                productID= arguments?.getString("catID").toString()
+                brandName= arguments?.getString("brandName").toString()
+                subCatName= arguments?.getString("subCatName").toString()
                 categoriesProductFactory = CategoriesViewFactory(
                     Repository.getInstance(
                         AppClient.getInstance(),
                         requireContext()))
                 categoriesProductViewModel = ViewModelProvider(this, categoriesProductFactory).get(CategoriesViewModel::class.java)
-                categoriesProductViewModel.getBrandProducts(output)
-                categoriesProductViewModel.onlineProducts.observe(viewLifecycleOwner) {
+                categoriesProductViewModel.getCategories(brandName,subCatName,productID)
+                categoriesProductViewModel.onlinesubcategoriesProduct.observe(viewLifecycleOwner)  {
 
                     Log.i("TAG","Count  ${it.size}")
 
