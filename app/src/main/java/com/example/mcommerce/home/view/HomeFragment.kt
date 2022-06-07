@@ -103,14 +103,14 @@ class HomeFragment : Fragment() {
         }
 
         homeViewModel.onlineDiscountCodes.observe(viewLifecycleOwner) { coupons ->
-            Log.i("getCodes","Get Discount Codes \n ${coupons.get(0)}")
+            //Log.i("getCodes","Get Discount Codes \n ${coupons.get(0)}")
             if (coupons != null){
                 discountCodeAdapter.setCouponsData(requireContext(), coupons)
             }
         }
         homeViewModel.getAllProducts()
         homeViewModel.onlineBrands.observe(viewLifecycleOwner) { brands ->
-            Log.i("TAG","hello from home fragment ${homeViewModel.onlineBrands.value?.get(1)?.id}")
+         //   Log.i("TAG","hello from home fragment ${homeViewModel.onlineBrands.value?.get(1)?.id}")
             homeViewModel.onlineBrands.value?.let { brandAdapter.setUpdatedData(it,requireContext(),communicator) }
         }
         var img: ImageView =view.findViewById(R.id.searchImg);

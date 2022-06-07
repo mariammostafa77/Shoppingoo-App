@@ -29,21 +29,15 @@ class BrandProductsAdapter : RecyclerView.Adapter<BrandProductsAdapter.ViewHolde
         this.comminucator=comminucator
         notifyDataSetChanged()
     }
-    /*fun setUpdatedData(allBrands:List<Product>,variant:List<Variants>,context: Context,comminucator:Communicator){
-        this.allBrands=allBrands
-        this.variant=variant
-        this.context=context
-        this.comminucator=comminucator
-        notifyDataSetChanged()
-    }*/
     inner class ViewHolder(private val itemView: View): RecyclerView.ViewHolder(itemView){
         var productName:TextView=itemView.findViewById(R.id.productName)
         val productImage: ImageView = itemView.findViewById(R.id.productImage)
         var catCardView:CardView=itemView.findViewById(R.id.cardViewCategoryItem)
+        var tvProductPrice:TextView=itemView.findViewById(R.id.tvProductPrice)
+
         fun bind(data: Product){
-            Log.i("TAG","from onBind adapter ${allBrands}")
-            productName.text=allBrands[position].variants[0].price
-            //productName.text=variant[position].variants[0].price
+            productName.text=allBrands[position].title
+            tvProductPrice.text=allBrands[position].variants[0].price + "EGP"
             Glide.with(context).load(allBrands[position].image.src).into(productImage)
             catCardView.setOnClickListener {
                 comminucator.passProductData(allBrands[position])
