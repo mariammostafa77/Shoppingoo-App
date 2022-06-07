@@ -97,27 +97,32 @@ class CategoryFragment : Fragment() {
 
         val tab = categoriesTabLayout.getTabAt(0)
         tab!!.select()
-        id="273053712523"
+        id=""
 
         categoriesTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 when (tab.position) {
                     0 -> {
-                        id="273053712523"
+                        id=""
                         categoriesProductViewModel.getCategories(brandName,subCategorySelected,id)
                         true
                     }
                     1 -> {
-                        id="273053679755"
+                        id="273053712523"
                         categoriesProductViewModel.getCategories(brandName,subCategorySelected,id)
                         true
                     }
                     2 -> {
-                        id="273053745291"
+                        id="273053679755"
                         categoriesProductViewModel.getCategories(brandName,subCategorySelected,id)
                         true
                     }
                     3 -> {
+                        id="273053745291"
+                        categoriesProductViewModel.getCategories(brandName,subCategorySelected,id)
+                        true
+                    }
+                    4 -> {
                         id="273053778059"
                         categoriesProductViewModel.getCategories(brandName,subCategorySelected,id)
                         true
@@ -165,7 +170,7 @@ class CategoryFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         fabClicked=false
-        id="273053712523"
+        id=""
         subCategorySelected=""
         categoriesProductViewModel.getCategories(brandName,subCategorySelected,id)
         //categoryBarTitle.text=brandName
