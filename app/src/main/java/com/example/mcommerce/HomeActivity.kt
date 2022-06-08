@@ -13,7 +13,6 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
 import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.ProductInfo.view.ProductInfoFragment
-import com.example.mcommerce.brandProducts.view.BrandProductsFragment
 import com.example.mcommerce.categories.view.CategoryFragment
 import com.example.mcommerce.home.view.HomeFragment
 import com.example.mcommerce.me.view.MeWithLogin
@@ -29,7 +28,6 @@ class HomeActivity : AppCompatActivity(),Communicator {
     private val homeFragment = HomeFragment()
     private val meWithLogin = MeWithLogin()
     private val categoryFragment = CategoryFragment()
-    private  val brandProductsFragment = BrandProductsFragment()
     private val meWithoutLoginFragment = MeWithoutLoginFragment()
     lateinit var bottomNavigationView: BottomNavigationView
     companion object{

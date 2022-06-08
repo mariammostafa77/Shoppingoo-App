@@ -1,7 +1,6 @@
-package com.example.mcommerce.brandProducts.view
+package com.example.mcommerce.categories.view
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,10 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.R
-import com.example.mcommerce.home.model.SmartCollection
 import com.example.mcommerce.model.Product
-import com.example.mcommerce.model.Variant
-import com.example.mcommerce.model.Variants
 
 class BrandProductsAdapter : RecyclerView.Adapter<BrandProductsAdapter.ViewHolder>(){
     var allBrands:List<Product> = ArrayList<Product>()

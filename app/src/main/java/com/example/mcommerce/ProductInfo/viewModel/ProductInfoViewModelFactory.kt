@@ -2,7 +2,6 @@ package com.example.mcommerce.ProductInfo.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.mcommerce.brandProducts.viewModel.BrandProductsViewModel
 import com.example.mcommerce.model.Repository
 import java.lang.IllegalArgumentException
 

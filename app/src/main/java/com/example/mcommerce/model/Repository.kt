@@ -64,6 +64,10 @@ class Repository private constructor(var remoteSource: RemoteSourceInterface, va
         return  remoteSource.getSubCategories(vendor,productType,collectionId)
     }
 
+    override suspend fun getProductTypes(id: String):AllProductsModel {
+        return remoteSource.getProductTypes(id)
+    }
+
     override suspend fun getCustomerDetails(id: String): CustomerDetail {
         return remoteSource.getUserDetails(id)
     }

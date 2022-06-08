@@ -73,6 +73,13 @@ class AppClient : RemoteSourceInterface {
         val response = service?.getCustomers()
         return response!!
     }
+
+    override suspend fun getProductTypes(id: String): AllProductsModel {
+        val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
+        val response = service?.getProductTypes(id)
+        return response!!
+    }
+
     override suspend fun getSubCategories(vendor: String,productType:String,collectionId:String):AllProductsModel{
         val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
         val response = service?.getSubCategories(vendor,productType,collectionId)

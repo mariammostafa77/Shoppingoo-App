@@ -130,5 +130,14 @@ import java.util.*
       @DELETE("draft_orders/"+"{draft_order_id}"+".json")
       suspend fun deleteProductFromShoppingCart(@Path("draft_order_id") id: String?): Response<DraftOrder>
 
+      @Headers(
+          "Accept: application/json",
+          "X-Shopify-Access-Token: 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",
+      )
+      @GET("collections/"+"{id}"+"/products.json?fields=product_type")
+      suspend fun getProductTypes(@Path("id") id:String?): AllProductsModel
+
+
+
 }
 

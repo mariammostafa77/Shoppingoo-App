@@ -28,6 +28,8 @@ interface RemoteSourceInterface {
     suspend fun getVariant(id:String): Variants
     suspend fun getSubCategories(vendor: String,productType:String,collectionId:String):AllProductsModel
 
+    suspend fun getShoppingCartProducts(): DraftResponse
+
     ///// Coupons
     suspend fun getDiscountCodes() : DiscountCodesModel
     suspend fun postNewCustomer(customer: CustomerDetail):Response<CustomerDetail>
@@ -40,7 +42,7 @@ interface RemoteSourceInterface {
     suspend fun postNewDraftOrder(order: DraftOrder):Response<DraftOrder>
     suspend fun getCustomers(): cust_details
 
-    suspend fun getShoppingCartProducts(): DraftResponse
+    suspend fun getProductTypes(id : String): AllProductsModel
 
     suspend fun deleteProductFromShoppingCart(id: String?): Response<DraftOrder>
 }
