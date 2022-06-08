@@ -90,6 +90,12 @@ class AppClient : RemoteSourceInterface {
         return response!!
     }
 
+    override suspend fun updateDraftOrder(id: String?, order: DraftOrder): Response<DraftOrder> {
+        val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
+        val response = service?.updateDraftOrder(id,order)
+        return response!!
+    }
+
     override suspend fun getUserDetails(id: String): CustomerDetail {
         val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
         val response = service?.getUserInfo(id)

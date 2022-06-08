@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.R
 import com.example.mcommerce.me.viewmodel.CustomerViewModel
 import com.example.mcommerce.me.viewmodel.CustomerViewModelFactory
@@ -22,24 +23,24 @@ class UserAddressesFragment : Fragment() {
 
     lateinit var address_back_icon : ImageView
     lateinit var btnAddNewAddress : Button
-
     lateinit var customerAddressesRecyclerView: RecyclerView
     private lateinit var customerAddressAdapter: CustomerAddressAdapter
     lateinit var customerAddressesLayoutManager: LinearLayoutManager
     lateinit var customerViewModel: CustomerViewModel
     lateinit var customerViewModelFactory: CustomerViewModelFactory
 
+    lateinit var communicator: Communicator
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_user_addresses, container, false)
         initComponent(view)
 
-        customerAddressesRecyclerView = view.findViewById(R.id.userAddressesRecyclerView)
-        customerAddressAdapter = CustomerAddressAdapter()
+        communicator = activity as Communicator
+        customerAddressAdapter = CustomerAddressAdapter(communicator)
         customerAddressesLayoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
         customerAddressesRecyclerView.setLayoutManager(customerAddressesLayoutManager)
         customerAddressesRecyclerView.setAdapter(customerAddressAdapter)
@@ -64,10 +65,10 @@ class UserAddressesFragment : Fragment() {
         }
         return view
     }
-
     private fun initComponent(view: View){
         address_back_icon = view.findViewById(R.id.address_back_icon)
         btnAddNewAddress = view.findViewById(R.id.btnAddNewAddress)
+        customerAddressesRecyclerView = view.findViewById(R.id.userAddressesRecyclerView)
     }
 
 

@@ -88,6 +88,10 @@ class Repository private constructor(var remoteSource: RemoteSourceInterface, va
         return remoteSource.deleteProductFromShoppingCart(id)
     }
 
+    override suspend fun updateDraftOrder(id: String?, order: DraftOrder): Response<DraftOrder> {
+        return remoteSource.updateDraftOrder(id,order)
+    }
+
     override suspend fun getShoppingCartProducts(): DraftResponse {
         return remoteSource.getShoppingCartProducts()
     }

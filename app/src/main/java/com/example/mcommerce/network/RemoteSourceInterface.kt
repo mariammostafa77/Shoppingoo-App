@@ -10,6 +10,7 @@ import com.example.mcommerce.draftModel.DraftResponse
 import com.example.mcommerce.home.model.BrandsModel
 import com.example.mcommerce.model.*
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.Path
 import java.util.*
 
@@ -33,4 +34,7 @@ interface RemoteSourceInterface {
     suspend fun getShoppingCartProducts(): DraftResponse
 
     suspend fun deleteProductFromShoppingCart(id: String?): Response<DraftOrder>
+
+    suspend fun updateDraftOrder(id: String? , order: DraftOrder):Response<DraftOrder>
+
 }
