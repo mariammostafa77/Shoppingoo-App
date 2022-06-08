@@ -2,6 +2,7 @@ package com.example.mcommerce.model
 
 import android.content.Context
 import android.util.Log
+import androidx.fragment.app.strictmode.SetRetainInstanceUsageViolation
 import androidx.lifecycle.LiveData
 import com.example.mcommerce.auth.login.model.CustomerModel
 import com.example.mcommerce.auth.login.model.cust_details
@@ -15,6 +16,7 @@ import com.example.mcommerce.network.RemoteSourceInterface
 import com.example.mcommerce.network.RetrofitHelper
 import com.example.mcommerce.network.ServiceApi
 import retrofit2.Response
+import java.util.*
 
 class Repository private constructor(var remoteSource: RemoteSourceInterface, var context: Context)
     : RepositoryInterface {
@@ -70,8 +72,8 @@ class Repository private constructor(var remoteSource: RemoteSourceInterface, va
         return remoteSource.addNewAddress(id,customer)
     }
 
-    override suspend fun changeCustomerCurrency(id: String? , customer: CustomerDetail): Response<CustomerDetail> {
-        return remoteSource.changeCustomerCurrency(id,customer)
+    override suspend fun changeCustomerCurrency(id: String? , currency: String): Response<CustomerDetail> {
+        return remoteSource.changeCustomerCurrency(id,currency)
     }
 
     override suspend fun postNewDraftOrder(order: DraftOrder): Response<DraftOrder> {
@@ -79,12 +81,14 @@ class Repository private constructor(var remoteSource: RemoteSourceInterface, va
     }
 
     override suspend fun getCustomers(): cust_details {
-       // Log.i("login",remoteSource.getCustomers().toString())
         return  remoteSource.getCustomers()
     }
 
+    override suspend fun deleteProductFromShoppingCart(id: String?): Response<DraftOrder> {
+        return remoteSource.deleteProductFromShoppingCart(id)
+    }
+
     override suspend fun getShoppingCartProducts(): DraftResponse {
-        Log.i("TAGGGGGG",remoteSource.getShoppingCartProducts().toString())
         return remoteSource.getShoppingCartProducts()
     }
 
