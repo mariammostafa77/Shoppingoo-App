@@ -1,12 +1,8 @@
 package com.example.mcommerce.network
 
-import com.example.mcommerce.auth.login.model.CustomerModel
 import com.example.mcommerce.auth.login.model.cust_details
-import com.example.mcommerce.auth.model.Customer
 import com.example.mcommerce.auth.model.CustomerDetail
-import com.example.mcommerce.auth.model.CustomerX
 import com.example.mcommerce.draftModel.DraftOrder
-import com.example.mcommerce.draftModel.DraftOrderX
 import com.example.mcommerce.draftModel.DraftResponse
 import com.example.mcommerce.home.model.BrandsModel
 import com.example.mcommerce.model.*
@@ -88,6 +84,12 @@ class AppClient : RemoteSourceInterface {
         return response!!
     }
 
+    override suspend fun deleteProductFromShoppingCart(id: String?): Response<DraftOrder> {
+        val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
+        val response = service?.deleteProductFromShoppingCart(id)
+        return response!!
+    }
+
     override suspend fun getUserDetails(id: String): CustomerDetail {
         val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
         val response = service?.getUserInfo(id)
@@ -100,9 +102,9 @@ class AppClient : RemoteSourceInterface {
         return response!!
     }
 
-    override suspend fun changeCustomerCurrency(id: String? , customer: CustomerDetail): Response<CustomerDetail> {
+    override suspend fun changeCustomerCurrency(id: String? , currency: String): Response<CustomerDetail> {
         val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
-        val response = service?.changeCustomerCurrency(id,customer)
+        val response = service?.changeCustomerCurrency(id,currency)
         return response!!
     }
 

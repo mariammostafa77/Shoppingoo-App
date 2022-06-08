@@ -61,7 +61,6 @@ import java.util.*
       @GET("price_rules/1089622311051/discount_codes.json")
       suspend fun getDiscountCodesFromNetwork(): DiscountCodesModel
 
-
       @Headers(
           "X-Shopify-Shop-Api-Call-Limit: 40/40",
           "Retry-After: 2.0",
@@ -78,7 +77,6 @@ import java.util.*
       )
       @POST("draft_orders.json")
       suspend fun postNewDraftOrder(@Body order: DraftOrder):Response<DraftOrder>
-
 
       @Headers(
           "X-Shopify-Shop-Api-Call-Limit: 40/40",
@@ -113,15 +111,24 @@ import java.util.*
           "Accept: application/json",
           "X-Shopify-Access-Token: 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"
       )
+      @FormUrlEncoded
       @PATCH("customers/"+"{id}"+".json")
-      suspend fun changeCustomerCurrency(@Path("id") id: String? ,@Body customer: CustomerDetail): Response<CustomerDetail>
+      suspend fun changeCustomerCurrency(@Path("id") id: String? ,@Field("currency") currency: String): Response<CustomerDetail>
 
       @Headers(
           "Accept: application/json",
-          "X-Shopify-Access-Token: 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",
-      )
+          "X-Shopify-Access-Token: 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",)
       @GET("draft_orders.json")
       suspend fun getShoppingCartProducts(): DraftResponse
+
+      @Headers(
+          "X-Shopify-Shop-Api-Call-Limit: 40/40",
+          "Retry-After: 2.0",
+          "Accept: application/json",
+          "X-Shopify-Access-Token: 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"
+      )
+      @DELETE("draft_orders/"+"{draft_order_id}"+".json")
+      suspend fun deleteProductFromShoppingCart(@Path("draft_order_id") id: String?): Response<DraftOrder>
 
 }
 
