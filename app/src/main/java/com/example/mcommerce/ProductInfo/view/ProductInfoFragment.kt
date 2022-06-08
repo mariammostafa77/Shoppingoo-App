@@ -15,6 +15,7 @@ import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -63,7 +64,8 @@ class ProductInfoFragment : Fragment() {
     lateinit var sizeSpinner:Spinner
     lateinit var colorSpinner:Spinner
     lateinit var btnAddToCard:Button
-
+    var allFavProducts:ArrayList<DraftOrderX> = ArrayList<DraftOrderX>()
+    var allProducts:List<Product> = ArrayList<Product>()
 
 
     var count:Int=0
@@ -112,21 +114,22 @@ class ProductInfoFragment : Fragment() {
 
         specificProductsViewModel.getSpecificProducts(output.id.toString())
         specificProductsViewModel.onlineSpecificProducts.observe(viewLifecycleOwner) { product ->
+            allProducts=listOf(product)
 
 
             Log.i("pro", "from fragment" + product.toString())
             specificProductsViewModel.onlineSpecificProducts.value?.let {
                 specificProductsViewModel.getFavProducts()
                 specificProductsViewModel.onlineFavProduct.observe(viewLifecycleOwner) { favProducts ->
-                    for (i in 0..favProducts.size-1){
+                    allFavProducts.addAll(favProducts)
+                    for (i in 0..favProducts.size-1) {
+                        if (favProducts.get(i).note == noteStatus && favProducts.get(i).email == customerEmail) {
+                            if (product.variants[0].id == favProducts[i].line_items!![0].variant_id) {
+                                addToFavImg.setImageResource(R.drawable.ic_favorite)
 
-                        if(product.variants[0].id== favProducts[i].line_items!![0].variant_id){
-
-                            addToFavImg.setImageResource(R.drawable.ic_favorite)
-
+                            }
                         }
                     }
-
 
                 }
 
@@ -212,57 +215,73 @@ class ProductInfoFragment : Fragment() {
             }
             addToFavImg.setOnClickListener {
 
-//                specificProductsViewModel.getFavProducts()
-//                specificProductsViewModel.onlineFavProduct.observe(viewLifecycleOwner) { favProducts ->
-//                    for (i in 0..favProducts.size-1){
-//
-//                        if(product.variants[0].id== favProducts[i].line_items!![0].variant_id){
-//
-//                            addToFavImg.setImageResource(R.drawable.ic_favorite)
-//
-//                        }
-//                    }
-//
-//
-//                }
+                specificProductsViewModel.getFavProducts()
+                specificProductsViewModel.onlineFavProduct.observe(viewLifecycleOwner) { favProducts ->
+                    for (i in 0..favProducts.size-1) {
+                        if (favProducts.get(i).note == noteStatus && favProducts.get(i).email == customerEmail) {
+                            if (product.variants[0].id == favProducts[i].line_items!![0].variant_id){
+                                if (favProducts[i].status == "open") {
+                                    addToFavImg.setImageResource(R.drawable.ic_baseline_favorite_border_24)
+                                    specificProductsViewModel.deleteFavProduct(favProducts.get(i).id.toString())
+                                    specificProductsViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
+                                        if (response.isSuccessful) {
 
+                                            Toast.makeText(requireContext(),
+                                                "Deleted Success!!!: " + response.code().toString(),
+                                                Toast.LENGTH_SHORT).show()
+                                        } else {
+                                            Toast.makeText(requireContext(),
+                                                "Deleted failed: " + response.code().toString(),
+                                                Toast.LENGTH_SHORT).show()
+                                        }
+                                    }
+                                } else {
+                                    addToFavImg.setImageResource(R.drawable.ic_favorite)
+                                    var variantId: Long = 0
+                                    var order = DraftOrderX()
+                                    order.note = "fav"
+                                    order.email = customerEmail
+                                    variantId = product.variants[0].id
+                                    Log.i("Index", "index: " + variantId.toString())
+                                    // order.line_items!![0].variant_id = variantId
+                                    var lineItem = LineItem()
+                                    lineItem.quantity = Integer.parseInt(productCount.text.toString())
+                                    lineItem.variant_id = variantId
+                                    order.line_items = listOf(lineItem)
 
+                                    // order.line_items!![0].variant_id = 40335555395723
+                                    var productImage = NoteAttribute()
+                                    productImage.name = "image"
+                                    productImage.value = product.images[0].src
+                                    order.note_attributes = listOf(productImage)
 
-                addToFavImg.setImageResource(R.drawable.ic_favorite)
-                var variantId: Long = 0
-                var order = DraftOrderX()
-                order.note = "fav"
-                order.email = customerEmail
-                        variantId = product.variants[0].id
-                        Log.i("Index", "index: " + variantId.toString())
-                        // order.line_items!![0].variant_id = variantId
-                        var lineItem = LineItem()
-                        lineItem.quantity = Integer.parseInt(productCount.text.toString())
-                        lineItem.variant_id = variantId
-                        order.line_items = listOf(lineItem)
+                                    var draftOrder = DraftOrder(order)
+                                    specificProductsViewModel.getCardOrder(draftOrder)
+                                    specificProductsViewModel.onlineCardOrder.observe(viewLifecycleOwner) { cardOrder ->
+                                        if (cardOrder.isSuccessful) {
+                                            Toast.makeText(requireContext(),
+                                                "add to card successfull: " + cardOrder.code()
+                                                    .toString(),
+                                                Toast.LENGTH_LONG).show()
 
-                // order.line_items!![0].variant_id = 40335555395723
-                var productImage = NoteAttribute()
-                productImage.name = "image"
-                productImage.value = product.images[0].src
-                order.note_attributes = listOf(productImage)
+                                        } else {
 
-                var draftOrder = DraftOrder(order)
-                specificProductsViewModel.getCardOrder(draftOrder)
-                specificProductsViewModel.onlineCardOrder.observe(viewLifecycleOwner) { cardOrder ->
-                    if (cardOrder.isSuccessful) {
-                        Toast.makeText(requireContext(),
-                            "add to card successfull: " + cardOrder.code().toString(),
-                            Toast.LENGTH_LONG).show()
+                                            Toast.makeText(requireContext(),
+                                                "add to card failed: " + cardOrder.code().toString(),
+                                                Toast.LENGTH_LONG).show()
 
-                    } else {
-
-                        Toast.makeText(requireContext(),
-                            "add to card failed: " + cardOrder.code().toString(),
-                            Toast.LENGTH_LONG).show()
-
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
+
                 }
+
+
+
+
 
             }
 

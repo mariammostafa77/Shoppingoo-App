@@ -45,7 +45,7 @@
             android:id="@+id/favIconImage"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:src="@drawable/ic_favorite"
+            android:src="@drawable/ic_baseline_favorite_border_24"
             app:layout_constraintBottom_toBottomOf="@+id/productName"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/productName" />
