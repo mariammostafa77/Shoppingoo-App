@@ -3,30 +3,14 @@ package com.example.mcommerce.me.view
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.mcommerce.R
-import com.example.mcommerce.auth.Register.viewModel.RegisterViewModel
-import com.example.mcommerce.auth.Register.viewModel.RegisterViewModelFactory
-import com.example.mcommerce.auth.model.CustomerDetail
-import com.example.mcommerce.home.view.AdsAdapter
-import com.example.mcommerce.home.view.DiscountCodeAdapter
 import com.example.mcommerce.me.view.setting.AppSettingFragment
-import com.example.mcommerce.me.view.setting.CustomerAddressAdapter
-import com.example.mcommerce.me.viewmodel.CustomerViewModel
-import com.example.mcommerce.me.viewmodel.CustomerViewModelFactory
-import com.example.mcommerce.model.Repository
-import com.example.mcommerce.network.AppClient
 import com.example.mcommerce.shopping_cart.view.ShoppingCartFragment
 
 class MeWithLogin : Fragment() {

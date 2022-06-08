@@ -41,9 +41,9 @@ class CustomerViewModel(repo: RepositoryInterface) : ViewModel(){
         }
     }
 
-    fun changeCustomerCurrency(id: String, customer: CustomerDetail){
+    fun changeCustomerCurrency(id: String, currency: String){
         viewModelScope.launch{
-            val result = iRepo.changeCustomerCurrency(id,customer)
+            val result = iRepo.changeCustomerCurrency(id,currency)
             withContext(Dispatchers.Main){
                 customerCurrency.value=result
             }

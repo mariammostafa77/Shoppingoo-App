@@ -80,10 +80,12 @@ class CategoryFragment : Fragment() {
 
         accessoriesBtn.setOnClickListener(View.OnClickListener {
             onAccessoriesBtnClick()
+            Log.i("TAG","shoes")
         })
 
         shoesBtn.setOnClickListener(View.OnClickListener {
             onShoesBtnClick()
+            Log.i("TAG","shoes")
         })
 
         tshirtBtn.setOnClickListener(View.OnClickListener {

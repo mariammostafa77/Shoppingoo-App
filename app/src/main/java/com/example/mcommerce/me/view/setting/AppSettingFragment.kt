@@ -7,12 +7,14 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContentProviderCompat
@@ -20,6 +22,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.mcommerce.AuthActivity
 import com.example.mcommerce.HomeActivity
 import com.example.mcommerce.R
+import com.example.mcommerce.auth.model.CustomerDetail
+import com.example.mcommerce.auth.model.CustomerX
 import com.example.mcommerce.me.viewmodel.CustomerViewModel
 import com.example.mcommerce.me.viewmodel.CustomerViewModelFactory
 import com.example.mcommerce.me.viewmodel.SavedSetting
@@ -49,6 +53,7 @@ class AppSettingFragment : Fragment() {
     lateinit var customerViewModel: CustomerViewModel
     lateinit var customerViewModelFactory: CustomerViewModelFactory
 
+    var customerId = ""
 
     companion object{
         var isUserLogin = true
@@ -68,7 +73,7 @@ class AppSettingFragment : Fragment() {
         customerViewModelFactory = CustomerViewModelFactory(Repository.getInstance(AppClient.getInstance(), requireContext()))
         customerViewModel = ViewModelProvider(this, customerViewModelFactory).get(CustomerViewModel::class.java)
         val sharedPreferences = requireContext().getSharedPreferences("userAuth", AppCompatActivity.MODE_PRIVATE)
-        val customerId = sharedPreferences.getString("cusomerID",null).toString()
+        customerId = sharedPreferences.getString("cusomerID",null).toString()
 
         currencySelected = loadCurrency(requireContext())
         if (currencySelected.isNullOrEmpty() || languageSelected.isNullOrEmpty()){
@@ -93,7 +98,7 @@ class AppSettingFragment : Fragment() {
             shareOurApp()
         }
         txtSignOutText.setOnClickListener {
-          /*
+/*
             val sharedPreferences: SharedPreferences = context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
             val editor = requireContext().getSharedPreferences("userAuth", Context.MODE_PRIVATE).edit()
             val email: String? = sharedPreferences.getString("email","")
@@ -109,7 +114,7 @@ class AppSettingFragment : Fragment() {
             editor.remove(phone)
             editor.remove(id)
             editor.commit()
-           */
+*/
             startActivity(Intent(requireContext(), AuthActivity::class.java))
         }
         return view
@@ -163,6 +168,57 @@ class AppSettingFragment : Fragment() {
     private fun showCurrencyList(){
         val languagesList = getResources().getStringArray(R.array.currency_options)
         val mBuilder = AlertDialog.Builder(requireContext())
+
+        mBuilder.setSingleChoiceItems(languagesList,-1){ dialog, which ->
+            when (which) {
+                0 ->{
+                    currencySelected  = getResources().getString(R.string.egp)
+                    updateCustomerCurrency("EGP")
+                }
+                1 ->{
+                    currencySelected = getResources().getString(R.string.usd_t)
+                    updateCustomerCurrency("USD")
+                }
+                2 ->{
+                    currencySelected = getResources().getString(R.string.eur_t_u20ac)
+                    updateCustomerCurrency("EUR")
+                }
+            }
+            dialog.dismiss()
+        }
+        val mDialog = mBuilder.create()
+        mDialog.show()
+    }
+
+    fun updateCustomerCurrency(currencySelected: String){
+        //val customer = CustomerX()
+        if(customerId.isNotEmpty()){
+         //   customer.currency =currencySelected
+         //   val customerDetail = CustomerDetail(customer)
+            customerViewModel.changeCustomerCurrency(customerId,currencySelected)
+            customerViewModel.selectedCustomerCurrency.observe(viewLifecycleOwner) { response ->
+                if(response.isSuccessful){
+                    Toast.makeText(requireContext(),"Updated Successfull: "+response.code().toString(),Toast.LENGTH_LONG).show()
+                    Log.i("update","currency from success: "+response.body().toString())
+                    replaceFragment(AppSettingFragment())
+                }
+                else{
+                    Log.i("updated","currency from failed: "+response.errorBody().toString())
+                    Toast.makeText(requireContext(),"Updated failed: "+response.code().toString()+ response.errorBody(),Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+        else{
+            //  setCurrency(currencySelected,requireContext())
+            Toast.makeText(requireContext(),"No Customer Id ", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
+    /*
+    private fun showCurrencyList(){
+        val languagesList = getResources().getStringArray(R.array.currency_options)
+        val mBuilder = AlertDialog.Builder(requireContext())
         mBuilder.setSingleChoiceItems(languagesList,-1){ dialog, which ->
             when (which) {
                 0 ->{
@@ -186,7 +242,7 @@ class AppSettingFragment : Fragment() {
         val mDialog = mBuilder.create()
         mDialog.show()
     }
-
+*/
     private fun showContactUsDialog(){
         val view = View.inflate(requireContext(), R.layout.dialog_view, null)
 

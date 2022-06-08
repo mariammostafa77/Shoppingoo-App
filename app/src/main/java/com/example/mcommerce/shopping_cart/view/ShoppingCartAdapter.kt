@@ -13,11 +13,10 @@ import com.example.mcommerce.R
 import com.example.mcommerce.draftModel.DraftOrderX
 import com.example.mcommerce.model.DiscountCode
 
-class ShoppingCartAdapter : RecyclerView.Adapter<ShoppingCartAdapter.ViewHolder>(){
+class ShoppingCartAdapter(private val listener: OnShoppingCartClickListener) : RecyclerView.Adapter<ShoppingCartAdapter.ViewHolder>(){
     var userShoppingCartProducts:List<DraftOrderX> = ArrayList<DraftOrderX>()
     lateinit var context: Context
     var counter: Int = 1
-
 
     fun setUserShoppingCartProducts(context: Context, _userShoppingCartProducts:List<DraftOrderX>){
         this.context= context
@@ -33,15 +32,11 @@ class ShoppingCartAdapter : RecyclerView.Adapter<ShoppingCartAdapter.ViewHolder>
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.shoppingCartProductTitle.text = userShoppingCartProducts[position].line_items?.get(0)!!.title
         holder.shoppingCartProductPrice.append("  ${userShoppingCartProducts[position].line_items?.get(0)!!.price} EGP")
+        counter = userShoppingCartProducts[position].line_items?.get(0)!!.quantity!!.toInt()
         holder.ShoppingCartProductQuantity.text = userShoppingCartProducts[position].line_items?.get(0)!!.quantity.toString()
         Glide.with(context).load(userShoppingCartProducts[position].note_attributes?.get(0)?.value).into(holder.shoppingCartItemImage)
         holder.shoppingCartIncreaseQuantity.setOnClickListener {
-           // if (counter < 10){
             counter++
-           // }
-          //  else {
-                counter = 10
-         //   }
             holder.ShoppingCartProductQuantity.text = counter.toString()
             }
         holder.shoppingCartDecreaseQuantity.setOnClickListener {
@@ -49,6 +44,10 @@ class ShoppingCartAdapter : RecyclerView.Adapter<ShoppingCartAdapter.ViewHolder>
             else{ counter = 1 }
             holder.ShoppingCartProductQuantity.text = counter.toString()
         }
+        holder.deleteProductImage.setOnClickListener {
+            listener.onItemClickListener(userShoppingCartProducts[position])
+        }
+
         holder.shoppingCartItem.setOnClickListener {
 
         }
@@ -65,6 +64,7 @@ class ShoppingCartAdapter : RecyclerView.Adapter<ShoppingCartAdapter.ViewHolder>
         val shoppingCartItemImage : ImageView = itemView.findViewById(R.id.shoppingCartItemImage)
         val shoppingCartProductTitle : TextView = itemView.findViewById(R.id.shoppingCartProductTitle)
         val shoppingCartProductPrice : TextView = itemView.findViewById(R.id.shoppingCartProductPrice)
+        val deleteProductImage : ImageView = itemView.findViewById(R.id.deleteProductImage)
         val shoppingCartIncreaseQuantity : ImageView = itemView.findViewById(R.id.shoppingCartIncreaseQuantity)
         val shoppingCartDecreaseQuantity : ImageView = itemView.findViewById(R.id.shoppingCartDecreaseQuantity)
         val ShoppingCartProductQuantity : TextView = itemView.findViewById(R.id.ShoppingCartProductQuantity)
