@@ -68,6 +68,7 @@
     <string name="send_email">أرسال بريد الكترونى</string>
     <string name="cancel">الغاء</string>
     <string name="subCategories">فئة</string>
+    <string name="Orders">الطلبات</string>
 
 
     <string-array name="currency_options">

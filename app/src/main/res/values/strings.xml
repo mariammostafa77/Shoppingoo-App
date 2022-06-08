@@ -27,7 +27,7 @@
     <string name="Login">Login</string>
     <string name="WishList">WishList</string>
     <string name="Price">Price: </string>
-    <string name="CreatedBy">Created by: </string>
+    <string name="CreatedBy">Created at: </string>
 
     <!-- Asmaa   -->
     <string name="product_name">Product Name</string>
@@ -83,6 +83,7 @@
     <string name="send_email">Send Email</string>
     <string name="cancel">Cancel</string>
     <string name="subCategories">Sub Categories</string>
+    <string name="Orders">Orders</string>
 
     <!-- Arrays -->
 
@@ -93,8 +94,6 @@
 
 
     </string-array>
-
-
 
 
 </resources>
