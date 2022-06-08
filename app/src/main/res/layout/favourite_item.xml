@@ -43,11 +43,12 @@
             android:id="@+id/favProductTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
             android:text="Title"
             android:textSize="21sp"
             android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/deleteFav"
             app:layout_constraintStart_toEndOf="@+id/favProductImg"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -55,13 +56,12 @@
             android:id="@+id/favProductPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
             android:text="@string/Price"
             android:textSize="18sp"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="16dp"
             app:layout_constraintStart_toEndOf="@+id/favProductImg"
-            app:layout_constraintTop_toBottomOf="@+id/favProductTitle"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/favProductTitle" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

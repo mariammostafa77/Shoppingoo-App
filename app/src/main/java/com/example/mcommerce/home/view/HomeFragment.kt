@@ -31,6 +31,7 @@ import kotlin.math.abs
 
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import com.example.mcommerce.favourite.view.FavouriteFragment
 import com.example.mcommerce.search.view.MysearchFragment
 import com.example.mcommerce.shopping_cart.view.ShoppingCartFragment
 
@@ -42,6 +43,7 @@ class HomeFragment : Fragment() {
     lateinit var discountCodeAdapter: DiscountCodeAdapter
     lateinit var couponsRecyclerView: RecyclerView
     lateinit var cardImg:ImageView
+    lateinit var favImg:ImageView
 
     lateinit var homeFactory: HomeViewModelFactory
     lateinit var homeViewModel: HomeViewModel
@@ -76,6 +78,7 @@ class HomeFragment : Fragment() {
         bradsRecyclerView=view.findViewById(R.id.bradsRecyclerView)
         couponsRecyclerView = view.findViewById(R.id.couponsRecyclerView)
         cardImg=view.findViewById(R.id.cardImg)
+        favImg=view.findViewById(R.id.favImg)
         couponsLayoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
         couponsRecyclerView.setLayoutManager(couponsLayoutManager)
         brandAdapter= BrandAdapter()
@@ -126,7 +129,14 @@ class HomeFragment : Fragment() {
             fragmentTransaction.addToBackStack(null)
             fragmentTransaction.commit()
         }
-
+        favImg.setOnClickListener {
+            val fragment: Fragment = FavouriteFragment()
+            val fragmentManager: FragmentManager = activity!!.supportFragmentManager
+            val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
+            fragmentTransaction.replace(com.example.mcommerce.R.id.frameLayout, fragment)
+            fragmentTransaction.addToBackStack(null)
+            fragmentTransaction.commit()
+        }
 
         return view
     }

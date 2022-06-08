@@ -6,6 +6,7 @@ import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph
@@ -32,16 +33,24 @@ class HomeActivity : AppCompatActivity(),Communicator {
     private  val brandProductsFragment = BrandProductsFragment()
     private val meWithoutLoginFragment = MeWithoutLoginFragment()
     lateinit var bottomNavigationView: BottomNavigationView
+
     companion object{
         var mySearchFlag:Int=0
         var myDetailsFlag:Int=0
+        var myFavFlag:Boolean=false
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+        val favSharedPreferences = getSharedPreferences("favourite", AppCompatActivity.MODE_PRIVATE)
+       myFavFlag= favSharedPreferences.getBoolean("favStatue",false)
+
 
         SavedSetting.loadLocale(this)
+
+
 
         bottomNavigationView = findViewById(R.id.buttomNav)
 

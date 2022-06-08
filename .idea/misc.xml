@@ -59,11 +59,15 @@
         <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/layout/activity_auth.xml" value="0.13020833333333334" />
         <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/layout/ads_layout.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/layout/dtails_layout.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/layout/favourite_item.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/layout/fragment_favourite.xml" value="0.13020833333333334" />
+        <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/layout/fragment_home.xml" value="0.196875" />
         <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/layout/fragment_login_form.xml" value="0.11614583333333334" />
         <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/layout/fragment_my_login.xml" value="0.13020833333333334" />
         <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/layout/fragment_product_info.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/layout/fragment_register.xml" value="0.2" />
         <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/layout/fragment_register_form.xml" value="0.11614583333333334" />
+        <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/layout/shopping_cart_item.xml" value="0.25416666666666665" />
         <entry key="..\:/Work Files/My projects/ITI Projects/Graduation Project/app/src/main/res/layout/ads_layout.xml" value="0.18489583333333334" />
         <entry key="..\:/Work Files/My projects/ITI Projects/Graduation Project/app/src/main/res/layout/category_cell.xml" value="0.27291666666666664" />
         <entry key="..\:/Work Files/My projects/ITI Projects/Graduation Project/app/src/main/res/layout/discount_codes_layout.xml" value="0.16" />
@@ -101,7 +105,7 @@
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/fragment_me_without_login.xml" value="0.16145833333333334" />
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/fragment_mysearch.xml" value="0.1390625" />
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/fragment_product_info.xml" value="0.16145833333333334" />
-        <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/fragment_register_form.xml" value="0.33" />
+        <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/fragment_register_form.xml" value="0.16302083333333334" />
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/fragment_shopping_cart.xml" value="0.25" />
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/fragment_user_addresses.xml" value="0.16145833333333334" />
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/fragment_user_profile.xml" value="0.16145833333333334" />
