@@ -35,6 +35,7 @@ class FavouriteFragment : Fragment(),FavouriteOnClickLisner {
     var favProducts:ArrayList<DraftOrderX> = ArrayList<DraftOrderX>()
 
     override fun onCreateView(
+
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
