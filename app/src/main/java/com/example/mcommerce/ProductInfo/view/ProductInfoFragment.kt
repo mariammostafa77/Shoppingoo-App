@@ -2,6 +2,7 @@ package com.example.mcommerce.ProductInfo.view
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,11 +10,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mcommerce.HomeActivity
+import com.example.mcommerce.HomeActivity.Companion.myFavFlag
+
+
 import com.example.mcommerce.HomeActivity.Companion.mySearchFlag
 import com.example.mcommerce.ProductInfo.viewModel.ProductInfoViewModel
 import com.example.mcommerce.ProductInfo.viewModel.ProductInfoViewModelFactory
@@ -23,12 +31,15 @@ import com.example.mcommerce.draftModel.DraftOrder
 import com.example.mcommerce.draftModel.DraftOrderX
 import com.example.mcommerce.draftModel.LineItem
 import com.example.mcommerce.draftModel.NoteAttribute
+import com.example.mcommerce.favourite.view.FavouriteFragment
 import com.example.mcommerce.me.viewmodel.SavedSetting.Companion.loadCurrency
 import com.example.mcommerce.model.Image
 import com.example.mcommerce.model.Product
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
 import com.example.mcommerce.search.view.MysearchFragment
+import com.example.mcommerce.shopping_cart.viewmodel.ShoppingCartViewModel
+import com.example.mcommerce.shopping_cart.viewmodel.ShoppingCartViewModelFactory
 
 
 class ProductInfoFragment : Fragment() {
@@ -47,18 +58,24 @@ class ProductInfoFragment : Fragment() {
     lateinit var btnDecrease:Button
     lateinit var productCount:TextView
     lateinit var ratBar:RatingBar
+    lateinit var addToFavImg:ImageView
     lateinit var backImg:ImageView
     lateinit var sizeSpinner:Spinner
     lateinit var colorSpinner:Spinner
     lateinit var btnAddToCard:Button
+
+
+
     var count:Int=0
     var totalRate=0
     var price : Double = 0.0
     var currency : String = ""
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?, ): View? {
         // Inflate the layout for this fragment
         var view =inflater.inflate(R.layout.fragment_product_info, container, false)
+
         output= arguments?.getSerializable("productInfo") as Product
         productImgArrayList=ArrayList<Image>()
         productInfoRecyclerview=view.findViewById(R.id.detailsRecyclerView)
@@ -77,7 +94,12 @@ class ProductInfoFragment : Fragment() {
         sizeSpinner=view.findViewById(R.id.sizeSpinner)
         colorSpinner=view.findViewById(R.id.colorSpiner)
         btnAddToCard=view.findViewById(R.id.btnAddToCard)
+        addToFavImg=view.findViewById(R.id.addToFavImg)
 
+        val sharedPreferences = requireContext().getSharedPreferences("userAuth", AppCompatActivity.MODE_PRIVATE)
+        val customerEmail = sharedPreferences.getString("email","").toString()
+
+        val noteStatus = "fav"
 
         currency = loadCurrency(requireContext())
         //start
@@ -90,121 +112,188 @@ class ProductInfoFragment : Fragment() {
 
         specificProductsViewModel.getSpecificProducts(output.id.toString())
         specificProductsViewModel.onlineSpecificProducts.observe(viewLifecycleOwner) { product ->
-            Log.i("pro","from fragment"+product.toString())
+
+
+            Log.i("pro", "from fragment" + product.toString())
             specificProductsViewModel.onlineSpecificProducts.value?.let {
+                specificProductsViewModel.getFavProducts()
+                specificProductsViewModel.onlineFavProduct.observe(viewLifecycleOwner) { favProducts ->
+                    for (i in 0..favProducts.size-1){
 
-                productInfoAdapter.setProductImages(product.images,requireContext())
-                productName.text=product.title
-                productDesc.text=product.body_html
+                        if(product.variants[0].id== favProducts[i].line_items!![0].variant_id){
 
-                if(currency == getResources().getString(R.string.egp)){
-                    productPrice.text = "${product.variants[0].price} ${currency}"
+                            addToFavImg.setImageResource(R.drawable.ic_favorite)
+
+                        }
+                    }
+
+
                 }
-                else if (currency == getResources().getString(R.string.usd_t)){
+
+                productInfoAdapter.setProductImages(product.images, requireContext())
+                productName.text = product.title
+                productDesc.text = product.body_html
+
+                if (currency == getResources().getString(R.string.egp)) {
+                    productPrice.text = "${product.variants[0].price} ${currency}"
+                } else if (currency == getResources().getString(R.string.usd_t)) {
                     price = (product.variants[0].price.toDouble()) * 0.053
                     productPrice.text = "${price} ${currency}"
-                }
-                else if (currency == getResources().getString(R.string.eur_t_u20ac)){
+                } else if (currency == getResources().getString(R.string.eur_t_u20ac)) {
                     price = (product.variants[0].price.toDouble()) * 0.050
                     productPrice.text = "${price} ${currency}"
-                }
-                else{
-                    productPrice.text = "${product.variants[0].price} ${getResources().getString(R.string.egp)}"
+                } else {
+                    productPrice.text =
+                        "${product.variants[0].price} ${getResources().getString(R.string.egp)}"
                 }
 
-                for (i in 0..product.variants.size-1) {
-                    totalRate+=product.variants[i].inventory_quantity
+                for (i in 0..product.variants.size - 1) {
+                    totalRate += product.variants[i].inventory_quantity
                 }
-                Log.i("totalRate",totalRate.toString())
-                totalRate=totalRate/(product.variants.size)
-                ratBar.rating=totalRate.toFloat()/4
+                Log.i("totalRate", totalRate.toString())
+                totalRate = totalRate / (product.variants.size)
+                ratBar.rating = totalRate.toFloat() / 4
 
             }
             //spinner of color and size
-            var sizeAdapter:ArrayAdapter<String> = ArrayAdapter<String>(requireContext(),android.R.layout.simple_spinner_item,product.options[0].values)
-            var colorAdapter:ArrayAdapter<String> = ArrayAdapter<String>(requireContext(),android.R.layout.simple_spinner_item,product.options[1].values)
+            var sizeAdapter: ArrayAdapter<String> = ArrayAdapter<String>(requireContext(),
+                android.R.layout.simple_spinner_item,
+                product.options[0].values)
+            var colorAdapter: ArrayAdapter<String> = ArrayAdapter<String>(requireContext(),
+                android.R.layout.simple_spinner_item,
+                product.options[1].values)
             sizeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             colorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            sizeSpinner.adapter=sizeAdapter
-            colorSpinner.adapter=colorAdapter
+            sizeSpinner.adapter = sizeAdapter
+            colorSpinner.adapter = colorAdapter
 
-            val sharedPreferences = requireContext().getSharedPreferences("userAuth", AppCompatActivity.MODE_PRIVATE)
             btnAddToCard.setOnClickListener {
-                var variantId:Long=0
-                val customerEmail = sharedPreferences.getString("email",null).toString()
-                var order=DraftOrderX()
-                order.note="card"
-                order.email=customerEmail
-
-                for(i in 0..product.variants.size-1){
-                    if(product.variants[i].option1==sizeSpinner.getSelectedItem().toString() &&
-                        product.variants[i].option2==colorSpinner.getSelectedItem().toString() ){
-                        variantId=  product.variants[i].id
-                        Log.i("Index","index: "+variantId.toString())
-                       // order.line_items!![0].variant_id = variantId
-                        var lineItem=LineItem()
-                        lineItem.quantity=Integer.parseInt(productCount.text.toString())
-                        lineItem.variant_id=variantId
-                        order.line_items=listOf(lineItem)
+                var variantId: Long = 0
+                var order = DraftOrderX()
+                order.note = "card"
+                order.email = customerEmail
+                for (i in 0..product.variants.size - 1) {
+                    if (product.variants[i].option1 == sizeSpinner.getSelectedItem().toString() &&
+                        product.variants[i].option2 == colorSpinner.getSelectedItem().toString()
+                    ) {
+                        variantId = product.variants[i].id
+                        Log.i("Index", "index: " + variantId.toString())
+                        // order.line_items!![0].variant_id = variantId
+                        var lineItem = LineItem()
+                        lineItem.quantity = Integer.parseInt(productCount.text.toString())
+                        lineItem.variant_id = variantId
+                        order.line_items = listOf(lineItem)
                         break
                     }
                 }
-               // order.line_items!![0].variant_id = 40335555395723
-                var productImage=NoteAttribute()
-                productImage.name="image"
-                productImage.value=product.images[0].src
-              order.note_attributes=listOf(productImage)
+                // order.line_items!![0].variant_id = 40335555395723
+                var productImage = NoteAttribute()
+                productImage.name = "image"
+                productImage.value = product.images[0].src
+                order.note_attributes = listOf(productImage)
 
-                var draftOrder= DraftOrder(order)
+                var draftOrder = DraftOrder(order)
                 specificProductsViewModel.getCardOrder(draftOrder)
                 specificProductsViewModel.onlineCardOrder.observe(viewLifecycleOwner) { cardOrder ->
-                    if(cardOrder.isSuccessful){
-                        Toast.makeText(requireContext(),"add to card successfull: "+cardOrder.code().toString(),Toast.LENGTH_LONG).show()
-                    }
-                    else{
+                    if (cardOrder.isSuccessful) {
+                        Toast.makeText(requireContext(),
+                            "add to card successfull: " + cardOrder.code().toString(),
+                            Toast.LENGTH_LONG).show()
+                    } else {
 
-                        Toast.makeText(requireContext(),"add to card failed: "+cardOrder.code().toString(),Toast.LENGTH_LONG).show()
+                        Toast.makeText(requireContext(),
+                            "add to card failed: " + cardOrder.code().toString(),
+                            Toast.LENGTH_LONG).show()
 
                     }
                 }
 
 
             }
+            addToFavImg.setOnClickListener {
+
+//                specificProductsViewModel.getFavProducts()
+//                specificProductsViewModel.onlineFavProduct.observe(viewLifecycleOwner) { favProducts ->
+//                    for (i in 0..favProducts.size-1){
+//
+//                        if(product.variants[0].id== favProducts[i].line_items!![0].variant_id){
+//
+//                            addToFavImg.setImageResource(R.drawable.ic_favorite)
+//
+//                        }
+//                    }
+//
+//
+//                }
 
 
 
-        }
+                addToFavImg.setImageResource(R.drawable.ic_favorite)
+                var variantId: Long = 0
+                var order = DraftOrderX()
+                order.note = "fav"
+                order.email = customerEmail
+                        variantId = product.variants[0].id
+                        Log.i("Index", "index: " + variantId.toString())
+                        // order.line_items!![0].variant_id = variantId
+                        var lineItem = LineItem()
+                        lineItem.quantity = Integer.parseInt(productCount.text.toString())
+                        lineItem.variant_id = variantId
+                        order.line_items = listOf(lineItem)
 
-        //end
-        productCount.text="1"
-        btnIncrease.setOnClickListener{
-            //Toast.makeText(requireContext(),"test",Toast.LENGTH_LONG).show()
-            count++
-            productCount.text=count.toString()
-        }
-        btnDecrease.setOnClickListener{
-            if(count>0) {
-                count--
+                // order.line_items!![0].variant_id = 40335555395723
+                var productImage = NoteAttribute()
+                productImage.name = "image"
+                productImage.value = product.images[0].src
+                order.note_attributes = listOf(productImage)
+
+                var draftOrder = DraftOrder(order)
+                specificProductsViewModel.getCardOrder(draftOrder)
+                specificProductsViewModel.onlineCardOrder.observe(viewLifecycleOwner) { cardOrder ->
+                    if (cardOrder.isSuccessful) {
+                        Toast.makeText(requireContext(),
+                            "add to card successfull: " + cardOrder.code().toString(),
+                            Toast.LENGTH_LONG).show()
+
+                    } else {
+
+                        Toast.makeText(requireContext(),
+                            "add to card failed: " + cardOrder.code().toString(),
+                            Toast.LENGTH_LONG).show()
+
+                    }
+                }
+
             }
-            else{
-                count=0
-            }
-            productCount.text=count.toString()
 
-        }
-        backImg.setOnClickListener {
-            if(mySearchFlag==1) {
-                val manager = activity!!.supportFragmentManager
-                val trans = manager.beginTransaction()
-                trans.replace(R.id.frameLayout, MysearchFragment()).commit()
+            //end
+            productCount.text = "1"
+            btnIncrease.setOnClickListener {
+                //Toast.makeText(requireContext(),"test",Toast.LENGTH_LONG).show()
+                count++
+                productCount.text = count.toString()
             }
-            else {
-                val manager = activity!!.supportFragmentManager
-                val trans = manager.beginTransaction()
-                trans.replace(R.id.frameLayout, CategoryFragment()).commit()
-            }
-        }
+            btnDecrease.setOnClickListener {
+                if (count > 0) {
+                    count--
+                } else {
+                    count = 0
+                }
+                productCount.text = count.toString()
 
+            }
+            backImg.setOnClickListener {
+                if (mySearchFlag == 1) {
+                    val manager = activity!!.supportFragmentManager
+                    val trans = manager.beginTransaction()
+                    trans.replace(R.id.frameLayout, MysearchFragment()).commit()
+                } else {
+                    val manager = activity!!.supportFragmentManager
+                    val trans = manager.beginTransaction()
+                    trans.replace(R.id.frameLayout, CategoryFragment()).commit()
+                }
+            }
+        }
 
 
 
