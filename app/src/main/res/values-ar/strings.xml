@@ -69,7 +69,8 @@
     <string name="cancel">الغاء</string>
     <string name="subCategories">فئة</string>
     <string name="Orders">الطلبات</string>
-
+    <string name="orderDetails">تفاصيل الطلب</string>
+    <string name="address2">العنوان:</string>
 
     <string-array name="currency_options">
     <item>جنيه مصرى</item>

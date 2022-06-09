@@ -10,6 +10,7 @@ import com.example.mcommerce.draftModel.DraftResponse
 import com.example.mcommerce.home.model.BrandsModel
 import com.example.mcommerce.network.RetrofitHelper
 import com.example.mcommerce.network.ServiceApi
+import com.example.mcommerce.orders.model.Orders
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Field
@@ -43,5 +44,6 @@ interface RepositoryInterface {
     suspend fun deleteProductFromShoppingCart(id: String?): Response<DraftOrder>
 
     suspend fun updateDraftOrder(id: String? , order: DraftOrder):Response<DraftOrder>
+    suspend fun getOrders(id : String): Orders
 
 }

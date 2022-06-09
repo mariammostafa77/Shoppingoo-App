@@ -11,12 +11,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.R
 import com.example.mcommerce.categories.view.OnSubCategoryClickInterface
+import com.example.mcommerce.orders.model.Order
 
 class OrdersAdapter : RecyclerView.Adapter<OrdersAdapter.ViewHolder>(){
-    var allOrders:List<String> = ArrayList<String>()
+    var allOrders:List<Order> = ArrayList<Order>()
     lateinit var context: Context
 
-    fun setUpdatedData(allOrders:List<String>, context: Context){
+    fun setUpdatedData(allOrders:List<Order>, context: Context){
         this.allOrders=allOrders
         this.context=context
         notifyDataSetChanged()
@@ -25,9 +26,9 @@ class OrdersAdapter : RecyclerView.Adapter<OrdersAdapter.ViewHolder>(){
         var tvOrderPrice: TextView =itemView.findViewById(R.id.tvOrderPrice)
         var tvOrderDate: TextView =itemView.findViewById(R.id.tvOrderDate)
 
-        fun bind(data: String) {
-            tvOrderPrice.text = allOrders[position]
-            tvOrderDate.text = allOrders[position]
+        fun bind(data: Order) {
+            tvOrderPrice.text = allOrders[position].total_price
+            tvOrderDate.text = allOrders[position].created_at
 
         }
 

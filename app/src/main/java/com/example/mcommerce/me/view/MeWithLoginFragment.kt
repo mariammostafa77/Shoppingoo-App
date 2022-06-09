@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.example.mcommerce.R
 import com.example.mcommerce.me.view.setting.AppSettingFragment
+import com.example.mcommerce.orders.view.OrdersFragment
 import com.example.mcommerce.shopping_cart.view.ShoppingCartFragment
 
 class MeWithLogin : Fragment() {
@@ -18,6 +19,7 @@ class MeWithLogin : Fragment() {
     lateinit var settingICon: ImageView
     lateinit var shoppingCartIcon : ImageView
     lateinit var txtWelcomeUser : TextView
+    lateinit var tvMoreOrders : TextView
 
     var userName : String = ""
 
@@ -33,6 +35,11 @@ class MeWithLogin : Fragment() {
         val fname: String? = sharedPreferences.getString("fname","")
         val lname: String? = sharedPreferences.getString("lname","")
 
+
+        tvMoreOrders.setOnClickListener(View.OnClickListener {
+            replaceFragment(OrdersFragment())
+        })
+
         txtWelcomeUser.append(" ${fname} ${lname}. ")
         settingICon.setOnClickListener {
             replaceFragment(AppSettingFragment())
@@ -47,7 +54,7 @@ class MeWithLogin : Fragment() {
         settingICon = view.findViewById(R.id.settingICon)
         shoppingCartIcon = view.findViewById(R.id.shoppingCartIcon)
         txtWelcomeUser = view.findViewById(R.id.txtWelcomeUser)
-
+        tvMoreOrders=view.findViewById(R.id.tvMoreOrders)
 
     }
 

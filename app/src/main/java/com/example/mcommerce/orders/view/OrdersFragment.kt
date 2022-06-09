@@ -5,12 +5,22 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mcommerce.R
+import com.example.mcommerce.categories.viewModel.CategoriesViewFactory
+import com.example.mcommerce.categories.viewModel.CategoriesViewModel
+import com.example.mcommerce.model.Repository
+import com.example.mcommerce.network.AppClient
+import com.example.mcommerce.orders.viewModel.OrdersViewFactory
+import com.example.mcommerce.orders.viewModel.OrdersViewModel
+
 class OrdersFragment : Fragment() {
 
     private lateinit var ordersRecycleView:RecyclerView
     private lateinit var ordersAdapter: OrdersAdapter
+    private lateinit var ordersViewFactory: OrdersViewFactory
+    private lateinit var ordersViewModel: OrdersViewModel
 
 
     override fun onCreateView(
@@ -22,7 +32,15 @@ class OrdersFragment : Fragment() {
         ordersRecycleView=view.findViewById(R.id.ordersRecycleView)
         ordersAdapter=OrdersAdapter()
         ordersRecycleView.adapter=ordersAdapter
-
+        ordersViewFactory = OrdersViewFactory(
+            Repository.getInstance(
+                AppClient.getInstance(),
+                requireContext()))
+        ordersViewModel = ViewModelProvider(this, ordersViewFactory)[OrdersViewModel::class.java]
+        ordersViewModel.getAllOrders("5758070096011")
+        ordersViewModel.allOnlineOrders.observe(viewLifecycleOwner) {
+            ordersAdapter.setUpdatedData(it,requireContext())
+        }
         return view
     }
 

@@ -14,6 +14,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
 import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.ProductInfo.view.ProductInfoFragment
+import com.example.mcommerce.auth.model.Addresse
 import com.example.mcommerce.categories.view.CategoryFragment
 import com.example.mcommerce.home.view.HomeFragment
 import com.example.mcommerce.me.view.MeWithLogin
@@ -129,6 +130,14 @@ class HomeActivity : AppCompatActivity(),Communicator {
         val searchFragment=MysearchFragment()
         searchFragment.arguments=bundle
         transaction.replace(R.id.frameLayout,searchFragment).commit()
+    }
+
+    override fun goToUserAddresses() {
+        TODO("Not yet implemented")
+    }
+
+    override fun goToPaymentFromAddress(selectedAddress: Addresse) {
+        TODO("Not yet implemented")
     }
 
     private fun passMapDataToFragment() {

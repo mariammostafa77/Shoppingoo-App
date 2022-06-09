@@ -13,6 +13,7 @@ import com.example.mcommerce.model.AllProductsModel
 import com.example.mcommerce.model.ProductDetails
 import com.example.mcommerce.model.DiscountCodesModel
 import com.example.mcommerce.model.*
+import com.example.mcommerce.orders.model.Orders
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Path
@@ -43,6 +44,7 @@ interface RemoteSourceInterface {
     suspend fun getCustomers(): cust_details
 
     suspend fun getProductTypes(id : String): AllProductsModel
+    suspend fun getOrders(id : String): Orders
 
     suspend fun deleteProductFromShoppingCart(id: String?): Response<DraftOrder>
 

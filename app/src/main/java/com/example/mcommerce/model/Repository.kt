@@ -15,6 +15,7 @@ import com.example.mcommerce.home.model.BrandsModel
 import com.example.mcommerce.network.RemoteSourceInterface
 import com.example.mcommerce.network.RetrofitHelper
 import com.example.mcommerce.network.ServiceApi
+import com.example.mcommerce.orders.model.Orders
 import retrofit2.Response
 import java.util.*
 
@@ -94,6 +95,10 @@ class Repository private constructor(var remoteSource: RemoteSourceInterface, va
 
     override suspend fun updateDraftOrder(id: String?, order: DraftOrder): Response<DraftOrder> {
         return remoteSource.updateDraftOrder(id,order)
+    }
+
+    override suspend fun getOrders(id: String): Orders {
+        return remoteSource.getOrders(id)
     }
 
     override suspend fun getShoppingCartProducts(): DraftResponse {

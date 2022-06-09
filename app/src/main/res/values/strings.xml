@@ -84,6 +84,8 @@
     <string name="cancel">Cancel</string>
     <string name="subCategories">Sub Categories</string>
     <string name="Orders">Orders</string>
+    <string name="orderDetails">Order Details</string>
+    <string name="address2">Address:</string>
 
     <!-- Arrays -->
 
