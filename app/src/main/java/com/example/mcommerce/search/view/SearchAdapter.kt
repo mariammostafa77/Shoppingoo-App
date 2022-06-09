@@ -57,7 +57,7 @@ class SearchAdapter( var comminicator:Communicator,var allProducts: List<Product
 
         }
         holder.favIconImage.setOnClickListener {
-            listener.addToFav(currentPosition,holder.favIconImage,)
+            listener.addToFav(currentPosition,holder.favIconImage,position)
         }
 
          listener.addFavImg(holder.favIconImage,currentPosition.variants[0].id)

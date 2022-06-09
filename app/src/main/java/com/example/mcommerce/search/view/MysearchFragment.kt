@@ -45,6 +45,9 @@ class MysearchFragment : Fragment(),FavClicked {
     var productID:String=""
     var brandName:String=""
     var subCatName:String=""
+    var allFavProducts:ArrayList<DraftOrderX> = ArrayList<DraftOrderX>()
+    var allVariantsID:ArrayList<Long> = ArrayList<Long>()
+    var allProducts:List<Product> = ArrayList<Product>()
 
     lateinit var allProductArrayList:ArrayList<Product>
     lateinit var filterProductArrayList:ArrayList<Product>
@@ -81,7 +84,7 @@ class MysearchFragment : Fragment(),FavClicked {
             searchViewModel.getAllProducts()
             if(mySearchFlag==1) {
                 searchViewModel.onlineProducts.observe(viewLifecycleOwner) { product ->
-
+                 allProducts=product
                     if (allProductArrayList.size == 0) {
                         allProductArrayList.addAll(product)
 
@@ -205,77 +208,98 @@ class MysearchFragment : Fragment(),FavClicked {
 
         }
 
-        return view
-    }
 
-    override fun addToFav(product:Product,img: ImageView) {
-        Toast.makeText(requireContext(),"Fav clicked",Toast.LENGTH_LONG).show()
-        val sharedPreferences: SharedPreferences = context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
-        val email: String? = sharedPreferences.getString("email","")
-        Log.i("email","email Fav"+email)
         searchViewModel.getFavProducts()
+        allFavProducts.clear()
         searchViewModel.onlineFavProduct.observe(viewLifecycleOwner) { favProducts ->
-            Log.i("SearchFav","Search Fav"+favProducts)
-            for (i in 0..favProducts.size-1) {
-                if (favProducts.get(i).note == "open" && favProducts.get(i).email == email) {
-                    if (product.variants[0].id == favProducts[i].line_items!![0].variant_id){
-                        if (favProducts[i].status == "open") {
-                            img.setImageResource(R.drawable.ic_baseline_favorite_border_24)
-                            searchViewModel.deleteSelectedProduct(favProducts.get(i).id.toString())
-                            searchViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
-                                if (response.isSuccessful) {
-
-                                    Toast.makeText(requireContext(),
-                                        "Deleted Success!!!: " + response.code().toString(),
-                                        Toast.LENGTH_SHORT).show()
-                                } else {
-                                    Toast.makeText(requireContext(),
-                                        "Deleted failed: " + response.code().toString(),
-                                        Toast.LENGTH_SHORT).show()
-                                }
-                            }
-                        } else {
-                            img.setImageResource(R.drawable.ic_favorite)
-                            var variantId: Long = 0
-                            var order = DraftOrderX()
-                            order.note = "fav"
-                            order.email = email
-
-                                    variantId = product.variants[i].id
-                                    Log.i("Index", "index: " + variantId.toString())
-                                    // order.line_items!![0].variant_id = variantId
-                                    var lineItem = LineItem()
-                                    lineItem.quantity = 0
-                                    lineItem.variant_id = variantId
-                                    order.line_items = listOf(lineItem)
-
-                            // order.line_items!![0].variant_id = 40335555395723
-                            var productImage = NoteAttribute()
-                            productImage.name = "image"
-                            productImage.value = product.images[0].src
-                            order.note_attributes = listOf(productImage)
-
-                            var draftOrder = DraftOrder(order)
-                            searchViewModel.getCardOrder(draftOrder)
-                            searchViewModel.onlineCardOrder.observe(viewLifecycleOwner) { cardOrder ->
-                                if (cardOrder.isSuccessful) {
-                                    Toast.makeText(requireContext(),
-                                        "add to fav successfull: " + cardOrder.code().toString(),
-                                        Toast.LENGTH_LONG).show()
-                                } else {
-
-                                    Toast.makeText(requireContext(),
-                                        "add to fav failed: " + cardOrder.code().toString(),
-                                        Toast.LENGTH_LONG).show()
-
-                                }
-                            }
-                            }
-                    }
+            allFavProducts.clear()
+            allVariantsID.clear()
+            for (i in 0..favProducts.size - 1) {
+                if (favProducts.get(i).note == "fav" && favProducts.get(i).email == email) {
+                    allFavProducts.add(favProducts.get(i))
+                    allVariantsID.add(favProducts.get(i).line_items!![0].variant_id!!)
                 }
             }
 
         }
+
+        return view
+    }
+
+    override fun addToFav(product:Product,img: ImageView,myIndex:Int) {
+        Toast.makeText(requireContext(),"Fav clicked",Toast.LENGTH_LONG).show()
+        val sharedPreferences: SharedPreferences = context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
+        val email: String? = sharedPreferences.getString("email","")
+        Log.i("filter","size of filter product: "+filterProductArrayList.size)
+        Log.i("filter","size of fav product: "+allFavProducts.size)
+        Log.i("filter","size of variants product: "+allVariantsID.size)
+
+
+        if(filterProductArrayList[myIndex].variants[0].id in allVariantsID){
+            Log.i("exits","already exists")
+
+            img.setImageResource(R.drawable.ic_baseline_favorite_border_24)
+            searchViewModel.deleteSelectedProduct(allFavProducts.get(myIndex).id.toString())
+            searchViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
+                if (response.isSuccessful) {
+
+                    Toast.makeText(requireContext(),
+                        "Deleted Success!!!: " + response.code().toString(),
+                        Toast.LENGTH_SHORT).show()
+
+
+                } else {
+                    Toast.makeText(requireContext(),
+                        "Deleted failed: " + response.code().toString(),
+                        Toast.LENGTH_SHORT).show()
+
+                }
+
+            }
+
+        }
+        else{
+            var variantId: Long = 0
+            var order = DraftOrderX()
+            order.note = "fav"
+            order.email = email
+
+                    variantId = filterProductArrayList[myIndex].variants[0].id
+                    Log.i("Index", "index: " + variantId.toString())
+                    // order.line_items!![0].variant_id = variantId
+                    var lineItem = LineItem()
+                    lineItem.quantity = 1
+                    lineItem.variant_id = variantId
+                    order.line_items = listOf(lineItem)
+
+
+            // order.line_items!![0].variant_id = 40335555395723
+            var productImage = NoteAttribute()
+            productImage.name = "image"
+            productImage.value = filterProductArrayList[myIndex].images[0].src
+            order.note_attributes = listOf(productImage)
+
+            var draftOrder = DraftOrder(order)
+            searchViewModel.getCardOrder(draftOrder)
+            searchViewModel.onlineCardOrder.observe(viewLifecycleOwner) { cardOrder ->
+                if (cardOrder.isSuccessful) {
+                    Toast.makeText(requireContext(),
+                        "add to card successfull: " + cardOrder.code().toString(),
+                        Toast.LENGTH_LONG).show()
+                } else {
+
+                    Toast.makeText(requireContext(),
+                        "add to card failed: " + cardOrder.code().toString()+"//"+cardOrder.body(),
+                        Toast.LENGTH_LONG).show()
+
+                }
+            }
+
+        }
+
+
+
+
 
     }
 
@@ -286,7 +310,7 @@ class MysearchFragment : Fragment(),FavClicked {
             searchViewModel.getFavProducts()
             searchViewModel.onlineFavProduct.observe(viewLifecycleOwner) { favProducts ->
                 for (i in 0..favProducts.size-1) {
-                    if (favProducts.get(i).note == "open" && favProducts.get(i).email == email) {
+                    if (favProducts.get(i).note == "fav" && favProducts.get(i).email == email) {
                         if (id == favProducts[i].line_items!![0].variant_id) {
                             img.setImageResource(R.drawable.ic_favorite)
 
