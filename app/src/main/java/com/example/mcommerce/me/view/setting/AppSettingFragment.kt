@@ -98,24 +98,14 @@ class AppSettingFragment : Fragment() {
             shareOurApp()
         }
         txtSignOutText.setOnClickListener {
-/*
             val sharedPreferences: SharedPreferences = context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
             val editor = requireContext().getSharedPreferences("userAuth", Context.MODE_PRIVATE).edit()
-            val email: String? = sharedPreferences.getString("email","")
-            val pass: String? = sharedPreferences.getString("password","")
-            val fname: String? = sharedPreferences.getString("fname","")
-            val lname: String? = sharedPreferences.getString("lname","")
-            val phone: String? = sharedPreferences.getString("phone","")
-            val id: String? = sharedPreferences.getString("cusomerID","")
-            editor.remove(email)
-            editor.remove(pass)
-            editor.remove(fname)
-            editor.remove(lname)
-            editor.remove(phone)
-            editor.remove(id)
-            editor.commit()
-*/
-            startActivity(Intent(requireContext(), AuthActivity::class.java))
+            val isLogin = sharedPreferences.getBoolean("isLogin",true)
+            if(isLogin == true){
+                editor.putBoolean("isLogin",false)
+                editor.commit()
+                startActivity(Intent(requireContext(), AuthActivity::class.java))
+            }
         }
         return view
     }

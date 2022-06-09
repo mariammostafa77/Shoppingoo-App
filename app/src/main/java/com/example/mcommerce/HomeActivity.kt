@@ -14,6 +14,7 @@ import com.example.mcommerce.home.view.HomeFragment
 import com.example.mcommerce.me.view.MeWithLogin
 import com.example.mcommerce.me.view.MeWithoutLoginFragment
 import com.example.mcommerce.me.view.setting.AddNewAddressFragment
+import com.example.mcommerce.me.view.setting.UserAddressesFragment
 import com.example.mcommerce.me.viewmodel.SavedSetting
 import com.example.mcommerce.model.Product
 import com.example.mcommerce.search.view.MysearchFragment
@@ -31,6 +32,8 @@ class HomeActivity : AppCompatActivity(),Communicator {
         var mySearchFlag:Int=0
         var myDetailsFlag:Int=0
     }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -119,14 +122,22 @@ class HomeActivity : AppCompatActivity(),Communicator {
         transaction.replace(R.id.frameLayout,searchFragment).commit()
     }
 
-    override fun goToUserAddresses() {
-        //
+    override fun goToUserAddresses(totalAmount: String){
+        val bundle=Bundle()
+        val userAddressesFragment = UserAddressesFragment()
+        bundle.putString("sub_total", totalAmount)
+        Log.i("payment","payment From Home${totalAmount}")
+        userAddressesFragment.arguments = bundle
+        replaceFragment(userAddressesFragment)
     }
 
-    override fun goToPaymentFromAddress(selectedAddress: Addresse) {
+
+    override fun goToPaymentFromAddress(selectedAddress: Addresse, totalAmount: String) {
         val bundle=Bundle()
         val paymentFragment = PaymentFragment()
         bundle.putSerializable("selectedAddress", selectedAddress)
+        bundle.putString("amount",totalAmount)
+        Log.i("payment","payment From Home${selectedAddress.city}, ${totalAmount}")
         paymentFragment.arguments=bundle
         replaceFragment(paymentFragment)
 

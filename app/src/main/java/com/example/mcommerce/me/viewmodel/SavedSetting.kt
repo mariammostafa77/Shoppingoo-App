@@ -41,6 +41,13 @@ class SavedSetting {
             return currency
         }
 
+        fun getUserName(context: Context) : String{
+            val sharedPreferences: SharedPreferences = context.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
+            val fname: String? = sharedPreferences.getString("fname","")
+            val lname: String? = sharedPreferences.getString("lname","")
+            return "${fname} ${lname}"
+        }
+
     }
 
 }

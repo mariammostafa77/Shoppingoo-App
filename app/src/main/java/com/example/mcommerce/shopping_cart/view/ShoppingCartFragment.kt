@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.R
 import com.example.mcommerce.draftModel.DraftOrder
 import com.example.mcommerce.draftModel.DraftOrderX
@@ -35,6 +36,7 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
     lateinit var shoppingCartViewModel: ShoppingCartViewModel
     var userShoppingCartProducts:ArrayList<DraftOrder> = ArrayList<DraftOrder>()
     var subTotal : Double = 0.0
+    lateinit var communicator: Communicator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +48,7 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
         initComponent(view)
         shoppingCartRecyclerView.setLayoutManager(linearLayoutManager)
         shoppingCartRecyclerView.setAdapter(shoppingCartAdapter)
+        communicator = activity as Communicator
 
         shoppingCartViewModelFactory = ShoppingCartViewModelFactory(Repository.getInstance(AppClient.getInstance(), requireContext()))
         shoppingCartViewModel = ViewModelProvider(this, shoppingCartViewModelFactory).get(ShoppingCartViewModel::class.java)
@@ -63,6 +66,8 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
                       userShoppingCartProducts.add(draftObj)
                 }
             }
+            Log.i("Testttttttt", userShoppingCartProducts.size.toString())
+            Toast.makeText(requireContext(), userShoppingCartProducts.size.toString(),Toast.LENGTH_SHORT).show()
             shoppingCartAdapter.setUserShoppingCartProducts(requireContext(),userShoppingCartProducts)
             subTotal = 0.0
             for (i in 0..userShoppingCartProducts.size-1){
@@ -76,7 +81,8 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
             txtSubTotal.text = subTotal.toString()
         }
         btnProceedToCheckout.setOnClickListener {
-            replaceFragment(UserAddressesFragment())
+            communicator.goToUserAddresses(subTotal.toString())
+            //replaceFragment(UserAddressesFragment())
         }
         return view
     }

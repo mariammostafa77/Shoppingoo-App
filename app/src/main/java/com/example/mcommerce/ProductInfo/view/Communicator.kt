@@ -9,7 +9,7 @@ interface Communicator {
     fun goToSearchWithID(id:String)
     fun goToSearchWithAllData(id:String,brandName:String,subCatName:String)
 
-    fun goToUserAddresses()
-    fun goToPaymentFromAddress(selectedAddress: Addresse)
+    fun goToUserAddresses(totalAmount: String)
+    fun goToPaymentFromAddress(selectedAddress: Addresse , tatalAmount: String)
 
 }

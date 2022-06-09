@@ -16,14 +16,13 @@ class MainActivity : AppCompatActivity() {
         val editor = sharedPreferences.edit()
         CoroutineScope(Dispatchers.Main).launch {
             delay(5000L)
-            if(sharedPreferences.getString("email",null)==null) {
+            if(sharedPreferences.getBoolean("isLogin",false)== false) {
                 startActivity(Intent(this@MainActivity, AuthActivity::class.java))
                 finish()
             }
             else{
                 startActivity(Intent(this@MainActivity, HomeActivity::class.java))
                 finish()
-
             }
         }
 
