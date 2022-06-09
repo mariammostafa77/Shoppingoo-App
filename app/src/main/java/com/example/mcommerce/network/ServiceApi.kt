@@ -139,5 +139,13 @@ import java.util.*
 
 
 
+      @Headers(
+          "X-Shopify-Shop-Api-Call-Limit: 40/40",
+          "Retry-After: 2.0",
+          "Accept: application/json",
+          "X-Shopify-Access-Token: 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"
+      )
+      @PUT("draft_orders/{id}.json")
+      suspend fun updateDraftOrder(@Path("id") id: String? , @Body order: DraftOrder):Response<DraftOrder>
 }
 

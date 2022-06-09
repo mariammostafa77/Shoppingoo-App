@@ -11,6 +11,7 @@ import com.example.mcommerce.home.model.BrandsModel
 import com.example.mcommerce.network.RetrofitHelper
 import com.example.mcommerce.network.ServiceApi
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.Path
 import java.util.*
@@ -40,4 +41,7 @@ interface RepositoryInterface {
     suspend fun getCustomers(): cust_details
 
     suspend fun deleteProductFromShoppingCart(id: String?): Response<DraftOrder>
+
+    suspend fun updateDraftOrder(id: String? , order: DraftOrder):Response<DraftOrder>
+
 }

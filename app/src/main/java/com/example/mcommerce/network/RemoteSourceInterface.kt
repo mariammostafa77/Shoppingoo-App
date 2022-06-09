@@ -45,4 +45,7 @@ interface RemoteSourceInterface {
     suspend fun getProductTypes(id : String): AllProductsModel
 
     suspend fun deleteProductFromShoppingCart(id: String?): Response<DraftOrder>
+
+    suspend fun updateDraftOrder(id: String? , order: DraftOrder):Response<DraftOrder>
+
 }

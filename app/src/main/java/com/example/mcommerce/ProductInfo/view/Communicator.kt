@@ -1,5 +1,6 @@
 package com.example.mcommerce.ProductInfo.view
 
+import com.example.mcommerce.auth.model.Addresse
 import com.example.mcommerce.model.Product
 
 interface Communicator {
@@ -7,4 +8,8 @@ interface Communicator {
     fun goFromBrandToCategories(brandName:String)
     fun goToSearchWithID(id:String)
     fun goToSearchWithAllData(id:String,brandName:String,subCatName:String)
+
+    fun goToUserAddresses()
+    fun goToPaymentFromAddress(selectedAddress: Addresse)
+
 }

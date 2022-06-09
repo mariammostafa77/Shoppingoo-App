@@ -1,5 +1,7 @@
 package com.example.mcommerce.auth.model
 
+import java.io.Serializable
+
 data class Addresse(
     val address1: String? = null,
     val address2: String? = null,
@@ -18,4 +20,4 @@ data class Addresse(
     val province: String? = null,
     val province_code: String? = null,
     val zip: String? = null
-)
+) : Serializable

@@ -10,6 +10,7 @@ import com.example.mcommerce.ProductInfo.viewModel.ProductInfoViewModel
 import com.example.mcommerce.ProductInfo.viewModel.ProductInfoViewModelFactory
 import com.example.mcommerce.draftModel.DraftOrder
 import com.example.mcommerce.draftModel.DraftOrderX
+import com.example.mcommerce.draftModel.DraftResponse
 import com.example.mcommerce.model.RepositoryInterface
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,10 +22,12 @@ class ShoppingCartViewModel(repo: RepositoryInterface) : ViewModel() {
     private val iRepo: RepositoryInterface = repo
     private var shopingCartProducts = MutableLiveData<List<DraftOrderX>>()
     private val itemDeleted = MutableLiveData<Response<DraftOrder>>()
+    private val itemUpdated = MutableLiveData<Response<DraftOrder>>()
 
     val onlineShoppingCartProduct: LiveData<List<DraftOrderX>> = shopingCartProducts
-    val selectedItem : MutableLiveData<Response<DraftOrder>> = itemDeleted
 
+    val selectedItem : MutableLiveData<Response<DraftOrder>> = itemDeleted
+    val onlineItemUpdated : MutableLiveData<Response<DraftOrder>> = itemUpdated
     fun getShoppingCardProducts(){
         viewModelScope.launch{
             val result = iRepo.getShoppingCartProducts()
@@ -40,7 +43,15 @@ class ShoppingCartViewModel(repo: RepositoryInterface) : ViewModel() {
                 itemDeleted.value = result
             }
         }
+    }
 
+    fun updateSelectedProduct(id: String,order: DraftOrder){
+        viewModelScope.launch{
+            val result = iRepo.updateDraftOrder(id,order)
+            withContext(Dispatchers.Main){
+                itemUpdated.value = result
+            }
+        }
     }
 
 
