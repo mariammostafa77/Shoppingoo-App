@@ -61,7 +61,6 @@ class PaymentFragment : Fragment() {
         if(arguments != null){
             selectedAddress = arguments?.getSerializable("selectedAddress") as Addresse
             amount = arguments?.getString("amount") as String
-          //  Toast.makeText(requireContext(),"${selectedAddress.city},,, ${amount}",Toast.LENGTH_SHORT).show()
             Log.i("payment","payment From Fragment: ${selectedAddress.city}")
         }
 

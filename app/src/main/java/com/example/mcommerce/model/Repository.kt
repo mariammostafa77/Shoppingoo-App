@@ -12,6 +12,8 @@ import com.example.mcommerce.draftModel.DraftOrder
 import com.example.mcommerce.draftModel.DraftOrderX
 import com.example.mcommerce.draftModel.DraftResponse
 import com.example.mcommerce.home.model.BrandsModel
+import com.example.mcommerce.model.currencies.CurrencyResponse
+import com.example.mcommerce.model.currencies.convertor.CurrencyConverter
 import com.example.mcommerce.network.RemoteSourceInterface
 import com.example.mcommerce.network.RetrofitHelper
 import com.example.mcommerce.network.ServiceApi
@@ -92,8 +94,18 @@ class Repository private constructor(var remoteSource: RemoteSourceInterface, va
         return remoteSource.updateDraftOrder(id,order)
     }
 
+    override suspend fun getAllCurrencies(): CurrencyResponse {
+        return  remoteSource.getAllCurrencies()
+    }
+
+    override suspend fun getCurrencyValue(to: String, from: String, amount: String): Response<CurrencyConverter> {
+       return remoteSource.getCurrencyValue(to,from,amount)
+    }
+
     override suspend fun getShoppingCartProducts(): DraftResponse {
         return remoteSource.getShoppingCartProducts()
     }
+
+
 
 }

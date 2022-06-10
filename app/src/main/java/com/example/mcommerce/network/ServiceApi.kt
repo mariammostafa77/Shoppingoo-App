@@ -9,6 +9,8 @@ import com.example.mcommerce.draftModel.DraftOrderX
 import com.example.mcommerce.draftModel.DraftResponse
 import com.example.mcommerce.home.model.BrandsModel
 import com.example.mcommerce.model.*
+import com.example.mcommerce.model.currencies.CurrencyResponse
+import com.example.mcommerce.model.currencies.convertor.CurrencyConverter
 import retrofit2.Response
 import retrofit2.http.*
 import java.util.*
@@ -138,5 +140,25 @@ import java.util.*
       )
       @PUT("draft_orders/{id}.json")
       suspend fun updateDraftOrder(@Path("id") id: String? , @Body order: DraftOrder):Response<DraftOrder>
+
+      // https://9d169ad72dd7620e70f56b28ae6146d9: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@madalex20220.myshopify.com/admin/api/2022-04/currencies.json
+
+      @Headers(
+          "Accept: application/json",
+          "X-Shopify-Access-Token: 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",)
+      @GET("currencies.json")
+      suspend fun getAllCurrencies(): CurrencyResponse
+
+      // https://api.apilayer.com/exchangerates_data/convert?to=EGP&from=USD&amount=1&apikey=OdsWOfPbLEyojdjFR7FjcSzVpifcX23n
+
+      @GET("convert?apikey=OdsWOfPbLEyojdjFR7FjcSzVpifcX23n&amount=1&from=EGP")
+      suspend fun getCurrencyValue(@Query("to") to: String, @Query("from") from: String,
+                                            @Query("amount") amount: String): Response<CurrencyConverter>
+
+      /*
+      @GET("convert?apikey=fZAyG1gol2pWw81x7xVgwwh1Omu3MTkS&amount=1&from=EGP")
+      suspend fun getQualifiedValueCurrency(@Query("to") to: String): Response<CurrencyConverter>
+*/
+
 }
 

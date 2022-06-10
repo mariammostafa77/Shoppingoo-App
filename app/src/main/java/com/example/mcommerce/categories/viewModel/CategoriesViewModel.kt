@@ -13,7 +13,9 @@ import kotlinx.coroutines.withContext
 class CategoriesViewModel(repo: RepositoryInterface) : ViewModel(){
     private val iRepo: RepositoryInterface = repo
     private val allProducts = MutableLiveData<List<Product>>()
+
     val onlineProducts: LiveData<List<Product>> = allProducts
+
     fun getBrandProducts(id:String){
         viewModelScope.launch{
             val result = iRepo.getBrandProducts(id)

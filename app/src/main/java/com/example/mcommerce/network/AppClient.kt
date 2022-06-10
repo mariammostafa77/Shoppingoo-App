@@ -6,8 +6,11 @@ import com.example.mcommerce.draftModel.DraftOrder
 import com.example.mcommerce.draftModel.DraftResponse
 import com.example.mcommerce.home.model.BrandsModel
 import com.example.mcommerce.model.*
+import com.example.mcommerce.model.currencies.CurrencyResponse
+import com.example.mcommerce.model.currencies.convertor.CurrencyConverter
 import retrofit2.Response
 import retrofit2.http.Path
+import java.util.*
 
 class AppClient : RemoteSourceInterface {
 
@@ -93,6 +96,18 @@ class AppClient : RemoteSourceInterface {
     override suspend fun updateDraftOrder(id: String?, order: DraftOrder): Response<DraftOrder> {
         val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
         val response = service?.updateDraftOrder(id,order)
+        return response!!
+    }
+
+    override suspend fun getAllCurrencies(): CurrencyResponse {
+        val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
+        val response = service?.getAllCurrencies()
+        return response!!
+    }
+
+    override suspend fun getCurrencyValue(to: String, from: String, amount: String): Response<CurrencyConverter> {
+        val service = CurrencyConverterHelper.getRetrofit()?.create(ServiceApi::class.java)
+        val response = service?.getCurrencyValue(to,from,amount)
         return response!!
     }
 

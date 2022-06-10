@@ -127,7 +127,6 @@ class ProductInfoFragment : Fragment() {
             colorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             sizeSpinner.adapter=sizeAdapter
             colorSpinner.adapter=colorAdapter
-
             val sharedPreferences = requireContext().getSharedPreferences("userAuth", AppCompatActivity.MODE_PRIVATE)
             btnAddToCard.setOnClickListener {
                 var variantId:Long=0

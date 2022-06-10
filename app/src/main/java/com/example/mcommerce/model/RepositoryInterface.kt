@@ -8,6 +8,8 @@ import com.example.mcommerce.draftModel.DraftOrder
 import com.example.mcommerce.draftModel.DraftOrderX
 import com.example.mcommerce.draftModel.DraftResponse
 import com.example.mcommerce.home.model.BrandsModel
+import com.example.mcommerce.model.currencies.CurrencyResponse
+import com.example.mcommerce.model.currencies.convertor.CurrencyConverter
 import com.example.mcommerce.network.RetrofitHelper
 import com.example.mcommerce.network.ServiceApi
 import retrofit2.Response
@@ -42,5 +44,8 @@ interface RepositoryInterface {
     suspend fun deleteProductFromShoppingCart(id: String?): Response<DraftOrder>
 
     suspend fun updateDraftOrder(id: String? , order: DraftOrder):Response<DraftOrder>
+    suspend fun getAllCurrencies(): CurrencyResponse
+
+    suspend fun getCurrencyValue(to: String, from: String, amount: String): Response<CurrencyConverter>
 
 }
