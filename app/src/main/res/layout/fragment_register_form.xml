@@ -56,68 +56,103 @@
                 android:paddingBottom="50dp">
 
 
-                <EditText
-                    android:id="@+id/edtLName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:drawableLeft="@drawable/ic_baseline_supervised_user_circle_24"
-                    android:ems="10"
-                    android:hint="Please enter last name"
-                    android:inputType="textPersonName"
-                    android:minHeight="48dp"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/edtFName" />
-
-                <EditText
-                    android:id="@+id/edtFName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="10dp"
-                    android:drawableLeft="@drawable/ic_baseline_supervised_user_circle_24"
-                    android:ems="10"
-                    android:hint="Please enter first name"
-                    android:inputType="textPersonName"
-                    android:minHeight="48dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <EditText
-                    android:id="@+id/edtRegisterEmail"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lname_txt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="10dp"
-                    android:drawableLeft="@drawable/authemail_24"
-                    android:ems="10"
-
-                    android:hint="Please enter you email"
-                    android:inputType="textEmailAddress"
-                    android:minHeight="48dp"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:hint="Please enter you LName"
+                    app:endIconMode="none"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/edtLName" />
+                    app:layout_constraintTop_toBottomOf="@+id/fname_txt"
+                    android:background="@color/black"
 
-                <EditText
-                    android:id="@+id/edtRegisterPassword"
+                    >
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtLName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
+                        android:minHeight="48dp"
+                        android:background="@color/white"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/fname_txt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="10dp"
-                    android:drawableLeft="@drawable/authpass_24"
-                    android:ems="10"
+                    android:hint="Please enter you FName"
+                    app:endIconMode="none"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:background="@color/black"
+
+                    >
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtFName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
+                        android:minHeight="48dp"
+                        android:background="@color/white"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/email_txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginTop="10dp"
+                    android:hint="Please enter you Email"
+                    app:endIconMode="none"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lname_txt"
+                    android:background="@color/black"
+                    >
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtRegisterEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textEmailAddress"
+                        android:minHeight="48dp"
+                        android:background="@color/white"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/password_txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginTop="10dp"
                     android:hint="Please enter you Password"
-                    android:inputType="textPassword"
-                    android:minHeight="48dp"
+                    app:endIconMode="password_toggle"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/edtRegisterEmail" />
+                    app:layout_constraintTop_toBottomOf="@+id/email_txt"
+                    android:background="@color/black"
+                    >
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtRegisterPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword"
+                        android:minHeight="48dp"
+                        android:background="@color/white"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
 
 
                 <Button
@@ -131,7 +166,7 @@
                     android:text="@string/register"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/edtPhone" />
+                    app:layout_constraintTop_toBottomOf="@+id/phone_txt" />
 
                 <TextView
                     android:id="@+id/txtHaveAcc"
@@ -146,36 +181,54 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/btnRegister" />
 
-                <EditText
-                    android:id="@+id/edtConfirmPass"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/password_txt2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="10dp"
-                    android:drawableLeft="@drawable/authpass_24"
-                    android:ems="10"
-                    android:hint="Please confirm Password"
-                    android:inputType="textPassword"
-                    android:minHeight="48dp"
+                    android:hint="Please enter you Password again"
+                    app:endIconMode="password_toggle"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/edtRegisterPassword" />
+                    app:layout_constraintTop_toBottomOf="@+id/password_txt"
+                    android:background="@color/black"
+                    >
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtConfirmPass"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword"
+                        android:minHeight="48dp"
+                        android:background="@color/white"
+                        />
 
-                <EditText
-                    android:id="@+id/edtPhone"
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/phone_txt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:drawableLeft="@drawable/phone_24"
-                    android:ems="15"
-                    android:hint="PhoneNumber"
-                    android:inputType="phone"
-                    android:minHeight="48dp"
+                    android:hint="Please enter you Phone"
+                    app:endIconMode="none"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/edtConfirmPass" />
+                    app:layout_constraintTop_toBottomOf="@+id/password_txt2"
+                    android:background="@color/black"
+                    >
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtPhone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="phone"
+                        android:minHeight="48dp"
+                        android:background="@color/white"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>

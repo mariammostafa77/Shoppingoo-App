@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.mcommerce.auth.login.model.CustomerModel
-import com.example.mcommerce.auth.login.model.cust_details
+
+import com.example.mcommerce.auth.model.Customer
 import com.example.mcommerce.auth.model.CustomerDetail
 import com.example.mcommerce.auth.model.CustomerX
 import com.example.mcommerce.model.RepositoryInterface
@@ -16,10 +16,10 @@ import kotlinx.coroutines.withContext
 
 class LoginViewModel(repo: RepositoryInterface) : ViewModel() {
     private val iRepo: RepositoryInterface = repo
-    private val myCustomer = MutableLiveData<cust_details>()
+    private val myCustomer = MutableLiveData<Customer>()
 
 
-    val customer: LiveData<cust_details> = myCustomer
+    val customer: LiveData<Customer> = myCustomer
 
     fun getCustomer() {
        viewModelScope.launch {

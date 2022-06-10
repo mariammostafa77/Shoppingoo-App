@@ -31,7 +31,7 @@ class FavProductsAdapter(private val listener: FavouriteOnClickLisner) : Recycle
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.favProductTitle.text = allFavProducts[position].line_items?.get(0)!!.title
-        holder.favProductPrice.append("  ${allFavProducts[position].line_items?.get(0)!!.price} EGP")
+        holder.favProductPrice.text=allFavProducts[position].line_items?.get(0)!!.price
         Glide.with(context).load(allFavProducts[position].note_attributes?.get(0)?.value).into(holder.favProductImg)
 
 

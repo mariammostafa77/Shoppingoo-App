@@ -1,7 +1,7 @@
 package com.example.mcommerce.model
 
-import com.example.mcommerce.auth.login.model.CustomerModel
-import com.example.mcommerce.auth.login.model.cust_details
+
+import com.example.mcommerce.auth.model.Customer
 import com.example.mcommerce.auth.model.CustomerDetail
 import com.example.mcommerce.auth.model.CustomerX
 import com.example.mcommerce.draftModel.DraftOrder
@@ -36,7 +36,7 @@ interface RepositoryInterface {
 
     suspend fun getShoppingCartProducts(): DraftResponse
 
-    suspend fun getCustomers(): cust_details
+    suspend fun getCustomers(): Customer
 
     suspend fun deleteProductFromShoppingCart(id: String?): Response<DraftOrder>
 }

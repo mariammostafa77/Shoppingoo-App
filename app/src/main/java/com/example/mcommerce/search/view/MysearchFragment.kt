@@ -259,6 +259,8 @@ class MysearchFragment : Fragment(),FavClicked {
 
         }
         else{
+            Log.i("exits","not exists")
+            img.setImageResource(R.drawable.ic_favorite)
             var variantId: Long = 0
             var order = DraftOrderX()
             order.note = "fav"
@@ -315,6 +317,7 @@ class MysearchFragment : Fragment(),FavClicked {
                             img.setImageResource(R.drawable.ic_favorite)
 
                         }
+
                     }
                 }
 
