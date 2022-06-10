@@ -6,29 +6,32 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.R
-import com.example.mcommerce.categories.view.OnSubCategoryClickInterface
 import com.example.mcommerce.orders.model.Order
 
 class OrdersAdapter : RecyclerView.Adapter<OrdersAdapter.ViewHolder>(){
     var allOrders:List<Order> = ArrayList<Order>()
     lateinit var context: Context
+    lateinit var onItemClickListener: OnOrderClickListenerInterface
 
-    fun setUpdatedData(allOrders:List<Order>, context: Context){
+    fun setUpdatedData(allOrders:List<Order>, context: Context,onItemClickListener: OnOrderClickListenerInterface){
         this.allOrders=allOrders
         this.context=context
+        this.onItemClickListener=onItemClickListener
         notifyDataSetChanged()
     }
     inner class ViewHolder(private val itemView: View): RecyclerView.ViewHolder(itemView){
         var tvOrderPrice: TextView =itemView.findViewById(R.id.tvOrderPrice)
         var tvOrderDate: TextView =itemView.findViewById(R.id.tvOrderDate)
-
+        var orderCard:CardView=itemView.findViewById(R.id.orderCard)
         fun bind(data: Order) {
             tvOrderPrice.text = allOrders[position].total_price
             tvOrderDate.text = allOrders[position].created_at
+            orderCard.setOnClickListener(View.OnClickListener {
+                onItemClickListener.onOrderClickListener(allOrders[position])
+            })
 
         }
 

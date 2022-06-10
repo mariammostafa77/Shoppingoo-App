@@ -22,6 +22,8 @@ import com.example.mcommerce.me.view.MeWithoutLoginFragment
 import com.example.mcommerce.me.view.setting.AddNewAddressFragment
 import com.example.mcommerce.me.viewmodel.SavedSetting
 import com.example.mcommerce.model.Product
+import com.example.mcommerce.orderDetails.view.OrderDetailsFragment
+import com.example.mcommerce.orders.model.Order
 import com.example.mcommerce.search.view.MysearchFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.util.*
@@ -138,6 +140,14 @@ class HomeActivity : AppCompatActivity(),Communicator {
 
     override fun goToPaymentFromAddress(selectedAddress: Addresse) {
         TODO("Not yet implemented")
+    }
+
+    override fun goToOrderDetails(selectedOrder: Order) {
+        val bundle=Bundle()
+        bundle.putSerializable("selectedOrder",selectedOrder)
+        val orderDetailsFragment=OrderDetailsFragment()
+        orderDetailsFragment.arguments=bundle
+        replaceFragment(orderDetailsFragment)
     }
 
     private fun passMapDataToFragment() {

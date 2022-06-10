@@ -1,5 +1,7 @@
 package com.example.mcommerce.orders.model
 
+import java.io.Serializable
+
 data class Order(
     val admin_graphql_api_id: String,
     val app_id: Int,
@@ -82,4 +84,4 @@ data class Order(
     val total_weight: Int,
     val updated_at: String,
     val user_id: Any
-)
+) : Serializable

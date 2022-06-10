@@ -86,6 +86,8 @@
     <string name="Orders">Orders</string>
     <string name="orderDetails">Order Details</string>
     <string name="address2">Address:</string>
+    <string name="TotalPrice">Total Price:</string>
+    <string name="Quantity">Quantity:</string>
 
     <!-- Arrays -->
 

@@ -29,6 +29,7 @@
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/fragment_mysearch.xml" value="0.1" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/fragment_order_details.xml" value="0.2" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/fragment_orders.xml" value="0.15729166666666666" />
+        <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/fragment_payment.xml" value="0.17028985507246377" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/fragment_product_info.xml" value="0.22" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/fragment_register.xml" value="0.17753623188405798" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/fragment_register_form.xml" value="0.21" />
@@ -36,8 +37,10 @@
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/fragment_user_addresses.xml" value="0.25" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/fragment_user_profile.xml" value="0.17753623188405798" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/image_container.xml" value="0.1082427536231884" />
+        <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/item_order.xml" value="0.17028985507246377" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/map_content.xml" value="0.1082427536231884" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/order_item.xml" value="0.21" />
+        <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/product_in_order.xml" value="0.33" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/shopping_cart_item.xml" value="0.17753623188405798" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/sub_category_item.xml" value="0.12273550724637682" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/menu/hom_tabs.xml" value="0.1787037037037037" />

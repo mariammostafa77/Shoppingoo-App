@@ -21,7 +21,6 @@ import com.example.mcommerce.model.Product
 class SubCategoriesAdapter : RecyclerView.Adapter<SubCategoriesAdapter.ViewHolder>(){
     var allTypes:List<String> = ArrayList<String>()
     lateinit var context: Context
-    lateinit var comminucator: Communicator
     lateinit var onClickAction: OnSubCategoryClickInterface
 
     fun setUpdatedData(allTypes:List<String>,context: Context,onClickAction: OnSubCategoryClickInterface){
