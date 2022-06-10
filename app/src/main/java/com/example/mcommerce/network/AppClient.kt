@@ -1,6 +1,7 @@
 package com.example.mcommerce.network
 
-import com.example.mcommerce.auth.login.model.cust_details
+
+import com.example.mcommerce.auth.model.Customer
 import com.example.mcommerce.auth.model.CustomerDetail
 import com.example.mcommerce.draftModel.DraftOrder
 import com.example.mcommerce.draftModel.DraftResponse
@@ -71,7 +72,7 @@ class AppClient : RemoteSourceInterface {
         return response!!
     }
 
-    override suspend fun getCustomers(): cust_details {
+    override suspend fun getCustomers(): Customer {
         val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
         val response = service?.getCustomers()
         return response!!

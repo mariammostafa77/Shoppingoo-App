@@ -1,6 +1,6 @@
 package com.example.mcommerce.network
-import com.example.mcommerce.auth.login.model.CustomerModel
-import com.example.mcommerce.auth.login.model.cust_details
+
+import com.example.mcommerce.auth.model.Customer
 
 import com.example.mcommerce.auth.model.CustomerDetail
 
@@ -30,7 +30,7 @@ interface RemoteSourceInterface {
     suspend fun changeCustomerCurrency(id: String? , currency: String): Response<CustomerDetail>
 
     suspend fun postNewDraftOrder(order: DraftOrder):Response<DraftOrder>
-    suspend fun getCustomers(): cust_details
+    suspend fun getCustomers(): Customer
     suspend fun getShoppingCartProducts(): DraftResponse
 
     suspend fun deleteProductFromShoppingCart(id: String?): Response<DraftOrder>

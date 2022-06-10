@@ -3,6 +3,7 @@ package com.example.mcommerce
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
 import com.example.mcommerce.ProductInfo.view.Communicator
@@ -28,9 +29,12 @@ class HomeActivity : AppCompatActivity(),Communicator {
     private  val brandProductsFragment = BrandProductsFragment()
     private val meWithoutLoginFragment = MeWithoutLoginFragment()
     lateinit var bottomNavigationView: BottomNavigationView
+
     companion object{
         var mySearchFlag:Int=0
         var myDetailsFlag:Int=0
+        var myFavFlag:Boolean=false
+
     }
 
 
@@ -38,8 +42,13 @@ class HomeActivity : AppCompatActivity(),Communicator {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+        val favSharedPreferences = getSharedPreferences("favourite", AppCompatActivity.MODE_PRIVATE)
+       myFavFlag= favSharedPreferences.getBoolean("favStatue",false)
+
 
         SavedSetting.loadLocale(this)
+
+
 
         bottomNavigationView = findViewById(R.id.buttomNav)
 

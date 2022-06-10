@@ -22,7 +22,7 @@ import com.example.mcommerce.home.view.HomeFragmentDirections
 
 import com.example.mcommerce.model.Product
 
-class SearchAdapter( var comminicator:Communicator,var allProducts: List<Product>,var context: Context):RecyclerView.Adapter<SearchAdapter.MyViewHolder>(){
+class SearchAdapter( var comminicator:Communicator,var allProducts: List<Product>,var context: Context,private val listener:FavClicked):RecyclerView.Adapter<SearchAdapter.MyViewHolder>(){
 
    // var allProducts: List<Product> = ArrayList<Product>()
     //lateinit var context: Context
@@ -31,6 +31,7 @@ class SearchAdapter( var comminicator:Communicator,var allProducts: List<Product
         this.allProducts = allProducts
         this.context = context
         this.comminicator=comminicator
+
         notifyDataSetChanged()
     }
 
@@ -38,6 +39,7 @@ class SearchAdapter( var comminicator:Communicator,var allProducts: List<Product
         val productImg: ImageView = itemView.findViewById(R.id.productImage)
         val productTitle: TextView = itemView.findViewById(R.id.productName)
         val cardItem: CardView = itemView.findViewById(R.id.cardViewCategoryItem)
+        var favIconImage:ImageView=itemView.findViewById(R.id.favIconImage)
 
     }
 
@@ -51,15 +53,14 @@ class SearchAdapter( var comminicator:Communicator,var allProducts: List<Product
         holder.productTitle.text=currentPosition.title
         Glide.with(context).load(currentPosition.image.src).into(holder.productImg)
         holder.cardItem.setOnClickListener{
-
-           //var navController: NavController = Navigation.findNavController(it)
-         //  var navDir: NavDirections = MysearchFragmentDirections.actionSearchFragmentToProductFragment()
-         //   navController.navigate(navDir)
-
-
             comminicator.passProductData(currentPosition)
 
         }
+        holder.favIconImage.setOnClickListener {
+            listener.addToFav(currentPosition,holder.favIconImage,position)
+        }
+
+         listener.addFavImg(holder.favIconImage,currentPosition.variants[0].id)
     }
 
     override fun getItemCount(): Int {
