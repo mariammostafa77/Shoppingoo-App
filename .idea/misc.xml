@@ -106,6 +106,7 @@
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/address_item.xml" value="0.15104166666666666" />
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/dialog_view.xml" value="0.27291666666666664" />
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/discount_codes_layout.xml" value="0.27291666666666664" />
+        <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/dropdwon_currency_item.xml" value="0.20260416666666667" />
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/fragment_add_new_address.xml" value="0.16145833333333334" />
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/fragment_app_setting.xml" value="0.16145833333333334" />
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/fragment_me_with_login.xml" value="0.16145833333333334" />
@@ -114,8 +115,6 @@
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/fragment_pay_pal.xml" value="0.19375" />
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/fragment_payment.xml" value="0.16302083333333334" />
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/fragment_product_info.xml" value="0.16145833333333334" />
-        <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/fragment_register_form.xml" value="0.16302083333333334" />
-        <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/fragment_shopping_cart.xml" value="0.25" />
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/fragment_register_form.xml" value="0.33" />
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/fragment_shopping_cart.xml" value="0.22" />
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/fragment_user_addresses.xml" value="0.16145833333333334" />

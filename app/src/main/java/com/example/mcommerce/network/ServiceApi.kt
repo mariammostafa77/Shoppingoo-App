@@ -149,15 +149,8 @@ import java.util.*
       suspend fun getAllCurrencies(): CurrencyResponse
 
       // https://api.apilayer.com/exchangerates_data/convert?to=EGP&from=USD&amount=1&apikey=OdsWOfPbLEyojdjFR7FjcSzVpifcX23n
-
-      @GET("convert?apikey=OdsWOfPbLEyojdjFR7FjcSzVpifcX23n&amount=1&from=EGP")
-      suspend fun getCurrencyValue(@Query("to") to: String, @Query("from") from: String,
-                                            @Query("amount") amount: String): Response<CurrencyConverter>
-
-      /*
-      @GET("convert?apikey=fZAyG1gol2pWw81x7xVgwwh1Omu3MTkS&amount=1&from=EGP")
-      suspend fun getQualifiedValueCurrency(@Query("to") to: String): Response<CurrencyConverter>
-*/
+      @GET("convert?apikey=bvWIQqwc5PjLwYrSgElp83ZEktkQWLJB&amount=1&from=EGP")
+      suspend fun getCurrencyValue(@Query("to") to: String): CurrencyConverter
 
       @Headers(
           "Accept: application/json",

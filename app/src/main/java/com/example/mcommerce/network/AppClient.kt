@@ -113,9 +113,9 @@ class AppClient : RemoteSourceInterface {
         return response!!
     }
 
-    override suspend fun getCurrencyValue(to: String, from: String, amount: String): Response<CurrencyConverter> {
+    override suspend fun getCurrencyValue(to: String): CurrencyConverter {
         val service = CurrencyConverterHelper.getRetrofit()?.create(ServiceApi::class.java)
-        val response = service?.getCurrencyValue(to,from,amount)
+        val response = service?.getCurrencyValue(to)
         return response!!
     }
 

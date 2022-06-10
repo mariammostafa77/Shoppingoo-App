@@ -41,7 +41,7 @@ class LoginFormFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-       var view=inflater.inflate(R.layout.fragment_login_form, container, false)
+        var view=inflater.inflate(R.layout.fragment_login_form, container, false)
         txtRegister=view.findViewById(R.id.txtDonnotHaveAcc)
         edtLoginEmail=view.findViewById(R.id.edtLoginEmail)
         edtLoginPassword=view.findViewById(R.id.edtLoginPassword)
@@ -92,27 +92,11 @@ class LoginFormFragment : Fragment() {
                             editor.putString("lname", customer.customers[i].last_name)
                             editor.putString("phone", customer.customers[i].phone)
                             editor.putString("cusomerID", customer.customers[i].id.toString())
+                            editor.putBoolean("isLogin", true)
                             editor.commit()
                             startActivity(Intent(requireContext(), HomeActivity::class.java))
                             break
                         }
-                for(i in 0..customer.customers.size-1) {
-                    if (customer.customers[i].email==myEmail &&customer.customers[i].tags==myPassword) {
-
-
-                        Log.i("login", "login sussessfull: " + customer.customers[i].tags.toString())
-                        editor.putString("email", customer.customers[i].email)
-                        editor.putString("password",customer.customers[i].tags)
-                        editor.putString("fname", customer.customers[i].first_name)
-                        editor.putString("lname", customer.customers[i].last_name)
-                        editor.putString("phone", customer.customers[i].phone)
-                        editor.putString("cusomerID", customer.customers[i].id.toString())
-                        editor.putBoolean("isLogin", true)
-                        editor.commit()
-                        startActivity(Intent(requireContext(), HomeActivity::class.java))
-                        break
-                    } else {
-                        Log.i("login", "login failed: " + "null")
                     }
                     if (isSuccess == false) {
                         Toast.makeText(requireContext(),
@@ -130,7 +114,7 @@ class LoginFormFragment : Fragment() {
         return view
     }
 
-     fun loginvalidatation() {
+    fun loginvalidatation() {
         if (loginEmail.isEmpty()) {
             edtLoginEmail.setError("Email is required")
             edtLoginEmail.requestFocus()

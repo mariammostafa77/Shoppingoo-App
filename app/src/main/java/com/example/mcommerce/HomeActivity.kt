@@ -3,13 +3,11 @@ package com.example.mcommerce
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
 import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.ProductInfo.view.ProductInfoFragment
 import com.example.mcommerce.auth.model.Addresse
-import com.example.mcommerce.brandProducts.view.BrandProductsFragment
 import com.example.mcommerce.categories.view.CategoryFragment
 import com.example.mcommerce.home.view.HomeFragment
 import com.example.mcommerce.me.view.MeWithLogin

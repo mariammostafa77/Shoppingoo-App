@@ -12,4 +12,6 @@ interface Communicator {
     fun goToUserAddresses(totalAmount: String)
     fun goToPaymentFromAddress(selectedAddress: Addresse , tatalAmount: String)
 
+
+
 }

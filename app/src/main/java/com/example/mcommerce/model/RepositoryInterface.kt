@@ -47,6 +47,6 @@ interface RepositoryInterface {
     suspend fun updateDraftOrder(id: String? , order: DraftOrder):Response<DraftOrder>
     suspend fun getAllCurrencies(): CurrencyResponse
 
-    suspend fun getCurrencyValue(to: String, from: String, amount: String): Response<CurrencyConverter>
+    suspend fun getCurrencyValue(to: String): CurrencyConverter
 
 }

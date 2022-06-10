@@ -82,7 +82,6 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
         }
         btnProceedToCheckout.setOnClickListener {
             communicator.goToUserAddresses(subTotal.toString())
-            //replaceFragment(UserAddressesFragment())
         }
         return view
     }
@@ -105,9 +104,9 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
                 shoppingCartViewModel.deleteSelectedProduct(draftOrder.draft_order?.id.toString())
                 shoppingCartViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
                     if(response.isSuccessful){
-                       // userShoppingCartProducts.remove(draftOrder)
+                        userShoppingCartProducts.remove(draftOrder)
                            shoppingCartAdapter.notifyDataSetChanged()
-                       // shoppingCartAdapter.setUserShoppingCartProducts(requireContext(),userShoppingCartProducts)
+                        shoppingCartAdapter.setUserShoppingCartProducts(requireContext(),userShoppingCartProducts)
                         subTotal = 0.0
                         for (i in 0..userShoppingCartProducts.size-1){
                             val price = ((userShoppingCartProducts[i].draft_order?.line_items?.get(0)!!.price)?.toDouble())?.times(

@@ -102,8 +102,8 @@ class Repository private constructor(var remoteSource: RemoteSourceInterface, va
         return  remoteSource.getAllCurrencies()
     }
 
-    override suspend fun getCurrencyValue(to: String, from: String, amount: String): Response<CurrencyConverter> {
-       return remoteSource.getCurrencyValue(to,from,amount)
+    override suspend fun getCurrencyValue(to: String): CurrencyConverter {
+       return remoteSource.getCurrencyValue(to)
     }
 
     override suspend fun getShoppingCartProducts(): DraftResponse {

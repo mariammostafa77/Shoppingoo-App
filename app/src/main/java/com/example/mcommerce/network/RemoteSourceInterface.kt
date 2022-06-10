@@ -31,9 +31,6 @@ interface RemoteSourceInterface {
     suspend fun getVariant(id:String): Variants
     suspend fun getSubCategories(vendor: String,productType:String,collectionId:String):AllProductsModel
 
-    suspend fun getShoppingCartProducts(): DraftResponse
-
-    ///// Coupons
     suspend fun getDiscountCodes() : DiscountCodesModel
     suspend fun postNewCustomer(customer: CustomerDetail):Response<CustomerDetail>
 
@@ -43,7 +40,6 @@ interface RemoteSourceInterface {
     suspend fun changeCustomerCurrency(id: String? , currency: String): Response<CustomerDetail>
 
     suspend fun postNewDraftOrder(order: DraftOrder):Response<DraftOrder>
-    suspend fun getCustomers(): cust_details
 
     suspend fun getProductTypes(id : String): AllProductsModel
     suspend fun getCustomers(): Customer
@@ -55,6 +51,6 @@ interface RemoteSourceInterface {
 
     suspend fun getAllCurrencies(): CurrencyResponse
 
-    suspend fun getCurrencyValue(to: String, from: String, amount: String): Response<CurrencyConverter>
+    suspend fun getCurrencyValue(to: String): CurrencyConverter
 
 }

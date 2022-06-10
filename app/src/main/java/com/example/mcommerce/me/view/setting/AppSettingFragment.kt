@@ -15,26 +15,22 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import androidx.core.content.ContentProviderCompat
-import androidx.core.view.size
 import androidx.lifecycle.ViewModelProvider
 import com.example.mcommerce.AuthActivity
-import com.example.mcommerce.HomeActivity
 import com.example.mcommerce.R
-import com.example.mcommerce.auth.model.CustomerDetail
-import com.example.mcommerce.auth.model.CustomerX
 import com.example.mcommerce.me.viewmodel.CustomerViewModel
 import com.example.mcommerce.me.viewmodel.CustomerViewModelFactory
 import com.example.mcommerce.me.viewmodel.SavedSetting
 import com.example.mcommerce.me.viewmodel.SavedSetting.Companion.loadCurrency
+import com.example.mcommerce.me.viewmodel.SavedSetting.Companion.loadLocale
 import com.example.mcommerce.me.viewmodel.SavedSetting.Companion.setCurrency
 import com.example.mcommerce.me.viewmodel.SavedSetting.Companion.setLocale
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
+import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.dialog_view.view.*
 
-
-class AppSettingFragment : Fragment(), AdapterView.OnItemSelectedListener {
+class AppSettingFragment : Fragment() {
 
     lateinit var setting_back_icon: ImageView
     lateinit var userAddressCard: CardView
@@ -44,75 +40,61 @@ class AppSettingFragment : Fragment(), AdapterView.OnItemSelectedListener {
     lateinit var shareAppCard: CardView
 
     lateinit var txtSelectedLanguage: TextView
-    lateinit var txtSelectedCurrency: TextView
     lateinit var txtLastAddress: TextView
     lateinit var txtSignOutText: TextView
+    lateinit var txtCurrency : TextView
     lateinit var currencySpinner: Spinner
 
     lateinit var customerViewModel: CustomerViewModel
     lateinit var customerViewModelFactory: CustomerViewModelFactory
-
-    var customerId = ""
+    val spinnerArray: ArrayList<String> = ArrayList()
 
     companion object {
-        var isUserLogin = true
+       // var isUserLogin = true
         var languageSelected: String = ""
         var currencySelected: String = ""
     }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_app_setting, container, false)
         initComponent(view)
-        SavedSetting.loadLocale(requireContext())
-        customerViewModelFactory = CustomerViewModelFactory(
-            Repository.getInstance(
-                AppClient.getInstance(),
-                requireContext()
-            )
-        )
-        customerViewModel =
-            ViewModelProvider(this, customerViewModelFactory).get(CustomerViewModel::class.java)
-        val sharedPreferences =
-            requireContext().getSharedPreferences("userAuth", AppCompatActivity.MODE_PRIVATE)
-        customerId = sharedPreferences.getString("cusomerID", null).toString()
+        loadLocale(requireContext())
+        customerViewModelFactory = CustomerViewModelFactory(Repository.getInstance(AppClient.getInstance(), requireContext()))
+        customerViewModel = ViewModelProvider(this, customerViewModelFactory).get(CustomerViewModel::class.java)
 
-        val spinnerArray: ArrayList<String> = ArrayList()
         customerViewModel.getAllCurrencies()
         customerViewModel.onlineCurrencies.observe(viewLifecycleOwner) { currencies ->
             for (i in 0..currencies.size - 1) {
                 spinnerArray.add(currencies.get(i).currency)
             }
         }
+
+        currencySelected = loadCurrency(context!!)
+        txtCurrency.text = currencySelected
+        txtSelectedLanguage.text = languageSelected
+        spinnerArray.add("EGP")
         val currencyAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
             requireContext(), android.R.layout.simple_spinner_item, spinnerArray)
         currencyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         currencySpinner.adapter = currencyAdapter
 
 
-        currencySelected = loadCurrency(requireContext())
-        if (currencySelected.isNullOrEmpty() || languageSelected.isNullOrEmpty()) {
-            currencySelected = getResources().getString(R.string.egp)
-            languageSelected = resources.getString(R.string.system_default)
+        currencySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                currencySelected = parent?.getItemAtPosition(position).toString()
+                setCurrency(currencySelected, context!!)
+            }
         }
-        txtSelectedLanguage.text = languageSelected
-        txtSelectedCurrency.text = currencySelected
+        currencySelected = loadCurrency(requireContext())
         userAddressCard.setOnClickListener {
             replaceFragment(UserAddressesFragment())
         }
         languageCard.setOnClickListener {
             showLanguagesList()
-        }
-        currencyCard.setOnClickListener {
-            showCurrencyList()
         }
         contactUsCard.setOnClickListener {
             showContactUsDialog()
@@ -121,10 +103,8 @@ class AppSettingFragment : Fragment(), AdapterView.OnItemSelectedListener {
             shareOurApp()
         }
         txtSignOutText.setOnClickListener {
-            val sharedPreferences: SharedPreferences =
-                context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
-            val editor =
-                requireContext().getSharedPreferences("userAuth", Context.MODE_PRIVATE).edit()
+            val sharedPreferences: SharedPreferences = context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
+            val editor = requireContext().getSharedPreferences("userAuth", Context.MODE_PRIVATE).edit()
             val isLogin = sharedPreferences.getBoolean("isLogin", true)
             if (isLogin == true) {
                 editor.putBoolean("isLogin", false)
@@ -133,6 +113,14 @@ class AppSettingFragment : Fragment(), AdapterView.OnItemSelectedListener {
             }
         }
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val currencyAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
+            requireContext(), R.layout.dropdwon_currency_item, spinnerArray)
+        currencyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        currencySpinner.setAdapter(currencyAdapter)
     }
 
     private fun initComponent(view: View) {
@@ -144,9 +132,9 @@ class AppSettingFragment : Fragment(), AdapterView.OnItemSelectedListener {
         shareAppCard = view.findViewById(R.id.shareAppCard)
 
         txtSelectedLanguage = view.findViewById(R.id.txtSelectedLanguage)
-        txtSelectedCurrency = view.findViewById(R.id.txtSelectedCurrency)
-        txtLastAddress = view.findViewById(R.id.txtLastAddress)
+       // txtLastAddress = view.findViewById(R.id.txtLastAddress)
         txtSignOutText = view.findViewById(R.id.txtSignOutText)
+        txtCurrency = view.findViewById(R.id.txtCurrency)
         currencySpinner = view.findViewById(R.id.currencySpinner)
     }
 
@@ -181,95 +169,6 @@ class AppSettingFragment : Fragment(), AdapterView.OnItemSelectedListener {
         mDialog.show()
     }
 
-    private fun showCurrencyList() {
-        val languagesList = getResources().getStringArray(R.array.currency_options)
-        val mBuilder = AlertDialog.Builder(requireContext())
-
-        mBuilder.setSingleChoiceItems(languagesList, -1) { dialog, which ->
-            when (which) {
-                0 -> {
-                    currencySelected = getResources().getString(R.string.egp)
-                    updateCustomerCurrency("EGP")
-                }
-                1 -> {
-                    currencySelected = getResources().getString(R.string.usd_t)
-                    updateCustomerCurrency("USD")
-                }
-                2 -> {
-                    currencySelected = getResources().getString(R.string.eur_t_u20ac)
-                    updateCustomerCurrency("EUR")
-                }
-            }
-            dialog.dismiss()
-        }
-        val mDialog = mBuilder.create()
-        mDialog.show()
-    }
-
-    fun updateCustomerCurrency(currencySelected: String) {
-        //val customer = CustomerX()
-        if (customerId.isNotEmpty()) {
-            //   customer.currency =currencySelected
-            //   val customerDetail = CustomerDetail(customer)
-            customerViewModel.changeCustomerCurrency(customerId, currencySelected)
-            customerViewModel.selectedCustomerCurrency.observe(viewLifecycleOwner) { response ->
-                if (response.isSuccessful) {
-                    Toast.makeText(
-                        requireContext(),
-                        "Updated Successfull: " + response.code().toString(),
-                        Toast.LENGTH_LONG
-                    ).show()
-                    Log.i("update", "currency from success: " + response.body().toString())
-                    replaceFragment(AppSettingFragment())
-                } else {
-                    Log.i("updated", "currency from failed: " + response.errorBody().toString())
-                    Toast.makeText(
-                        requireContext(),
-                        "Updated failed: " + response.code().toString() + response.errorBody(),
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-            }
-        } else {
-            //  setCurrency(currencySelected,requireContext())
-            Toast.makeText(requireContext(), "No Customer Id ", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-
-    private fun showCurrencyList1() {
-
-    }
-
-
-    /*
-    private fun showCurrencyList(){
-        val languagesList = getResources().getStringArray(R.array.currency_options)
-        val mBuilder = AlertDialog.Builder(requireContext())
-        mBuilder.setSingleChoiceItems(languagesList,-1){ dialog, which ->
-            when (which) {
-                0 ->{
-                    currencySelected  = getResources().getString(R.string.egp)
-                    setCurrency(currencySelected,requireContext())
-                    replaceFragment(AppSettingFragment())
-                }
-                1 ->{
-                    currencySelected = getResources().getString(R.string.usd_t)
-                    setCurrency(currencySelected,requireContext())
-                    replaceFragment(AppSettingFragment())
-                }
-                2 ->{
-                    currencySelected = getResources().getString(R.string.eur_t_u20ac)
-                    setCurrency(currencySelected,requireContext())
-                    replaceFragment(AppSettingFragment())
-                }
-            }
-            dialog.dismiss()
-        }
-        val mDialog = mBuilder.create()
-        mDialog.show()
-    }
-*/
     private fun showContactUsDialog() {
         val view = View.inflate(requireContext(), R.layout.dialog_view, null)
 
@@ -285,13 +184,11 @@ class AppSettingFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 Intent(Intent.ACTION_VIEW, Uri.parse("mailto:" + "asmaayousef786@gmail.com"))
             intent.putExtra(Intent.EXTRA_SUBJECT, "mcommerce_contact_us")
             startActivity(intent)
-
         }
         view.btn_cancel.setOnClickListener {
             dialog.dismiss()
         }
     }
-
     private fun shareOurApp() {
         val txtShare = "M_Commerce App"
         val shareLink = "http://play.google.com/store/apps/details?id=com.example.mcommerce"
@@ -299,14 +196,6 @@ class AppSettingFragment : Fragment(), AdapterView.OnItemSelectedListener {
         share.type = "text/plain"
         share.putExtra(Intent.EXTRA_TEXT, "${txtShare} \n${shareLink}")
         startActivity(share)
-    }
-
-    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-        currencySelected = p0?.getItemAtPosition(p2).toString()
-    }
-
-    override fun onNothingSelected(p0: AdapterView<*>?) {
-        currencySelected = "EGP"
     }
 
 

@@ -24,19 +24,19 @@ class SavedSetting {
         }
           fun loadLocale(context: Context) {
               val sharedPreferences: SharedPreferences = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
-              val language: String? = sharedPreferences.getString("language", "")
+              val language: String? = sharedPreferences.getString("language", "System Default")
               languageSelected = language.toString()
               setLocale(language!!,context)
         }
 
         fun setCurrency(selectedCurrency: String, context: Context) {
             val editor = context.getSharedPreferences("settings", Context.MODE_PRIVATE).edit()
-                editor.putString("currency", selectedCurrency)
+                editor.putString("currency_to", selectedCurrency)
                 editor.apply()
         }
         fun loadCurrency(context: Context) : String{
             val sharedPreferences: SharedPreferences = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
-            val currency: String? = sharedPreferences.getString("currency","")
+            val currency: String? = sharedPreferences.getString("currency_to","EGP")
             setCurrency(currency!!,context)
             return currency
         }

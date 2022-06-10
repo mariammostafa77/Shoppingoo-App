@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
@@ -17,13 +18,19 @@ import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.R
 import com.example.mcommerce.categories.viewModel.CategoriesViewFactory
 import com.example.mcommerce.categories.viewModel.CategoriesViewModel
+import com.example.mcommerce.me.viewmodel.CustomerViewModel
+import com.example.mcommerce.me.viewmodel.CustomerViewModelFactory
+import com.example.mcommerce.me.viewmodel.SavedSetting
 import com.example.mcommerce.model.Product
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayout
+import java.math.RoundingMode
+import java.text.DecimalFormat
+import java.text.FieldPosition
 
-class CategoryFragment : Fragment() ,OnSubCategoryClickInterface {
+class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConvertor {
     private lateinit var brandProductsAdapter: BrandProductsAdapter
     private lateinit var subCategoriesAdapter: SubCategoriesAdapter
     private lateinit var categoriesProductFactory: CategoriesViewFactory
@@ -39,6 +46,14 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface {
     private var brandName:String=""
     private var subCategorySelected:String=""
 
+    lateinit var customerViewModel: CustomerViewModel
+    lateinit var customerViewModelFactory: CustomerViewModelFactory
+
+     var userId = ""
+    var toCurrency = ""
+    var convertorResult: Double = 0.0
+    var allProducts: ArrayList<Product> = ArrayList()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,9 +62,14 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface {
         val view=inflater.inflate(R.layout.fragment_category, container, false)
         initComponents(view)
         subCategoriesAdapter= SubCategoriesAdapter()
-        brandProductsAdapter= BrandProductsAdapter()
+        brandProductsAdapter= BrandProductsAdapter(this)
         categoryRecyclerView.adapter = brandProductsAdapter
         communicator = activity as Communicator
+        customerViewModelFactory = CustomerViewModelFactory(Repository.getInstance(AppClient.getInstance(), requireContext()))
+        customerViewModel = ViewModelProvider(this, customerViewModelFactory).get(CustomerViewModel::class.java)
+        val sharedPreferences = requireContext().getSharedPreferences("userAuth", AppCompatActivity.MODE_PRIVATE)
+      //  userId = sharedPreferences.getString("cusomerID","").toString()
+
         id=""
        //checkArgs()
         categoriesProductFactory = CategoriesViewFactory(
@@ -71,6 +91,7 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface {
         }
         categoriesProductViewModel.getCategories(brandName,subCategorySelected,id)
         categoriesProductViewModel.onlinesubcategoriesProduct.observe(viewLifecycleOwner) {products ->
+            allProducts.addAll(products)
             brandProductsAdapter.setUpdatedData(products,requireContext(),communicator)
         }
         categoriesProductViewModel.allOnlineProducts.observe(viewLifecycleOwner) {
@@ -118,6 +139,25 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface {
         Toast.makeText(requireContext(),subCategorySelected,Toast.LENGTH_LONG).show()
         dialog.dismiss()
     }
+    override fun onPriceConverter(position: Int) : String{
+     /*       toCurrency = SavedSetting.loadCurrency(context!!)
+            if(toCurrency.isNullOrEmpty()){
+                toCurrency = "EGP"
+            }
+            customerViewModel.getAmountAfterConversion(toCurrency)
+            customerViewModel.onlineCurrencyChanged.observe(viewLifecycleOwner) { result ->
+                convertorResult = result.result
+            }
+        Log.i("Testttttttttt", (allProducts.get(position).variants.get(0).price.toDouble() * convertorResult).toString() +" " +toCurrency)
+        val df = DecimalFormat("#.##")
+        df.roundingMode = RoundingMode.UP
+        val result = (allProducts.get(position).variants.get(0).price.toDouble() * convertorResult)
+        val roundoff = df.format(result)
+        return "${roundoff}  ${toCurrency}"
+      */
+        return ""
+    }
+
     private fun initComponents(view:View){
         categoriesTabLayout = view.findViewById(R.id.categoryTabBar)
         categoryRecyclerView=view.findViewById(R.id.categoryRecyclerView)
