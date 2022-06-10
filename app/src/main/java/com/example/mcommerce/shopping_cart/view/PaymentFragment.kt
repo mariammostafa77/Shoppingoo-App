@@ -40,7 +40,6 @@ class PaymentFragment : Fragment() {
     lateinit var couponsFactory: HomeViewModelFactory
     lateinit var couponsViewModel: HomeViewModel
 
-    /////
      var paymentMethod: String = "Cash"
     var amount = ""
 
@@ -61,7 +60,7 @@ class PaymentFragment : Fragment() {
         if(arguments != null){
             selectedAddress = arguments?.getSerializable("selectedAddress") as Addresse
             amount = arguments?.getString("amount") as String
-            Log.i("payment","payment From Fragment: ${selectedAddress.city}")
+          //  Log.i("payment","payment From Fragment: ${selectedAddress.city}")
         }
 
         paymentTitleTxt.append(" ${getUserName(requireContext())}")
@@ -125,6 +124,7 @@ class PaymentFragment : Fragment() {
                     if(coupons[i].code.equals(discountCode)){
                         btnApplyDiscount.setText("Verified!")
                         // etCouponsField.isInEditMode = false
+                        etCouponsField.setEnabled(false)
                         break
                     }
                     else{
