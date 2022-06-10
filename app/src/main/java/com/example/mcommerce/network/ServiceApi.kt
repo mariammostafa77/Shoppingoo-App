@@ -159,5 +159,14 @@ import java.util.*
       suspend fun getQualifiedValueCurrency(@Query("to") to: String): Response<CurrencyConverter>
 */
 
+      @Headers(
+          "Accept: application/json",
+          "X-Shopify-Access-Token: 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",
+      )
+      @GET("collections/"+"{id}"+"/products.json?fields=product_type")
+      suspend fun getProductTypes(@Path("id") id:String?): AllProductsModel
+
+
+
 }
 

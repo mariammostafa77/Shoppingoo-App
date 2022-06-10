@@ -82,6 +82,7 @@
     <string name="contact_us_dialog_text">If you found any problem, please send us an email to improve our services.</string>
     <string name="send_email">Send Email</string>
     <string name="cancel">Cancel</string>
+    <string name="subCategories">Sub Categories</string>
 
     <!-- Arrays -->
 
