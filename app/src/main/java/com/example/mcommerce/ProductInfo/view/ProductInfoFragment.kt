@@ -129,7 +129,6 @@ class ProductInfoFragment : Fragment() {
                 productInfoAdapter.setProductImages(product.images, requireContext())
                 productName.text = product.title
                 productDesc.text = product.body_html
-       // customerViewModel.getUserDetails(userId)
            /*
             toCurrency = loadCurrency(context!!)
             if(toCurrency.isNullOrEmpty()){
@@ -144,7 +143,8 @@ class ProductInfoFragment : Fragment() {
                 val roundoff = df.format(result)
                 productPrice.text = "${roundoff}  ${toCurrency}"
             }
-            */
+                */
+
                 productPrice.text = product.variants[0].price
                 for (i in 0..product.variants.size - 1) {
                     totalRate += product.variants[i].inventory_quantity

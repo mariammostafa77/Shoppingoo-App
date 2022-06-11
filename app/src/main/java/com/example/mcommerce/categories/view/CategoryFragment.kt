@@ -140,7 +140,8 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
         dialog.dismiss()
     }
     override fun onPriceConverter(position: Int) : String{
-     /*       toCurrency = SavedSetting.loadCurrency(context!!)
+        /*
+           toCurrency = SavedSetting.loadCurrency(context!!)
             if(toCurrency.isNullOrEmpty()){
                 toCurrency = "EGP"
             }
@@ -148,13 +149,13 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
             customerViewModel.onlineCurrencyChanged.observe(viewLifecycleOwner) { result ->
                 convertorResult = result.result
             }
-        Log.i("Testttttttttt", (allProducts.get(position).variants.get(0).price.toDouble() * convertorResult).toString() +" " +toCurrency)
+       // Log.i("Testttttttttt", (allProducts.get(position).variants.get(0).price.toDouble() * convertorResult).toString() +" " +toCurrency)
         val df = DecimalFormat("#.##")
         df.roundingMode = RoundingMode.UP
         val result = (allProducts.get(position).variants.get(0).price.toDouble() * convertorResult)
         val roundoff = df.format(result)
         return "${roundoff}  ${toCurrency}"
-      */
+*/
         return ""
     }
 
