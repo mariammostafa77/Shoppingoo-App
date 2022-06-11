@@ -9,9 +9,16 @@ import com.example.mcommerce.draftModel.DraftOrderX
 import com.example.mcommerce.draftModel.DraftResponse
 import com.example.mcommerce.home.model.BrandsModel
 import com.example.mcommerce.model.*
+import com.example.mcommerce.model.AllProductsModel
+import com.example.mcommerce.model.ProductDetails
+import com.example.mcommerce.model.DiscountCodesModel
+import com.example.mcommerce.model.*
 import retrofit2.Response
 import retrofit2.http.Path
 import java.util.*
+import retrofit2.http.Body
+
+import retrofit2.http.Field
 
 
 interface RemoteSourceInterface {
@@ -21,15 +28,20 @@ interface RemoteSourceInterface {
     suspend fun getSpecificProduct(id:String): ProductDetails
     suspend fun getVariant(id:String): Variants
     suspend fun getSubCategories(vendor: String,productType:String,collectionId:String):AllProductsModel
+
     ///// Coupons
     suspend fun getDiscountCodes() : DiscountCodesModel
     suspend fun postNewCustomer(customer: CustomerDetail):Response<CustomerDetail>
+
     suspend fun getUserDetails(id:String): CustomerDetail
+
     suspend fun addNewAddress(id: String?, customer: CustomerDetail): Response<CustomerDetail>
     suspend fun changeCustomerCurrency(id: String? , currency: String): Response<CustomerDetail>
 
     suspend fun postNewDraftOrder(order: DraftOrder):Response<DraftOrder>
     suspend fun getCustomers(): Customer
+
+
     suspend fun getShoppingCartProducts(): DraftResponse
 
     suspend fun deleteProductFromShoppingCart(id: String?): Response<DraftOrder>
