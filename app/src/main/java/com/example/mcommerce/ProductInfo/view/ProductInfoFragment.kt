@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mcommerce.HomeActivity.Companion.myDetailsFlag
 import com.example.mcommerce.HomeActivity.Companion.mySearchFlag
 import com.example.mcommerce.ProductInfo.viewModel.ProductInfoViewModel
 import com.example.mcommerce.ProductInfo.viewModel.ProductInfoViewModelFactory
@@ -65,8 +66,8 @@ class ProductInfoFragment : Fragment() {
     var currency : String = ""
     var productIndex:Int=0
     var toCurrency  = ""
-
     var convertorResult : Double = 1.0
+    var productID:Long=0
 
     lateinit var customerViewModel: CustomerViewModel
     lateinit var customerViewModelFactory: CustomerViewModelFactory
@@ -74,7 +75,7 @@ class ProductInfoFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?, ): View? {
         var view =inflater.inflate(R.layout.fragment_product_info, container, false)
         Log.i("test","test")
-        output= arguments?.getSerializable("productInfo") as Product
+
         productImgArrayList=ArrayList<Image>()
         productInfoRecyclerview=view.findViewById(R.id.detailsRecyclerView)
         linearLayoutManager= LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
@@ -101,16 +102,23 @@ class ProductInfoFragment : Fragment() {
         val userId = sharedPreferences.getString("cusomerID","").toString()
         currency = loadCurrency(requireContext())
         val noteStatus = "fav"
+        if(myDetailsFlag==1){
+           productID= arguments?.getLong("productID",0)!!
+        }
+        else {
+            output= arguments?.getSerializable("productInfo") as Product
+            productID = output.id
+        }
 
         //start
-        Log.i("pro",output.id.toString())
+
         specificProductsFactory = ProductInfoViewModelFactory(
             Repository.getInstance(
                 AppClient.getInstance(),
                 requireContext()))
         specificProductsViewModel = ViewModelProvider(this, specificProductsFactory).get(ProductInfoViewModel::class.java)
 
-        specificProductsViewModel.getSpecificProducts(output.id.toString())
+        specificProductsViewModel.getSpecificProducts(productID.toString())
         specificProductsViewModel.onlineSpecificProducts.observe(viewLifecycleOwner) { product ->
             allProducts=listOf(product)
             Log.i("pro", "from fragment" + product.toString())
@@ -166,49 +174,7 @@ class ProductInfoFragment : Fragment() {
             sizeSpinner.adapter = sizeAdapter
             colorSpinner.adapter = colorAdapter
 
-            btnAddToCard.setOnClickListener {
-                var variantId: Long = 0
-                var order = DraftOrderX()
-                order.note = "card"
-                order.email = customerEmail
-                for (i in 0..product.variants.size - 1) {
-                    if (product.variants[i].option1 == sizeSpinner.getSelectedItem().toString() &&
-                        product.variants[i].option2 == colorSpinner.getSelectedItem().toString()
-                    ) {
-                        variantId = product.variants[i].id
-                        Log.i("Index", "index: " + variantId.toString())
-                        // order.line_items!![0].variant_id = variantId
-                        var lineItem = LineItem()
-                        lineItem.quantity = Integer.parseInt(productCount.text.toString())
-                        lineItem.variant_id = variantId
-                        order.line_items = listOf(lineItem)
-                        break
-                    }
-                }
-                // order.line_items!![0].variant_id = 40335555395723
-                var productImage = NoteAttribute()
-                productImage.name = "image"
-                productImage.value = product.images[0].src
-                order.note_attributes = listOf(productImage)
 
-                var draftOrder = DraftOrder(order)
-                specificProductsViewModel.getCardOrder(draftOrder)
-                specificProductsViewModel.onlineCardOrder.observe(viewLifecycleOwner) { cardOrder ->
-                    if (cardOrder.isSuccessful) {
-                        Toast.makeText(requireContext(),
-                            "add to card successfull: " + cardOrder.code().toString(),
-                            Toast.LENGTH_LONG).show()
-                    } else {
-
-                        Toast.makeText(requireContext(),
-                            "add to card failed: " + cardOrder.code().toString(),
-                            Toast.LENGTH_LONG).show()
-
-                    }
-                }
-
-
-            }
 
 
             //end
@@ -227,17 +193,50 @@ class ProductInfoFragment : Fragment() {
                 productCount.text = count.toString()
 
             }
-            backImg.setOnClickListener {
-                if (mySearchFlag == 1) {
-                    val manager = activity!!.supportFragmentManager
-                    val trans = manager.beginTransaction()
-                    trans.replace(R.id.frameLayout, MysearchFragment()).commit()
-                } else {
-                    val manager = activity!!.supportFragmentManager
-                    val trans = manager.beginTransaction()
-                    trans.replace(R.id.frameLayout, CategoryFragment()).commit()
+
+
+        }
+        btnAddToCard.setOnClickListener {
+            var variantId: Long = 0
+            var order = DraftOrderX()
+            order.note = "card"
+            order.email = customerEmail
+            for (i in 0..allProducts[0].variants.size - 1) {
+                if (allProducts[0].variants[i].option1 == sizeSpinner.getSelectedItem().toString() &&
+                    allProducts[0].variants[i].option2 == colorSpinner.getSelectedItem().toString()
+                ) {
+                    variantId = allProducts[0].variants[i].id
+                    Log.i("Index", "index: " + variantId.toString())
+                    // order.line_items!![0].variant_id = variantId
+                    var lineItem = LineItem()
+                    lineItem.quantity = Integer.parseInt(productCount.text.toString())
+                    lineItem.variant_id = variantId
+                    order.line_items = listOf(lineItem)
+                    break
                 }
             }
+            // order.line_items!![0].variant_id = 40335555395723
+            var productImage = NoteAttribute()
+            productImage.name = "image"
+            productImage.value = allProducts[0].images[0].src
+            order.note_attributes = listOf(productImage)
+
+            var draftOrder = DraftOrder(order)
+            specificProductsViewModel.getCardOrder(draftOrder)
+            specificProductsViewModel.onlineCardOrder.observe(viewLifecycleOwner) { cardOrder ->
+                if (cardOrder.isSuccessful) {
+                    Toast.makeText(requireContext(),
+                        "add to card successfull: " + cardOrder.code().toString(),
+                        Toast.LENGTH_LONG).show()
+                } else {
+
+                    Toast.makeText(requireContext(),
+                        "add to card failed: " + cardOrder.code().toString(),
+                        Toast.LENGTH_LONG).show()
+
+                }
+            }
+
 
         }
 
@@ -320,6 +319,17 @@ class ProductInfoFragment : Fragment() {
 
                     }
                 }
+            }
+        }
+        backImg.setOnClickListener {
+            if (mySearchFlag == 1) {
+                val manager = activity!!.supportFragmentManager
+                val trans = manager.beginTransaction()
+                trans.replace(R.id.frameLayout, MysearchFragment()).commit()
+            } else {
+                val manager = activity!!.supportFragmentManager
+                val trans = manager.beginTransaction()
+                trans.replace(R.id.frameLayout, CategoryFragment()).commit()
             }
         }
 

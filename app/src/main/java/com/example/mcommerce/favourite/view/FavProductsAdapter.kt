@@ -10,10 +10,11 @@ import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.R
 import com.example.mcommerce.draftModel.DraftOrderX
 
-class FavProductsAdapter(private val listener: FavouriteOnClickLisner) : RecyclerView.Adapter<FavProductsAdapter.ViewHolder>(){
+class FavProductsAdapter(private val listener: FavouriteOnClickLisner,var comminicator: Communicator) : RecyclerView.Adapter<FavProductsAdapter.ViewHolder>(){
     var allFavProducts:List<DraftOrderX> = ArrayList<DraftOrderX>()
     lateinit var context: Context
 
@@ -41,7 +42,9 @@ class FavProductsAdapter(private val listener: FavouriteOnClickLisner) : Recycle
         }
 
         holder.favCartItem.setOnClickListener {
-
+            allFavProducts[position].line_items!![0].product_id?.let { it1 ->
+                comminicator.goToProductDetails(it1)
+            }
         }
 
 
