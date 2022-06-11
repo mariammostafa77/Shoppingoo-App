@@ -6,7 +6,6 @@ import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph
@@ -20,6 +19,7 @@ import com.example.mcommerce.home.view.HomeFragment
 import com.example.mcommerce.me.view.MeWithLogin
 import com.example.mcommerce.me.view.MeWithoutLoginFragment
 import com.example.mcommerce.me.view.setting.AddNewAddressFragment
+import com.example.mcommerce.me.view.setting.UserAddressesFragment
 import com.example.mcommerce.me.viewmodel.SavedSetting
 import com.example.mcommerce.model.Product
 import com.example.mcommerce.orderDetails.view.OrderDetailsFragment
@@ -41,6 +41,8 @@ class HomeActivity : AppCompatActivity(),Communicator {
         var myFavFlag:Boolean=false
 
     }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,6 +101,7 @@ class HomeActivity : AppCompatActivity(),Communicator {
     }
 
     override fun passProductData(product: Product) {
+        myDetailsFlag=0
        val bundle=Bundle()
         bundle.putSerializable("productInfo",product)
         val transaction=this.supportFragmentManager.beginTransaction()
@@ -108,6 +111,7 @@ class HomeActivity : AppCompatActivity(),Communicator {
     }
 
     override fun goFromBrandToCategories(brandName:String) {
+        myDetailsFlag=0
         val bundle=Bundle()
         bundle.putString("brandTitle",brandName)
         categoryFragment.arguments=bundle
@@ -115,6 +119,7 @@ class HomeActivity : AppCompatActivity(),Communicator {
         Log.i("TAG","brandName from home $brandName")
     }
     override fun goToSearchWithID(id: String) {
+        myDetailsFlag=0
         val bundle=Bundle()
         bundle.putString("catID",id)
         val transaction=this.supportFragmentManager.beginTransaction()
@@ -124,6 +129,7 @@ class HomeActivity : AppCompatActivity(),Communicator {
     }
 
     override fun goToSearchWithAllData(id: String, brandName: String, subCatName: String) {
+        myDetailsFlag=0
         val bundle=Bundle()
         bundle.putString("catID",id)
         bundle.putString("brandName",brandName)
@@ -134,14 +140,28 @@ class HomeActivity : AppCompatActivity(),Communicator {
         transaction.replace(R.id.frameLayout,searchFragment).commit()
     }
 
-    override fun goToUserAddresses() {
-        TODO("Not yet implemented")
+    override fun goToUserAddresses(totalAmount: String){
+        myDetailsFlag=0
+        val bundle=Bundle()
+        val userAddressesFragment = UserAddressesFragment()
+        bundle.putString("sub_total", totalAmount)
+        Log.i("payment","payment From Home${totalAmount}")
+        userAddressesFragment.arguments = bundle
+        replaceFragment(userAddressesFragment)
     }
 
-    override fun goToPaymentFromAddress(selectedAddress: Addresse) {
-        TODO("Not yet implemented")
-    }
 
+    override fun goToPaymentFromAddress(selectedAddress: Addresse, totalAmount: String) {
+        myDetailsFlag=0
+        val bundle=Bundle()
+        val paymentFragment = PaymentFragment()
+        bundle.putSerializable("selectedAddress", selectedAddress)
+        bundle.putString("amount",totalAmount)
+        Log.i("payment","payment From Home${selectedAddress.city}, ${totalAmount}")
+        paymentFragment.arguments=bundle
+        replaceFragment(paymentFragment)
+
+    }
     override fun goToOrderDetails(selectedOrder: Order) {
         val bundle=Bundle()
         bundle.putSerializable("selectedOrder",selectedOrder)
@@ -150,7 +170,17 @@ class HomeActivity : AppCompatActivity(),Communicator {
         replaceFragment(orderDetailsFragment)
     }
 
+    override fun goToProductDetails(id: Long) {
+        myDetailsFlag=1
+        val bundle=Bundle()
+        val productInfo = ProductInfoFragment()
+        bundle.putLong("productID",id)
+        productInfo.arguments=bundle
+        replaceFragment(productInfo)
+    }
+
     private fun passMapDataToFragment() {
+        myDetailsFlag=0
         val bundle: Bundle? = intent.extras
         if (bundle != null) {
             val userAdress = intent.getStringArrayListExtra("userAddress")

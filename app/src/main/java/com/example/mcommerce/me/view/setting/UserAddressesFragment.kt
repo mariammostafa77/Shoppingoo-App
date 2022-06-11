@@ -8,12 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.R
+import com.example.mcommerce.auth.model.Addresse
 import com.example.mcommerce.me.viewmodel.CustomerViewModel
 import com.example.mcommerce.me.viewmodel.CustomerViewModelFactory
 import com.example.mcommerce.model.Repository
@@ -30,7 +32,7 @@ class UserAddressesFragment : Fragment() {
     lateinit var customerViewModelFactory: CustomerViewModelFactory
 
     lateinit var communicator: Communicator
-
+    var amount = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -40,7 +42,13 @@ class UserAddressesFragment : Fragment() {
         initComponent(view)
 
         communicator = activity as Communicator
-        customerAddressAdapter = CustomerAddressAdapter(communicator)
+
+        if(arguments != null){
+            amount = arguments?.getString("sub_total") as String
+            Toast.makeText(requireContext(),"${amount}", Toast.LENGTH_SHORT).show()
+        }
+
+        customerAddressAdapter = CustomerAddressAdapter(communicator,amount)
         customerAddressesLayoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
         customerAddressesRecyclerView.setLayoutManager(customerAddressesLayoutManager)
         customerAddressesRecyclerView.setAdapter(customerAddressAdapter)
@@ -51,7 +59,6 @@ class UserAddressesFragment : Fragment() {
         val customerId = sharedPreferences.getString("cusomerID",null).toString()
         customerViewModel.getUserDetails(customerId)
         customerViewModel.customerInfo.observe(viewLifecycleOwner) { response ->
-            Log.i("testtttt","testtttttt ${response.addresses?.get(0)}")
             if(response != null) {
                 customerAddressAdapter.setCustomerAddressesData(requireContext(),
                     response.addresses!!)
@@ -60,7 +67,7 @@ class UserAddressesFragment : Fragment() {
         btnAddNewAddress.setOnClickListener {
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
             transaction.replace(R.id.frameLayout, AddNewAddressFragment())
-            transaction.addToBackStack(null);
+            transaction.addToBackStack(null)
             transaction.commit()
         }
         return view

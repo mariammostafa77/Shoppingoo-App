@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,10 +14,9 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.R
 import com.example.mcommerce.draftModel.DraftOrder
-import com.example.mcommerce.draftModel.DraftOrderX
-import com.example.mcommerce.me.view.setting.UserAddressesFragment
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
 import com.example.mcommerce.shopping_cart.viewmodel.ShoppingCartViewModel
@@ -35,6 +33,7 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
     lateinit var shoppingCartViewModel: ShoppingCartViewModel
     var userShoppingCartProducts:ArrayList<DraftOrder> = ArrayList<DraftOrder>()
     var subTotal : Double = 0.0
+    lateinit var communicator: Communicator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +45,7 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
         initComponent(view)
         shoppingCartRecyclerView.setLayoutManager(linearLayoutManager)
         shoppingCartRecyclerView.setAdapter(shoppingCartAdapter)
+        communicator = activity as Communicator
 
         shoppingCartViewModelFactory = ShoppingCartViewModelFactory(Repository.getInstance(AppClient.getInstance(), requireContext()))
         shoppingCartViewModel = ViewModelProvider(this, shoppingCartViewModelFactory).get(ShoppingCartViewModel::class.java)
@@ -63,6 +63,8 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
                       userShoppingCartProducts.add(draftObj)
                 }
             }
+          //  Log.i("Testttttttt", userShoppingCartProducts.size.toString())
+         //   Toast.makeText(requireContext(), userShoppingCartProducts.size.toString(),Toast.LENGTH_SHORT).show()
             shoppingCartAdapter.setUserShoppingCartProducts(requireContext(),userShoppingCartProducts)
             subTotal = 0.0
             for (i in 0..userShoppingCartProducts.size-1){
@@ -76,7 +78,7 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
             txtSubTotal.text = subTotal.toString()
         }
         btnProceedToCheckout.setOnClickListener {
-            replaceFragment(UserAddressesFragment())
+            communicator.goToUserAddresses(subTotal.toString())
         }
         return view
     }
@@ -99,9 +101,9 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
                 shoppingCartViewModel.deleteSelectedProduct(draftOrder.draft_order?.id.toString())
                 shoppingCartViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
                     if(response.isSuccessful){
-                       // userShoppingCartProducts.remove(draftOrder)
+                        userShoppingCartProducts.remove(draftOrder)
                            shoppingCartAdapter.notifyDataSetChanged()
-                       // shoppingCartAdapter.setUserShoppingCartProducts(requireContext(),userShoppingCartProducts)
+                        shoppingCartAdapter.setUserShoppingCartProducts(requireContext(),userShoppingCartProducts)
                         subTotal = 0.0
                         for (i in 0..userShoppingCartProducts.size-1){
                             val price = ((userShoppingCartProducts[i].draft_order?.line_items?.get(0)!!.price)?.toDouble())?.times(

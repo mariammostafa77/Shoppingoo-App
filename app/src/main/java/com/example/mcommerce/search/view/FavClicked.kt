@@ -5,6 +5,6 @@ import com.example.mcommerce.draftModel.DraftOrderX
 import com.example.mcommerce.model.Product
 
 interface FavClicked {
-    fun addToFav(product:Product,img:ImageView)
+    fun addToFav(product:Product,img:ImageView,myIndex:Int)
     fun addFavImg(img:ImageView,id: Long)
 }

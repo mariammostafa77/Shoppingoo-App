@@ -11,7 +11,7 @@ import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.R
 import com.example.mcommerce.auth.model.Addresse
 
-class CustomerAddressAdapter(var communicator: Communicator) : RecyclerView.Adapter<CustomerAddressAdapter.ViewHolder>(){
+class CustomerAddressAdapter(var communicator: Communicator,var amount : String) : RecyclerView.Adapter<CustomerAddressAdapter.ViewHolder>(){
     var customerAddresses :List<Addresse> = ArrayList<Addresse>()
     lateinit var context: Context
 
@@ -33,7 +33,7 @@ class CustomerAddressAdapter(var communicator: Communicator) : RecyclerView.Adap
         holder.addressCardView.setOnClickListener {
             //////// move to checkout with Address Data
             val selectedAddresses: Addresse = customerAddresses[position]
-            communicator.goToPaymentFromAddress(selectedAddresses)
+            communicator.goToPaymentFromAddress(selectedAddresses,amount)
         }
     }
     override fun getItemCount(): Int {

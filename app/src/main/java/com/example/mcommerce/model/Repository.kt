@@ -4,14 +4,16 @@ import android.content.Context
 import android.util.Log
 import androidx.fragment.app.strictmode.SetRetainInstanceUsageViolation
 import androidx.lifecycle.LiveData
-import com.example.mcommerce.auth.login.model.CustomerModel
-import com.example.mcommerce.auth.login.model.cust_details
+
+import com.example.mcommerce.auth.model.Customer
 import com.example.mcommerce.auth.model.CustomerDetail
 import com.example.mcommerce.auth.model.CustomerX
 import com.example.mcommerce.draftModel.DraftOrder
 import com.example.mcommerce.draftModel.DraftOrderX
 import com.example.mcommerce.draftModel.DraftResponse
 import com.example.mcommerce.home.model.BrandsModel
+import com.example.mcommerce.model.currencies.CurrencyResponse
+import com.example.mcommerce.model.currencies.convertor.CurrencyConverter
 import com.example.mcommerce.network.RemoteSourceInterface
 import com.example.mcommerce.network.RetrofitHelper
 import com.example.mcommerce.network.ServiceApi
@@ -85,7 +87,7 @@ class Repository private constructor(var remoteSource: RemoteSourceInterface, va
         return  remoteSource.postNewDraftOrder(order)
     }
 
-    override suspend fun getCustomers(): cust_details {
+    override suspend fun getCustomers(): Customer {
         return  remoteSource.getCustomers()
     }
 
@@ -101,8 +103,18 @@ class Repository private constructor(var remoteSource: RemoteSourceInterface, va
         return remoteSource.getOrders(id)
     }
 
+    override suspend fun getAllCurrencies(): CurrencyResponse {
+        return  remoteSource.getAllCurrencies()
+    }
+
+    override suspend fun getCurrencyValue(to: String): CurrencyConverter {
+       return remoteSource.getCurrencyValue(to)
+    }
+
     override suspend fun getShoppingCartProducts(): DraftResponse {
         return remoteSource.getShoppingCartProducts()
     }
+
+
 
 }

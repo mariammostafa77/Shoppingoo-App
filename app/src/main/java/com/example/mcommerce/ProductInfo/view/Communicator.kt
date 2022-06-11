@@ -10,6 +10,11 @@ interface Communicator {
     fun goToSearchWithID(id:String)
     fun goToSearchWithAllData(id:String,brandName:String,subCatName:String)
 
+    fun goToUserAddresses(totalAmount: String)
+    fun goToPaymentFromAddress(selectedAddress: Addresse , tatalAmount: String)
+    fun goToProductDetails(id:Long)
+
+
     fun goToUserAddresses()
     fun goToPaymentFromAddress(selectedAddress: Addresse)
     fun goToOrderDetails(selectedOrder: Order)

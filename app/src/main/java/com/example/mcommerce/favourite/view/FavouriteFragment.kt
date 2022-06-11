@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.R
 import com.example.mcommerce.draftModel.DraftOrderX
 import com.example.mcommerce.favourite.viewModel.FavViewModel
@@ -31,6 +32,7 @@ class FavouriteFragment : Fragment(),FavouriteOnClickLisner {
     lateinit var linearLayoutManager: LinearLayoutManager
     lateinit var favViewModelFactory : FavViewModelFactory
     lateinit var favViewModel: FavViewModel
+    lateinit var communicator: Communicator
 
     var favProducts:ArrayList<DraftOrderX> = ArrayList<DraftOrderX>()
 
@@ -40,10 +42,11 @@ class FavouriteFragment : Fragment(),FavouriteOnClickLisner {
         savedInstanceState: Bundle?,
     ): View? {
         var view=inflater.inflate(R.layout.fragment_favourite, container, false)
+        communicator = activity as Communicator
         favRecyclerView = view.findViewById(R.id.favRecyclerView)
         Log.i("FavArray","test Fav: ")
         Toast.makeText(requireContext(),"fav Fragment",Toast.LENGTH_LONG).show()
-        favAdapter= FavProductsAdapter(this)
+        favAdapter= FavProductsAdapter(this,communicator)
         linearLayoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
         favRecyclerView.setLayoutManager(linearLayoutManager)
         favRecyclerView.setAdapter(favAdapter)

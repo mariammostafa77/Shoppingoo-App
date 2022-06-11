@@ -8,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.mcommerce.auth.model.CustomerDetail
 import com.example.mcommerce.auth.model.CustomerX
 import com.example.mcommerce.model.RepositoryInterface
+import com.example.mcommerce.model.currencies.CurrencyModel
+import com.example.mcommerce.model.currencies.convertor.CurrencyConverter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -18,10 +20,16 @@ class CustomerViewModel(repo: RepositoryInterface) : ViewModel(){
     private val customerDetail = MutableLiveData<CustomerX>()
     private val updatedCustomerAddress = MutableLiveData<Response<CustomerDetail>>()
     private val customerCurrency = MutableLiveData<Response<CustomerDetail>>()
+    private val allCurrencies = MutableLiveData<List<CurrencyModel>>()
+    //// Currency Converter
+    private val currencyChanged = MutableLiveData<CurrencyConverter>()
 
     val customerInfo: LiveData<CustomerX> = customerDetail
     val newCustomerAddress: LiveData<Response<CustomerDetail>> = updatedCustomerAddress
     val selectedCustomerCurrency : LiveData<Response<CustomerDetail>> = customerCurrency
+    val onlineCurrencies : LiveData<List<CurrencyModel>> = allCurrencies
+    //// Currency Converter
+    val onlineCurrencyChanged: LiveData<CurrencyConverter> = currencyChanged
 
     fun getUserDetails(id: String) {
         viewModelScope.launch {
@@ -46,6 +54,24 @@ class CustomerViewModel(repo: RepositoryInterface) : ViewModel(){
             val result = iRepo.changeCustomerCurrency(id,currency)
             withContext(Dispatchers.Main){
                 customerCurrency.value=result
+            }
+        }
+    }
+
+    fun getAllCurrencies() {
+        viewModelScope.launch {
+            val result = iRepo.getAllCurrencies()
+            withContext(Dispatchers.Main) {
+                allCurrencies.postValue(result.currencies)
+            }
+        }
+    }
+
+    fun getAmountAfterConversion(to: String){
+        viewModelScope.launch {
+            val result = iRepo.getCurrencyValue(to)
+            withContext(Dispatchers.Main) {
+                currencyChanged.postValue(result)
             }
         }
     }
