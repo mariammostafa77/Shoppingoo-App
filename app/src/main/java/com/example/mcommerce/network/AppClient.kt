@@ -7,8 +7,11 @@ import com.example.mcommerce.draftModel.DraftOrder
 import com.example.mcommerce.draftModel.DraftResponse
 import com.example.mcommerce.home.model.BrandsModel
 import com.example.mcommerce.model.*
+import com.example.mcommerce.model.currencies.CurrencyResponse
+import com.example.mcommerce.model.currencies.convertor.CurrencyConverter
 import retrofit2.Response
 import retrofit2.http.Path
+import java.util.*
 
 class AppClient : RemoteSourceInterface {
 
@@ -74,6 +77,13 @@ class AppClient : RemoteSourceInterface {
         val response = service?.getCustomers()
         return response!!
     }
+
+    override suspend fun getProductTypes(id: String): AllProductsModel {
+        val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
+        val response = service?.getProductTypes(id)
+        return response!!
+    }
+
     override suspend fun getSubCategories(vendor: String,productType:String,collectionId:String):AllProductsModel{
         val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
         val response = service?.getSubCategories(vendor,productType,collectionId)
@@ -88,6 +98,24 @@ class AppClient : RemoteSourceInterface {
     override suspend fun deleteProductFromShoppingCart(id: String?): Response<DraftOrder> {
         val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
         val response = service?.deleteProductFromShoppingCart(id)
+        return response!!
+    }
+
+    override suspend fun updateDraftOrder(id: String?, order: DraftOrder): Response<DraftOrder> {
+        val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
+        val response = service?.updateDraftOrder(id,order)
+        return response!!
+    }
+
+    override suspend fun getAllCurrencies(): CurrencyResponse {
+        val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
+        val response = service?.getAllCurrencies()
+        return response!!
+    }
+
+    override suspend fun getCurrencyValue(to: String): CurrencyConverter {
+        val service = CurrencyConverterHelper.getRetrofit()?.create(ServiceApi::class.java)
+        val response = service?.getCurrencyValue(to)
         return response!!
     }
 

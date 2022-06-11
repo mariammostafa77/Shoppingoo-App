@@ -73,9 +73,9 @@ class AddNewAddressFragment : Fragment() {
             addressDataLayout.isVisible = true
             btnSaveNewAddress.isVisible = true
             userAddress = bundle.getStringArrayList("adress")!!
-            txtCountry.append(" ${userAddress?.get(0).toString()}")
-            txtCity.append(" ${userAddress?.get(1).toString()}")
-            txtZipCode.append(" ${userAddress?.get(3).toString()}")
+            txtCountry.append(" ${userAddress.get(0).toString()}")
+            txtCity.append(" ${userAddress.get(1).toString()}")
+            txtZipCode.append(" ${userAddress.get(3).toString()}")
         } else{
             addressDataLayout.isVisible = false
             btnSaveNewAddress.isVisible = false

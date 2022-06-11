@@ -136,6 +136,7 @@ class RegisterFormFragment : Fragment() {
                     editor.putString("lname", response.body()!!.customer!!.last_name)
                     editor.putString("phone", response.body()!!.customer!!.phone)
                     editor.putString("cusomerID", response.body()!!.customer!!.id.toString())
+                    editor.putBoolean("isLogin", true)
                     editor.commit()
                     startActivity(Intent(requireContext(), HomeActivity::class.java))
                 } else {

@@ -1,7 +1,6 @@
-package com.example.mcommerce.brandProducts.view
+package com.example.mcommerce.categories.view
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,12 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.R
-import com.example.mcommerce.home.model.SmartCollection
 import com.example.mcommerce.model.Product
-import com.example.mcommerce.model.Variant
-import com.example.mcommerce.model.Variants
 
-class BrandProductsAdapter : RecyclerView.Adapter<BrandProductsAdapter.ViewHolder>(){
+class BrandProductsAdapter(var currencyConvertor: CurrencyConvertor) : RecyclerView.Adapter<BrandProductsAdapter.ViewHolder>(){
     var allBrands:List<Product> = ArrayList<Product>()
     //var variant:List<Variants> = ArrayList<Variants>()
     lateinit var context: Context
@@ -38,13 +34,12 @@ class BrandProductsAdapter : RecyclerView.Adapter<BrandProductsAdapter.ViewHolde
         fun bind(data: Product){
             productName.text=allBrands[position].title
             tvProductPrice.text=allBrands[position].variants[0].price + "EGP"
+          //  tvProductPrice.text = currencyConvertor.onPriceConverter(position)
             Glide.with(context).load(allBrands[position].image.src).into(productImage)
             catCardView.setOnClickListener {
                 comminucator.passProductData(allBrands[position])
             }
-
         }
-
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.category_cell,parent,false);

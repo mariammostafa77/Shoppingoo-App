@@ -13,5 +13,7 @@
     <color name="headers_color">#FF018786</color>
     <color name="tool_bar_title">#FF000000</color>
     <color name="gray_edit_text">#E8EBEC</color>
+    <color name="orange">#FFC107</color>
+
 
 </resources>

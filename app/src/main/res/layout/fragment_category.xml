@@ -60,6 +60,16 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/favorite_icon"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/filterImg"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/filter"
+            app:layout_constraintBottom_toBottomOf="@+id/shipping_bag_icon"
+            app:layout_constraintEnd_toStartOf="@+id/shipping_bag_icon"
+            app:layout_constraintTop_toTopOf="@+id/shipping_bag_icon" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.tabs.TabLayout
@@ -108,71 +118,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/categoryTabBar"
         app:spanCount="2" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/openOptionsBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:tint="@android:color/white"
-        android:src="@drawable/ic_baseline_add_48"
-        app:backgroundTint="#021139"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/accessoriesBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="10dp"
-        android:clickable="true"
-        android:src="@drawable/white_jewelry"
-        android:visibility="invisible"
-        app:backgroundTint="#021139"
-        app:tint="@android:color/white"
-        app:fabSize="mini"
-        app:layout_constraintBottom_toTopOf="@+id/openOptionsBtn"
-        app:layout_constraintEnd_toEndOf="@+id/openOptionsBtn"
-        tools:ignore="SpeakableTextPresentCheck" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/tshirtBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:src="@drawable/white_tshirt"
-        app:backgroundTint="#021139"
-        app:tint="@android:color/white"
-        android:visibility="invisible"
-        app:fabSize="mini"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/accessoriesBtn"
-        app:layout_constraintEnd_toEndOf="@+id/accessoriesBtn"
-        tools:ignore="SpeakableTextPresentCheck" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/shoesBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:visibility="invisible"
-        app:tint="@android:color/white"
-        android:clickable="true"
-        android:focusable="true"
-        android:src="@drawable/shoe_white"
-        app:backgroundTint="#021139"
-        app:fabSize="mini"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/tshirtBtn"
-        app:layout_constraintEnd_toEndOf="@+id/tshirtBtn"
-        tools:ignore="SpeakableTextPresentCheck" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

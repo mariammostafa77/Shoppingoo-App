@@ -8,6 +8,8 @@ import com.example.mcommerce.draftModel.DraftOrderX
 import com.example.mcommerce.draftModel.DraftResponse
 import com.example.mcommerce.home.model.BrandsModel
 import com.example.mcommerce.model.*
+import com.example.mcommerce.model.currencies.CurrencyResponse
+import com.example.mcommerce.model.currencies.convertor.CurrencyConverter
 import retrofit2.Response
 import retrofit2.http.*
 import java.util.*
@@ -128,6 +130,36 @@ import java.util.*
       )
       @DELETE("draft_orders/"+"{draft_order_id}"+".json")
       suspend fun deleteProductFromShoppingCart(@Path("draft_order_id") id: String?): Response<DraftOrder>
+
+      @Headers(
+          "X-Shopify-Shop-Api-Call-Limit: 40/40",
+          "Retry-After: 2.0",
+          "Accept: application/json",
+          "X-Shopify-Access-Token: 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"
+      )
+      @PUT("draft_orders/{id}.json")
+      suspend fun updateDraftOrder(@Path("id") id: String? , @Body order: DraftOrder):Response<DraftOrder>
+
+      // https://9d169ad72dd7620e70f56b28ae6146d9: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@madalex20220.myshopify.com/admin/api/2022-04/currencies.json
+
+      @Headers(
+          "Accept: application/json",
+          "X-Shopify-Access-Token: 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",)
+      @GET("currencies.json")
+      suspend fun getAllCurrencies(): CurrencyResponse
+
+      // https://api.apilayer.com/exchangerates_data/convert?to=EGP&from=USD&amount=1&apikey=OdsWOfPbLEyojdjFR7FjcSzVpifcX23n
+      @GET("convert?apikey=bvWIQqwc5PjLwYrSgElp83ZEktkQWLJB&amount=1&from=EGP")
+      suspend fun getCurrencyValue(@Query("to") to: String): CurrencyConverter
+
+      @Headers(
+          "Accept: application/json",
+          "X-Shopify-Access-Token: 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",
+      )
+      @GET("collections/"+"{id}"+"/products.json?fields=product_type")
+      suspend fun getProductTypes(@Path("id") id:String?): AllProductsModel
+
+
 
 }
 

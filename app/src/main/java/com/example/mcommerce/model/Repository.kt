@@ -12,6 +12,8 @@ import com.example.mcommerce.draftModel.DraftOrder
 import com.example.mcommerce.draftModel.DraftOrderX
 import com.example.mcommerce.draftModel.DraftResponse
 import com.example.mcommerce.home.model.BrandsModel
+import com.example.mcommerce.model.currencies.CurrencyResponse
+import com.example.mcommerce.model.currencies.convertor.CurrencyConverter
 import com.example.mcommerce.network.RemoteSourceInterface
 import com.example.mcommerce.network.RetrofitHelper
 import com.example.mcommerce.network.ServiceApi
@@ -64,6 +66,10 @@ class Repository private constructor(var remoteSource: RemoteSourceInterface, va
         return  remoteSource.getSubCategories(vendor,productType,collectionId)
     }
 
+    override suspend fun getProductTypes(id: String):AllProductsModel {
+        return remoteSource.getProductTypes(id)
+    }
+
     override suspend fun getCustomerDetails(id: String): CustomerDetail {
         return remoteSource.getUserDetails(id)
     }
@@ -88,8 +94,22 @@ class Repository private constructor(var remoteSource: RemoteSourceInterface, va
         return remoteSource.deleteProductFromShoppingCart(id)
     }
 
+    override suspend fun updateDraftOrder(id: String?, order: DraftOrder): Response<DraftOrder> {
+        return remoteSource.updateDraftOrder(id,order)
+    }
+
+    override suspend fun getAllCurrencies(): CurrencyResponse {
+        return  remoteSource.getAllCurrencies()
+    }
+
+    override suspend fun getCurrencyValue(to: String): CurrencyConverter {
+       return remoteSource.getCurrencyValue(to)
+    }
+
     override suspend fun getShoppingCartProducts(): DraftResponse {
         return remoteSource.getShoppingCartProducts()
     }
+
+
 
 }

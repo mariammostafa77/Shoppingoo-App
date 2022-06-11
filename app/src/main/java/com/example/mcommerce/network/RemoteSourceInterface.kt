@@ -13,12 +13,16 @@ import com.example.mcommerce.model.AllProductsModel
 import com.example.mcommerce.model.ProductDetails
 import com.example.mcommerce.model.DiscountCodesModel
 import com.example.mcommerce.model.*
+import com.example.mcommerce.model.currencies.CurrencyResponse
+import com.example.mcommerce.model.currencies.convertor.CurrencyConverter
 import retrofit2.Response
 import retrofit2.http.Path
 import java.util.*
 import retrofit2.http.Body
 
 import retrofit2.http.Field
+import java.util.*
+import retrofit2.http.Query
 
 
 interface RemoteSourceInterface {
@@ -29,7 +33,6 @@ interface RemoteSourceInterface {
     suspend fun getVariant(id:String): Variants
     suspend fun getSubCategories(vendor: String,productType:String,collectionId:String):AllProductsModel
 
-    ///// Coupons
     suspend fun getDiscountCodes() : DiscountCodesModel
     suspend fun postNewCustomer(customer: CustomerDetail):Response<CustomerDetail>
 
@@ -39,10 +42,19 @@ interface RemoteSourceInterface {
     suspend fun changeCustomerCurrency(id: String? , currency: String): Response<CustomerDetail>
 
     suspend fun postNewDraftOrder(order: DraftOrder):Response<DraftOrder>
+
+    suspend fun getProductTypes(id : String): AllProductsModel
     suspend fun getCustomers(): Customer
 
 
     suspend fun getShoppingCartProducts(): DraftResponse
 
     suspend fun deleteProductFromShoppingCart(id: String?): Response<DraftOrder>
+
+    suspend fun updateDraftOrder(id: String? , order: DraftOrder):Response<DraftOrder>
+
+    suspend fun getAllCurrencies(): CurrencyResponse
+
+    suspend fun getCurrencyValue(to: String): CurrencyConverter
+
 }

@@ -67,6 +67,7 @@
     <string name="contact_us_dialog_text">إذا وجدت أي مشكلة ، يرجى إرسال بريد إلكتروني إلينا لتحسين خدماتنا.</string>
     <string name="send_email">أرسال بريد الكترونى</string>
     <string name="cancel">الغاء</string>
+    <string name="subCategories">فئة</string>
 
 
     <string-array name="currency_options">

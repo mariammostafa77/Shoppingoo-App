@@ -1,8 +1,5 @@
 package com.example.mcommerce.ProductInfo.view
 
-import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,19 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mcommerce.HomeActivity
-import com.example.mcommerce.HomeActivity.Companion.myFavFlag
-
-
 import com.example.mcommerce.HomeActivity.Companion.mySearchFlag
 import com.example.mcommerce.ProductInfo.viewModel.ProductInfoViewModel
 import com.example.mcommerce.ProductInfo.viewModel.ProductInfoViewModelFactory
@@ -32,15 +20,16 @@ import com.example.mcommerce.draftModel.DraftOrder
 import com.example.mcommerce.draftModel.DraftOrderX
 import com.example.mcommerce.draftModel.LineItem
 import com.example.mcommerce.draftModel.NoteAttribute
-import com.example.mcommerce.favourite.view.FavouriteFragment
+import com.example.mcommerce.me.viewmodel.CustomerViewModel
+import com.example.mcommerce.me.viewmodel.CustomerViewModelFactory
 import com.example.mcommerce.me.viewmodel.SavedSetting.Companion.loadCurrency
 import com.example.mcommerce.model.Image
 import com.example.mcommerce.model.Product
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
 import com.example.mcommerce.search.view.MysearchFragment
-import com.example.mcommerce.shopping_cart.viewmodel.ShoppingCartViewModel
-import com.example.mcommerce.shopping_cart.viewmodel.ShoppingCartViewModelFactory
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
 
 class ProductInfoFragment : Fragment() {
@@ -70,16 +59,19 @@ class ProductInfoFragment : Fragment() {
     var isExists=false
     var myIndex:Long=0
 
-
     var count:Int=0
     var totalRate=0
     var price : Double = 0.0
     var currency : String = ""
     var productIndex:Int=0
+    var toCurrency  = ""
 
+    var convertorResult : Double = 1.0
+
+    lateinit var customerViewModel: CustomerViewModel
+    lateinit var customerViewModelFactory: CustomerViewModelFactory
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?, ): View? {
-        // Inflate the layout for this fragment
         var view =inflater.inflate(R.layout.fragment_product_info, container, false)
         Log.i("test","test")
         output= arguments?.getSerializable("productInfo") as Product
@@ -101,13 +93,15 @@ class ProductInfoFragment : Fragment() {
         colorSpinner=view.findViewById(R.id.colorSpiner)
         btnAddToCard=view.findViewById(R.id.btnAddToCard)
         addToFavImg=view.findViewById(R.id.addToFavImg)
+        customerViewModelFactory = CustomerViewModelFactory(Repository.getInstance(AppClient.getInstance(), requireContext()))
+        customerViewModel = ViewModelProvider(this, customerViewModelFactory).get(CustomerViewModel::class.java)
 
         val sharedPreferences = requireContext().getSharedPreferences("userAuth", AppCompatActivity.MODE_PRIVATE)
         val customerEmail = sharedPreferences.getString("email","").toString()
-
+        val userId = sharedPreferences.getString("cusomerID","").toString()
+        currency = loadCurrency(requireContext())
         val noteStatus = "fav"
 
-        currency = loadCurrency(requireContext())
         //start
         Log.i("pro",output.id.toString())
         specificProductsFactory = ProductInfoViewModelFactory(
@@ -128,30 +122,30 @@ class ProductInfoFragment : Fragment() {
                         if (favProducts.get(i).note == noteStatus && favProducts.get(i).email == customerEmail) {
                             if (product.variants[0].id == favProducts[i].line_items!![0].variant_id) {
                                 addToFavImg.setImageResource(R.drawable.ic_favorite)
-
                             }
                         }
                     }
-
                 }
-
                 productInfoAdapter.setProductImages(product.images, requireContext())
                 productName.text = product.title
                 productDesc.text = product.body_html
-
-                if (currency == getResources().getString(R.string.egp)) {
-                    productPrice.text = "${product.variants[0].price} ${currency}"
-                } else if (currency == getResources().getString(R.string.usd_t)) {
-                    price = (product.variants[0].price.toDouble()) * 0.053
-                    productPrice.text = "${price} ${currency}"
-                } else if (currency == getResources().getString(R.string.eur_t_u20ac)) {
-                    price = (product.variants[0].price.toDouble()) * 0.050
-                    productPrice.text = "${price} ${currency}"
-                } else {
-                    productPrice.text =
-                        "${product.variants[0].price} ${getResources().getString(R.string.egp)}"
-                }
-
+       // customerViewModel.getUserDetails(userId)
+           /*
+            toCurrency = loadCurrency(context!!)
+            if(toCurrency.isNullOrEmpty()){
+                toCurrency = "EGP"
+            }
+            customerViewModel.getAmountAfterConversion(toCurrency)
+            customerViewModel.onlineCurrencyChanged.observe(viewLifecycleOwner) { result ->
+                convertorResult = result.result
+                val df = DecimalFormat("#.##")
+                df.roundingMode = RoundingMode.UP
+                val result = product.variants[0].price.toDouble() * convertorResult
+                val roundoff = df.format(result)
+                productPrice.text = "${roundoff}  ${toCurrency}"
+            }
+            */
+                productPrice.text = product.variants[0].price
                 for (i in 0..product.variants.size - 1) {
                     totalRate += product.variants[i].inventory_quantity
                 }
@@ -245,7 +239,6 @@ class ProductInfoFragment : Fragment() {
                 }
             }
 
-
         }
 
         specificProductsViewModel.getFavProducts()
@@ -267,28 +260,28 @@ class ProductInfoFragment : Fragment() {
                 Log.i("exits","already exists")
                 for(i in 0..allFavProducts.size-1) {
                     if(allFavProducts[i].line_items!![0].variant_id==allProducts[0].variants[0].id){
-                       productIndex=i
+                        productIndex=i
                         break
                     }
                 }
-                    addToFavImg.setImageResource(R.drawable.ic_baseline_favorite_border_24)
-                    specificProductsViewModel.deleteFavProduct(allFavProducts.get(productIndex).id.toString())
-                    specificProductsViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
-                        if (response.isSuccessful) {
+                addToFavImg.setImageResource(R.drawable.ic_baseline_favorite_border_24)
+                specificProductsViewModel.deleteFavProduct(allFavProducts.get(productIndex).id.toString())
+                specificProductsViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
+                    if (response.isSuccessful) {
 
-                            Toast.makeText(requireContext(),
-                                "Deleted Success!!!: " + response.code().toString(),
-                                Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(),
+                            "Deleted Success!!!: " + response.code().toString(),
+                            Toast.LENGTH_SHORT).show()
 
 
-                        } else {
-                            Toast.makeText(requireContext(),
-                                "Deleted failed: " + response.code().toString(),
-                                Toast.LENGTH_SHORT).show()
-
-                        }
+                    } else {
+                        Toast.makeText(requireContext(),
+                            "Deleted failed: " + response.code().toString(),
+                            Toast.LENGTH_SHORT).show()
 
                     }
+
+                }
 
             }
             else{
@@ -328,14 +321,9 @@ class ProductInfoFragment : Fragment() {
                     }
                 }
             }
-
-
-
         }
-
 
         return view
     }
-
 
 }

@@ -1,36 +1,29 @@
 package com.example.mcommerce
 
-import android.content.Context
-import android.content.SharedPreferences
-import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
-import androidx.navigation.NavGraph
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
 import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.ProductInfo.view.ProductInfoFragment
-import com.example.mcommerce.brandProducts.view.BrandProductsFragment
+import com.example.mcommerce.auth.model.Addresse
 import com.example.mcommerce.categories.view.CategoryFragment
 import com.example.mcommerce.home.view.HomeFragment
 import com.example.mcommerce.me.view.MeWithLogin
 import com.example.mcommerce.me.view.MeWithoutLoginFragment
 import com.example.mcommerce.me.view.setting.AddNewAddressFragment
+import com.example.mcommerce.me.view.setting.UserAddressesFragment
 import com.example.mcommerce.me.viewmodel.SavedSetting
 import com.example.mcommerce.model.Product
 import com.example.mcommerce.search.view.MysearchFragment
+import com.example.mcommerce.shopping_cart.view.PaymentFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import java.util.*
 
 class HomeActivity : AppCompatActivity(),Communicator {
     private val homeFragment = HomeFragment()
     private val meWithLogin = MeWithLogin()
     private val categoryFragment = CategoryFragment()
-    private  val brandProductsFragment = BrandProductsFragment()
     private val meWithoutLoginFragment = MeWithoutLoginFragment()
     lateinit var bottomNavigationView: BottomNavigationView
 
@@ -40,6 +33,8 @@ class HomeActivity : AppCompatActivity(),Communicator {
         var myFavFlag:Boolean=false
 
     }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -131,6 +126,27 @@ class HomeActivity : AppCompatActivity(),Communicator {
         val searchFragment=MysearchFragment()
         searchFragment.arguments=bundle
         transaction.replace(R.id.frameLayout,searchFragment).commit()
+    }
+
+    override fun goToUserAddresses(totalAmount: String){
+        val bundle=Bundle()
+        val userAddressesFragment = UserAddressesFragment()
+        bundle.putString("sub_total", totalAmount)
+        Log.i("payment","payment From Home${totalAmount}")
+        userAddressesFragment.arguments = bundle
+        replaceFragment(userAddressesFragment)
+    }
+
+
+    override fun goToPaymentFromAddress(selectedAddress: Addresse, totalAmount: String) {
+        val bundle=Bundle()
+        val paymentFragment = PaymentFragment()
+        bundle.putSerializable("selectedAddress", selectedAddress)
+        bundle.putString("amount",totalAmount)
+        Log.i("payment","payment From Home${selectedAddress.city}, ${totalAmount}")
+        paymentFragment.arguments=bundle
+        replaceFragment(paymentFragment)
+
     }
 
     private fun passMapDataToFragment() {
