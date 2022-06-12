@@ -1,5 +1,7 @@
 package com.example.mcommerce.categories.view
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -18,12 +20,18 @@ import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.R
 import com.example.mcommerce.categories.viewModel.CategoriesViewFactory
 import com.example.mcommerce.categories.viewModel.CategoriesViewModel
+import com.example.mcommerce.draftModel.DraftOrder
+import com.example.mcommerce.draftModel.DraftOrderX
+import com.example.mcommerce.draftModel.LineItem
+import com.example.mcommerce.draftModel.NoteAttribute
 import com.example.mcommerce.me.viewmodel.CustomerViewModel
 import com.example.mcommerce.me.viewmodel.CustomerViewModelFactory
 import com.example.mcommerce.me.viewmodel.SavedSetting
 import com.example.mcommerce.model.Product
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
+import com.example.mcommerce.search.viewModel.SearchViewModel
+import com.example.mcommerce.search.viewModel.SearchViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayout
 import java.math.RoundingMode
@@ -42,9 +50,13 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
     private lateinit var communicator:Communicator
     private lateinit var categoryBarTitle:TextView
     private lateinit var dialog : BottomSheetDialog
+    lateinit var searchFactor: SearchViewModelFactory
+    lateinit var searchViewModel: SearchViewModel
     private var id:String=""
     private var brandName:String=""
     private var subCategorySelected:String=""
+    var allVariantsID:ArrayList<Long> = ArrayList<Long>()
+    var allFavProducts:ArrayList<DraftOrderX> = ArrayList<DraftOrderX>()
 
     lateinit var customerViewModel: CustomerViewModel
     lateinit var customerViewModelFactory: CustomerViewModelFactory
@@ -61,6 +73,10 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
         // Inflate the layout for this fragment
         val view=inflater.inflate(R.layout.fragment_category, container, false)
         initComponents(view)
+        searchFactor = SearchViewModelFactory(
+            Repository.getInstance(AppClient.getInstance(), requireContext())
+        )
+        searchViewModel = ViewModelProvider(this, searchFactor).get(SearchViewModel::class.java)
         subCategoriesAdapter= SubCategoriesAdapter()
         brandProductsAdapter= BrandProductsAdapter(this)
         categoryRecyclerView.adapter = brandProductsAdapter
@@ -68,7 +84,9 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
         customerViewModelFactory = CustomerViewModelFactory(Repository.getInstance(AppClient.getInstance(), requireContext()))
         customerViewModel = ViewModelProvider(this, customerViewModelFactory).get(CustomerViewModel::class.java)
         val sharedPreferences = requireContext().getSharedPreferences("userAuth", AppCompatActivity.MODE_PRIVATE)
-      //  userId = sharedPreferences.getString("cusomerID","").toString()
+        val email: String? = sharedPreferences.getString("email","")
+
+        //  userId = sharedPreferences.getString("cusomerID","").toString()
 
         id=""
        //checkArgs()
@@ -114,6 +132,19 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
             communicator.goToSearchWithAllData(id,brandName,subCategorySelected)
 
         }
+        searchViewModel.getFavProducts()
+        allFavProducts.clear()
+        searchViewModel.onlineFavProduct.observe(viewLifecycleOwner) { favProducts ->
+            allFavProducts.clear()
+            allVariantsID.clear()
+            for (i in 0..favProducts.size - 1) {
+                if (favProducts.get(i).note == "fav" && favProducts.get(i).email == email) {
+                    allFavProducts.add(favProducts.get(i))
+                    allVariantsID.add(favProducts.get(i).line_items!![0].variant_id!!)
+                }
+            }
+
+        }
         return view
     }
 
@@ -157,6 +188,99 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
         return "${roundoff}  ${toCurrency}"
 */
         return ""
+    }
+
+    override fun addToFav(product: Product, img: ImageView, myIndex: Int) {
+        Toast.makeText(requireContext(),"Fav clicked",Toast.LENGTH_LONG).show()
+        val sharedPreferences: SharedPreferences = context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
+        val email: String? = sharedPreferences.getString("email","")
+
+        if(allProducts[myIndex].variants[0].id in allVariantsID){
+            Log.i("exits","already exists")
+
+            img.setImageResource(R.drawable.ic_baseline_favorite_border_24)
+            searchViewModel.deleteSelectedProduct(allFavProducts.get(myIndex).id.toString())
+            searchViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
+                if (response.isSuccessful) {
+
+                    Toast.makeText(requireContext(),
+                        "Deleted Success!!!: " + response.code().toString(),
+                        Toast.LENGTH_SHORT).show()
+
+
+                } else {
+                    Toast.makeText(requireContext(),
+                        "Deleted failed: " + response.code().toString(),
+                        Toast.LENGTH_SHORT).show()
+
+                }
+
+            }
+
+        }
+        else{
+            Log.i("exits","not exists")
+            img.setImageResource(R.drawable.ic_favorite)
+            var variantId: Long = 0
+            var order = DraftOrderX()
+            order.note = "fav"
+            order.email = email
+
+            variantId = allProducts[myIndex].variants[0].id
+            Log.i("Index", "index: " + variantId.toString())
+            // order.line_items!![0].variant_id = variantId
+            var lineItem = LineItem()
+            lineItem.quantity = 1
+            lineItem.variant_id = variantId
+            order.line_items = listOf(lineItem)
+
+
+            // order.line_items!![0].variant_id = 40335555395723
+            var productImage = NoteAttribute()
+            productImage.name = "image"
+            productImage.value = allProducts[myIndex].images[0].src
+            order.note_attributes = listOf(productImage)
+
+            var draftOrder = DraftOrder(order)
+            searchViewModel.getCardOrder(draftOrder)
+            searchViewModel.onlineCardOrder.observe(viewLifecycleOwner) { cardOrder ->
+                if (cardOrder.isSuccessful) {
+                    Toast.makeText(requireContext(),
+                        "add to card successfull: " + cardOrder.code().toString(),
+                        Toast.LENGTH_LONG).show()
+                } else {
+
+                    Toast.makeText(requireContext(),
+                        "add to card failed: " + cardOrder.code().toString()+"//"+cardOrder.body(),
+                        Toast.LENGTH_LONG).show()
+
+                }
+            }
+
+        }
+
+
+
+    }
+
+    override fun addFavImg(img: ImageView, id: Long) {
+        val sharedPreferences: SharedPreferences = context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
+        val email: String? = sharedPreferences.getString("email","")
+        searchViewModel.getFavProducts()
+        searchViewModel.onlineFavProduct.observe(viewLifecycleOwner) { favProducts ->
+            for (i in 0..favProducts.size-1) {
+                if (favProducts.get(i).note == "fav" && favProducts.get(i).email == email) {
+                    if (id == favProducts[i].line_items!![0].variant_id) {
+                        img.setImageResource(R.drawable.ic_favorite)
+
+                    }
+
+                }
+            }
+
+
+
+        }
     }
 
     private fun initComponents(view:View){
