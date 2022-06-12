@@ -13,6 +13,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.R
 import com.example.mcommerce.auth.model.Addresse
+import com.example.mcommerce.draftModel.LineItem
+import com.example.mcommerce.draftModel.OrderPrices
 import com.example.mcommerce.home.viewModel.HomeViewModel
 import com.example.mcommerce.home.viewModel.HomeViewModelFactory
 import com.example.mcommerce.me.viewmodel.SavedSetting.Companion.getUserName
@@ -35,13 +37,20 @@ class PaymentFragment : Fragment() {
     lateinit var radioPaypal : RadioButton
     lateinit var radioCash : RadioButton
 
-    lateinit var communicator: Communicator
-    lateinit var selectedAddress: Addresse
     lateinit var couponsFactory: HomeViewModelFactory
     lateinit var couponsViewModel: HomeViewModel
+    lateinit var communicator: Communicator
+    lateinit var selectedAddress: Addresse
 
-     var paymentMethod: String = "Cash"
-    var amount = ""
+   // var amount = ""
+    var lineItems : ArrayList<LineItem> = ArrayList()
+    var orderPrices : ArrayList<OrderPrices> = ArrayList()
+
+    var paymentMethod: String = "Cash"
+    var subTotal : Double = 0.0
+    var total : Double = 0.0
+    var fees : Double = 0.0
+    var discount: Double = 0.0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,11 +68,18 @@ class PaymentFragment : Fragment() {
 
         if(arguments != null){
             selectedAddress = arguments?.getSerializable("selectedAddress") as Addresse
-            amount = arguments?.getString("amount") as String
-          //  Log.i("payment","payment From Fragment: ${selectedAddress.city}")
+            lineItems = arguments?.getSerializable("lineItems") as ArrayList<LineItem>
+            orderPrices = arguments?.getSerializable("orderPrice") as ArrayList<OrderPrices>
+            Log.i("payment","payment From Fragment: ${selectedAddress.city}")
         }
-
+        /////
+        calculateOrderPrice()
+        ///Asign Variable
         paymentTitleTxt.append(" ${getUserName(requireContext())}")
+        txtSubTotalText.text = subTotal.toString()
+        txtTotalText.text = total.toString()
+        txtFeesText.text = fees.toString()
+
         btnApplyDiscount.setOnClickListener {
             applyDiscount()
         }
@@ -116,6 +132,14 @@ class PaymentFragment : Fragment() {
         radioCash = view.findViewById(R.id.radioCash)
     }
 
+    private fun calculateOrderPrice(){
+        for (i in 0..orderPrices.size-1){
+            subTotal += orderPrices.get(i).subTotal
+            total += orderPrices.get(i).total
+            fees += orderPrices.get(i).tax
+        }
+    }
+
     private fun applyDiscount(){
         val discountCode = etCouponsField.text.toString()
         couponsViewModel.onlineDiscountCodes.observe(viewLifecycleOwner) { coupons ->
@@ -135,9 +159,8 @@ class PaymentFragment : Fragment() {
         }
     }
 
-
     private fun getPayment() {
-      //  val amount: String = "20"
+        val amount: String = "50.00"
         val payment = PayPalPayment(BigDecimal(amount), "USD", "Course Fees",
             PayPalPayment.PAYMENT_INTENT_SALE)
         val intent = Intent(requireContext(), PaymentActivity::class.java)
@@ -146,13 +169,11 @@ class PaymentFragment : Fragment() {
         startActivityForResult(intent, PAYPAL_REQUEST_CODE)
     }
 
-
     companion object{
         val clientKey = "ATWyXBtF8COKnCN1FG7AR_Sznijz2_WkTrhD7Cj2GzrwjVivPEacw2HE_AX_ndbR91_4dsEw0SEfrcuT"
         val PAYPAL_REQUEST_CODE = 123
         private val config = PayPalConfiguration()
             .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX).clientId(clientKey)
-
     }
 
 }

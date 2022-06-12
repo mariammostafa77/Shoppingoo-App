@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.R
 import com.example.mcommerce.auth.model.Addresse
+import com.example.mcommerce.draftModel.LineItem
+import com.example.mcommerce.draftModel.OrderPrices
 import com.example.mcommerce.me.viewmodel.CustomerViewModel
 import com.example.mcommerce.me.viewmodel.CustomerViewModelFactory
 import com.example.mcommerce.model.Repository
@@ -32,7 +34,11 @@ class UserAddressesFragment : Fragment() {
     lateinit var customerViewModelFactory: CustomerViewModelFactory
 
     lateinit var communicator: Communicator
-    var amount = ""
+
+    var lineItems : ArrayList<LineItem> = ArrayList()
+    var orderPrices : ArrayList<OrderPrices> = ArrayList()
+
+   // var amount = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -44,11 +50,14 @@ class UserAddressesFragment : Fragment() {
         communicator = activity as Communicator
 
         if(arguments != null){
-            amount = arguments?.getString("sub_total") as String
-            Toast.makeText(requireContext(),"${amount}", Toast.LENGTH_SHORT).show()
+           // amount = arguments?.getString("sub_total") as String
+            lineItems = arguments?.getSerializable("line_items") as ArrayList<LineItem>
+            orderPrices = arguments?.getSerializable("order_price") as ArrayList<OrderPrices>
+           // Log.i("paymenttt","payment From Address Fragment ${lineItems.get(0).quantity},${lineItems.get(0).tax_lines?.get(0)?.price}," +
+             //       ",${lineItems.get(0).variant_id}, ${orderPrices.get(0).subTotal}, ${orderPrices.get(0).total}")
+           // Toast.makeText(requireContext(),"${orderPrices.get(0).subTotal}", Toast.LENGTH_SHORT).show()
         }
-
-        customerAddressAdapter = CustomerAddressAdapter(communicator,amount)
+        customerAddressAdapter = CustomerAddressAdapter(communicator,lineItems,orderPrices)
         customerAddressesLayoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
         customerAddressesRecyclerView.setLayoutManager(customerAddressesLayoutManager)
         customerAddressesRecyclerView.setAdapter(customerAddressAdapter)

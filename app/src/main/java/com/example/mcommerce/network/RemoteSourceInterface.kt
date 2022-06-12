@@ -50,6 +50,7 @@ interface RemoteSourceInterface {
 
 
     suspend fun getShoppingCartProducts(): DraftResponse
+    suspend fun getOrders(id : String): Orders
 
     suspend fun deleteProductFromShoppingCart(id: String?): Response<DraftOrder>
 
