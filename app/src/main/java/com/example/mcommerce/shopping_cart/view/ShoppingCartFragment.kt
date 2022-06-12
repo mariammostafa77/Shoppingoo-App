@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.R
 import com.example.mcommerce.draftModel.DraftOrder
+import com.example.mcommerce.draftModel.LineItem
+import com.example.mcommerce.draftModel.OrderPrices
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
 import com.example.mcommerce.shopping_cart.viewmodel.ShoppingCartViewModel
@@ -34,6 +36,8 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
     var userShoppingCartProducts:ArrayList<DraftOrder> = ArrayList<DraftOrder>()
     var subTotal : Double = 0.0
     lateinit var communicator: Communicator
+    var lineItems : ArrayList<LineItem> = ArrayList()
+    var orderPrices : ArrayList<OrderPrices> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,14 +67,10 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
                       userShoppingCartProducts.add(draftObj)
                 }
             }
-          //  Log.i("Testttttttt", userShoppingCartProducts.size.toString())
-         //   Toast.makeText(requireContext(), userShoppingCartProducts.size.toString(),Toast.LENGTH_SHORT).show()
             shoppingCartAdapter.setUserShoppingCartProducts(requireContext(),userShoppingCartProducts)
             subTotal = 0.0
             for (i in 0..userShoppingCartProducts.size-1){
-                val price = ((userShoppingCartProducts[i].draft_order?.line_items?.get(0)!!.price)?.toDouble())?.times(
-                    (userShoppingCartProducts[i].draft_order?.line_items?.get(0)!!.quantity!!)
-                )
+                val price = (userShoppingCartProducts[i].draft_order?.subtotal_price)?.toDouble()!!
                 if (price != null) {
                     subTotal += price
                 }
@@ -78,7 +78,17 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
             txtSubTotal.text = subTotal.toString()
         }
         btnProceedToCheckout.setOnClickListener {
-            communicator.goToUserAddresses(subTotal.toString())
+            for(i in 0..userShoppingCartProducts.size-1){
+                val lineItem = LineItem(variant_id = userShoppingCartProducts.get(0).draft_order?.line_items?.get(0)?.variant_id,
+                quantity = userShoppingCartProducts.get(0).draft_order?.line_items?.get(0)?.quantity,
+                tax_lines = userShoppingCartProducts.get(0).draft_order?.line_items?.get(0)?.tax_lines)
+                val orderPrice = OrderPrices(tax = (userShoppingCartProducts.get(0).draft_order?.tax_lines?.get(0)?.price)
+                !!.toDouble(), subTotal = (userShoppingCartProducts.get(0).draft_order?.subtotal_price)
+                !!.toDouble(),total = (userShoppingCartProducts.get(0).draft_order?.total_price)!!.toDouble())
+                lineItems.add(lineItem)
+                orderPrices.add(orderPrice)
+            }
+            communicator.goToUserAddresses(lineItems,orderPrices)
         }
         return view
     }
@@ -105,10 +115,18 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
                            shoppingCartAdapter.notifyDataSetChanged()
                         shoppingCartAdapter.setUserShoppingCartProducts(requireContext(),userShoppingCartProducts)
                         subTotal = 0.0
+                       /*
                         for (i in 0..userShoppingCartProducts.size-1){
                             val price = ((userShoppingCartProducts[i].draft_order?.line_items?.get(0)!!.price)?.toDouble())?.times(
                                 (userShoppingCartProducts[i].draft_order?.line_items?.get(0)!!.quantity!!)
                             )
+                            if (price != null) {
+                                subTotal += price
+                            }
+                        }
+                        */
+                        for (i in 0..userShoppingCartProducts.size-1){
+                            val price = (userShoppingCartProducts[i].draft_order?.subtotal_price)?.toDouble()!!
                             if (price != null) {
                                 subTotal += price
                             }
@@ -160,6 +178,7 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
             if (response.isSuccessful) {
                 Toast.makeText(requireContext(),"Decreased Success!!!: "+response.code().toString(),Toast.LENGTH_SHORT).show()
                 subTotal = 0.0
+
                 for (i in 0..userShoppingCartProducts.size-1){
                     val price = ((userShoppingCartProducts[i].draft_order?.line_items?.get(0)!!.price)?.toDouble())?.times(
                         (userShoppingCartProducts[i].draft_order?.line_items?.get(0)!!.quantity!!)
@@ -168,6 +187,7 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
                         subTotal += price
                     }
                 }
+
                 txtSubTotal.text = subTotal.toString()
 
             }

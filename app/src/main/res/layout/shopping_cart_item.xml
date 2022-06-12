@@ -16,7 +16,7 @@
         android:layout_height="match_parent"
         android:paddingVertical="4dp">
         <CheckBox
-            android:id="@+id/radioSelectedItem"
+            android:id="@+id/selectedItemCheckBox"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginStart="2dp"
@@ -32,7 +32,7 @@
             app:layout_constraintWidth_percent="0.3"
             android:src="@drawable/x"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/radioSelectedItem"
+            app:layout_constraintStart_toEndOf="@+id/selectedItemCheckBox"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView

@@ -1,5 +1,7 @@
 package com.example.mcommerce.draftModel
 
+import java.io.Serializable
+
 data class LineItem(
     val admin_graphql_api_id: String? = null,
     val applied_discount: Any? = null,
@@ -21,4 +23,4 @@ data class LineItem(
     var variant_id: Long? = null,
     val variant_title: String? = null,
     val vendor: String? = null
-)
+) : Serializable
