@@ -11,6 +11,7 @@ import com.example.mcommerce.model.*
 import com.example.mcommerce.orders.model.Orders
 import com.example.mcommerce.model.currencies.CurrencyResponse
 import com.example.mcommerce.model.currencies.convertor.CurrencyConverter
+import com.example.mcommerce.orders.model.OrderResponse
 import retrofit2.Response
 import retrofit2.http.*
 import java.util.*
@@ -171,6 +172,15 @@ import java.util.*
       @GET("collections/"+"{id}"+"/products.json?fields=product_type")
       suspend fun getProductTypes(@Path("id") id:String?): AllProductsModel
 
+
+      @Headers(
+          "X-Shopify-Shop-Api-Call-Limit: 40/40",
+          "Retry-After: 2.0",
+          "Accept: application/json",
+          "X-Shopify-Access-Token: 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"
+      )
+      @POST("orders.json")
+      suspend fun postNewOrder(@Body orders: OrderResponse):Response<OrderResponse>
 
 }
 

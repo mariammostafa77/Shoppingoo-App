@@ -17,6 +17,7 @@ import com.example.mcommerce.model.currencies.convertor.CurrencyConverter
 import com.example.mcommerce.network.RemoteSourceInterface
 import com.example.mcommerce.network.RetrofitHelper
 import com.example.mcommerce.network.ServiceApi
+import com.example.mcommerce.orders.model.OrderResponse
 import com.example.mcommerce.orders.model.Orders
 import retrofit2.Response
 import java.util.*
@@ -109,6 +110,10 @@ class Repository private constructor(var remoteSource: RemoteSourceInterface, va
 
     override suspend fun getCurrencyValue(to: String): CurrencyConverter {
        return remoteSource.getCurrencyValue(to)
+    }
+
+    override suspend fun postNewOrder(orders: OrderResponse): Response<OrderResponse> {
+        return remoteSource.postNewOrder(orders)
     }
 
     override suspend fun getShoppingCartProducts(): DraftResponse {

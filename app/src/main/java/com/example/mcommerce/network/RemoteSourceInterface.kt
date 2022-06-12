@@ -16,6 +16,7 @@ import com.example.mcommerce.model.*
 import com.example.mcommerce.orders.model.Orders
 import com.example.mcommerce.model.currencies.CurrencyResponse
 import com.example.mcommerce.model.currencies.convertor.CurrencyConverter
+import com.example.mcommerce.orders.model.OrderResponse
 import retrofit2.Response
 import retrofit2.http.Path
 import java.util.*
@@ -57,5 +58,7 @@ interface RemoteSourceInterface {
     suspend fun getAllCurrencies(): CurrencyResponse
 
     suspend fun getCurrencyValue(to: String): CurrencyConverter
+
+    suspend fun postNewOrder(orders: OrderResponse):Response<OrderResponse>
 
 }

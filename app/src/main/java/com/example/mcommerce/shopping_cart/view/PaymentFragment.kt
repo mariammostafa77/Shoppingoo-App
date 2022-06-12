@@ -1,7 +1,9 @@
 package com.example.mcommerce.shopping_cart.view
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -20,6 +22,9 @@ import com.example.mcommerce.home.viewModel.HomeViewModelFactory
 import com.example.mcommerce.me.viewmodel.SavedSetting.Companion.getUserName
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
+import com.example.mcommerce.orders.model.Order
+import com.example.mcommerce.shopping_cart.viewmodel.ShoppingCartViewModel
+import com.example.mcommerce.shopping_cart.viewmodel.ShoppingCartViewModelFactory
 import com.paypal.android.sdk.payments.*
 import org.json.JSONException
 import org.json.JSONObject
@@ -39,6 +44,10 @@ class PaymentFragment : Fragment() {
 
     lateinit var couponsFactory: HomeViewModelFactory
     lateinit var couponsViewModel: HomeViewModel
+
+    lateinit var shoppingCartViewModelFactory: ShoppingCartViewModelFactory
+    lateinit var shoppingCartViewModel: ShoppingCartViewModel
+
     lateinit var communicator: Communicator
     lateinit var selectedAddress: Addresse
 
@@ -51,7 +60,7 @@ class PaymentFragment : Fragment() {
     var total : Double = 0.0
     var fees : Double = 0.0
     var discount: Double = 0.0
-
+    var userEmail: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,6 +74,12 @@ class PaymentFragment : Fragment() {
 
         couponsFactory = HomeViewModelFactory(Repository.getInstance(AppClient.getInstance(), requireContext()))
         couponsViewModel = ViewModelProvider(this, couponsFactory).get(HomeViewModel::class.java)
+
+        shoppingCartViewModelFactory = ShoppingCartViewModelFactory(Repository.getInstance(AppClient.getInstance(), requireContext()))
+        shoppingCartViewModel = ViewModelProvider(this, shoppingCartViewModelFactory).get(ShoppingCartViewModel::class.java)
+
+        val sharedPreferences: SharedPreferences = context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
+        userEmail = sharedPreferences.getString("email","").toString()
 
         if(arguments != null){
             selectedAddress = arguments?.getSerializable("selectedAddress") as Addresse
@@ -89,6 +104,15 @@ class PaymentFragment : Fragment() {
         }
         radioCash.setOnClickListener {
             paymentMethod = "Cash"
+        }
+
+        btnPlaceOrder.setOnClickListener {
+            val order: Order = Order()
+            order.email = userEmail
+            order.line_items = lineItems as List<com.example.mcommerce.orders.model.LineItem>
+           // order.discount_codes =
+
+          //  shoppingCartViewModel.postNewOrder()
         }
         return view
     }

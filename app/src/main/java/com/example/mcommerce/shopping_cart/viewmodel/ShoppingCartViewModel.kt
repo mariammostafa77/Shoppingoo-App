@@ -8,10 +8,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mcommerce.ProductInfo.viewModel.ProductInfoViewModel
 import com.example.mcommerce.ProductInfo.viewModel.ProductInfoViewModelFactory
+import com.example.mcommerce.auth.model.CustomerDetail
 import com.example.mcommerce.draftModel.DraftOrder
 import com.example.mcommerce.draftModel.DraftOrderX
 import com.example.mcommerce.draftModel.DraftResponse
 import com.example.mcommerce.model.RepositoryInterface
+import com.example.mcommerce.orders.model.OrderResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -23,11 +25,15 @@ class ShoppingCartViewModel(repo: RepositoryInterface) : ViewModel() {
     private var shopingCartProducts = MutableLiveData<List<DraftOrderX>>()
     private val itemDeleted = MutableLiveData<Response<DraftOrder>>()
     private val itemUpdated = MutableLiveData<Response<DraftOrder>>()
+    private val newOrder = MutableLiveData<Response<OrderResponse>>()
 
     val onlineShoppingCartProduct: LiveData<List<DraftOrderX>> = shopingCartProducts
 
     val selectedItem : MutableLiveData<Response<DraftOrder>> = itemDeleted
     val onlineItemUpdated : MutableLiveData<Response<DraftOrder>> = itemUpdated
+    val onlineNewOrder : LiveData<Response<OrderResponse>> = newOrder
+
+
     fun getShoppingCardProducts(){
         viewModelScope.launch{
             val result = iRepo.getShoppingCartProducts()
@@ -54,6 +60,15 @@ class ShoppingCartViewModel(repo: RepositoryInterface) : ViewModel() {
         }
     }
 
+    fun postNewOrder(orderResponse: OrderResponse){
+        viewModelScope.launch{
+            val result = iRepo.postNewOrder(orderResponse)
+            withContext(Dispatchers.Main){
+                newOrder.value= result
+            }
+        }
+
+    }
 
 
 

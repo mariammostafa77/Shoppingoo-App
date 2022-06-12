@@ -10,6 +10,7 @@ import com.example.mcommerce.model.*
 import com.example.mcommerce.orders.model.Orders
 import com.example.mcommerce.model.currencies.CurrencyResponse
 import com.example.mcommerce.model.currencies.convertor.CurrencyConverter
+import com.example.mcommerce.orders.model.OrderResponse
 import retrofit2.Response
 import retrofit2.http.Path
 import java.util.*
@@ -123,6 +124,12 @@ class AppClient : RemoteSourceInterface {
     override suspend fun getCurrencyValue(to: String): CurrencyConverter {
         val service = CurrencyConverterHelper.getRetrofit()?.create(ServiceApi::class.java)
         val response = service?.getCurrencyValue(to)
+        return response!!
+    }
+
+    override suspend fun postNewOrder(orders: OrderResponse): Response<OrderResponse> {
+        val service = CurrencyConverterHelper.getRetrofit()?.create(ServiceApi::class.java)
+        val response = service?.postNewOrder(orders)
         return response!!
     }
 
