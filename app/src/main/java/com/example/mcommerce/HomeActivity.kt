@@ -1,9 +1,15 @@
 package com.example.mcommerce
 
+import android.content.Context
+import android.content.SharedPreferences
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.NavGraph
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
 import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.ProductInfo.view.ProductInfoFragment
@@ -16,9 +22,11 @@ import com.example.mcommerce.me.view.setting.AddNewAddressFragment
 import com.example.mcommerce.me.view.setting.UserAddressesFragment
 import com.example.mcommerce.me.viewmodel.SavedSetting
 import com.example.mcommerce.model.Product
+import com.example.mcommerce.orderDetails.view.OrderDetailsFragment
+import com.example.mcommerce.orders.model.Order
 import com.example.mcommerce.search.view.MysearchFragment
-import com.example.mcommerce.shopping_cart.view.PaymentFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.util.*
 
 class HomeActivity : AppCompatActivity(),Communicator {
     private val homeFragment = HomeFragment()
@@ -140,11 +148,18 @@ class HomeActivity : AppCompatActivity(),Communicator {
         Log.i("payment","payment From Home${totalAmount}")
         userAddressesFragment.arguments = bundle
         replaceFragment(userAddressesFragment)
+    override fun goToUserAddresses() {
+        TODO("Not yet implemented")
     }
 
 
     override fun goToPaymentFromAddress(selectedAddress: Addresse, totalAmount: String) {
         myDetailsFlag=0
+    override fun goToPaymentFromAddress(selectedAddress: Addresse) {
+        TODO("Not yet implemented")
+    }
+
+    override fun goToOrderDetails(selectedOrder: Order) {
         val bundle=Bundle()
         val paymentFragment = PaymentFragment()
         bundle.putSerializable("selectedAddress", selectedAddress)
@@ -153,6 +168,10 @@ class HomeActivity : AppCompatActivity(),Communicator {
         paymentFragment.arguments=bundle
         replaceFragment(paymentFragment)
 
+        bundle.putSerializable("selectedOrder",selectedOrder)
+        val orderDetailsFragment=OrderDetailsFragment()
+        orderDetailsFragment.arguments=bundle
+        replaceFragment(orderDetailsFragment)
     }
 
     override fun goToProductDetails(id: Long) {

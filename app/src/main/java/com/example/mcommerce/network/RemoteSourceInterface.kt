@@ -13,6 +13,7 @@ import com.example.mcommerce.model.AllProductsModel
 import com.example.mcommerce.model.ProductDetails
 import com.example.mcommerce.model.DiscountCodesModel
 import com.example.mcommerce.model.*
+import com.example.mcommerce.orders.model.Orders
 import com.example.mcommerce.model.currencies.CurrencyResponse
 import com.example.mcommerce.model.currencies.convertor.CurrencyConverter
 import retrofit2.Response
@@ -48,6 +49,7 @@ interface RemoteSourceInterface {
 
 
     suspend fun getShoppingCartProducts(): DraftResponse
+    suspend fun getOrders(id : String): Orders
 
     suspend fun deleteProductFromShoppingCart(id: String?): Response<DraftOrder>
 

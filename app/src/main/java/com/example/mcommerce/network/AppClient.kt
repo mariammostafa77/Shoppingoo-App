@@ -7,6 +7,7 @@ import com.example.mcommerce.draftModel.DraftOrder
 import com.example.mcommerce.draftModel.DraftResponse
 import com.example.mcommerce.home.model.BrandsModel
 import com.example.mcommerce.model.*
+import com.example.mcommerce.orders.model.Orders
 import com.example.mcommerce.model.currencies.CurrencyResponse
 import com.example.mcommerce.model.currencies.convertor.CurrencyConverter
 import retrofit2.Response
@@ -81,6 +82,12 @@ class AppClient : RemoteSourceInterface {
     override suspend fun getProductTypes(id: String): AllProductsModel {
         val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
         val response = service?.getProductTypes(id)
+        return response!!
+    }
+
+    override suspend fun getOrders(id: String): Orders {
+        val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
+        val response = service?.getOrders(id)
         return response!!
     }
 

@@ -8,6 +8,7 @@ import com.example.mcommerce.draftModel.DraftOrderX
 import com.example.mcommerce.draftModel.DraftResponse
 import com.example.mcommerce.home.model.BrandsModel
 import com.example.mcommerce.model.*
+import com.example.mcommerce.orders.model.Orders
 import com.example.mcommerce.model.currencies.CurrencyResponse
 import com.example.mcommerce.model.currencies.convertor.CurrencyConverter
 import retrofit2.Response
@@ -130,7 +131,18 @@ import java.util.*
       )
       @DELETE("draft_orders/"+"{draft_order_id}"+".json")
       suspend fun deleteProductFromShoppingCart(@Path("draft_order_id") id: String?): Response<DraftOrder>
-
+      @Headers(
+          "Accept: application/json",
+          "X-Shopify-Access-Token: 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",
+      )
+      @GET("collections/"+"{id}"+"/products.json?fields=product_type")
+      suspend fun getProductTypes(@Path("id") id:String?): AllProductsModel
+      @Headers(
+          "Accept: application/json",
+          "X-Shopify-Access-Token: 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",
+      )
+      @GET("customers/"+"{id}"+"/orders.json")
+      suspend fun getOrders(@Path("id") id:String?): Orders
       @Headers(
           "X-Shopify-Shop-Api-Call-Limit: 40/40",
           "Retry-After: 2.0",
