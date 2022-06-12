@@ -162,8 +162,11 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
         checkArgs()
         id=""
         subCategorySelected=""
-        categoriesProductViewModel.getCategories(brandName,subCategorySelected,id)
+        //categoriesProductViewModel.getCategories(brandName,subCategorySelected,id)
     }
+
+
+
     override fun onSubCategoryClick(type:String) {
         subCategorySelected=type
         categoriesProductViewModel.getCategories(brandName,subCategorySelected,id)
@@ -191,7 +194,7 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
     }
 
     override fun addToFav(product: Product, img: ImageView, myIndex: Int) {
-        Toast.makeText(requireContext(),"Fav clicked",Toast.LENGTH_LONG).show()
+       /* Toast.makeText(requireContext(),"Fav clicked",Toast.LENGTH_LONG).show()
         val sharedPreferences: SharedPreferences = context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
         val email: String? = sharedPreferences.getString("email","")
 
@@ -257,14 +260,14 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
                 }
             }
 
-        }
+        }*/
 
 
 
     }
 
     override fun addFavImg(img: ImageView, id: Long) {
-        val sharedPreferences: SharedPreferences = context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
+        /*val sharedPreferences: SharedPreferences = context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
         val email: String? = sharedPreferences.getString("email","")
         searchViewModel.getFavProducts()
         searchViewModel.onlineFavProduct.observe(viewLifecycleOwner) { favProducts ->
@@ -280,7 +283,7 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
 
 
 
-        }
+        }*/
     }
 
     private fun initComponents(view:View){
