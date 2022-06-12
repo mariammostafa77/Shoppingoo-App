@@ -83,7 +83,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:text="@string/product_name"
-                android:textSize="12dp"
+                android:textSize="10dp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/detailsRecyclerView" />
@@ -157,7 +157,7 @@
                 android:textSize="20dp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/productRatingBar" />
+                app:layout_constraintTop_toBottomOf="@+id/colorSpiner" />
 
             <TextView
                 android:id="@+id/txtProductDetails"
@@ -170,7 +170,6 @@
                 android:text="TextView"
                 android:textSize="10dp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/btnAddToCard"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.342"
                 app:layout_constraintStart_toStartOf="parent"
@@ -186,17 +185,21 @@
                 android:numStars="5"
                 android:stepSize="0.5"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/colorSpiner" />
+                app:layout_constraintTop_toBottomOf="@+id/colorSpiner"
+                style="?android:attr/ratingBarStyleSmall"/>
 
             <Button
                 android:id="@+id/btnAddToCard"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="344dp"
                 android:text="@string/AddToCard"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.518"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtProductDetails" />
+                app:layout_constraintTop_toBottomOf="@+id/reviewsRecycleView"
+                />
 
             <ImageView
                 android:id="@+id/addToFavImg"
@@ -247,6 +250,27 @@
                 app:layout_constraintStart_toEndOf="@+id/textView16"
                 app:layout_constraintTop_toTopOf="@+id/textView16"
                 tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+            <TextView
+                android:id="@+id/txtComment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/comment"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtProductDetails" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/reviewsRecycleView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtComment" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

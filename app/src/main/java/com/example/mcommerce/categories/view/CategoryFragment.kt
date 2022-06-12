@@ -266,20 +266,9 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
     override fun addFavImg(img: ImageView, id: Long) {
         val sharedPreferences: SharedPreferences = context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
         val email: String? = sharedPreferences.getString("email","")
-        searchViewModel.getFavProducts()
-        searchViewModel.onlineFavProduct.observe(viewLifecycleOwner) { favProducts ->
-            for (i in 0..favProducts.size-1) {
-                if (favProducts.get(i).note == "fav" && favProducts.get(i).email == email) {
-                    if (id == favProducts[i].line_items!![0].variant_id) {
-                        img.setImageResource(R.drawable.ic_favorite)
 
-                    }
-
-                }
-            }
-
-
-
+        if(id in allVariantsID){
+            img.setImageResource(R.drawable.ic_favorite)
         }
     }
 
