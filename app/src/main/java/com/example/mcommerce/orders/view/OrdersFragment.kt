@@ -1,5 +1,7 @@
 package com.example.mcommerce.orders.view
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -24,7 +26,7 @@ class OrdersFragment : Fragment(),OnOrderClickListenerInterface {
     private lateinit var ordersViewFactory: OrdersViewFactory
     private lateinit var ordersViewModel: OrdersViewModel
     private lateinit var communicator: Communicator
-
+    private var id:String =""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,12 +38,16 @@ class OrdersFragment : Fragment(),OnOrderClickListenerInterface {
         communicator = activity as Communicator
         ordersAdapter=OrdersAdapter()
         ordersRecycleView.adapter=ordersAdapter
+        val sharedPreferences: SharedPreferences = context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
+        id = sharedPreferences.getString("cusomerID","").toString()
         ordersViewFactory = OrdersViewFactory(
             Repository.getInstance(
                 AppClient.getInstance(),
                 requireContext()))
         ordersViewModel = ViewModelProvider(this, ordersViewFactory)[OrdersViewModel::class.java]
-        ordersViewModel.getAllOrders("5758070096011")
+        if(id.isNotEmpty()){
+            ordersViewModel.getAllOrders(id)
+        }
         ordersViewModel.allOnlineOrders.observe(viewLifecycleOwner) {
             ordersAdapter.setUpdatedData(it,requireContext(),this)
         }

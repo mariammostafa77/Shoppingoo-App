@@ -11,20 +11,9 @@ interface Communicator {
     fun goFromBrandToCategories(brandName:String)
     fun goToSearchWithID(id:String)
     fun goToSearchWithAllData(id:String,brandName:String,subCatName:String)
-
-    fun goToUserAddresses(totalAmount: String)
-    fun goToPaymentFromAddress(selectedAddress: Addresse , tatalAmount: String)
-   // fun goToUserAddresses(totalAmount: String)
     fun goToUserAddresses(lineItems: ArrayList<LineItem> ,orderPrices: ArrayList<OrderPrices> )
     fun goToPaymentFromAddress(selectedAddress: Addresse , lineItems: ArrayList<LineItem> ,orderPrices: ArrayList<OrderPrices>)
     fun goToProductDetails(id:Long)
-
-
-   // fun goToUserAddresses()
-   // fun goToPaymentFromAddress(selectedAddress: Addresse)
-    fun goToOrderDetails(selectedOrder: Order)
-    fun goToUserAddresses()
-    fun goToPaymentFromAddress(selectedAddress: Addresse)
     fun goToOrderDetails(selectedOrder: Order)
 
 }

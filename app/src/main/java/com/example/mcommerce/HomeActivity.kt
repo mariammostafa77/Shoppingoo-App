@@ -143,7 +143,6 @@ class HomeActivity : AppCompatActivity(),Communicator {
         transaction.replace(R.id.frameLayout,searchFragment).commit()
     }
 
-    override fun goToUserAddresses(totalAmount: String){
     override fun goToUserAddresses(lineItems: ArrayList<LineItem>, orderPrices: ArrayList<OrderPrices> ){
         myDetailsFlag=0
         val bundle=Bundle()
@@ -174,7 +173,7 @@ class HomeActivity : AppCompatActivity(),Communicator {
 
     }
 
-    }
+
     override fun goToOrderDetails(selectedOrder: Order) {
         val bundle=Bundle()
         bundle.putSerializable("selectedOrder",selectedOrder)
