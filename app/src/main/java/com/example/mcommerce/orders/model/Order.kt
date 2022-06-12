@@ -1,10 +1,14 @@
 package com.example.mcommerce.orders.model
 
+import com.example.mcommerce.draftModel.NoteAttribute
+import com.example.mcommerce.draftModel.TaxLine
+import com.paypal.android.sdk.payments.ShippingAddress
 import java.io.Serializable
 
 data class Order(
     val admin_graphql_api_id: String,
     val app_id: Int,
+    val billing_address: BillingAddress,
     val browser_ip: Any,
     val buyer_accepts_marketing: Boolean,
     val cancel_reason: Any,
@@ -44,7 +48,7 @@ data class Order(
     val location_id: Any,
     val name: String,
     val note: String,
-    val note_attributes: List<Any>,
+    val note_attributes: List<NoteAttribute>,
     val number: Int,
     val order_number: Int,
     val order_status_url: String,
@@ -58,6 +62,7 @@ data class Order(
     val reference: Any,
     val referring_site: Any,
     val refunds: List<Any>,
+    val shipping_address: ShippingAddress,
     val shipping_lines: List<Any>,
     val source_identifier: Any,
     val source_name: String,
@@ -65,7 +70,7 @@ data class Order(
     val subtotal_price: String,
     val subtotal_price_set: SubtotalPriceSet,
     val tags: String,
-    val tax_lines: List<Any>,
+    val tax_lines: List<TaxLine>,
     val taxes_included: Boolean,
     val test: Boolean,
     val token: String,
@@ -84,4 +89,5 @@ data class Order(
     val total_weight: Int,
     val updated_at: String,
     val user_id: Any
+
 ) : Serializable
