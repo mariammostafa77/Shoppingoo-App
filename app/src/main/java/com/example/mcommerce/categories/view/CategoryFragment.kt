@@ -323,6 +323,7 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
             }
             3 -> {
                 id="273053745291"
+                Log.i("TAG","")
                 categoriesProductViewModel.getCategories(brandName,"",id)
                 getSubTypes()
                 true
