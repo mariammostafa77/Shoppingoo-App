@@ -68,7 +68,7 @@ class FavouriteFragment : Fragment(),FavouriteOnClickLisner {
 
             }
 
-            favAdapter.setFavtProducts(requireContext(),favProducts)
+            favAdapter.setFavtProducts(requireContext(),favProducts,favProducts.size)
 
         }
         return view
@@ -85,7 +85,7 @@ class FavouriteFragment : Fragment(),FavouriteOnClickLisner {
                 favViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
                     if(response.isSuccessful){
                         favProducts.remove(draftOrderX)
-                        favAdapter.setFavtProducts(requireContext(),favProducts)
+                        favAdapter.setFavtProducts(requireContext(),favProducts,favProducts.size)
 
                         Toast.makeText(requireContext(),"Deleted Success!!!: "+response.code().toString(),Toast.LENGTH_SHORT).show()
                     }

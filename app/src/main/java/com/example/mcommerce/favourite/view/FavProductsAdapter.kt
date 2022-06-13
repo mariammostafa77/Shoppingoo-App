@@ -17,11 +17,13 @@ import com.example.mcommerce.draftModel.DraftOrderX
 class FavProductsAdapter(private val listener: FavouriteOnClickLisner,var comminicator: Communicator) : RecyclerView.Adapter<FavProductsAdapter.ViewHolder>(){
     var allFavProducts:List<DraftOrderX> = ArrayList<DraftOrderX>()
     lateinit var context: Context
+    var arrayCount:Int=0
 
 
-    fun setFavtProducts(context: Context, allFavProducts:List<DraftOrderX>){
+    fun setFavtProducts(context: Context, allFavProducts:List<DraftOrderX>, arrayCount:Int){
         this.context= context
         this.allFavProducts = allFavProducts
+        this.arrayCount=arrayCount
         notifyDataSetChanged()
     }
 
@@ -51,7 +53,7 @@ class FavProductsAdapter(private val listener: FavouriteOnClickLisner,var commin
     }
 
     override fun getItemCount(): Int {
-        return allFavProducts.size
+        return arrayCount
     }
 
     inner class ViewHolder(private val itemView: View): RecyclerView.ViewHolder(itemView) {

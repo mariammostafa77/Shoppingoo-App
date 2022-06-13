@@ -2,6 +2,8 @@
 <resources>
     <string name="app_name">MCommerce</string>
     <string name="brandname">اسم العلامة التجارية</string>
+    <string name="reviewerName">الاسم</string>
+    <string name="comment">التعليق</string>
     <string name="brand">العلامات التجارية</string>
     <string name="home">الصفحة الرئيسية</string>
     <string name="details">التفاصيل</string>
