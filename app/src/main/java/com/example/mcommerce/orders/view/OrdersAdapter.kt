@@ -15,11 +15,13 @@ class OrdersAdapter : RecyclerView.Adapter<OrdersAdapter.ViewHolder>(){
     var allOrders:List<Order> = ArrayList<Order>()
     lateinit var context: Context
     lateinit var onItemClickListener: OnOrderClickListenerInterface
+    var orderSize:Int=0
 
-    fun setUpdatedData(allOrders:List<Order>, context: Context,onItemClickListener: OnOrderClickListenerInterface){
+    fun setUpdatedData(allOrders:List<Order>, context: Context,onItemClickListener: OnOrderClickListenerInterface,orderSize:Int){
         this.allOrders=allOrders
         this.context=context
         this.onItemClickListener=onItemClickListener
+        this.orderSize=orderSize
         notifyDataSetChanged()
     }
     inner class ViewHolder(private val itemView: View): RecyclerView.ViewHolder(itemView){
@@ -41,12 +43,11 @@ class OrdersAdapter : RecyclerView.Adapter<OrdersAdapter.ViewHolder>(){
         return ViewHolder(view)
     }
     override fun getItemCount(): Int {
-        return allOrders.size
+        return orderSize
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         allOrders.get(position).let { holder.bind(it) }
-        Log.i("TAG","onBindViewHolder${allOrders.size}")
 
     }
 }
