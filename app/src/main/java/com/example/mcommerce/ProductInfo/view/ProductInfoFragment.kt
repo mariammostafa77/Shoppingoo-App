@@ -23,7 +23,9 @@ import com.example.mcommerce.draftModel.LineItem
 import com.example.mcommerce.draftModel.NoteAttribute
 import com.example.mcommerce.me.viewmodel.CustomerViewModel
 import com.example.mcommerce.me.viewmodel.CustomerViewModelFactory
+import com.example.mcommerce.me.viewmodel.SavedSetting.Companion.getPrice
 import com.example.mcommerce.me.viewmodel.SavedSetting.Companion.loadCurrency
+import com.example.mcommerce.me.viewmodel.SavedSetting.Companion.loadCurrencyResult
 import com.example.mcommerce.model.Image
 import com.example.mcommerce.model.Product
 import com.example.mcommerce.model.Repository
@@ -68,6 +70,7 @@ class ProductInfoFragment : Fragment() {
     var toCurrency  = ""
     var convertorResult : Double = 1.0
     var productID:Long=0
+    var amount = ""
 
     lateinit var customerViewModel: CustomerViewModel
     lateinit var customerViewModelFactory: CustomerViewModelFactory
@@ -96,6 +99,9 @@ class ProductInfoFragment : Fragment() {
         addToFavImg=view.findViewById(R.id.addToFavImg)
         customerViewModelFactory = CustomerViewModelFactory(Repository.getInstance(AppClient.getInstance(), requireContext()))
         customerViewModel = ViewModelProvider(this, customerViewModelFactory).get(CustomerViewModel::class.java)
+
+        toCurrency = loadCurrency(requireContext())
+        amount = loadCurrencyResult(requireContext())
 
         val sharedPreferences = requireContext().getSharedPreferences("userAuth", AppCompatActivity.MODE_PRIVATE)
         val customerEmail = sharedPreferences.getString("email","").toString()
@@ -137,8 +143,8 @@ class ProductInfoFragment : Fragment() {
                 productInfoAdapter.setProductImages(product.images, requireContext())
                 productName.text = product.title
                 productDesc.text = product.body_html
+
            /*
-            toCurrency = loadCurrency(context!!)
             if(toCurrency.isNullOrEmpty()){
                 toCurrency = "EGP"
             }
@@ -151,9 +157,10 @@ class ProductInfoFragment : Fragment() {
                 val roundoff = df.format(result)
                 productPrice.text = "${roundoff}  ${toCurrency}"
             }
-                */
-
-                productPrice.text = product.variants[0].price
+           */
+                amount = getPrice(product.variants[0].price,requireContext())
+                productPrice.text = amount
+                //productPrice.text = product.variants[0].price
                 for (i in 0..product.variants.size - 1) {
                     totalRate += product.variants[i].inventory_quantity
                 }

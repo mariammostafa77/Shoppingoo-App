@@ -73,6 +73,8 @@
     <string name="address2">العنوان:</string>
     <string name="TotalPrice">السعر الكلي</string>
     <string name="Quantity">الكمية:</string>
+    <string name="choose_address">Choose Address</string>
+    <string name="please_select_your_shipping_address">Please Select Your Shipping Address</string>
 
     <string-array name="currency_options">
     <item>جنيه مصرى</item>

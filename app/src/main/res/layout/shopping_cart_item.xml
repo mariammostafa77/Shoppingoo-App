@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingVertical="4dp">
-        <CheckBox
+      <!--  <CheckBox
             android:id="@+id/selectedItemCheckBox"
             android:layout_width="24dp"
             android:layout_height="24dp"
@@ -24,6 +24,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             />
+            -->
         <ImageView
             android:id="@+id/shoppingCartItemImage"
             android:layout_width="0dp"
@@ -32,9 +33,8 @@
             app:layout_constraintWidth_percent="0.3"
             android:src="@drawable/x"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/selectedItemCheckBox"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
         <TextView
             android:id="@+id/shoppingCartProductTitle"
             android:layout_width="0dp"
@@ -42,7 +42,7 @@
             android:layout_marginHorizontal="10dp"
             android:layout_marginTop="4dp"
             android:text="Title"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/deleteProductImage"
             app:layout_constraintStart_toEndOf="@+id/shoppingCartItemImage"
