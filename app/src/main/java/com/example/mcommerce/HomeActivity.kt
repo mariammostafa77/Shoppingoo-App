@@ -81,12 +81,12 @@ class HomeActivity : AppCompatActivity(),Communicator {
                     true
                 }
                 R.id.categoryTab -> {
-                    finish()
+                   // finish()
                     replaceFragment(categoryFragment)
                     true
                 }
                 R.id.meTab -> {
-                    finish()
+                   // finish()
                     replaceFragment(meWithLogin)
                     true
                 }

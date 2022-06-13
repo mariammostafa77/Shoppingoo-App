@@ -50,12 +50,12 @@ class OrderDetailsFragment : Fragment() {
             selectedOrder=arguments?.getSerializable("selectedOrder") as Order
         }
         tvOrderAddress.text=
-            "${selectedOrder.customer.default_address.address1},${selectedOrder.customer.default_address.city}"
+            "${selectedOrder.customer?.default_address?.address1},${selectedOrder.customer?.default_address?.city}"
         tvOrderCreatedAt.text=selectedOrder.created_at
         tvOrderTotalPrice.text=
             "${selectedOrder.current_total_price} ${selectedOrder.currency}"
 
-        orderItemsAdapter.setUpdatedData(selectedOrder.line_items,requireContext(),communicator)
+        orderItemsAdapter.setUpdatedData(selectedOrder.line_items!!,requireContext(),communicator)
 
         return view
     }

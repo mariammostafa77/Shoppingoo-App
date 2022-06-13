@@ -22,7 +22,9 @@ import com.example.mcommerce.home.viewModel.HomeViewModelFactory
 import com.example.mcommerce.me.viewmodel.SavedSetting.Companion.getUserName
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
+import com.example.mcommerce.orders.model.BillingAddress
 import com.example.mcommerce.orders.model.Order
+import com.example.mcommerce.orders.model.OrderResponse
 import com.example.mcommerce.shopping_cart.viewmodel.ShoppingCartViewModel
 import com.example.mcommerce.shopping_cart.viewmodel.ShoppingCartViewModelFactory
 import com.paypal.android.sdk.payments.*
@@ -41,6 +43,7 @@ class PaymentFragment : Fragment() {
     lateinit var btnPlaceOrder : Button
     lateinit var radioPaypal : RadioButton
     lateinit var radioCash : RadioButton
+    lateinit var txtDiscountCount: TextView
 
     lateinit var couponsFactory: HomeViewModelFactory
     lateinit var couponsViewModel: HomeViewModel
@@ -61,6 +64,7 @@ class PaymentFragment : Fragment() {
     var fees : Double = 0.0
     var discount: Double = 0.0
     var userEmail: String = ""
+    var discountCode : String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -109,10 +113,27 @@ class PaymentFragment : Fragment() {
         btnPlaceOrder.setOnClickListener {
             val order: Order = Order()
             order.email = userEmail
-            order.line_items = lineItems as List<com.example.mcommerce.orders.model.LineItem>
-           // order.discount_codes =
+            val billingAddress = BillingAddress(address1 = selectedAddress.address1, address2 = selectedAddress.address2,
+            city = selectedAddress.city, country = selectedAddress.country,phone = selectedAddress.phone,
+                province = "", zip = selectedAddress.zip)
+            order.billing_address = billingAddress
+        //    order.discount_codes = listOf(discountCode)
 
-          //  shoppingCartViewModel.postNewOrder()
+            order.line_items = lineItems as List<com.example.mcommerce.orders.model.LineItem>
+
+            val orderResponse = OrderResponse(order)
+            shoppingCartViewModel.postNewOrder(orderResponse)
+            shoppingCartViewModel.onlineNewOrder.observe(viewLifecycleOwner) { response ->
+                if (response.isSuccessful) {
+                    Toast.makeText(requireContext(), "Order Added Successfull: " + response.code().toString(),
+                        Toast.LENGTH_LONG).show()
+                    Log.i("porder", "Success Because: " + response.body().toString())
+                }else{
+                    Toast.makeText(requireContext(), "Order Not Added: " + response.code().toString(), Toast.LENGTH_LONG).show()
+                    Log.i("porder", "Faild Because: " + response.errorBody() + " ,\n " + response.message().toString())
+                }
+            }
+
         }
         return view
     }
@@ -154,6 +175,7 @@ class PaymentFragment : Fragment() {
         btnPlaceOrder = view.findViewById(R.id.btnPlaceOrder)
         radioPaypal = view.findViewById(R.id.radioPaypal)
         radioCash = view.findViewById(R.id.radioCash)
+        txtDiscountCount = view.findViewById(R.id.txtDiscountCount)
     }
 
     private fun calculateOrderPrice(){
@@ -165,14 +187,15 @@ class PaymentFragment : Fragment() {
     }
 
     private fun applyDiscount(){
-        val discountCode = etCouponsField.text.toString()
+        var discountCode = etCouponsField.text.toString()
         couponsViewModel.onlineDiscountCodes.observe(viewLifecycleOwner) { coupons ->
             if (coupons != null){
                 for(i in 0..coupons.size-1){
                     if(coupons[i].code.equals(discountCode)){
                         btnApplyDiscount.setText("Verified!")
-                        // etCouponsField.isInEditMode = false
                         etCouponsField.setEnabled(false)
+                        discountCode = etCouponsField.text.toString()
+                        txtDiscountCount.text = (total * 0.1).toString()
                         break
                     }
                     else{
