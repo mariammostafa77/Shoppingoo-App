@@ -89,7 +89,7 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
         //  userId = sharedPreferences.getString("cusomerID","").toString()
 
         id=""
-       //checkArgs()
+       checkArgs()
         categoriesProductFactory = CategoriesViewFactory(
             Repository.getInstance(
                 AppClient.getInstance(),
@@ -103,11 +103,11 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
             dialog.setContentView(view)
             dialog.show()
         })
-        categoriesProductViewModel.getAllProducts(brandName,"","")
+        //categoriesProductViewModel.getAllProducts(brandName,"","")
         categoriesProductViewModel.onlineProductsTypes.observe(viewLifecycleOwner) {
             getProductTypes(it)
         }
-        categoriesProductViewModel.getCategories(brandName,subCategorySelected,id)
+        //categoriesProductViewModel.getCategories(brandName,subCategorySelected,id)
         categoriesProductViewModel.onlinesubcategoriesProduct.observe(viewLifecycleOwner) {products ->
             allProducts.addAll(products)
             brandProductsAdapter.setUpdatedData(products,requireContext(),communicator)
@@ -130,7 +130,6 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
             mySearchFlag=2
             //communicator.goToSearchWithID(id)
             communicator.goToSearchWithAllData(id,brandName,subCategorySelected)
-
         }
         searchViewModel.getFavProducts()
         allFavProducts.clear()
@@ -160,6 +159,8 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
     override fun onStart() {
         super.onStart()
         checkArgs()
+        categoriesProductViewModel.getCategories(brandName,subCategorySelected,id)
+        brandName=""
         id=""
         subCategorySelected=""
         //categoriesProductViewModel.getCategories(brandName,subCategorySelected,id)

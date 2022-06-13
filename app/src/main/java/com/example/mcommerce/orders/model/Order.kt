@@ -2,7 +2,6 @@ package com.example.mcommerce.orders.model
 
 import com.example.mcommerce.draftModel.NoteAttribute
 import com.example.mcommerce.draftModel.TaxLine
-import com.paypal.android.sdk.payments.ShippingAddress
 import java.io.Serializable
 
 data class Order(

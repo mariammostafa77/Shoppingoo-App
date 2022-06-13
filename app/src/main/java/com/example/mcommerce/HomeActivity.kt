@@ -1,5 +1,6 @@
 package com.example.mcommerce
 
+import android.app.Activity
 import android.app.PendingIntent.getActivity
 import android.content.Context
 import android.content.SharedPreferences
@@ -76,17 +77,16 @@ class HomeActivity : AppCompatActivity(),Communicator {
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.homeTab -> {
-                    //removeFragment(get)
                     replaceFragment(homeFragment)
                     true
                 }
                 R.id.categoryTab -> {
-                    finish()
+
+                    //removeFragment()
                     replaceFragment(categoryFragment)
                     true
                 }
                 R.id.meTab -> {
-                    finish()
                     replaceFragment(meWithLogin)
                     true
                 }
@@ -103,9 +103,12 @@ class HomeActivity : AppCompatActivity(),Communicator {
         if (fragment != null) {
             var transaction = supportFragmentManager.beginTransaction()
             transaction.replace(R.id.frameLayout, fragment)
+            transaction.addToBackStack(null)
             transaction.commit()
         }
+
     }
+
 
     fun removeFragment(fragment: Fragment) {
         var transaction = supportFragmentManager.beginTransaction()
