@@ -114,6 +114,7 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
         }
         categoriesProductViewModel.allOnlineProducts.observe(viewLifecycleOwner) {
             getProductTypes(it)
+            Log.i("TAG","")
         }
         categoriesTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
