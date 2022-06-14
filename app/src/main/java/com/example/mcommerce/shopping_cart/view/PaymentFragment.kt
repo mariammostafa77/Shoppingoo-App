@@ -17,12 +17,13 @@ import com.example.mcommerce.R
 import com.example.mcommerce.auth.model.Addresse
 import com.example.mcommerce.draftModel.LineItem
 import com.example.mcommerce.draftModel.OrderPrices
+import com.example.mcommerce.orders.model.ShippingAddress
 import com.example.mcommerce.home.viewModel.HomeViewModel
 import com.example.mcommerce.home.viewModel.HomeViewModelFactory
+import com.example.mcommerce.me.viewmodel.SavedSetting
 import com.example.mcommerce.me.viewmodel.SavedSetting.Companion.getUserName
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
-import com.example.mcommerce.orders.model.BillingAddress
 import com.example.mcommerce.orders.model.Order
 import com.example.mcommerce.orders.model.OrderResponse
 import com.example.mcommerce.shopping_cart.viewmodel.ShoppingCartViewModel
@@ -65,10 +66,14 @@ class PaymentFragment : Fragment() {
     var discount: Double = 0.0
     var userEmail: String = ""
     var discountCode : String = ""
+    var totoalAmount: String = ""
+    var subTotoalAmount: String = ""
+    var taxAmount: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_payment, container, false)
@@ -89,15 +94,20 @@ class PaymentFragment : Fragment() {
             selectedAddress = arguments?.getSerializable("selectedAddress") as Addresse
             lineItems = arguments?.getSerializable("lineItems") as ArrayList<LineItem>
             orderPrices = arguments?.getSerializable("orderPrice") as ArrayList<OrderPrices>
-            Log.i("payment","payment From Fragment: ${selectedAddress.city}")
         }
-        /////
+
         calculateOrderPrice()
         ///Asign Variable
         paymentTitleTxt.append(" ${getUserName(requireContext())}")
-        txtSubTotalText.text = subTotal.toString()
-        txtTotalText.text = total.toString()
-        txtFeesText.text = fees.toString()
+
+
+        subTotoalAmount = SavedSetting.getPrice(subTotal.toString(), requireContext())
+        totoalAmount = SavedSetting.getPrice(total.toString(), requireContext())
+        taxAmount = SavedSetting.getPrice(fees.toString(), requireContext())
+
+        txtSubTotalText.text = subTotoalAmount
+        txtTotalText.text = totoalAmount
+        txtFeesText.text = taxAmount
 
         btnApplyDiscount.setOnClickListener {
             applyDiscount()
@@ -112,13 +122,18 @@ class PaymentFragment : Fragment() {
 
         btnPlaceOrder.setOnClickListener {
             val order: Order = Order()
-            order.email = userEmail
-            val billingAddress = BillingAddress(address1 = selectedAddress.address1, address2 = selectedAddress.address2,
-            city = selectedAddress.city, country = selectedAddress.country,phone = selectedAddress.phone,
-                province = "", zip = selectedAddress.zip)
-            order.billing_address = billingAddress
-        //    order.discount_codes = listOf(discountCode)
+            //  val billingAddress = ShippingAddress(address1 = selectedAddress.address1, address2 = selectedAddress.address2,
+            //  city = selectedAddress.city, country = selectedAddress.country,phone = selectedAddress.phone,
+            //      province = "", zip = selectedAddress.zip)
 
+            order.email = userEmail
+            val shippingAddress = ShippingAddress(address1 = selectedAddress.address1.toString(),
+                address2 =  selectedAddress.address2.toString(),city = selectedAddress.city.toString(),country = selectedAddress.country.toString()
+            ,name = getUserName(requireContext()), phone = selectedAddress.phone.toString(),zip = selectedAddress.zip.toString(),
+                company = "",country_code = selectedAddress.country_code.toString())
+            order.shipping_address = shippingAddress
+          //  order.discount_codes = listOf(discountCode)
+            order.processing_method = paymentMethod
             order.line_items = lineItems as List<com.example.mcommerce.orders.model.LineItem>
 
             Log.i("TAG","response: $order")
@@ -212,7 +227,7 @@ class PaymentFragment : Fragment() {
 
     private fun getPayment() {
         val amount: String = "50.00"
-        val payment = PayPalPayment(BigDecimal(amount), "USD", "Course Fees",
+        val payment = PayPalPayment(BigDecimal(total), "USD", "Course Fees",
             PayPalPayment.PAYMENT_INTENT_SALE)
         val intent = Intent(requireContext(), PaymentActivity::class.java)
         intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config)

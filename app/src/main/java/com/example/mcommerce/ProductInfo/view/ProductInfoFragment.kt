@@ -202,9 +202,7 @@ class ProductInfoFragment : Fragment() {
                     count = 0
                 }
                 productCount.text = count.toString()
-
             }
-
 
         }
         btnAddToCard.setOnClickListener {

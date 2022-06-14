@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.R
 import com.example.mcommerce.draftModel.DraftOrder
+import com.example.mcommerce.me.viewmodel.SavedSetting
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
 import com.example.mcommerce.orderDetails.viewModel.OrderDetailsViewModel
@@ -52,8 +53,9 @@ class OrderDetailsFragment : Fragment() {
         tvOrderAddress.text=
             "${selectedOrder.customer?.default_address?.address1},${selectedOrder.customer?.default_address?.city}"
         tvOrderCreatedAt.text=selectedOrder.created_at
-        tvOrderTotalPrice.text=
-            "${selectedOrder.current_total_price} ${selectedOrder.currency}"
+
+        val amount = SavedSetting.getPrice(selectedOrder.current_total_price.toString(), requireContext())
+        tvOrderTotalPrice.text = amount
 
         orderItemsAdapter.setUpdatedData(selectedOrder.line_items!!,requireContext(),communicator)
 
