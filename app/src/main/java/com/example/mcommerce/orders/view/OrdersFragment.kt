@@ -49,7 +49,7 @@ class OrdersFragment : Fragment(),OnOrderClickListenerInterface {
             ordersViewModel.getAllOrders(id)
         }
         ordersViewModel.allOnlineOrders.observe(viewLifecycleOwner) {
-            ordersAdapter.setUpdatedData(it,requireContext(),this)
+            ordersAdapter.setUpdatedData(it,requireContext(),this,it.size)
         }
         return view
     }

@@ -65,6 +65,7 @@ class ShoppingCartViewModel(repo: RepositoryInterface) : ViewModel() {
             val result = iRepo.postNewOrder(orderResponse)
             withContext(Dispatchers.Main){
                 newOrder.value= result
+                Log.i("TAG","result: $result")
             }
         }
 

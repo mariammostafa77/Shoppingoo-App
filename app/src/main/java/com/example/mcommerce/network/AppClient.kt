@@ -128,7 +128,7 @@ class AppClient : RemoteSourceInterface {
     }
 
     override suspend fun postNewOrder(orders: OrderResponse): Response<OrderResponse> {
-        val service = CurrencyConverterHelper.getRetrofit()?.create(ServiceApi::class.java)
+        val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
         val response = service?.postNewOrder(orders)
         return response!!
     }

@@ -178,6 +178,8 @@ import java.util.*
       @Headers(
           "Accept: application/json",
           "X-Shopify-Access-Token: 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",
+          "Retry-After: 2.0",
+          "X-Shopify-Shop-Api-Call-Limit: 40/40",
       )
       @POST("orders.json")
       suspend fun postNewOrder(@Body order: OrderResponse):Response<OrderResponse>

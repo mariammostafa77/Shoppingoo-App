@@ -27,10 +27,15 @@ import com.example.mcommerce.favourite.viewModel.FavViewModelFactory
 import com.example.mcommerce.me.view.setting.AppSettingFragment
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
+import com.example.mcommerce.orders.model.Order
+import com.example.mcommerce.orders.view.OnOrderClickListenerInterface
+import com.example.mcommerce.orders.view.OrdersAdapter
 import com.example.mcommerce.orders.view.OrdersFragment
+import com.example.mcommerce.orders.viewModel.OrdersViewFactory
+import com.example.mcommerce.orders.viewModel.OrdersViewModel
 import com.example.mcommerce.shopping_cart.view.ShoppingCartFragment
 
-class MeWithLogin : Fragment(), FavouriteOnClickLisner {
+class MeWithLogin : Fragment(), FavouriteOnClickLisner, OnOrderClickListenerInterface {
 
     lateinit var settingICon: ImageView
     lateinit var shoppingCartIcon : ImageView
@@ -44,8 +49,13 @@ class MeWithLogin : Fragment(), FavouriteOnClickLisner {
     lateinit var favViewModelFactory : FavViewModelFactory
     lateinit var favViewModel: FavViewModel
     lateinit var communicator: Communicator
+    private lateinit var ordersAdapter: OrdersAdapter
+    private lateinit var ordersViewFactory: OrdersViewFactory
+    private lateinit var ordersViewModel: OrdersViewModel
     var favProducts:ArrayList<DraftOrderX> = ArrayList<DraftOrderX>()
     var userName : String = ""
+    private var userId:String =""
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,6 +68,28 @@ class MeWithLogin : Fragment(), FavouriteOnClickLisner {
         val sharedPreferences: SharedPreferences = context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
         val fname: String? = sharedPreferences.getString("fname","")
         val lname: String? = sharedPreferences.getString("lname","")
+        userId = sharedPreferences.getString("cusomerID","").toString()
+
+        //order array
+        ordersAdapter=OrdersAdapter()
+        ordersrecycler.adapter=ordersAdapter
+        ordersViewFactory = OrdersViewFactory(
+            Repository.getInstance(
+                AppClient.getInstance(),
+                requireContext()))
+        ordersViewModel = ViewModelProvider(this, ordersViewFactory)[OrdersViewModel::class.java]
+        if(userId.isNotEmpty()){
+            ordersViewModel.getAllOrders(userId)
+        }
+        ordersViewModel.allOnlineOrders.observe(viewLifecycleOwner) {
+            if(it.size >=2){
+                ordersAdapter.setUpdatedData(it,requireContext(),this,2)
+            }
+            else{
+                ordersAdapter.setUpdatedData(it,requireContext(),this,it.size)
+            }
+
+        }
         //favourite arrayList
         communicator = activity as Communicator
         favRecyclerView = view.findViewById(R.id.wishListRecyclerview)
@@ -152,6 +184,11 @@ class MeWithLogin : Fragment(), FavouriteOnClickLisner {
                 dialog.cancel()
             }
             .show()
+    }
+
+    override fun onOrderClickListener(order: Order) {
+        communicator.goToOrderDetails(order)
+
     }
 
 

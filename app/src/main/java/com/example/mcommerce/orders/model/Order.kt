@@ -88,5 +88,5 @@ data class Order(
     val total_tip_received: String? = null,
     val total_weight: Int? = null,
     val updated_at: String? = null,
-    val user_id: Any? = null
+    val user_id: Any? = null,
 ) : Serializable

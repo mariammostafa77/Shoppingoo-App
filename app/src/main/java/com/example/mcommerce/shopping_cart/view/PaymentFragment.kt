@@ -121,13 +121,17 @@ class PaymentFragment : Fragment() {
 
             order.line_items = lineItems as List<com.example.mcommerce.orders.model.LineItem>
 
+            Log.i("TAG","response: $order")
             val orderResponse = OrderResponse(order)
             shoppingCartViewModel.postNewOrder(orderResponse)
             shoppingCartViewModel.onlineNewOrder.observe(viewLifecycleOwner) { response ->
                 if (response.isSuccessful) {
                     Toast.makeText(requireContext(), "Order Added Successfull: " + response.code().toString(),
                         Toast.LENGTH_LONG).show()
+                    communicator.goToOrderSummary(order,fees)
                     Log.i("porder", "Success Because: " + response.body().toString())
+                    Log.i("TAG","response22: ${response.raw().request().url()}")
+
                 }else{
                     Toast.makeText(requireContext(), "Order Not Added: " + response.code().toString(), Toast.LENGTH_LONG).show()
                     Log.i("porder", "Faild Because: " + response.errorBody() + " ,\n " + response.message().toString())

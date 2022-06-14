@@ -16,6 +16,7 @@ import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.ProductInfo.view.ProductInfoFragment
 import com.example.mcommerce.auth.model.Addresse
 import com.example.mcommerce.categories.view.CategoryFragment
+import com.example.mcommerce.confirmOrder.ConfirmOrderFragment
 import com.example.mcommerce.draftModel.LineItem
 import com.example.mcommerce.draftModel.OrderPrices
 import com.example.mcommerce.home.view.HomeFragment
@@ -31,7 +32,9 @@ import com.example.mcommerce.search.view.MysearchFragment
 import com.example.mcommerce.shopping_cart.view.PaymentAddressFragment
 import com.example.mcommerce.shopping_cart.view.PaymentFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.android.synthetic.main.fragment_confirm_order.*
 import java.util.*
+import kotlin.math.log
 
 class HomeActivity : AppCompatActivity(),Communicator {
     private val homeFragment = HomeFragment()
@@ -162,6 +165,10 @@ class HomeActivity : AppCompatActivity(),Communicator {
         bundle.putSerializable("line_items",lineItems)
         bundle.putSerializable("order_price",orderPrices)
         //bundle.putString("sub_total", totalAmount)
+        //Log.i("paymenttt","payment From Home${lineItems.get(0).quantity},,,, ${orderPrices.get(0).subTotal}")
+        userAddressesFragment.arguments = bundle
+        replaceFragment(userAddressesFragment)
+
       //  Log.i("paymenttt","payment From Home${lineItems.get(0).quantity},,,, ${orderPrices.get(0).subTotal}")
         paymentAddressFragment.arguments = bundle
         replaceFragment(paymentAddressFragment)
@@ -190,6 +197,16 @@ class HomeActivity : AppCompatActivity(),Communicator {
         val orderDetailsFragment=OrderDetailsFragment()
         orderDetailsFragment.arguments=bundle
         replaceFragment(orderDetailsFragment)
+    }
+
+    override fun goToOrderSummary(order: Order, fees:Double) {
+        val bundle=Bundle()
+        bundle.putSerializable("order",order)
+        bundle.putDouble("fees",fees)
+        val confirmOrderFragment=ConfirmOrderFragment()
+        confirmOrderFragment.arguments=bundle
+        replaceFragment(confirmOrderFragment)
+        Log.i("TAG","order from activity $order")
     }
 
     override fun goToProductDetails(id: Long) {

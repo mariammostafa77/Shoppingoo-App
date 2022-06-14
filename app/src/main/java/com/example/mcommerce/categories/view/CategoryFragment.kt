@@ -89,7 +89,7 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
         //  userId = sharedPreferences.getString("cusomerID","").toString()
 
         id=""
-       //checkArgs()
+       checkArgs()
         categoriesProductFactory = CategoriesViewFactory(
             Repository.getInstance(
                 AppClient.getInstance(),
@@ -159,7 +159,7 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
 
     override fun onStart() {
         super.onStart()
-        checkArgs()
+        //checkArgs()
         id=""
         subCategorySelected=""
         categoriesProductViewModel.getCategories(brandName,subCategorySelected,id)

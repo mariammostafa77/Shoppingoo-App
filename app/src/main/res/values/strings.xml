@@ -19,8 +19,6 @@
     <string name="haveAcc">If you  already have an account pleas click here</string>
     <string name="search">Search Here</string>
     <string name="All">All</string>
-
-    <!-- Mariam -->
     <string name="Me">Me</string>
     <string name="Welcome">Welcome</string>
     <string name="Others">Others</string>
@@ -30,6 +28,19 @@
     <string name="WishList">WishList</string>
     <string name="Price">Price: </string>
     <string name="CreatedBy">Created at: </string>
+    <string name="TotalPrice">Total Price:</string>
+    <string name="Quantity">Quantity:</string>
+    <string name="subCategories">Sub Categories</string>
+    <string name="Orders">Orders</string>
+    <string name="orderDetails">Order Details</string>
+    <string name="orderSummary">Order Summary</string>
+    <string name="phoneNum">Phone Number</string>
+    <string name="YourItems">Your Items</string>
+    <string name="YourOrder">Your Order</string>
+    <string name="fees">Fees</string>
+    <string name="yourAddress">Your Address</string>
+    <string name="paymentMethod">Payment Method</string>
+
 
     <!-- Asmaa   -->
     <string name="product_name">Product Name</string>
@@ -62,7 +73,7 @@
     <string name="phone1">phone:</string>
     <string name="save_address">Save Address</string>
     <string name="shpping_cart">Shpping Cart</string>
-    <string name="sub_total">Sub Total:</string>
+    <string name="sub_total">SubTotal:</string>
     <string name="sub_total_value" translatable="false">0.0 $</string>
     <string name="proceed_to_checkout">Proceed To Checkout</string>
     <string name="no_available_coupons">No Available Coupons</string>
@@ -84,10 +95,9 @@
     <string name="contact_us_dialog_text">If you found any problem, please send us an email to improve our services.</string>
     <string name="send_email">Send Email</string>
     <string name="cancel">Cancel</string>
-    <string name="subCategories">Sub Categories</string>
-    <string name="Orders">Orders</string>
-    <string name="orderDetails">Order Details</string>
     <string name="address2">Address:</string>
+
+
     <string name="TotalPrice">Total Price:</string>
     <string name="Quantity">Quantity:</string>
     <string name="choose_address">Choose Address</string>

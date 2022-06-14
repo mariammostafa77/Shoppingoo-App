@@ -75,6 +75,13 @@
     <string name="address2">العنوان:</string>
     <string name="TotalPrice">السعر الكلي</string>
     <string name="Quantity">الكمية:</string>
+    <string name="orderSummary">ملخص الطلب</string>
+    <string name="phoneNum">رقم التليفون</string>
+    <string name="YourItems">منتجاتك</string>
+    <string name="YourOrder">طلبك</string>
+    <string name="fees">ضريبة</string>
+    <string name="yourAddress">عنوانك</string>
+    <string name="paymentMethod">طريقة الدفع</string>
     <string name="choose_address">Choose Address</string>
     <string name="please_select_your_shipping_address">Please Select Your Shipping Address</string>
 
