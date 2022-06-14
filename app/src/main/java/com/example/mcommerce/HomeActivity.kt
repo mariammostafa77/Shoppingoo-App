@@ -164,12 +164,7 @@ class HomeActivity : AppCompatActivity(),Communicator {
         val paymentAddressFragment = PaymentAddressFragment()
         bundle.putSerializable("line_items",lineItems)
         bundle.putSerializable("order_price",orderPrices)
-        //bundle.putString("sub_total", totalAmount)
         //Log.i("paymenttt","payment From Home${lineItems.get(0).quantity},,,, ${orderPrices.get(0).subTotal}")
-        userAddressesFragment.arguments = bundle
-        replaceFragment(userAddressesFragment)
-
-      //  Log.i("paymenttt","payment From Home${lineItems.get(0).quantity},,,, ${orderPrices.get(0).subTotal}")
         paymentAddressFragment.arguments = bundle
         replaceFragment(paymentAddressFragment)
     }
@@ -181,10 +176,6 @@ class HomeActivity : AppCompatActivity(),Communicator {
         bundle.putSerializable("selectedAddress", selectedAddress)
         bundle.putSerializable("lineItems",lineItems)
         bundle.putSerializable("orderPrice",orderPrices)
-        //bundle.putString("sub_total", totalAmount)
-        // Log.i("paymenttt","payment From Home${lineItems.get(0).quantity},,,, ${orderPrices.get(0).subTotal}")
-        //  bundle.putString("amount",totalAmount)
-        //  Log.i("payment","payment From Home${selectedAddress.city}, ${totalAmount}")
         paymentFragment.arguments=bundle
         replaceFragment(paymentFragment)
 

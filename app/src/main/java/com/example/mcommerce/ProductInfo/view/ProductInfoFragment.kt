@@ -161,38 +161,7 @@ class ProductInfoFragment : Fragment() {
                 productInfoAdapter.setProductImages(product.images, requireContext())
                 productName.text = product.title
                 productDesc.text = product.body_html
-                /*
-                 toCurrency = loadCurrency(context!!)
-                 if(toCurrency.isNullOrEmpty()){
-                     toCurrency = "EGP"
-                 }
-                 customerViewModel.getAmountAfterConversion(toCurrency)
-                 customerViewModel.onlineCurrencyChanged.observe(viewLifecycleOwner) { result ->
-                     convertorResult = result.result
-                     val df = DecimalFormat("#.##")
-                     df.roundingMode = RoundingMode.UP
-                     val result = product.variants[0].price.toDouble() * convertorResult
-                     val roundoff = df.format(result)
-                     productPrice.text = "${roundoff}  ${toCurrency}"
-                 }
-                     */
 
-                productPrice.text = product.variants[0].price
-
-           /*
-            if(toCurrency.isNullOrEmpty()){
-                toCurrency = "EGP"
-            }
-            customerViewModel.getAmountAfterConversion(toCurrency)
-            customerViewModel.onlineCurrencyChanged.observe(viewLifecycleOwner) { result ->
-                convertorResult = result.result
-                val df = DecimalFormat("#.##")
-                df.roundingMode = RoundingMode.UP
-                val result = product.variants[0].price.toDouble() * convertorResult
-                val roundoff = df.format(result)
-                productPrice.text = "${roundoff}  ${toCurrency}"
-            }
-           */
                 amount = getPrice(product.variants[0].price,requireContext())
                 productPrice.text = amount
                 //productPrice.text = product.variants[0].price

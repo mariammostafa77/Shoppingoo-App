@@ -28,8 +28,10 @@
     <string name="WishList">WishList</string>
     <string name="Price">Price: </string>
     <string name="CreatedBy">Created at: </string>
+    <!--
     <string name="TotalPrice">Total Price:</string>
     <string name="Quantity">Quantity:</string>
+    -->
     <string name="subCategories">Sub Categories</string>
     <string name="Orders">Orders</string>
     <string name="orderDetails">Order Details</string>
