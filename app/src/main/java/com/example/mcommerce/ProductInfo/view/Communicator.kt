@@ -15,5 +15,6 @@ interface Communicator {
     fun goToPaymentFromAddress(selectedAddress: Addresse , lineItems: ArrayList<LineItem> ,orderPrices: ArrayList<OrderPrices>)
     fun goToProductDetails(id:Long)
     fun goToOrderDetails(selectedOrder: Order)
+    fun goToOrderSummary(order: Order,fees:Double)
 
 }
