@@ -39,8 +39,7 @@ class SearchViewModel(repo: RepositoryInterface) : ViewModel(){
 
             }
         }
-        //Log.i("TAG","from home model view ${allProducts.value}")
-        //Log.i("TAG","from home model view ${onlineProducts.value}")
+
     }
     val onlineFavProduct: LiveData<List<DraftOrderX>> = allFavProducts
     val selectedItem : MutableLiveData<Response<DraftOrder>> = itemDeleted

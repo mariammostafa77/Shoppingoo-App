@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mcommerce.HomeActivity.Companion.myDetailsFlag
 import com.example.mcommerce.HomeActivity.Companion.mySearchFlag
+import com.example.mcommerce.ProductInfo.model.Reviews
 import com.example.mcommerce.ProductInfo.viewModel.ProductInfoViewModel
 import com.example.mcommerce.ProductInfo.viewModel.ProductInfoViewModelFactory
 import com.example.mcommerce.R
@@ -59,6 +60,12 @@ class ProductInfoFragment : Fragment() {
     var allFavProducts:ArrayList<DraftOrderX> = ArrayList<DraftOrderX>()
     var allVariantsID:ArrayList<Long> = ArrayList<Long>()
     var allProducts:List<Product> = ArrayList<Product>()
+
+    lateinit var reviewsRecyclerview: RecyclerView
+    lateinit var reviewsAdapter: ReviewAdapter
+    lateinit var reviewsLinearLayoutManager: LinearLayoutManager
+    var allComments: List<Reviews> = ArrayList<Reviews>()
+
     var isExists=false
     var myIndex:Long=0
 
@@ -97,6 +104,17 @@ class ProductInfoFragment : Fragment() {
         colorSpinner=view.findViewById(R.id.colorSpiner)
         btnAddToCard=view.findViewById(R.id.btnAddToCard)
         addToFavImg=view.findViewById(R.id.addToFavImg)
+
+        reviewsRecyclerview=view.findViewById(R.id.reviewsRecycleView)
+        reviewsLinearLayoutManager= LinearLayoutManager(requireContext())
+        reviewsRecyclerview.setLayoutManager(reviewsLinearLayoutManager)
+        reviewsAdapter= ReviewAdapter()
+        reviewsRecyclerview.setAdapter(reviewsAdapter)
+        var reviews=Reviews("Zeinab Ibrahim","Good")
+        allComments=listOf(reviews)
+        reviewsAdapter.setComment(allComments,requireContext())
+
+
         customerViewModelFactory = CustomerViewModelFactory(Repository.getInstance(AppClient.getInstance(), requireContext()))
         customerViewModel = ViewModelProvider(this, customerViewModelFactory).get(CustomerViewModel::class.java)
 
@@ -109,7 +127,7 @@ class ProductInfoFragment : Fragment() {
         currency = loadCurrency(requireContext())
         val noteStatus = "fav"
         if(myDetailsFlag==1){
-           productID= arguments?.getLong("productID",0)!!
+            productID= arguments?.getLong("productID",0)!!
         }
         else {
             output= arguments?.getSerializable("productInfo") as Product
@@ -143,6 +161,23 @@ class ProductInfoFragment : Fragment() {
                 productInfoAdapter.setProductImages(product.images, requireContext())
                 productName.text = product.title
                 productDesc.text = product.body_html
+                /*
+                 toCurrency = loadCurrency(context!!)
+                 if(toCurrency.isNullOrEmpty()){
+                     toCurrency = "EGP"
+                 }
+                 customerViewModel.getAmountAfterConversion(toCurrency)
+                 customerViewModel.onlineCurrencyChanged.observe(viewLifecycleOwner) { result ->
+                     convertorResult = result.result
+                     val df = DecimalFormat("#.##")
+                     df.roundingMode = RoundingMode.UP
+                     val result = product.variants[0].price.toDouble() * convertorResult
+                     val roundoff = df.format(result)
+                     productPrice.text = "${roundoff}  ${toCurrency}"
+                 }
+                     */
+
+                productPrice.text = product.variants[0].price
 
            /*
             if(toCurrency.isNullOrEmpty()){
