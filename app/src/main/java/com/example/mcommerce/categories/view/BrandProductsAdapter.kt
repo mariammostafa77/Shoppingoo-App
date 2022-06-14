@@ -36,7 +36,7 @@ class BrandProductsAdapter(var currencyConvertor: CurrencyConvertor) : RecyclerV
             productName.text=allBrands[position].title
             tvProductPrice.text=allBrands[position].variants[0].price + "EGP"
           //  tvProductPrice.text = currencyConvertor.onPriceConverter(position)
-            //Glide.with(context).load(allBrands[position].image.src).into(productImage)
+            Glide.with(context).load(allBrands[position].image.src).placeholder(R.drawable.mycardview_24).into(productImage)
             catCardView.setOnClickListener {
                 comminucator.passProductData(allBrands[position])
             }
