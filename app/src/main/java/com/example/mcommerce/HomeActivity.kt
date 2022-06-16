@@ -29,6 +29,7 @@ import com.example.mcommerce.model.Product
 import com.example.mcommerce.orderDetails.view.OrderDetailsFragment
 import com.example.mcommerce.orders.model.Order
 import com.example.mcommerce.search.view.MysearchFragment
+import com.example.mcommerce.shopping_cart.view.PaymentAddressFragment
 import com.example.mcommerce.shopping_cart.view.PaymentFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.fragment_confirm_order.*
@@ -167,16 +168,14 @@ class HomeActivity : AppCompatActivity(),Communicator {
     override fun goToUserAddresses(lineItems: ArrayList<LineItem>, orderPrices: ArrayList<OrderPrices> ){
         myDetailsFlag=0
         val bundle=Bundle()
-        val userAddressesFragment = UserAddressesFragment()
+       // val userAddressesFragment = UserAddressesFragment()
+        val paymentAddressFragment = PaymentAddressFragment()
         bundle.putSerializable("line_items",lineItems)
         bundle.putSerializable("order_price",orderPrices)
-        //bundle.putString("sub_total", totalAmount)
         //Log.i("paymenttt","payment From Home${lineItems.get(0).quantity},,,, ${orderPrices.get(0).subTotal}")
-        userAddressesFragment.arguments = bundle
-        replaceFragment(userAddressesFragment)
-
+        paymentAddressFragment.arguments = bundle
+        replaceFragment(paymentAddressFragment)
     }
-
 
     override fun goToPaymentFromAddress(selectedAddress: Addresse , lineItems: ArrayList<LineItem> ,orderPrices: ArrayList<OrderPrices>){
         myDetailsFlag=0
@@ -185,10 +184,6 @@ class HomeActivity : AppCompatActivity(),Communicator {
         bundle.putSerializable("selectedAddress", selectedAddress)
         bundle.putSerializable("lineItems",lineItems)
         bundle.putSerializable("orderPrice",orderPrices)
-        //bundle.putString("sub_total", totalAmount)
-        // Log.i("paymenttt","payment From Home${lineItems.get(0).quantity},,,, ${orderPrices.get(0).subTotal}")
-        //  bundle.putString("amount",totalAmount)
-        //  Log.i("payment","payment From Home${selectedAddress.city}, ${totalAmount}")
         paymentFragment.arguments=bundle
         replaceFragment(paymentFragment)
 

@@ -24,11 +24,14 @@ import com.example.mcommerce.me.viewmodel.SavedSetting
 import com.example.mcommerce.me.viewmodel.SavedSetting.Companion.loadCurrency
 import com.example.mcommerce.me.viewmodel.SavedSetting.Companion.loadLocale
 import com.example.mcommerce.me.viewmodel.SavedSetting.Companion.setCurrency
+import com.example.mcommerce.me.viewmodel.SavedSetting.Companion.setCurrencyResult
 import com.example.mcommerce.me.viewmodel.SavedSetting.Companion.setLocale
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.dialog_view.view.*
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
 class AppSettingFragment : Fragment() {
 
@@ -49,11 +52,13 @@ class AppSettingFragment : Fragment() {
     lateinit var customerViewModelFactory: CustomerViewModelFactory
     val spinnerArray: ArrayList<String> = ArrayList()
 
+    var convertorResult : Double = 1.0
+
     companion object {
-       // var isUserLogin = true
         var languageSelected: String = ""
         var currencySelected: String = ""
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -71,7 +76,6 @@ class AppSettingFragment : Fragment() {
                 spinnerArray.add(currencies.get(i).currency)
             }
         }
-
         currencySelected = loadCurrency(context!!)
         txtCurrency.text = currencySelected
         txtSelectedLanguage.text = languageSelected
@@ -81,15 +85,20 @@ class AppSettingFragment : Fragment() {
         currencyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         currencySpinner.adapter = currencyAdapter
 
-
         currencySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {}
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 currencySelected = parent?.getItemAtPosition(position).toString()
                 setCurrency(currencySelected, context!!)
+                customerViewModel.getAmountAfterConversion(parent?.getItemAtPosition(position).toString())
+                customerViewModel.onlineCurrencyChanged.observe(viewLifecycleOwner) { result ->
+                    convertorResult = result.result
+                    setCurrencyResult(convertorResult.toString(),requireContext())
+                }
             }
         }
         currencySelected = loadCurrency(requireContext())
+
         userAddressCard.setOnClickListener {
             replaceFragment(UserAddressesFragment())
         }

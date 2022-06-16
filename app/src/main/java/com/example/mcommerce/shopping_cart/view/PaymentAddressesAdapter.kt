@@ -1,4 +1,4 @@
-package com.example.mcommerce.me.view.setting
+package com.example.mcommerce.shopping_cart.view
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -13,8 +13,8 @@ import com.example.mcommerce.auth.model.Addresse
 import com.example.mcommerce.draftModel.LineItem
 import com.example.mcommerce.draftModel.OrderPrices
 
-class CustomerAddressAdapter(var lineItems: ArrayList<LineItem>, var orderPrices: ArrayList<OrderPrices>)
-    : RecyclerView.Adapter<CustomerAddressAdapter.ViewHolder>(){
+class PaymentAddressesAdapter (var communicator: Communicator, var lineItems: ArrayList<LineItem>, var orderPrices: ArrayList<OrderPrices>)
+    : RecyclerView.Adapter<PaymentAddressesAdapter.ViewHolder>(){
     var customerAddresses :List<Addresse> = ArrayList<Addresse>()
     lateinit var context: Context
 
@@ -33,22 +33,24 @@ class CustomerAddressAdapter(var lineItems: ArrayList<LineItem>, var orderPrices
         holder.cityText.append("  ${customerAddresses[position].city}")
         holder.userAddressLine1.append("  ${customerAddresses[position].address1}")
         holder.phoneText.append("  ${customerAddresses[position].phone}")
-      /*  holder.addressCardView.setOnClickListener {
+        holder.addressCardView.setOnClickListener {
+
             val selectedAddresses: Addresse = customerAddresses[position]
             communicator.goToPaymentFromAddress(selectedAddresses,lineItems,orderPrices)
+
         }
-       */
+
     }
     override fun getItemCount(): Int {
         return customerAddresses.size
     }
 
     inner class ViewHolder(private val itemView: View): RecyclerView.ViewHolder(itemView) {
-       val countryText: TextView = itemView.findViewById(R.id.userCountryText)
+        val countryText: TextView = itemView.findViewById(R.id.userCountryText)
         val cityText: TextView = itemView.findViewById(R.id.userCityText)
         val userAddressLine1: TextView = itemView.findViewById(R.id.userAddressLine1)
         val phoneText: TextView = itemView.findViewById(R.id.userPhoneText)
-      //  val addressCardView: CardView = itemView.findViewById(R.id.addressCardView)
+        val addressCardView: CardView = itemView.findViewById(R.id.addressCardView)
     }
 
 }

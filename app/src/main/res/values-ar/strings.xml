@@ -84,6 +84,9 @@
     <string name="paymentMethod">طريقة الدفع</string>
     <string name="noData">لم يتم العثور علي شئ</string>
 
+    <string name="choose_address">Choose Address</string>
+    <string name="please_select_your_shipping_address">Please Select Your Shipping Address</string>
+
     <string-array name="currency_options">
     <item>جنيه مصرى</item>
     <item>دولار أمريكي  $</item>

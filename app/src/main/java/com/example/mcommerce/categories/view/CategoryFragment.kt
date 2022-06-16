@@ -178,11 +178,8 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
         super.onStart()
         collectionId=""
         subCategorySelected=""
-        //categoriesProductViewModel.getCategories(brandName,subCategorySelected,id)
+        categoriesProductViewModel.getCategories(brandName,subCategorySelected,id)
     }
-
-
-
     override fun onSubCategoryClick(type:String) {
         subCategorySelected=type
         categoriesProductViewModel.getCategories(brandName,subCategorySelected, collectionId)

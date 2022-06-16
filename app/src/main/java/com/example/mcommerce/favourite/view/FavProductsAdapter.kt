@@ -1,6 +1,7 @@
 package com.example.mcommerce.favourite.view
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,7 +54,15 @@ class FavProductsAdapter(private val listener: FavouriteOnClickLisner,var commin
     }
 
     override fun getItemCount(): Int {
-        return arrayCount
+        var count=0
+        Log.i("count","count")
+        if(allFavProducts.size>=4) {
+            count= arrayCount
+        }
+        else{
+            count= allFavProducts.size
+        }
+        return count
     }
 
     inner class ViewHolder(private val itemView: View): RecyclerView.ViewHolder(itemView) {
