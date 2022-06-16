@@ -186,25 +186,6 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
         Toast.makeText(requireContext(),subCategorySelected,Toast.LENGTH_LONG).show()
         dialog.dismiss()
     }
-    override fun onPriceConverter(position: Int) : String{
-        /*
-           toCurrency = SavedSetting.loadCurrency(context!!)
-            if(toCurrency.isNullOrEmpty()){
-                toCurrency = "EGP"
-            }
-            customerViewModel.getAmountAfterConversion(toCurrency)
-            customerViewModel.onlineCurrencyChanged.observe(viewLifecycleOwner) { result ->
-                convertorResult = result.result
-            }
-       // Log.i("Testttttttttt", (allProducts.get(position).variants.get(0).price.toDouble() * convertorResult).toString() +" " +toCurrency)
-        val df = DecimalFormat("#.##")
-        df.roundingMode = RoundingMode.UP
-        val result = (allProducts.get(position).variants.get(0).price.toDouble() * convertorResult)
-        val roundoff = df.format(result)
-        return "${roundoff}  ${toCurrency}"
-*/
-        return ""
-    }
 
     override fun addToFav(product: Product, img: ImageView, myIndex: Int) {
         Toast.makeText(requireContext(),"Fav clicked",Toast.LENGTH_LONG).show()
