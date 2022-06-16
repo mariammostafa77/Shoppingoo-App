@@ -236,6 +236,7 @@ class ProductInfoFragment : Fragment() {
 
         }
         btnAddToCard.setOnClickListener {
+
             var variantId: Long = 0
             for (i in 0..allProducts[0].variants.size - 1) {
                 if (allProducts[0].variants[i].option1 == sizeSpinner.getSelectedItem()
@@ -244,6 +245,7 @@ class ProductInfoFragment : Fragment() {
                         .toString()
                 ) {
                     variantId = allProducts[0].variants[i].id
+
                     break
                 }
             }
@@ -264,7 +266,7 @@ class ProductInfoFragment : Fragment() {
                 shoppingCartViewModel.onlineItemUpdated.observe(viewLifecycleOwner) { response ->
                     if (response.isSuccessful) {
                         Toast.makeText(requireContext(),"update Success!!!: "+response.code().toString(),Toast.LENGTH_SHORT).show()
-
+                        loadData()
 
                     }
                 }
@@ -303,6 +305,7 @@ class ProductInfoFragment : Fragment() {
                         Toast.makeText(requireContext(),
                             "add to card successfull: " + cardOrder.code().toString(),
                             Toast.LENGTH_LONG).show()
+                        loadData()
                     } else {
 
                         Toast.makeText(requireContext(),
@@ -332,6 +335,7 @@ class ProductInfoFragment : Fragment() {
                         Toast.makeText(requireContext(),
                             "Deleted Success!!!: " + response.code().toString(),
                             Toast.LENGTH_SHORT).show()
+                        loadData()
 
 
                     } else {
@@ -369,13 +373,14 @@ class ProductInfoFragment : Fragment() {
                 specificProductsViewModel.getCardOrder(draftOrder)
                 specificProductsViewModel.onlineCardOrder.observe(viewLifecycleOwner) { fav ->
                     if (fav.isSuccessful) {
-                        Toast.makeText(requireContext(),"add to card successfull: " + fav.code().toString(),
+                        Toast.makeText(requireContext(),"add to Fav successfull: " + fav.code().toString(),
                             Toast.LENGTH_LONG).show()
+                        loadData()
 
                     } else {
 
                         Toast.makeText(requireContext(),
-                            "add to card failed: " + fav.code().toString(),
+                            "add to Fav failed: " + fav.code().toString(),
                             Toast.LENGTH_LONG).show()
 
                     }
@@ -395,6 +400,30 @@ class ProductInfoFragment : Fragment() {
         }
 
         return view
+    }
+    fun loadData(){
+        val sharedPreferences = requireContext().getSharedPreferences("userAuth", AppCompatActivity.MODE_PRIVATE)
+        val customerEmail = sharedPreferences.getString("email","").toString()
+        val noteStatus = "fav"
+        specificProductsViewModel.getFavProducts()
+        allFavProducts.clear()
+        specificProductsViewModel.onlineFavProduct.observe(viewLifecycleOwner) { allDraftProducts ->
+            allFavProducts.clear()
+            allVariantsID.clear()
+            allCardProducts.clear()
+            allCardVariantsID.clear()
+            for (i in 0..allDraftProducts.size - 1) {
+                if (allDraftProducts.get(i).note == noteStatus && allDraftProducts.get(i).email == customerEmail) {
+                    allFavProducts.add(allDraftProducts.get(i))
+                    allVariantsID.add(allDraftProducts.get(i).line_items!![0].variant_id!!)
+                }
+                else if (allDraftProducts.get(i).note == "card" && allDraftProducts.get(i).email == customerEmail) {
+                    allCardProducts.add(allDraftProducts.get(i))
+                    allCardVariantsID.add(allDraftProducts.get(i).line_items!![0].variant_id!!)
+                }
+            }
+
+        }
     }
 
 }
