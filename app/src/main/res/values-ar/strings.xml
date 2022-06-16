@@ -82,6 +82,8 @@
     <string name="fees">ضريبة</string>
     <string name="yourAddress">عنوانك</string>
     <string name="paymentMethod">طريقة الدفع</string>
+    <string name="noData">لم يتم العثور علي شئ</string>
+
     <string-array name="currency_options">
     <item>جنيه مصرى</item>
     <item>دولار أمريكي  $</item>
