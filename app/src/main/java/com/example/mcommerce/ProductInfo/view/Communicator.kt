@@ -16,5 +16,6 @@ interface Communicator {
     fun goToProductDetails(id:Long)
     fun goToOrderDetails(selectedOrder: Order)
     fun goToOrderSummary(order: Order,fees:Double)
+    fun goToHome()
 
 }

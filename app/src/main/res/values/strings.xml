@@ -40,6 +40,8 @@
     <string name="fees">Fees</string>
     <string name="yourAddress">Your Address</string>
     <string name="paymentMethod">Payment Method</string>
+    <string name="noData">"No Data Found "</string>
+
 
 
     <!-- Asmaa   -->
@@ -96,7 +98,6 @@
     <string name="send_email">Send Email</string>
     <string name="cancel">Cancel</string>
     <string name="address2">Address:</string>
-
 
 
     <!-- Arrays -->

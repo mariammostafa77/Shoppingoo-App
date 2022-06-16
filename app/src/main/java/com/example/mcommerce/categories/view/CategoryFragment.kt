@@ -38,7 +38,7 @@ import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.FieldPosition
 
-class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConvertor {
+class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, CurrencyConvertor {
     private lateinit var brandProductsAdapter: BrandProductsAdapter
     private lateinit var subCategoriesAdapter: SubCategoriesAdapter
     private lateinit var categoriesProductFactory: CategoriesViewFactory
@@ -47,12 +47,14 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
     private lateinit var categoriesTabLayout: TabLayout
     private lateinit var searchIcon:ImageView
     private lateinit var filterImg:ImageView
+    private lateinit var imgNoData:ImageView
+    private lateinit var tvNoData:TextView
     private lateinit var communicator:Communicator
     private lateinit var categoryBarTitle:TextView
     private lateinit var dialog : BottomSheetDialog
     lateinit var searchFactor: SearchViewModelFactory
     lateinit var searchViewModel: SearchViewModel
-    private var id:String=""
+    private var  collectionId:String=""
     private var brandName:String=""
     private var subCategorySelected:String=""
     var allVariantsID:ArrayList<Long> = ArrayList<Long>()
@@ -73,6 +75,14 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
         // Inflate the layout for this fragment
         val view=inflater.inflate(R.layout.fragment_category, container, false)
         initComponents(view)
+        if(flag == 0){
+            checkArgs()
+        } else{
+            brandName=""
+        }
+        tvNoData.visibility=View.INVISIBLE
+        imgNoData.visibility=View.INVISIBLE
+
         searchFactor = SearchViewModelFactory(
             Repository.getInstance(AppClient.getInstance(), requireContext())
         )
@@ -87,9 +97,7 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
         val email: String? = sharedPreferences.getString("email","")
 
         //  userId = sharedPreferences.getString("cusomerID","").toString()
-
-        id=""
-       checkArgs()
+        collectionId=""
         categoriesProductFactory = CategoriesViewFactory(
             Repository.getInstance(
                 AppClient.getInstance(),
@@ -107,10 +115,19 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
         categoriesProductViewModel.onlineProductsTypes.observe(viewLifecycleOwner) {
             getProductTypes(it)
         }
-        categoriesProductViewModel.getCategories(brandName,subCategorySelected,id)
+        categoriesProductViewModel.getCategories(brandName,subCategorySelected, collectionId)
         categoriesProductViewModel.onlinesubcategoriesProduct.observe(viewLifecycleOwner) {products ->
             allProducts.addAll(products)
             brandProductsAdapter.setUpdatedData(products,requireContext(),communicator)
+
+            if(products.isEmpty()){
+                tvNoData.visibility=View.VISIBLE
+                imgNoData.visibility=View.VISIBLE
+
+            }else{
+                tvNoData.visibility=View.INVISIBLE
+                imgNoData.visibility=View.INVISIBLE
+            }
         }
         categoriesProductViewModel.allOnlineProducts.observe(viewLifecycleOwner) {
             getProductTypes(it)
@@ -129,7 +146,7 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
         searchIcon.setOnClickListener {
             mySearchFlag=2
             //communicator.goToSearchWithID(id)
-            communicator.goToSearchWithAllData(id,brandName,subCategorySelected)
+            communicator.goToSearchWithAllData( collectionId,brandName,subCategorySelected)
 
         }
         searchViewModel.getFavProducts()
@@ -149,9 +166,9 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
     }
 
     private fun checkArgs() {
-        Log.i("TAG","Brand name $brandName")
         if(arguments != null){
             brandName=arguments?.getString("brandTitle").toString()
+            Log.i("TAG","Brand name from category $brandName")
         }else{
             brandName=""
         }
@@ -159,8 +176,7 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
 
     override fun onStart() {
         super.onStart()
-        //checkArgs()
-        id=""
+        collectionId=""
         subCategorySelected=""
         //categoriesProductViewModel.getCategories(brandName,subCategorySelected,id)
     }
@@ -169,7 +185,7 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
 
     override fun onSubCategoryClick(type:String) {
         subCategorySelected=type
-        categoriesProductViewModel.getCategories(brandName,subCategorySelected,id)
+        categoriesProductViewModel.getCategories(brandName,subCategorySelected, collectionId)
         Toast.makeText(requireContext(),subCategorySelected,Toast.LENGTH_LONG).show()
         dialog.dismiss()
     }
@@ -282,6 +298,8 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
         categoryBarTitle=view.findViewById(R.id.categoryBarTitle)
         filterImg=view.findViewById(R.id.filterImg)
         dialog = BottomSheetDialog(requireContext())
+        tvNoData = view.findViewById(R.id.tvNoData)
+        imgNoData=view.findViewById(R.id.imgNoData)
 
     }
     private fun getProductTypes(allProductsTypes:List<Product>){
@@ -296,33 +314,33 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
     private fun onTabSelectedListener(tab: TabLayout.Tab){
         when (tab.position) {
             0 -> {
-                id=""
-                categoriesProductViewModel.getCategories(brandName,"",id)
+                collectionId=""
+                categoriesProductViewModel.getCategories(brandName,"", collectionId)
                 getSubTypes()
                 true
             }
             1 -> {
-                id="273053712523"
-                categoriesProductViewModel.getCategories(brandName,"",id)
+                collectionId="273053712523"
+                categoriesProductViewModel.getCategories(brandName,"", collectionId)
                 getSubTypes()
                 true
             }
             2 -> {
-                id="273053679755"
-                categoriesProductViewModel.getCategories(brandName,"",id)
+                collectionId="273053679755"
+                categoriesProductViewModel.getCategories(brandName,"", collectionId)
                 getSubTypes()
                 true
             }
             3 -> {
-                id="273053745291"
+                collectionId="273053745291"
                 Log.i("TAG","")
-                categoriesProductViewModel.getCategories(brandName,"",id)
+                categoriesProductViewModel.getCategories(brandName,"", collectionId)
                 getSubTypes()
                 true
             }
             4 -> {
-                id="273053778059"
-                categoriesProductViewModel.getCategories(brandName,"",id)
+                collectionId="273053778059"
+                categoriesProductViewModel.getCategories(brandName,"", collectionId)
                 getSubTypes()
                 true
             }
@@ -331,8 +349,8 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
         }
     }
     private fun getSubTypes() {
-        if (id.isNotEmpty()) {
-            categoriesProductViewModel.getProductsType(id)
+        if ( collectionId.isNotEmpty()) {
+            categoriesProductViewModel.getProductsType( collectionId)
         }
         else{
             categoriesProductViewModel.getAllProducts(brandName,"","")

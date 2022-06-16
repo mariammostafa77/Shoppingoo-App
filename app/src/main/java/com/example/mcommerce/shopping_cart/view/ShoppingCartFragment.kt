@@ -33,7 +33,6 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
     lateinit var linearLayoutManager: LinearLayoutManager
     lateinit var shoppingCartViewModelFactory : ShoppingCartViewModelFactory
     lateinit var shoppingCartViewModel: ShoppingCartViewModel
-    var userShoppingCartProducts:ArrayList<DraftOrder> = ArrayList<DraftOrder>()
     var subTotal : Double = 0.0
     lateinit var communicator: Communicator
     var lineItems : ArrayList<LineItem> = ArrayList()
@@ -41,6 +40,10 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+    }
+
+    companion object{
+        var userShoppingCartProducts:ArrayList<DraftOrder> = ArrayList<DraftOrder>()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
