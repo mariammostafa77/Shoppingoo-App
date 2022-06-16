@@ -116,6 +116,12 @@ class AppSettingFragment : Fragment() {
             val editor = requireContext().getSharedPreferences("userAuth", Context.MODE_PRIVATE).edit()
             val isLogin = sharedPreferences.getBoolean("isLogin", true)
             if (isLogin == true) {
+                editor.remove("email")
+                editor.remove("password")
+                editor.remove("fname")
+                editor.remove("lname")
+                editor.remove("phone")
+                editor.remove("cusomerID")
                 editor.putBoolean("isLogin", false)
                 editor.commit()
                 startActivity(Intent(requireContext(), AuthActivity::class.java))

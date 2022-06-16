@@ -65,7 +65,8 @@ class SavedSetting {
 
         fun getPrice(price: String, context: Context): String{
             val amount: String = loadCurrencyResult(context)
-            if (amount.isNotEmpty()){
+            val to : String = loadCurrency(context)
+            if (amount.isNotEmpty() && to != "EGP"){
                 val result: Double = price.toDouble() * amount.toDouble()
                 val df = DecimalFormat("#.##")
                 df.roundingMode = RoundingMode.UP

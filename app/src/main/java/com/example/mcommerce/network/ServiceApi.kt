@@ -87,7 +87,7 @@ import java.util.*
           "Accept: application/json",
           "X-Shopify-Access-Token: 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"
       )
-      @GET("customers.json")
+      @GET("customers.json?limit=250")
       suspend fun getCustomers(): Customer
 
       @Headers(
@@ -121,7 +121,7 @@ import java.util.*
       @Headers(
           "Accept: application/json",
           "X-Shopify-Access-Token: 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",)
-      @GET("draft_orders.json")
+      @GET("draft_orders.json?limit=250")
       suspend fun getShoppingCartProducts(): DraftResponse
 
       @Headers(

@@ -40,15 +40,17 @@ class ShoppingCartAdapter(var comminicator: Communicator,private val listener: O
 
         holder.shoppingCartProductTitle.text = userShoppingCartProducts[position].draft_order?.line_items?.get(0)?.name.toString()
         holder.shoppingCartProductPrice.text = ("Price: ${amount}")
-        counter = userShoppingCartProducts[position].draft_order?.line_items?.get(0)?.quantity!!.toInt()
+
         holder.ShoppingCartProductQuantity.text = userShoppingCartProducts[position].draft_order?.line_items?.get(0)?.quantity.toString()
         Glide.with(context).load(userShoppingCartProducts[position].draft_order?.note_attributes?.get(0)?.value).into(holder.shoppingCartItemImage)
         holder.shoppingCartIncreaseQuantity.setOnClickListener {
+            counter = userShoppingCartProducts[position].draft_order?.line_items?.get(0)?.quantity!!.toInt()
             counter++
             holder.ShoppingCartProductQuantity.text = counter.toString()
             listener.onIncrementClickListener(userShoppingCartProducts[position])
         }
         holder.shoppingCartDecreaseQuantity.setOnClickListener {
+            counter = userShoppingCartProducts[position].draft_order?.line_items?.get(0)?.quantity!!.toInt()
             if(counter>1) { counter-- }
             else{ counter = 1 }
             holder.ShoppingCartProductQuantity.text = counter.toString()

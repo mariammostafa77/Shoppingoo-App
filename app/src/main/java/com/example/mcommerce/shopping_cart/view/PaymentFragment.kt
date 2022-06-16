@@ -100,7 +100,6 @@ class PaymentFragment : Fragment() {
         ///Asign Variable
         paymentTitleTxt.append(" ${getUserName(requireContext())}")
 
-
         subTotoalAmount = SavedSetting.getPrice(subTotal.toString(), requireContext())
         totoalAmount = SavedSetting.getPrice(total.toString(), requireContext())
         taxAmount = SavedSetting.getPrice(fees.toString(), requireContext())
@@ -227,7 +226,6 @@ class PaymentFragment : Fragment() {
     }
 
     private fun getPayment() {
-        val amount: String = "50.00"
         val payment = PayPalPayment(BigDecimal(total), "USD", "Course Fees",
             PayPalPayment.PAYMENT_INTENT_SALE)
         val intent = Intent(requireContext(), PaymentActivity::class.java)
@@ -238,7 +236,8 @@ class PaymentFragment : Fragment() {
 
     companion object{
         val clientKey = "ATWyXBtF8COKnCN1FG7AR_Sznijz2_WkTrhD7Cj2GzrwjVivPEacw2HE_AX_ndbR91_4dsEw0SEfrcuT"
-        val PAYPAL_REQUEST_CODE = 123
+       // val PAYPAL_REQUEST_CODE = 123
+       val PAYPAL_REQUEST_CODE = 7171
         private val config = PayPalConfiguration()
             .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX).clientId(clientKey)
     }
