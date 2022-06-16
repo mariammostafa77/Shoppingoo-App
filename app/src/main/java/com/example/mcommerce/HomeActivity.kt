@@ -16,7 +16,7 @@ import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.ProductInfo.view.ProductInfoFragment
 import com.example.mcommerce.auth.model.Addresse
 import com.example.mcommerce.categories.view.CategoryFragment
-import com.example.mcommerce.confirmOrder.ConfirmOrderFragment
+import com.example.mcommerce.confirmOrder.view.ConfirmOrderFragment
 import com.example.mcommerce.draftModel.LineItem
 import com.example.mcommerce.draftModel.OrderPrices
 import com.example.mcommerce.home.view.HomeFragment
@@ -39,9 +39,10 @@ import kotlin.math.log
 class HomeActivity : AppCompatActivity(),Communicator {
     private val homeFragment = HomeFragment()
     private val meWithLogin = MeWithLogin()
-    private val categoryFragment = CategoryFragment()
+    private val myCategoryFragment = CategoryFragment(1)
     private val meWithoutLoginFragment = MeWithoutLoginFragment()
     lateinit var bottomNavigationView: BottomNavigationView
+    private var userId =""
 
     companion object{
         var mySearchFlag:Int=0
@@ -61,7 +62,8 @@ class HomeActivity : AppCompatActivity(),Communicator {
 
         SavedSetting.loadLocale(this)
 
-
+        val sharedPreferences: SharedPreferences = getSharedPreferences("userAuth", Context.MODE_PRIVATE)
+        userId = sharedPreferences.getString("cusomerID","").toString()
 
         bottomNavigationView = findViewById(R.id.buttomNav)
 
@@ -86,12 +88,16 @@ class HomeActivity : AppCompatActivity(),Communicator {
                 }
                 R.id.categoryTab -> {
                    // finish()
-                    replaceFragment(categoryFragment)
+                    replaceFragment(myCategoryFragment)
                     true
                 }
                 R.id.meTab -> {
                    // finish()
-                    replaceFragment(meWithLogin)
+                    if(userId.isNullOrEmpty()){
+                        replaceFragment(meWithoutLoginFragment)
+                    }else{
+                        replaceFragment(meWithLogin)
+                    }
                     true
                 }
                 else -> false
@@ -131,8 +137,10 @@ class HomeActivity : AppCompatActivity(),Communicator {
         myDetailsFlag=0
         val bundle=Bundle()
         bundle.putString("brandTitle",brandName)
+        val categoryFragment = CategoryFragment(0)
         categoryFragment.arguments=bundle
         replaceFragment(categoryFragment)
+        //bottomNavigationView.setSelectedItemId(R.id.categoryTab);
         Log.i("TAG","brandName from home $brandName")
     }
     override fun goToSearchWithID(id: String) {
@@ -194,10 +202,14 @@ class HomeActivity : AppCompatActivity(),Communicator {
         val bundle=Bundle()
         bundle.putSerializable("order",order)
         bundle.putDouble("fees",fees)
-        val confirmOrderFragment=ConfirmOrderFragment()
+        val confirmOrderFragment= ConfirmOrderFragment()
         confirmOrderFragment.arguments=bundle
         replaceFragment(confirmOrderFragment)
         Log.i("TAG","order from activity $order")
+    }
+
+    override fun goToHome() {
+        replaceFragment(homeFragment)
     }
 
     override fun goToProductDetails(id: Long) {

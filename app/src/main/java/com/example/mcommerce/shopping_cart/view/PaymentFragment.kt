@@ -143,7 +143,8 @@ class PaymentFragment : Fragment() {
                 if (response.isSuccessful) {
                     Toast.makeText(requireContext(), "Order Added Successfull: " + response.code().toString(),
                         Toast.LENGTH_LONG).show()
-                    communicator.goToOrderSummary(order,fees)
+                    communicator.goToOrderSummary(response.body()?.order!!,fees)
+                    //response.body()?.order?.let { it1 -> communicator.goToOrderSummary(it1,fees) }
                     Log.i("porder", "Success Because: " + response.body().toString())
                     Log.i("TAG","response22: ${response.raw().request().url()}")
 

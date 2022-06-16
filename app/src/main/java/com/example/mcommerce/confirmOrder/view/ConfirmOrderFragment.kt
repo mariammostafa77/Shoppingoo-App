@@ -1,24 +1,30 @@
-package com.example.mcommerce.confirmOrder
+package com.example.mcommerce.confirmOrder.view
 
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.R
+import com.example.mcommerce.categories.viewModel.CategoriesViewFactory
+import com.example.mcommerce.categories.viewModel.CategoriesViewModel
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
 import com.example.mcommerce.orderDetails.view.OrderItemsAdapter
 import com.example.mcommerce.orderDetails.viewModel.OrderDetailsViewModel
 import com.example.mcommerce.orderDetails.viewModel.OrderDetailsViewModelFactory
 import com.example.mcommerce.orders.model.Order
+import com.example.mcommerce.shopping_cart.view.ShoppingCartFragment
+import com.example.mcommerce.shopping_cart.viewmodel.ShoppingCartViewModel
+import com.example.mcommerce.shopping_cart.viewmodel.ShoppingCartViewModelFactory
 
 
 class ConfirmOrderFragment : Fragment() {
@@ -36,6 +42,9 @@ class ConfirmOrderFragment : Fragment() {
     private lateinit var orderDetailsViewModelFactory: OrderDetailsViewModelFactory
     private lateinit var orderDetailsViewModel: OrderDetailsViewModel
     private lateinit var communicator: Communicator
+
+    lateinit var shoppingCartViewModelFactory : ShoppingCartViewModelFactory
+    lateinit var shoppingCartViewModel: ShoppingCartViewModel
 
     lateinit var myOrder: Order
     var fees:Double=0.0
@@ -78,6 +87,16 @@ class ConfirmOrderFragment : Fragment() {
             orderItemsAdapter.setUpdatedData(myOrder.line_items!!,requireContext(),communicator)
 
         }
+        shoppingCartViewModelFactory = ShoppingCartViewModelFactory(Repository.getInstance(AppClient.getInstance(), requireContext()))
+        shoppingCartViewModel = ViewModelProvider(this, shoppingCartViewModelFactory).get(ShoppingCartViewModel::class.java)
+        for(product in ShoppingCartFragment.userShoppingCartProducts){
+            shoppingCartViewModel.deleteSelectedProduct(product.draft_order?.id.toString())
+        }
+
+        okBtn.setOnClickListener {
+            communicator.goToHome()
+        }
+
 
         return view
     }
@@ -91,5 +110,5 @@ class ConfirmOrderFragment : Fragment() {
       tvPhoneNum=view.findViewById(R.id.tvPhoneNum)
       tvPaymentMethod=view.findViewById(R.id.tvPaymentMethod)
       okBtn=view.findViewById(R.id.okBtn)
-  }
+    }
 }

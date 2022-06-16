@@ -119,5 +119,25 @@
         app:layout_constraintTop_toBottomOf="@id/categoryTabBar"
         app:spanCount="2" />
 
+    <ImageView
+        android:id="@+id/imgNoData"
+        android:layout_width="201dp"
+        android:layout_height="158dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/nodata"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/categoryTabBar" />
+
+    <TextView
+        android:id="@+id/tvNoData"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/noData"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="@+id/imgNoData"
+        app:layout_constraintStart_toStartOf="@+id/imgNoData"
+        app:layout_constraintTop_toBottomOf="@+id/imgNoData" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

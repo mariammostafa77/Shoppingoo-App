@@ -395,7 +395,7 @@ class ProductInfoFragment : Fragment() {
             } else {
                 val manager = activity!!.supportFragmentManager
                 val trans = manager.beginTransaction()
-                trans.replace(R.id.frameLayout, CategoryFragment()).commit()
+                trans.replace(R.id.frameLayout, CategoryFragment(1)).commit()
             }
         }
 

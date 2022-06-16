@@ -42,6 +42,8 @@
     <string name="fees">Fees</string>
     <string name="yourAddress">Your Address</string>
     <string name="paymentMethod">Payment Method</string>
+    <string name="noData">"No Data Found "</string>
+
 
 
     <!-- Asmaa   -->
