@@ -1,7 +1,10 @@
 package com.example.mcommerce.search.view
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,6 +15,7 @@ import android.widget.*
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mcommerce.AuthActivity
 import com.example.mcommerce.HomeActivity.Companion.mySearchFlag
 import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.R
@@ -26,6 +30,7 @@ import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
 import com.example.mcommerce.search.viewModel.SearchViewModel
 import com.example.mcommerce.search.viewModel.SearchViewModelFactory
+import kotlinx.android.synthetic.main.dialog_view.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -333,9 +338,7 @@ class MysearchFragment : Fragment(),FavClicked {
 
         }
         else{
-            Toast.makeText(requireContext(),
-                "You can not add to Favourite without login",
-                Toast.LENGTH_LONG).show()
+            showLoginDialog("You can not add to Favourite without Login",requireContext())
         }
 
 
@@ -349,6 +352,29 @@ class MysearchFragment : Fragment(),FavClicked {
                 img.setImageResource(R.drawable.ic_favorite)
             }
     }
+    fun showLoginDialog(dialogInfo: String,context:Context) {
+        val view = View.inflate(context, R.layout.dialog_view, null)
 
+        val builder = AlertDialog.Builder(context)
+        builder.setView(view)
+
+        val dialog = builder.create()
+        dialog.show()
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.setCancelable(false)
+        view.dialoImg.setImageResource(R.drawable.personlogin)
+        view.btn_confirm.text = "LOGIN"
+        view.btn_cancel.text = "CANCEL"
+        view.txtDialogTitle.text = "Warning"
+        view.txtDialogSubTitle.text = dialogInfo
+        view.txtDialogSubTitle.setTypeface(view.txtDialogSubTitle.getTypeface(), Typeface.ITALIC);
+        view.txtDialogInfo.text = ""
+        view.btn_confirm.setOnClickListener {
+            startActivity(Intent(context, AuthActivity::class.java))
+        }
+        view.btn_cancel.setOnClickListener {
+            dialog.dismiss()
+        }
+    }
 
 }

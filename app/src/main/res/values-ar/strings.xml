@@ -87,6 +87,7 @@
     <string name="applay">تطبيق</string>
     <string name="noResultFound">لا يوجد نواتج بحث </string>
     <string name="noWhishlist">لا يوجد مفضلة لديك</string>
+    <string name="noFav">"حاليا لا يوجد محفوظ في المضلة لديك"</string>
 
 
     <string name="choose_address">Choose Address</string>

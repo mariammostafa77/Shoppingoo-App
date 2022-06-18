@@ -1,5 +1,10 @@
 package com.example.mcommerce.ProductInfo.view
 
+import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.Context
+import android.content.Intent
+import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,10 +12,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mcommerce.AuthActivity
 import com.example.mcommerce.HomeActivity.Companion.myDetailsFlag
 import com.example.mcommerce.HomeActivity.Companion.mySearchFlag
 import com.example.mcommerce.ProductInfo.model.Reviews
@@ -35,6 +42,8 @@ import com.example.mcommerce.search.view.MysearchFragment
 import com.example.mcommerce.shopping_cart.view.ShoppingCartFragment
 import com.example.mcommerce.shopping_cart.viewmodel.ShoppingCartViewModel
 import com.example.mcommerce.shopping_cart.viewmodel.ShoppingCartViewModelFactory
+import kotlinx.android.synthetic.main.dialog_view.*
+import kotlinx.android.synthetic.main.dialog_view.view.*
 import java.math.RoundingMode
 import java.text.DecimalFormat
 
@@ -324,9 +333,13 @@ class ProductInfoFragment : Fragment() {
                 }
             }
             else{
-                Toast.makeText(requireContext(),
-                    "You can not add to cart without login",
-                    Toast.LENGTH_LONG).show()
+
+                showLoginDialog("You can not add to cart without Login",requireContext())
+
+
+
+
+
             }
         }
         addToFavImg.setOnClickListener {
@@ -400,9 +413,8 @@ class ProductInfoFragment : Fragment() {
                 }
             }
                 else{
-                    Toast.makeText(requireContext(),
-                        "You can not add to Favourite without login",
-                        android.widget.Toast.LENGTH_LONG).show()
+
+                showLoginDialog("You can not add to Favourite without Login",requireContext())
                 }
         }
         backImg.setOnClickListener {
@@ -451,6 +463,31 @@ class ProductInfoFragment : Fragment() {
                 }
             }
 
+        }
+    }
+
+    fun showLoginDialog(dialogInfo: String,context:Context) {
+        val view = View.inflate(context, R.layout.dialog_view, null)
+
+        val builder = AlertDialog.Builder(context)
+        builder.setView(view)
+
+        val dialog = builder.create()
+        dialog.show()
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.setCancelable(false)
+        view.dialoImg.setImageResource(R.drawable.personlogin)
+        view.btn_confirm.text = "LOGIN"
+        view.btn_cancel.text = "CANCEL"
+        view.txtDialogTitle.text = "Warning"
+        view.txtDialogSubTitle.text = dialogInfo
+        view.txtDialogSubTitle.setTypeface(view.txtDialogSubTitle.getTypeface(), Typeface.ITALIC);
+        view.txtDialogInfo.text = ""
+        view.btn_confirm.setOnClickListener {
+            startActivity(Intent(context, AuthActivity::class.java))
+        }
+        view.btn_cancel.setOnClickListener {
+            dialog.dismiss()
         }
     }
 

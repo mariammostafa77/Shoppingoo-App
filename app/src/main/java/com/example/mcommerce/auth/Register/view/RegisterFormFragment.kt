@@ -21,9 +21,11 @@ import com.example.mcommerce.HomeActivity
 import com.example.mcommerce.R
 import com.example.mcommerce.auth.Register.viewModel.RegisterViewModel
 import com.example.mcommerce.auth.Register.viewModel.RegisterViewModelFactory
+import com.example.mcommerce.auth.login.view.LoginFormFragment
 import com.example.mcommerce.auth.model.*
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
+import com.example.mcommerce.shopping_cart.view.ShoppingCartFragment
 import com.google.android.gms.common.util.CollectionUtils.listOf
 import kotlinx.android.synthetic.main.fragment_register_form.*
 
@@ -71,10 +73,10 @@ class RegisterFormFragment : Fragment() {
         registerViewModel = ViewModelProvider(this, registerViewModelFactory).get(RegisterViewModel::class.java)
 
         txtLogin.setOnClickListener {
-
-            var navController: NavController = Navigation.findNavController(it)
-            var navDir: NavDirections =RegisterFormFragmentDirections.actionMyRegisterFragmentToMyLoginFragment()
-            navController.navigate(navDir)
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragmentContainerView, LoginFormFragment())
+            transaction.addToBackStack(null);
+            transaction.commit()
         }
         btnSkip.setOnClickListener {
             startActivity(Intent(requireContext(),HomeActivity::class.java))

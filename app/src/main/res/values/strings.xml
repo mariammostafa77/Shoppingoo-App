@@ -46,6 +46,7 @@
     <string name="noData">"Not available yet!"</string>
     <string name="noOrder">"You have no order in progress!"</string>
     <string name="noWhishlist">"You have no Favourite in progress!"</string>
+    <string name="noFav">"You currently have nothing saved to your Favourite list!"</string>
 
 
 

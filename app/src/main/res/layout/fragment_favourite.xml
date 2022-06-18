@@ -63,28 +63,29 @@
 
     <ImageView
         android:id="@+id/noDataImg"
-        android:visibility="invisible"
         android:layout_width="151dp"
         android:layout_height="113dp"
-        android:layout_marginTop="50dp"
-        android:src="@drawable/noresults"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="150dp"
+        android:src="@drawable/favourite"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/favBarID"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/favBarID" />
 
     <TextView
         android:id="@+id/txtNoData"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.8"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:text="@string/noData"
+        android:layout_marginEnd="20dp"
+        android:text="@string/noFav"
         android:textAlignment="center"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="@+id/noDataImg"
         app:layout_constraintStart_toStartOf="@+id/noDataImg"
-        app:layout_constraintTop_toBottomOf="@+id/noDataImg"
-        android:visibility="invisible"/>
+        app:layout_constraintTop_toBottomOf="@+id/noDataImg" />
 
     <ProgressBar
         android:id="@+id/favProgressBar"

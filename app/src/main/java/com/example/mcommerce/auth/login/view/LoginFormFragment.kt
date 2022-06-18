@@ -24,6 +24,7 @@ import com.example.mcommerce.auth.login.viewModel.LoginViewModel
 import com.example.mcommerce.auth.login.viewModel.LoginViewModelFactory
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
+import com.example.mcommerce.shopping_cart.view.ShoppingCartFragment
 
 
 class LoginFormFragment : Fragment() {
@@ -31,6 +32,7 @@ class LoginFormFragment : Fragment() {
     lateinit var edtLoginEmail:EditText
     lateinit var edtLoginPassword:EditText
     lateinit var btnLogin:Button
+    lateinit var btnLoginSkip:Button
     lateinit var loginViewModel: LoginViewModel
     lateinit var loginViewModelFactory: LoginViewModelFactory
     var isSuccess:Boolean=false
@@ -47,12 +49,18 @@ class LoginFormFragment : Fragment() {
         edtLoginEmail=view.findViewById(R.id.edtLoginEmail)
         edtLoginPassword=view.findViewById(R.id.edtLoginPassword)
         btnLogin=view.findViewById(R.id.btnLogin)
+        btnLoginSkip=view.findViewById(R.id.btnLoginSkip)
         loginProgressbar=view.findViewById(R.id.loginProgressBar)
+        btnLoginSkip.setOnClickListener {
+            startActivity(Intent(requireContext(),HomeActivity::class.java))
+        }
 
         txtRegister.setOnClickListener {
-            var navController: NavController = Navigation.findNavController(it)
-            var navDir: NavDirections =LoginFormFragmentDirections.actionMyLoginFragmentToMyRegisterFragment()
-            navController.navigate(navDir)
+
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragmentContainerView, RegisterFormFragment())
+            transaction.addToBackStack(null);
+            transaction.commit()
 
 
         }

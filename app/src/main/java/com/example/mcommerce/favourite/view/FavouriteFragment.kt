@@ -1,7 +1,9 @@
 package com.example.mcommerce.favourite.view
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
@@ -27,6 +29,7 @@ import com.example.mcommerce.network.AppClient
 import com.example.mcommerce.shopping_cart.view.ShoppingCartAdapter
 import com.example.mcommerce.shopping_cart.viewmodel.ShoppingCartViewModel
 import com.example.mcommerce.shopping_cart.viewmodel.ShoppingCartViewModelFactory
+import kotlinx.android.synthetic.main.dialog_view.view.*
 
 
 class FavouriteFragment : Fragment(),FavouriteOnClickLisner {
@@ -130,6 +133,5 @@ class FavouriteFragment : Fragment(),FavouriteOnClickLisner {
             }
             .show()
     }
-
 
 }
