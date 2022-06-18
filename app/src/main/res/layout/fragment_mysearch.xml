@@ -48,4 +48,26 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edtSearch" />
+    <ImageView
+        android:id="@+id/noDataSearchImg"
+        android:layout_width="151dp"
+        android:layout_height="113dp"
+        android:layout_marginTop="50dp"
+        android:src="@drawable/noresults"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtSearch"
+        />
+
+    <TextView
+        android:id="@+id/txtNoSearchData"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/noResultFound"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="@+id/noDataSearchImg"
+        app:layout_constraintStart_toStartOf="@+id/noDataSearchImg"
+        app:layout_constraintTop_toBottomOf="@+id/noDataSearchImg" />
 </androidx.constraintlayout.widget.ConstraintLayout>

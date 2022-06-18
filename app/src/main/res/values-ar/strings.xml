@@ -85,6 +85,8 @@
     <string name="noData">لم يتم العثور علي شئ</string>
     <string name="noOrder">"لا توجد طلبات جارية"</string>
     <string name="applay">تطبيق</string>
+    <string name="noResultFound">لا يوجد نواتج بحث </string>
+    <string name="noWhishlist">لا يوجد مفضلة لديك</string>
 
 
     <string name="choose_address">Choose Address</string>

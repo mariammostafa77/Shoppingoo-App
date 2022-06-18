@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
@@ -33,6 +35,8 @@ class FavouriteFragment : Fragment(),FavouriteOnClickLisner {
     lateinit var favViewModelFactory : FavViewModelFactory
     lateinit var favViewModel: FavViewModel
     lateinit var communicator: Communicator
+    lateinit var noDataImage:ImageView
+    lateinit var txtNoData:TextView
 
     var favProducts:ArrayList<DraftOrderX> = ArrayList<DraftOrderX>()
 
@@ -44,6 +48,8 @@ class FavouriteFragment : Fragment(),FavouriteOnClickLisner {
         var view=inflater.inflate(R.layout.fragment_favourite, container, false)
         communicator = activity as Communicator
         favRecyclerView = view.findViewById(R.id.favRecyclerView)
+        noDataImage=view.findViewById(R.id.noDataImg)
+        txtNoData=view.findViewById(R.id.txtNoData)
         Log.i("FavArray","test Fav: ")
         Toast.makeText(requireContext(),"fav Fragment",Toast.LENGTH_LONG).show()
         favAdapter= FavProductsAdapter(this,communicator)
@@ -61,11 +67,18 @@ class FavouriteFragment : Fragment(),FavouriteOnClickLisner {
 
             for (i in 0..allFavProducts.size-1){
                 if(allFavProducts.get(i).note == note && allFavProducts.get(i).email == email){
-
                     favProducts.add(allFavProducts.get(i))
 
                 }
 
+            }
+            if(favProducts.isEmpty()){
+                noDataImage.visibility=View.VISIBLE
+                txtNoData.visibility=View.VISIBLE
+            }
+            else{
+                noDataImage.visibility=View.INVISIBLE
+                txtNoData.visibility=View.INVISIBLE
             }
 
             favAdapter.setFavtProducts(requireContext(),favProducts,favProducts.size)
@@ -85,9 +98,20 @@ class FavouriteFragment : Fragment(),FavouriteOnClickLisner {
                 favViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
                     if(response.isSuccessful){
                         favProducts.remove(draftOrderX)
+                        if(favProducts.isEmpty()){
+                            noDataImage.visibility=View.VISIBLE
+                            txtNoData.visibility=View.VISIBLE
+                        }
+                        else{
+                            noDataImage.visibility=View.INVISIBLE
+                            txtNoData.visibility=View.INVISIBLE
+                        }
                         favAdapter.setFavtProducts(requireContext(),favProducts,favProducts.size)
 
+
                         Toast.makeText(requireContext(),"Deleted Success!!!: "+response.code().toString(),Toast.LENGTH_SHORT).show()
+
+
                     }
                     else{
                         Toast.makeText(requireContext(),"Deleted failed: "+response.code().toString(),Toast.LENGTH_SHORT).show()

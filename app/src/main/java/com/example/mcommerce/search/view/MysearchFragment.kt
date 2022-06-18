@@ -36,6 +36,8 @@ class MysearchFragment : Fragment(),FavClicked {
     lateinit var productSearchAdapter: SearchAdapter
     lateinit var searchFactor:SearchViewModelFactory
     lateinit var searchViewModel:SearchViewModel
+    lateinit var noDataSearchImg:ImageView
+    lateinit var noDataSearchtxt:TextView
     lateinit var categoriesProductFactory: CategoriesViewFactory
     lateinit var categoriesProductViewModel: CategoriesViewModel
 //lateinit var linearLayoutManager:LinearLayoutManager
@@ -64,6 +66,8 @@ class MysearchFragment : Fragment(),FavClicked {
         // Inflate the layout for this fragment
         var view =inflater.inflate(R.layout.fragment_mysearch, container, false)
         communicator = activity as Communicator
+        noDataSearchImg=view.findViewById(R.id.noDataSearchImg)
+        noDataSearchtxt=view.findViewById(R.id.txtNoSearchData)
         val sharedPreferences: SharedPreferences = context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
          email= sharedPreferences.getString("email","").toString()
 
@@ -109,6 +113,14 @@ class MysearchFragment : Fragment(),FavClicked {
                                 {
                                     filterProductArrayList.add(it)
                                 }
+                            }
+                            if(filterProductArrayList.isEmpty()){
+                                noDataSearchImg.visibility=View.VISIBLE
+                                noDataSearchtxt.visibility=View.VISIBLE
+                            }
+                            else{
+                                noDataSearchtxt.visibility=View.INVISIBLE
+                                noDataSearchImg.visibility=View.INVISIBLE
                             }
 
                         }
@@ -165,6 +177,14 @@ class MysearchFragment : Fragment(),FavClicked {
                                     filterProductArrayList.add(it)
                                 }
                             }
+                            if(filterProductArrayList.isEmpty()){
+                                noDataSearchImg.visibility=View.VISIBLE
+                                noDataSearchtxt.visibility=View.VISIBLE
+                            }
+                            else{
+                                noDataSearchImg.visibility=View.INVISIBLE
+                                noDataSearchtxt.visibility=View.INVISIBLE
+                            }
 
                         }
                         else{
@@ -195,6 +215,14 @@ class MysearchFragment : Fragment(),FavClicked {
                         {
                             filterProductArrayList.add(it)
                         }
+                    }
+                    if(filterProductArrayList.isEmpty()){
+                        noDataSearchImg.visibility=View.VISIBLE
+                        noDataSearchtxt.visibility=View.VISIBLE
+                    }
+                    else{
+                        noDataSearchImg.visibility=View.INVISIBLE
+                        noDataSearchtxt.visibility=View.INVISIBLE
                     }
 
                 }

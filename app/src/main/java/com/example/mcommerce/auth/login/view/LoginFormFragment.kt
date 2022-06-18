@@ -17,6 +17,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.NavDirections
+import androidx.navigation.Navigation
 import com.example.mcommerce.HomeActivity
 import com.example.mcommerce.R
 import com.example.mcommerce.auth.Register.view.RegisterFormFragment
@@ -47,15 +50,11 @@ class LoginFormFragment : Fragment() {
         edtLoginPassword=view.findViewById(R.id.edtLoginPassword)
         btnLogin=view.findViewById(R.id.btnLogin)
         txtRegister.setOnClickListener {
-//            var navController: NavController = Navigation.findNavController(it)
-//            var navDir: NavDirections =LoginFormFragmentDirections.actionMyLoginFragmentToMyRegisterFragment()
-//            navController.navigate(navDir)
-            val fragment: Fragment = RegisterFormFragment()
-            val fragmentManager: FragmentManager = activity!!.supportFragmentManager
-            val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
-            fragmentTransaction.replace(com.example.mcommerce.R.id.frameLayout, fragment)
-            fragmentTransaction.addToBackStack(null)
-            fragmentTransaction.commit()
+            var navController: NavController = Navigation.findNavController(it)
+            var navDir: NavDirections =LoginFormFragmentDirections.actionMyLoginFragmentToMyRegisterFragment()
+            navController.navigate(navDir)
+
+
         }
 
         btnLogin.setOnClickListener {

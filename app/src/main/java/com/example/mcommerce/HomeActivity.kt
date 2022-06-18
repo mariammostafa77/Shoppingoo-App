@@ -67,17 +67,22 @@ class HomeActivity : AppCompatActivity(),Communicator {
 
         bottomNavigationView = findViewById(R.id.buttomNav)
 
-       // replaceFragment(homeFragment)
+        replaceFragment(homeFragment)
 
         //getSupportFragmentManager().beginTransaction().replace(R.id.viewLayout,new HomeFragment()).commit();
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.frameLayout) as NavHostFragment?
-        val navController = navHostFragment!!.navController
-        val navGraph = navHostFragment!!.navController.navInflater.inflate(R.navigation.my_nav_graph)
+
+
+//        val navHostFragment =
+//            supportFragmentManager.findFragmentById(R.id.frameLayout) as NavHostFragment?
+//        val navController = navHostFragment!!.navController
+//        val navGraph = navHostFragment!!.navController.navInflater.inflate(R.navigation.my_nav_graph)
+
+
         // navGraph.setStartDestination(R.id.fragmentAddMed1);
         // navGraph.setStartDestination(R.id.fragmentAddMed1);
-        navGraph.setStartDestination(R.id.homeFragment)
-        navController.graph = navGraph
+
+//        navGraph.setStartDestination(R.id.homeFragment)
+//        navController.graph = navGraph
 
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
