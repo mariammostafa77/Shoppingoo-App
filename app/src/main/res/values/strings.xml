@@ -109,6 +109,8 @@
     <string name="please_select_your_shipping_address">Please Select Your Shipping Address</string>
     <string name="varaince">varaince</string>
     <string name="applay">applay</string>
+    <string name="no_data_to_display">No Data To Display</string>
+    <string name="click_here_to_choose_location">Click Here To Choose Location</string>
 
     <!-- Arrays -->
 

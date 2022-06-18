@@ -8,13 +8,25 @@
     android:background="@color/white"
     tools:context=".me.view.setting.AddNewAddressFragment">
 
+    <TextView
+        android:id="@+id/txtPleaseClickHere"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/click_here_to_choose_location"
+        android:textSize="18sp"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toBottomOf="@+id/chooseLocationImg"
+        app:layout_constraintEnd_toEndOf="@+id/chooseLocationImg"
+        app:layout_constraintStart_toStartOf="@+id/chooseLocationImg"
+        />
+
     <ImageView
         android:id="@+id/chooseLocationImg"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
         app:layout_constraintHeight_percent="0.3"
-        android:src="@drawable/choose_location"
+        android:src="@drawable/add_new_location"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>

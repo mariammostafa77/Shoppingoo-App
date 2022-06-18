@@ -64,6 +64,40 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/chooseAddressHeader"/>
 
+    <ProgressBar
+        android:id="@+id/paymentAddressProgressBar"
+        style="?android:attr/progressBarStyle"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/paymentUserAddressesRecyclerView"
+        app:layout_constraintStart_toStartOf="@+id/paymentUserAddressesRecyclerView"
+        app:layout_constraintTop_toBottomOf="@+id/SelectAddressBar" />
+
+    <ImageView
+        android:id="@+id/imgNoAddress"
+        android:layout_width="151dp"
+        android:layout_height="113dp"
+        android:layout_marginTop="100dp"
+        android:src="@drawable/noresults"
+        android:visibility="invisible"
+        app:layout_constraintTop_toBottomOf="@+id/SelectAddressBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+    <TextView
+        android:id="@+id/txtNoAddressDataFound"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/no_data_to_display"
+        android:visibility="invisible"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="@+id/imgNoAddress"
+        app:layout_constraintStart_toStartOf="@+id/imgNoAddress"
+        app:layout_constraintTop_toBottomOf="@+id/imgNoAddress" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnPaymentAddNewAddress"
         android:layout_width="0dp"

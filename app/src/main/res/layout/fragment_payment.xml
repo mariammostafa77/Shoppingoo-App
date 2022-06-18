@@ -97,6 +97,17 @@
                     android:textColor="@drawable/radio_text_color"
                     android:button="@android:color/transparent"/>
                 <RadioButton
+                    android:id="@+id/radioVisa"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Visa"
+                    android:layout_marginStart="4dp"
+                    android:background="@drawable/radio_selector"
+                    android:textColor="@drawable/radio_text_color"
+                    android:button="@android:color/transparent" />
+               <!--
+                <RadioButton
                     android:id="@+id/radioPaypal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -106,6 +117,7 @@
                     android:background="@drawable/radio_selector"
                     android:textColor="@drawable/radio_text_color"
                     android:button="@android:color/transparent" />
+                    -->
             </RadioGroup>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

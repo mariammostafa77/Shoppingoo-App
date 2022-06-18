@@ -29,10 +29,10 @@ class CustomerAddressAdapter(var lineItems: ArrayList<LineItem>, var orderPrices
         return ViewHolder(view)
     }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.countryText.append("  ${customerAddresses[position].country}")
-        holder.cityText.append("  ${customerAddresses[position].city}")
-        holder.userAddressLine1.append("  ${customerAddresses[position].address1}")
-        holder.phoneText.append("  ${customerAddresses[position].phone}")
+        holder.countryText.text = "Country:  ${customerAddresses[position].country}"
+        holder.cityText.text = "City  ${customerAddresses[position].city}"
+        holder.userAddressLine1.text = "Area:  ${customerAddresses[position].address1}"
+        holder.phoneText.text= "Phone:  ${customerAddresses[position].phone}"
       /*  holder.addressCardView.setOnClickListener {
             val selectedAddresses: Addresse = customerAddresses[position]
             communicator.goToPaymentFromAddress(selectedAddresses,lineItems,orderPrices)
