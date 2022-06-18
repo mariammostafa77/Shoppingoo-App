@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -36,6 +37,8 @@ import com.example.mcommerce.network.AppClient
 import com.example.mcommerce.search.viewModel.SearchViewModel
 import com.example.mcommerce.search.viewModel.SearchViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.slider.RangeSlider
+import com.google.android.material.slider.Slider
 import com.google.android.material.tabs.TabLayout
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -53,14 +56,17 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
     private lateinit var filterImg:ImageView
     private lateinit var imgNoData:ImageView
     private lateinit var tvNoData:TextView
+    private lateinit var applayBtn:Button
     private lateinit var communicator:Communicator
     private lateinit var categoryBarTitle:TextView
     private lateinit var dialog : BottomSheetDialog
+    private lateinit var priceSlider:RangeSlider
     lateinit var searchFactor: SearchViewModelFactory
     lateinit var searchViewModel: SearchViewModel
     private var  collectionId:String=""
     private var brandName:String=""
     private var subCategorySelected:String=""
+    private var maxPrice: Double=0.0
     var allVariantsID:ArrayList<Long> = ArrayList<Long>()
     var allFavProducts:ArrayList<DraftOrderX> = ArrayList<DraftOrderX>()
 
@@ -99,7 +105,6 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
         customerViewModel = ViewModelProvider(this, customerViewModelFactory).get(CustomerViewModel::class.java)
         val sharedPreferences = requireContext().getSharedPreferences("userAuth", AppCompatActivity.MODE_PRIVATE)
         val email: String? = sharedPreferences.getString("email","")
-
         //  userId = sharedPreferences.getString("cusomerID","").toString()
         collectionId=""
         categoriesProductFactory = CategoriesViewFactory(
@@ -111,26 +116,46 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
         filterImg.setOnClickListener(View.OnClickListener {
             val view = layoutInflater.inflate(R.layout.custom_bottom_sheet, null)
             val subTypeRecycle:RecyclerView=view.findViewById(R.id.subTypeRecycle)
+            applayBtn=view.findViewById(R.id.applayBtn)
+            priceSlider=view.findViewById(R.id.priceSlider)
+            priceSlider.valueFrom = 0.0F
+            priceSlider.valueTo = maxPrice.toFloat()
+            priceSlider.addOnChangeListener { rangeSlider, value, fromUser ->
+                // Responds to when slider's value is changed
+            }
+            applayBtn.setOnClickListener {
+
+            }
             subTypeRecycle.adapter = subCategoriesAdapter
+            priceSlider=view.findViewById(R.id.priceSlider)
             dialog.setContentView(view)
             dialog.show()
         })
-        categoriesProductViewModel.getAllProducts(brandName,"","")
-        categoriesProductViewModel.onlineProductsTypes.observe(viewLifecycleOwner) {
+        //categoriesProductViewModel.getAllProducts(brandName,"",collectionId)
+        /*categoriesProductViewModel.onlineProductsTypes.observe(viewLifecycleOwner) {
             getProductTypes(it)
-        }
+        }*/
         categoriesProductViewModel.getCategories(brandName,subCategorySelected, collectionId)
+        getSubTypes()
         categoriesProductViewModel.onlinesubcategoriesProduct.observe(viewLifecycleOwner) {products ->
             allProducts.addAll(products)
             brandProductsAdapter.setUpdatedData(products,requireContext(),communicator)
-
+            for(product in products){
+                if(product.variants[0].price.toDouble() > maxPrice){
+                    maxPrice = product.variants[0].price.toDouble()
+                }
+            }
+            Log.i("MAXTAG",maxPrice.toString())
+            Log.i("CountTAG",products.size.toString())
             if(products.isEmpty()){
                 tvNoData.visibility=View.VISIBLE
                 imgNoData.visibility=View.VISIBLE
+                filterImg.visibility=View.INVISIBLE
 
             }else{
                 tvNoData.visibility=View.INVISIBLE
                 imgNoData.visibility=View.INVISIBLE
+                filterImg.visibility=View.VISIBLE
             }
         }
         categoriesProductViewModel.allOnlineProducts.observe(viewLifecycleOwner) {
@@ -305,31 +330,35 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
         when (tab.position) {
             0 -> {
                 collectionId=""
+                maxPrice=0.0
                 categoriesProductViewModel.getCategories(brandName,"", collectionId)
                 getSubTypes()
                 true
             }
             1 -> {
                 collectionId="273053712523"
+                maxPrice=0.0
                 categoriesProductViewModel.getCategories(brandName,"", collectionId)
                 getSubTypes()
                 true
             }
             2 -> {
                 collectionId="273053679755"
+                maxPrice=0.0
                 categoriesProductViewModel.getCategories(brandName,"", collectionId)
                 getSubTypes()
                 true
             }
             3 -> {
                 collectionId="273053745291"
-                Log.i("TAG","")
+                maxPrice=0.0
                 categoriesProductViewModel.getCategories(brandName,"", collectionId)
                 getSubTypes()
                 true
             }
             4 -> {
                 collectionId="273053778059"
+                maxPrice=0.0
                 categoriesProductViewModel.getCategories(brandName,"", collectionId)
                 getSubTypes()
                 true
@@ -339,11 +368,11 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
         }
     }
     private fun getSubTypes() {
-        if ( collectionId.isNotEmpty()) {
-            categoriesProductViewModel.getProductsType( collectionId)
+        /*if ( collectionId.isNotEmpty()) {
+            categoriesProductViewModel.getProductsType(collectionId)
         }
-        else{
-            categoriesProductViewModel.getAllProducts(brandName,"","")
-        }
+        else{*/
+            categoriesProductViewModel.getAllProducts(brandName,"",collectionId)
+        //}
     }
 }

@@ -24,7 +24,7 @@ class CategoriesViewModel(repo: RepositoryInterface) : ViewModel(){
             }
         }
     }
-    private val allProductTypes = MutableLiveData<List<Product>>()
+    /*private val allProductTypes = MutableLiveData<List<Product>>()
     val onlineProductsTypes: LiveData<List<Product>> = allProductTypes
     fun getProductsType(id:String){
         viewModelScope.launch{
@@ -36,7 +36,7 @@ class CategoriesViewModel(repo: RepositoryInterface) : ViewModel(){
 
             }
         }
-    }
+    }*/
 
     private val subcategoriesProduct = MutableLiveData<List<Product>>()
     val onlinesubcategoriesProduct: LiveData<List<Product>> = subcategoriesProduct

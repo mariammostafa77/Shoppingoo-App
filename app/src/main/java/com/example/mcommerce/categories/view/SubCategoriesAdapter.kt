@@ -28,7 +28,7 @@ class SubCategoriesAdapter : RecyclerView.Adapter<SubCategoriesAdapter.ViewHolde
         this.onClickAction=onClickAction
         this.context=context
         notifyDataSetChanged()
-        Log.i("TAG","adapter ${allTypes[0]}")
+       // Log.i("TAG","adapter ${allTypes[0]}")
     }
     inner class ViewHolder(private val itemView: View): RecyclerView.ViewHolder(itemView){
         var tvType: TextView =itemView.findViewById(R.id.tvType)

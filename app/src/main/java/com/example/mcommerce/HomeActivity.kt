@@ -198,15 +198,18 @@ class HomeActivity : AppCompatActivity(),Communicator {
         replaceFragment(orderDetailsFragment)
     }
 
-    override fun goToOrderSummary(order: Order, fees:Double) {
+    override fun goToOrderSummary(order: Order, totoalAmount: String, subTotal: String, taxAmount: String) {
         val bundle=Bundle()
         bundle.putSerializable("order",order)
-        bundle.putDouble("fees",fees)
+        bundle.putString("totoalAmount",totoalAmount)
+        bundle.putString("subTotal",subTotal)
+        bundle.putString("taxAmount",taxAmount)
         val confirmOrderFragment= ConfirmOrderFragment()
         confirmOrderFragment.arguments=bundle
         replaceFragment(confirmOrderFragment)
         Log.i("TAG","order from activity $order")
     }
+
 
     override fun goToHome() {
         replaceFragment(homeFragment)
