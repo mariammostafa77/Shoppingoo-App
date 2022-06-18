@@ -27,6 +27,7 @@ import com.example.mcommerce.auth.Register.viewModel.RegisterViewModelFactory
 import com.example.mcommerce.auth.model.*
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
+import com.google.android.gms.common.util.CollectionUtils.listOf
 import kotlinx.android.synthetic.main.fragment_register_form.*
 
 
@@ -108,14 +109,14 @@ class RegisterFormFragment : Fragment() {
 
             //  customer.phone="01009843245"
             customer.tags = registerPassword
-            customer.addresses = listOf(Addresse(address1 = "Alkafal",
-                phone = "01203574583",
-                city = "Alex",
-                province = "",
-                zip = "21552",
-                last_name = "Lastnameson",
-                first_name = "Mother",
-                country = "CA"))
+//            customer.addresses = listOf(Addresse(address1 = "Alkafal",
+//                phone = "01203574583",
+//                city = "Alex",
+//                province = "",
+//                zip = "21552",
+//                last_name = "Lastnameson",
+//                first_name = "Mother",
+//                country = "EG"))
 
             var customDetai = CustomerDetail(customer)
             Toast.makeText(requireContext(), "" + myEdtPhone.text.toString(), Toast.LENGTH_LONG)

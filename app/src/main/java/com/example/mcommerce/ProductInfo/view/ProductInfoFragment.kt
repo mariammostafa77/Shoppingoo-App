@@ -32,6 +32,7 @@ import com.example.mcommerce.model.Product
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
 import com.example.mcommerce.search.view.MysearchFragment
+import com.example.mcommerce.shopping_cart.view.ShoppingCartFragment
 import com.example.mcommerce.shopping_cart.viewmodel.ShoppingCartViewModel
 import com.example.mcommerce.shopping_cart.viewmodel.ShoppingCartViewModelFactory
 import java.math.RoundingMode
@@ -58,6 +59,7 @@ class ProductInfoFragment : Fragment() {
     lateinit var ratBar:RatingBar
     lateinit var addToFavImg:ImageView
     lateinit var backImg:ImageView
+    lateinit var cardImg:ImageView
     lateinit var sizeSpinner:Spinner
     lateinit var colorSpinner:Spinner
     lateinit var btnAddToCard:Button
@@ -110,6 +112,7 @@ class ProductInfoFragment : Fragment() {
         colorSpinner=view.findViewById(R.id.colorSpiner)
         btnAddToCard=view.findViewById(R.id.btnAddToCard)
         addToFavImg=view.findViewById(R.id.addToFavImg)
+        cardImg=view.findViewById(R.id.cardDetailsImg)
 
         reviewsRecyclerview=view.findViewById(R.id.reviewsRecycleView)
         reviewsLinearLayoutManager= LinearLayoutManager(requireContext())
@@ -236,46 +239,9 @@ class ProductInfoFragment : Fragment() {
 
         }
         btnAddToCard.setOnClickListener {
+            if(customerEmail !="") {
 
-            var variantId: Long = 0
-            for (i in 0..allProducts[0].variants.size - 1) {
-                if (allProducts[0].variants[i].option1 == sizeSpinner.getSelectedItem()
-                        .toString() &&
-                    allProducts[0].variants[i].option2 == colorSpinner.getSelectedItem()
-                        .toString()
-                ) {
-                    variantId = allProducts[0].variants[i].id
-
-                    break
-                }
-            }
-            if(variantId in allCardVariantsID ){
-                Log.i("exits","already exists")
-                for(i in 0..allCardProducts.size-1) {
-                    if(allCardProducts[i].line_items!![0].variant_id==variantId){
-                        productIndex=i
-                        break
-                    }
-                }
-                var oldCount= allCardProducts[productIndex].line_items!![0].quantity
-                var newCount= oldCount!! + count
-                Log.i("exits","count: "+newCount)
-                val newDraftOrder = DraftOrder(allCardProducts[productIndex])
-                newDraftOrder.draft_order?.line_items!![0].quantity =newCount
-                shoppingCartViewModel.updateSelectedProduct(newDraftOrder.draft_order?.id.toString(),newDraftOrder)
-                shoppingCartViewModel.onlineItemUpdated.observe(viewLifecycleOwner) { response ->
-                    if (response.isSuccessful) {
-                        Toast.makeText(requireContext(),"update Success!!!: "+response.code().toString(),Toast.LENGTH_SHORT).show()
-                        loadData()
-
-                    }
-                }
-
-            }else {
                 var variantId: Long = 0
-                var order = DraftOrderX()
-                order.note = "card"
-                order.email = customerEmail
                 for (i in 0..allProducts[0].variants.size - 1) {
                     if (allProducts[0].variants[i].option1 == sizeSpinner.getSelectedItem()
                             .toString() &&
@@ -283,120 +249,182 @@ class ProductInfoFragment : Fragment() {
                             .toString()
                     ) {
                         variantId = allProducts[0].variants[i].id
-                        Log.i("Index", "index: " + variantId.toString())
-                        // order.line_items!![0].variant_id = variantId
-                        var lineItem = LineItem()
-                        lineItem.quantity = Integer.parseInt(productCount.text.toString())
-                        lineItem.variant_id = variantId
-                        order.line_items = listOf(lineItem)
+
                         break
                     }
                 }
-                // order.line_items!![0].variant_id = 40335555395723
-                var productImage = NoteAttribute()
-                productImage.name = "image"
-                productImage.value = allProducts[0].images[0].src
-                order.note_attributes = listOf(productImage)
-
-                var draftOrder = DraftOrder(order)
-                specificProductsViewModel.getCardOrder(draftOrder)
-                specificProductsViewModel.onlineCardOrder.observe(viewLifecycleOwner) { cardOrder ->
-                    if (cardOrder.isSuccessful) {
-                        Toast.makeText(requireContext(),
-                            "add to card successfull: " + cardOrder.code().toString(),
-                            Toast.LENGTH_LONG).show()
-                        loadData()
-                    } else {
-
-                        Toast.makeText(requireContext(),
-                            "add to card failed: " + cardOrder.code().toString(),
-                            Toast.LENGTH_LONG).show()
-
+                if (variantId in allCardVariantsID) {
+                    Log.i("exits", "already exists")
+                    for (i in 0..allCardProducts.size - 1) {
+                        if (allCardProducts[i].line_items!![0].variant_id == variantId) {
+                            productIndex = i
+                            break
+                        }
                     }
-                }
-            }
+                    var oldCount = allCardProducts[productIndex].line_items!![0].quantity
+                    var newCount = oldCount!! + count
+                    Log.i("exits", "count: " + newCount)
+                    val newDraftOrder = DraftOrder(allCardProducts[productIndex])
+                    newDraftOrder.draft_order?.line_items!![0].quantity = newCount
+                    shoppingCartViewModel.updateSelectedProduct(newDraftOrder.draft_order?.id.toString(),
+                        newDraftOrder)
+                    shoppingCartViewModel.onlineItemUpdated.observe(viewLifecycleOwner) { response ->
+                        if (response.isSuccessful) {
+                            Toast.makeText(requireContext(),
+                                "update Success!!!: " + response.code().toString(),
+                                Toast.LENGTH_SHORT).show()
+                            loadData()
 
-        }
-        addToFavImg.setOnClickListener {
-
-            if(allProducts[0].variants[0].id in allVariantsID){
-                Log.i("exits","already exists")
-                for(i in 0..allFavProducts.size-1) {
-                    if(allFavProducts[i].line_items!![0].variant_id==allProducts[0].variants[0].id){
-                        productIndex=i
-                        break
-                    }
-                }
-                addToFavImg.setImageResource(R.drawable.ic_baseline_favorite_border_24)
-                specificProductsViewModel.deleteFavProduct(allFavProducts.get(productIndex).id.toString())
-                specificProductsViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
-                    if (response.isSuccessful) {
-
-                        Toast.makeText(requireContext(),
-                            "Deleted Success!!!: " + response.code().toString(),
-                            Toast.LENGTH_SHORT).show()
-                        loadData()
-
-
-                    } else {
-                        Toast.makeText(requireContext(),
-                            "Deleted failed: " + response.code().toString(),
-                            Toast.LENGTH_SHORT).show()
-
+                        }
                     }
 
-                }
+                } else {
+                    var variantId: Long = 0
+                    var order = DraftOrderX()
+                    order.note = "card"
+                    order.email = customerEmail
+                    for (i in 0..allProducts[0].variants.size - 1) {
+                        if (allProducts[0].variants[i].option1 == sizeSpinner.getSelectedItem()
+                                .toString() &&
+                            allProducts[0].variants[i].option2 == colorSpinner.getSelectedItem()
+                                .toString()
+                        ) {
+                            variantId = allProducts[0].variants[i].id
+                            Log.i("Index", "index: " + variantId.toString())
+                            // order.line_items!![0].variant_id = variantId
+                            var lineItem = LineItem()
+                            lineItem.quantity = Integer.parseInt(productCount.text.toString())
+                            lineItem.variant_id = variantId
+                            order.line_items = listOf(lineItem)
+                            break
+                        }
+                    }
+                    // order.line_items!![0].variant_id = 40335555395723
+                    var productImage = NoteAttribute()
+                    productImage.name = "image"
+                    productImage.value = allProducts[0].images[0].src
+                    order.note_attributes = listOf(productImage)
 
+                    var draftOrder = DraftOrder(order)
+                    specificProductsViewModel.getCardOrder(draftOrder)
+                    specificProductsViewModel.onlineCardOrder.observe(viewLifecycleOwner) { cardOrder ->
+                        if (cardOrder.isSuccessful) {
+                            Toast.makeText(requireContext(),
+                                "add to card successfull: " + cardOrder.code().toString(),
+                                Toast.LENGTH_LONG).show()
+                            loadData()
+                        } else {
+
+                            Toast.makeText(requireContext(),
+                                "add to card failed: " + cardOrder.code().toString(),
+                                Toast.LENGTH_LONG).show()
+
+                        }
+                    }
+                }
             }
             else{
-                Log.i("exits","not exists")
-                addToFavImg.setImageResource(R.drawable.ic_favorite)
-                var variantId: Long = 0
-                var order = DraftOrderX()
-                order.note = "fav"
-                order.email = customerEmail
-                variantId = allProducts[0].variants[0].id
-                Log.i("Index", "index: " + variantId.toString())
-                // order.line_items!![0].variant_id = variantId
-                var lineItem = LineItem()
-                lineItem.quantity = Integer.parseInt(productCount.text.toString())
-                lineItem.variant_id = variantId
-                order.line_items = listOf(lineItem)
+                Toast.makeText(requireContext(),
+                    "You can not add to cart without login",
+                    Toast.LENGTH_LONG).show()
+            }
+        }
+        addToFavImg.setOnClickListener {
+            if(customerEmail !="") {
+                if (allProducts[0].variants[0].id in allVariantsID) {
+                    Log.i("exits", "already exists")
+                    for (i in 0..allFavProducts.size - 1) {
+                        if (allFavProducts[i].line_items!![0].variant_id == allProducts[0].variants[0].id) {
+                            productIndex = i
+                            break
+                        }
+                    }
+                    addToFavImg.setImageResource(R.drawable.ic_baseline_favorite_border_24)
+                    specificProductsViewModel.deleteFavProduct(allFavProducts.get(productIndex).id.toString())
+                    specificProductsViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
+                        if (response.isSuccessful) {
 
-                // order.line_items!![0].variant_id = 40335555395723
-                var productImage = NoteAttribute()
-                productImage.name = "image"
-                productImage.value = allProducts[0].images[0].src
-                order.note_attributes = listOf(productImage)
+                            Toast.makeText(requireContext(),
+                                "Deleted Success!!!: " + response.code().toString(),
+                                Toast.LENGTH_SHORT).show()
+                            loadData()
 
-                var draftOrder = DraftOrder(order)
-                specificProductsViewModel.getCardOrder(draftOrder)
-                specificProductsViewModel.onlineCardOrder.observe(viewLifecycleOwner) { fav ->
-                    if (fav.isSuccessful) {
-                        Toast.makeText(requireContext(),"add to Fav successfull: " + fav.code().toString(),
-                            Toast.LENGTH_LONG).show()
-                        loadData()
 
-                    } else {
+                        } else {
+                            Toast.makeText(requireContext(),
+                                "Deleted failed: " + response.code().toString(),
+                                Toast.LENGTH_SHORT).show()
 
-                        Toast.makeText(requireContext(),
-                            "add to Fav failed: " + fav.code().toString(),
-                            Toast.LENGTH_LONG).show()
+                        }
 
+                    }
+
+                } else {
+                    Log.i("exits", "not exists")
+                    addToFavImg.setImageResource(R.drawable.ic_favorite)
+                    var variantId: Long = 0
+                    var order = DraftOrderX()
+                    order.note = "fav"
+                    order.email = customerEmail
+                    variantId = allProducts[0].variants[0].id
+                    Log.i("Index", "index: " + variantId.toString())
+                    // order.line_items!![0].variant_id = variantId
+                    var lineItem = LineItem()
+                    lineItem.quantity = Integer.parseInt(productCount.text.toString())
+                    lineItem.variant_id = variantId
+                    order.line_items = listOf(lineItem)
+
+                    // order.line_items!![0].variant_id = 40335555395723
+                    var productImage = NoteAttribute()
+                    productImage.name = "image"
+                    productImage.value = allProducts[0].images[0].src
+                    order.note_attributes = listOf(productImage)
+
+                    var draftOrder = DraftOrder(order)
+                    specificProductsViewModel.getCardOrder(draftOrder)
+                    specificProductsViewModel.onlineCardOrder.observe(viewLifecycleOwner) { fav ->
+                        if (fav.isSuccessful) {
+                            Toast.makeText(requireContext(),
+                                "add to Fav successfull: " + fav.code().toString(),
+                                Toast.LENGTH_LONG).show()
+                            loadData()
+
+                        } else {
+
+                            Toast.makeText(requireContext(),
+                                "add to Fav failed: " + fav.code().toString(),
+                                Toast.LENGTH_LONG).show()
+
+                        }
                     }
                 }
             }
+                else{
+                    Toast.makeText(requireContext(),
+                        "You can not add to Favourite without login",
+                        android.widget.Toast.LENGTH_LONG).show()
+                }
         }
         backImg.setOnClickListener {
             if (mySearchFlag == 1) {
-                val manager = activity!!.supportFragmentManager
-                val trans = manager.beginTransaction()
-                trans.replace(R.id.frameLayout, MysearchFragment()).commit()
+
+                val transaction = requireActivity().supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.frameLayout, MysearchFragment())
+                transaction.addToBackStack(null);
+                transaction.commit()
             } else {
-                val manager = activity!!.supportFragmentManager
-                val trans = manager.beginTransaction()
-                trans.replace(R.id.frameLayout, CategoryFragment(1)).commit()
+
+                val transaction = requireActivity().supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.frameLayout, CategoryFragment(1))
+                transaction.addToBackStack(null);
+                transaction.commit()
             }
+        }
+        cardImg.setOnClickListener {
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.frameLayout, ShoppingCartFragment())
+            transaction.addToBackStack(null);
+            transaction.commit()
         }
 
         return view
