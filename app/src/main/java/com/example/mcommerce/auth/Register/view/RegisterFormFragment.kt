@@ -11,10 +11,7 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -50,6 +47,7 @@ class RegisterFormFragment : Fragment() {
     lateinit var registerPassword:String
     lateinit var registerConfirmPassword:String
     lateinit var registerPhone:String
+    lateinit var registerProgressbar:ProgressBar
 
 
 
@@ -59,7 +57,7 @@ class RegisterFormFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
        var view= inflater.inflate(R.layout.fragment_register_form, container, false)
-
+        registerProgressbar=view.findViewById(R.id.registerProgressBar)
         btnSkip=view.findViewById(R.id.btnSkip)
         txtLogin=view.findViewById(R.id.txtHaveAcc)
         edtFName=view.findViewById(R.id.edtFName)
@@ -95,7 +93,7 @@ class RegisterFormFragment : Fragment() {
                 Patterns.EMAIL_ADDRESS.matcher(registerEmail).matches()
             ) {
 
-
+            registerProgressbar.visibility = View.VISIBLE
 
             var customer = CustomerX()
             customer.first_name = registerFName
@@ -124,6 +122,7 @@ class RegisterFormFragment : Fragment() {
             registerViewModel.postCustomer(customDetai)
             registerViewModel.customer.observe(viewLifecycleOwner) { response ->
                 if (response.isSuccessful) {
+                    registerProgressbar.visibility = View.INVISIBLE
                     Toast.makeText(requireContext(),
                         "Register Successfull: " + response.code().toString(),
                         Toast.LENGTH_LONG).show()
@@ -141,6 +140,7 @@ class RegisterFormFragment : Fragment() {
                     editor.commit()
                     startActivity(Intent(requireContext(), HomeActivity::class.java))
                 } else {
+
                     Log.i("Reg", "messs: " + response.code().toString())
                     Log.i("Reg", "err: " + response.errorBody())
                     Toast.makeText(requireContext(),

@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 
 import android.widget.Toast
@@ -37,6 +38,7 @@ class FavouriteFragment : Fragment(),FavouriteOnClickLisner {
     lateinit var communicator: Communicator
     lateinit var noDataImage:ImageView
     lateinit var txtNoData:TextView
+    lateinit var favProgressbar:ProgressBar
 
     var favProducts:ArrayList<DraftOrderX> = ArrayList<DraftOrderX>()
 
@@ -50,6 +52,7 @@ class FavouriteFragment : Fragment(),FavouriteOnClickLisner {
         favRecyclerView = view.findViewById(R.id.favRecyclerView)
         noDataImage=view.findViewById(R.id.noDataImg)
         txtNoData=view.findViewById(R.id.txtNoData)
+        favProgressbar=view.findViewById(R.id.favProgressBar)
         Log.i("FavArray","test Fav: ")
         Toast.makeText(requireContext(),"fav Fragment",Toast.LENGTH_LONG).show()
         favAdapter= FavProductsAdapter(this,communicator)
@@ -62,6 +65,7 @@ class FavouriteFragment : Fragment(),FavouriteOnClickLisner {
         val sharedPreferences: SharedPreferences = context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
         val email: String? = sharedPreferences.getString("email","")
         val note = "fav"
+        favProgressbar.visibility = View.VISIBLE
         favViewModel.getFavProducts()
         favViewModel.onlineFavProduct.observe(viewLifecycleOwner) { allFavProducts ->
 
@@ -75,10 +79,12 @@ class FavouriteFragment : Fragment(),FavouriteOnClickLisner {
             if(favProducts.isEmpty()){
                 noDataImage.visibility=View.VISIBLE
                 txtNoData.visibility=View.VISIBLE
+                favProgressbar.visibility = View.INVISIBLE
             }
             else{
                 noDataImage.visibility=View.INVISIBLE
                 txtNoData.visibility=View.INVISIBLE
+                favProgressbar.visibility = View.INVISIBLE
             }
 
             favAdapter.setFavtProducts(requireContext(),favProducts,favProducts.size)

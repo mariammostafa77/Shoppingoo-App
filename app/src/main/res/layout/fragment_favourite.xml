@@ -63,6 +63,7 @@
 
     <ImageView
         android:id="@+id/noDataImg"
+        android:visibility="invisible"
         android:layout_width="151dp"
         android:layout_height="113dp"
         android:layout_marginTop="50dp"
@@ -82,6 +83,18 @@
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="@+id/noDataImg"
         app:layout_constraintStart_toStartOf="@+id/noDataImg"
-        app:layout_constraintTop_toBottomOf="@+id/noDataImg" />
+        app:layout_constraintTop_toBottomOf="@+id/noDataImg"
+        android:visibility="invisible"/>
+
+    <ProgressBar
+        android:id="@+id/favProgressBar"
+        style="?android:attr/progressBarStyle"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/favRecyclerView"
+        app:layout_constraintStart_toStartOf="@+id/favRecyclerView"
+        app:layout_constraintTop_toBottomOf="@+id/favBarID" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

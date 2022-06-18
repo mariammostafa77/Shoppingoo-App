@@ -9,10 +9,7 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -39,6 +36,7 @@ class LoginFormFragment : Fragment() {
     var isSuccess:Boolean=false
     lateinit var loginEmail:String
     lateinit var loginPassword:String
+    lateinit var loginProgressbar:ProgressBar
     var sharedPreferences: SharedPreferences? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,6 +47,8 @@ class LoginFormFragment : Fragment() {
         edtLoginEmail=view.findViewById(R.id.edtLoginEmail)
         edtLoginPassword=view.findViewById(R.id.edtLoginPassword)
         btnLogin=view.findViewById(R.id.btnLogin)
+        loginProgressbar=view.findViewById(R.id.loginProgressBar)
+
         txtRegister.setOnClickListener {
             var navController: NavController = Navigation.findNavController(it)
             var navDir: NavDirections =LoginFormFragmentDirections.actionMyLoginFragmentToMyRegisterFragment()
@@ -58,12 +58,14 @@ class LoginFormFragment : Fragment() {
         }
 
         btnLogin.setOnClickListener {
+
             loginEmail=edtLoginEmail.text.toString()
             loginPassword=edtLoginPassword.text.toString()
 
             if (!loginEmail.isEmpty() && !loginPassword.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(loginEmail)
                     .matches() && loginPassword.length >= 6
             ) {
+                loginProgressbar.visibility = View.VISIBLE
                 loginViewModelFactory = LoginViewModelFactory(
                     Repository.getInstance(
                         AppClient.getInstance(),
@@ -79,6 +81,7 @@ class LoginFormFragment : Fragment() {
                     for (i in 0..customer.customers.size - 1) {
                         if (customer.customers[i].email == loginEmail && customer.customers[i].tags == loginPassword) {
                             isSuccess = true
+                            loginProgressbar.visibility = View.INVISIBLE
                             Toast.makeText(requireContext(), "Login Successful", Toast.LENGTH_LONG)
                                 .show()
                             Log.i("login",
