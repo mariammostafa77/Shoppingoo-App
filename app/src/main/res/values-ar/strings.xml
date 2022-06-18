@@ -83,6 +83,9 @@
     <string name="yourAddress">عنوانك</string>
     <string name="paymentMethod">طريقة الدفع</string>
     <string name="noData">لم يتم العثور علي شئ</string>
+    <string name="noOrder">"لا توجد طلبات جارية"</string>
+    <string name="applay">تطبيق</string>
+
 
     <string name="choose_address">Choose Address</string>
     <string name="please_select_your_shipping_address">Please Select Your Shipping Address</string>

@@ -72,19 +72,16 @@ class ConfirmOrderFragment : Fragment() {
         orderDetailsViewModel = ViewModelProvider(this, orderDetailsViewModelFactory)[OrderDetailsViewModel::class.java]
         if(arguments != null){
             myOrder=arguments?.getSerializable("order") as Order
-            fees= arguments?.getDouble("fees")!!
+            //fees= arguments?.getDouble("fees")!!
             tvAddress.text=
-                "${myOrder.billing_address?.address1} ${myOrder.billing_address?.city}, ${myOrder.billing_address?.country}"
-            tvTotal.text=
-                "${myOrder.total_price} ${myOrder.currency}"
-
-
-            tvSubTotal.text= myOrder.subtotal_price.toString()
-            tvFees.text=fees.toString()
-            tvPhoneNum.text=myOrder.phone.toString()
+                "${myOrder.shipping_address?.address1} ${myOrder.shipping_address?.city}, ${myOrder.shipping_address?.country}"
+            tvTotal.text= arguments?.getString("totoalAmount")!!
+            tvSubTotal.text= arguments?.getString("subTotal")!!
+            tvFees.text=arguments?.getString("taxAmount")!!
+            tvPhoneNum.text=myOrder.shipping_address?.phone.toString()
             //tvPaymentMethod.text=myOrder.processing_method
             Log.i("TAG","line ${myOrder.line_items}")
-            orderItemsAdapter.setUpdatedData(myOrder.line_items!!,requireContext(),communicator)
+            myOrder.line_items?.let { orderItemsAdapter.setUpdatedData(it,requireContext(),communicator) }
 
         }
         shoppingCartViewModelFactory = ShoppingCartViewModelFactory(Repository.getInstance(AppClient.getInstance(), requireContext()))

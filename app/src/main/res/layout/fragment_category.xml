@@ -121,10 +121,10 @@
 
     <ImageView
         android:id="@+id/imgNoData"
-        android:layout_width="201dp"
-        android:layout_height="158dp"
-        android:layout_marginTop="20dp"
-        android:src="@drawable/nodata"
+        android:layout_width="151dp"
+        android:layout_height="113dp"
+        android:layout_marginTop="50dp"
+        android:src="@drawable/noresults"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/categoryTabBar" />
@@ -133,6 +133,7 @@
         android:id="@+id/tvNoData"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:text="@string/noData"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="@+id/imgNoData"

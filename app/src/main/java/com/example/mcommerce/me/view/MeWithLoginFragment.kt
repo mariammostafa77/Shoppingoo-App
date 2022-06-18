@@ -41,6 +41,7 @@ class MeWithLogin : Fragment(), FavouriteOnClickLisner, OnOrderClickListenerInte
     lateinit var shoppingCartIcon : ImageView
     lateinit var txtWelcomeUser : TextView
     lateinit var txtMoreFav:TextView
+    lateinit var tvNoOrder:TextView
     lateinit var tvMoreOrders : TextView
     lateinit var ordersrecycler:RecyclerView
     lateinit var favRecyclerView: RecyclerView
@@ -69,7 +70,7 @@ class MeWithLogin : Fragment(), FavouriteOnClickLisner, OnOrderClickListenerInte
         val fname: String? = sharedPreferences.getString("fname","")
         val lname: String? = sharedPreferences.getString("lname","")
         userId = sharedPreferences.getString("cusomerID","").toString()
-
+        tvNoOrder.visibility=View.INVISIBLE
         //order array
         ordersAdapter=OrdersAdapter()
         ordersrecycler.adapter=ordersAdapter
@@ -84,9 +85,17 @@ class MeWithLogin : Fragment(), FavouriteOnClickLisner, OnOrderClickListenerInte
         ordersViewModel.allOnlineOrders.observe(viewLifecycleOwner) {
             if(it.size >=2){
                 ordersAdapter.setUpdatedData(it,requireContext(),this,2)
+                tvNoOrder.visibility=View.INVISIBLE
             }
             else{
                 ordersAdapter.setUpdatedData(it,requireContext(),this,it.size)
+               if(it.isEmpty()){
+                   tvNoOrder.visibility=View.VISIBLE
+                   tvMoreOrders.visibility=View.INVISIBLE
+               }else{
+                   tvNoOrder.visibility=View.INVISIBLE
+                   tvMoreOrders.visibility=View.VISIBLE
+               }
             }
 
         }
@@ -151,6 +160,7 @@ class MeWithLogin : Fragment(), FavouriteOnClickLisner, OnOrderClickListenerInte
         tvMoreOrders=view.findViewById(R.id.tvMoreOrders)
         txtMoreFav=view.findViewById(R.id.txtMoreFav)
         ordersrecycler=view.findViewById(R.id.ordersrecycler)
+        tvNoOrder=view.findViewById(R.id.tvNoOrder)
     }
 
     fun replaceFragment(fragment: Fragment) {
