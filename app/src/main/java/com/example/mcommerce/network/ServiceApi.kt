@@ -165,6 +165,9 @@ import java.util.*
       @GET("convert?apikey=bvWIQqwc5PjLwYrSgElp83ZEktkQWLJB&amount=1&from=EGP")
       suspend fun getCurrencyValue(@Query("to") to: String): CurrencyConverter
 
+      @GET("convert?apikey=bvWIQqwc5PjLwYrSgElp83ZEktkQWLJB&amount=1&to=EGP")
+      suspend fun getCurrencyValuesInEgp(@Query("from") from: String): CurrencyConverter
+
       @Headers(
           "Accept: application/json",
           "X-Shopify-Access-Token: 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",

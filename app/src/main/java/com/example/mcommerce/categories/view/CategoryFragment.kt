@@ -57,22 +57,19 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
     private lateinit var categoryBarTitle:TextView
     private lateinit var dialog : BottomSheetDialog
     private lateinit var priceSlider:RangeSlider
+    private lateinit var customerViewModel: CustomerViewModel
+    private lateinit var customerViewModelFactory: CustomerViewModelFactory
     lateinit var searchFactor: SearchViewModelFactory
     lateinit var searchViewModel: SearchViewModel
     private var  collectionId:String=""
     private var brandName:String=""
     private var subCategorySelected:String=""
     private var maxPrice: Double=0.0
-    var allVariantsID:ArrayList<Long> = ArrayList<Long>()
-    var allFavProducts:ArrayList<DraftOrderX> = ArrayList<DraftOrderX>()
-
-    lateinit var customerViewModel: CustomerViewModel
-    lateinit var customerViewModelFactory: CustomerViewModelFactory
-
-     var userId = ""
-    var toCurrency = ""
-    var convertorResult: Double = 0.0
-    var allProducts: ArrayList<Product> = ArrayList()
+    private var priceSliderPrice: Double=0.0
+    private var priceSelectesConverted:Double=0.0
+    private var allVariantsID:ArrayList<Long> = ArrayList<Long>()
+    private var allFavProducts:ArrayList<DraftOrderX> = ArrayList<DraftOrderX>()
+    private var allProducts: ArrayList<Product> = ArrayList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -86,9 +83,6 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
         } else{
             brandName=""
         }
-        tvNoData.visibility=View.INVISIBLE
-        imgNoData.visibility=View.INVISIBLE
-
         searchFactor = SearchViewModelFactory(
             Repository.getInstance(AppClient.getInstance(), requireContext())
         )
@@ -101,7 +95,6 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
         customerViewModel = ViewModelProvider(this, customerViewModelFactory).get(CustomerViewModel::class.java)
         val sharedPreferences = requireContext().getSharedPreferences("userAuth", AppCompatActivity.MODE_PRIVATE)
         val email: String? = sharedPreferences.getString("email","")
-        //  userId = sharedPreferences.getString("cusomerID","").toString()
         collectionId=""
         categoriesProductFactory = CategoriesViewFactory(
             Repository.getInstance(
@@ -115,25 +108,38 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
             applayBtn=view.findViewById(R.id.applayBtn)
             priceSlider=view.findViewById(R.id.priceSlider)
             priceSlider.valueFrom = 0.0F
-            priceSlider.valueTo = maxPrice.toFloat()
+            val strPrice =  SavedSetting.getPrice(maxPrice.toString(), requireContext())
+            val delim = " "
+            val list = strPrice.split(delim)
+            priceSlider.valueTo =list[0].toFloat()
             priceSlider.addOnChangeListener { rangeSlider, value, fromUser ->
-                // Responds to when slider's value is changed
+                priceSliderPrice= value.toDouble()
             }
             applayBtn.setOnClickListener {
-
+                if(priceSliderPrice != 0.0){
+                    if(list[1] != "EGP"){
+                        categoriesProductViewModel.getAmountAfterConversionInEgp(list[1])
+                    }
+                    else{
+                        filterProductsByPrice(allProducts,priceSliderPrice)
+                    }
+                }
+                dialog.dismiss()
             }
             subTypeRecycle.adapter = subCategoriesAdapter
             priceSlider=view.findViewById(R.id.priceSlider)
             dialog.setContentView(view)
             dialog.show()
         })
-        //categoriesProductViewModel.getAllProducts(brandName,"",collectionId)
-        /*categoriesProductViewModel.onlineProductsTypes.observe(viewLifecycleOwner) {
-            getProductTypes(it)
-        }*/
+        categoriesProductViewModel.onlineCurrencyChangedInEgp.observe(viewLifecycleOwner){
+            priceSelectesConverted=priceSliderPrice/it.result
+            filterProductsByPrice(allProducts,priceSelectesConverted)
+        }
+
         categoriesProductViewModel.getCategories(brandName,subCategorySelected, collectionId)
         getSubTypes()
         categoriesProductViewModel.onlinesubcategoriesProduct.observe(viewLifecycleOwner) {products ->
+            allProducts.clear()
             allProducts.addAll(products)
             brandProductsAdapter.setUpdatedData(products,requireContext(),communicator)
             for(product in products){
@@ -141,18 +147,7 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
                     maxPrice = product.variants[0].price.toDouble()
                 }
             }
-            Log.i("MAXTAG",maxPrice.toString())
-            Log.i("CountTAG",products.size.toString())
-            if(products.isEmpty()){
-                tvNoData.visibility=View.VISIBLE
-                imgNoData.visibility=View.VISIBLE
-                filterImg.visibility=View.INVISIBLE
-
-            }else{
-                tvNoData.visibility=View.INVISIBLE
-                imgNoData.visibility=View.INVISIBLE
-                filterImg.visibility=View.VISIBLE
-            }
+            checkEmptyArray(products)
         }
         categoriesProductViewModel.allOnlineProducts.observe(viewLifecycleOwner) {
             getProductTypes(it)
@@ -208,7 +203,7 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
         subCategorySelected=type
         categoriesProductViewModel.getCategories(brandName,subCategorySelected, collectionId)
         Toast.makeText(requireContext(),subCategorySelected,Toast.LENGTH_LONG).show()
-        dialog.dismiss()
+        //dialog.dismiss()
     }
 
     override fun addToFav(product: Product, img: ImageView, myIndex: Int) {
@@ -223,17 +218,13 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
             searchViewModel.deleteSelectedProduct(allFavProducts.get(myIndex).id.toString())
             searchViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
                 if (response.isSuccessful) {
-
                     Toast.makeText(requireContext(),
                         "Deleted Success!!!: " + response.code().toString(),
                         Toast.LENGTH_SHORT).show()
-
-
                 } else {
                     Toast.makeText(requireContext(),
                         "Deleted failed: " + response.code().toString(),
                         Toast.LENGTH_SHORT).show()
-
                 }
 
             }
@@ -355,11 +346,29 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
         }
     }
     private fun getSubTypes() {
-        /*if ( collectionId.isNotEmpty()) {
-            categoriesProductViewModel.getProductsType(collectionId)
+        categoriesProductViewModel.getAllProducts(brandName,"",collectionId)
+    }
+    private fun checkEmptyArray(products:List<Product>){
+        if(products.isEmpty()){
+            tvNoData.visibility=View.VISIBLE
+            imgNoData.visibility=View.VISIBLE
+            filterImg.visibility=View.INVISIBLE
+
+        }else{
+            tvNoData.visibility=View.INVISIBLE
+            imgNoData.visibility=View.INVISIBLE
+            filterImg.visibility=View.VISIBLE
         }
-        else{*/
-            categoriesProductViewModel.getAllProducts(brandName,"",collectionId)
-        //}
+    }
+    private fun filterProductsByPrice(productsList: List<Product>,priceSliderPrice:Double){
+        var filteredProduct:ArrayList<Product> = ArrayList<Product>()
+        filteredProduct.clear()
+        for (product in productsList){
+            if(product.variants[0].price.toDouble() <= priceSliderPrice){
+                filteredProduct.add(product)
+            }
+        }
+        brandProductsAdapter.setUpdatedData(filteredProduct,requireContext(),communicator)
+        checkEmptyArray(filteredProduct)
     }
 }
