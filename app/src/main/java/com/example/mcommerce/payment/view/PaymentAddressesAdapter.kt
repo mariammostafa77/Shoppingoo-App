@@ -1,4 +1,4 @@
-package com.example.mcommerce.shopping_cart.view
+package com.example.mcommerce.payment.view
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -29,10 +29,10 @@ class PaymentAddressesAdapter (var communicator: Communicator, var lineItems: Ar
         return ViewHolder(view)
     }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.countryText.append("  ${customerAddresses[position].country}")
-        holder.cityText.append("  ${customerAddresses[position].city}")
-        holder.userAddressLine1.append("  ${customerAddresses[position].address1}")
-        holder.phoneText.append("  ${customerAddresses[position].phone}")
+        holder.countryText.text="Country:  ${customerAddresses[position].country}"
+        holder.cityText.text = "City  ${customerAddresses[position].city}"
+        holder.userAddressLine1.text = "Area:  ${customerAddresses[position].address1}"
+        holder.phoneText.text = "Phone:  ${customerAddresses[position].phone}"
         holder.addressCardView.setOnClickListener {
 
             val selectedAddresses: Addresse = customerAddresses[position]

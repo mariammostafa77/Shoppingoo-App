@@ -9,14 +9,14 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.NavDirections
+import androidx.navigation.Navigation
 import com.example.mcommerce.HomeActivity
 import com.example.mcommerce.R
 import com.example.mcommerce.auth.Register.view.RegisterFormFragment
@@ -24,6 +24,7 @@ import com.example.mcommerce.auth.login.viewModel.LoginViewModel
 import com.example.mcommerce.auth.login.viewModel.LoginViewModelFactory
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
+import com.example.mcommerce.shopping_cart.view.ShoppingCartFragment
 
 
 class LoginFormFragment : Fragment() {
@@ -31,11 +32,13 @@ class LoginFormFragment : Fragment() {
     lateinit var edtLoginEmail:EditText
     lateinit var edtLoginPassword:EditText
     lateinit var btnLogin:Button
+    lateinit var btnLoginSkip:Button
     lateinit var loginViewModel: LoginViewModel
     lateinit var loginViewModelFactory: LoginViewModelFactory
     var isSuccess:Boolean=false
     lateinit var loginEmail:String
     lateinit var loginPassword:String
+    lateinit var loginProgressbar:ProgressBar
     var sharedPreferences: SharedPreferences? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,25 +49,31 @@ class LoginFormFragment : Fragment() {
         edtLoginEmail=view.findViewById(R.id.edtLoginEmail)
         edtLoginPassword=view.findViewById(R.id.edtLoginPassword)
         btnLogin=view.findViewById(R.id.btnLogin)
+        btnLoginSkip=view.findViewById(R.id.btnLoginSkip)
+        loginProgressbar=view.findViewById(R.id.loginProgressBar)
+        btnLoginSkip.setOnClickListener {
+            startActivity(Intent(requireContext(),HomeActivity::class.java))
+        }
+
         txtRegister.setOnClickListener {
-//            var navController: NavController = Navigation.findNavController(it)
-//            var navDir: NavDirections =LoginFormFragmentDirections.actionMyLoginFragmentToMyRegisterFragment()
-//            navController.navigate(navDir)
-            val fragment: Fragment = RegisterFormFragment()
-            val fragmentManager: FragmentManager = activity!!.supportFragmentManager
-            val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
-            fragmentTransaction.replace(com.example.mcommerce.R.id.frameLayout, fragment)
-            fragmentTransaction.addToBackStack(null)
-            fragmentTransaction.commit()
+
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragmentContainerView, RegisterFormFragment())
+            transaction.addToBackStack(null);
+            transaction.commit()
+
+
         }
 
         btnLogin.setOnClickListener {
+
             loginEmail=edtLoginEmail.text.toString()
             loginPassword=edtLoginPassword.text.toString()
 
             if (!loginEmail.isEmpty() && !loginPassword.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(loginEmail)
                     .matches() && loginPassword.length >= 6
             ) {
+                loginProgressbar.visibility = View.VISIBLE
                 loginViewModelFactory = LoginViewModelFactory(
                     Repository.getInstance(
                         AppClient.getInstance(),
@@ -80,6 +89,7 @@ class LoginFormFragment : Fragment() {
                     for (i in 0..customer.customers.size - 1) {
                         if (customer.customers[i].email == loginEmail && customer.customers[i].tags == loginPassword) {
                             isSuccess = true
+                            loginProgressbar.visibility = View.INVISIBLE
                             Toast.makeText(requireContext(), "Login Successful", Toast.LENGTH_LONG)
                                 .show()
                             Log.i("login",

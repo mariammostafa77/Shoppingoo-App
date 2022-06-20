@@ -19,6 +19,7 @@ import com.example.mcommerce.ProductInfo.view.Communicator
 
 import com.example.mcommerce.R
 import com.example.mcommerce.home.view.HomeFragmentDirections
+import com.example.mcommerce.me.viewmodel.SavedSetting
 
 import com.example.mcommerce.model.Product
 
@@ -38,6 +39,7 @@ class SearchAdapter( var comminicator:Communicator,var allProducts: List<Product
     class MyViewHolder(private val itemView: View) : RecyclerView.ViewHolder(itemView) {
         val productImg: ImageView = itemView.findViewById(R.id.productImage)
         val productTitle: TextView = itemView.findViewById(R.id.productName)
+        val productPrice:TextView=itemView.findViewById(R.id.tvProductPrice)
         val cardItem: CardView = itemView.findViewById(R.id.cardViewCategoryItem)
         var favIconImage:ImageView=itemView.findViewById(R.id.favIconImage)
 
@@ -50,6 +52,8 @@ class SearchAdapter( var comminicator:Communicator,var allProducts: List<Product
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currentPosition=allProducts[position]
+        val amount = SavedSetting.getPrice(currentPosition.variants[0].price.toString(), context)
+        holder.productPrice.text=amount
         holder.productTitle.text=currentPosition.title
         Glide.with(context).load(currentPosition.image.src).into(holder.productImg)
         holder.cardItem.setOnClickListener{

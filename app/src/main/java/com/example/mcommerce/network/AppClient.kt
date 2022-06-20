@@ -127,6 +127,12 @@ class AppClient : RemoteSourceInterface {
         return response!!
     }
 
+    override suspend fun getCurrencyValueInEgp(from: String): CurrencyConverter {
+        val service = CurrencyConverterHelper.getRetrofit()?.create(ServiceApi::class.java)
+        val response = service?.getCurrencyValuesInEgp(from)
+        return response!!
+    }
+
     override suspend fun postNewOrder(orders: OrderResponse): Response<OrderResponse> {
         val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
         val response = service?.postNewOrder(orders)

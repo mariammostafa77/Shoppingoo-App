@@ -24,7 +24,7 @@ import com.example.mcommerce.favourite.view.FavouriteFragment
 import com.example.mcommerce.favourite.view.FavouriteOnClickLisner
 import com.example.mcommerce.favourite.viewModel.FavViewModel
 import com.example.mcommerce.favourite.viewModel.FavViewModelFactory
-import com.example.mcommerce.me.view.setting.AppSettingFragment
+import com.example.mcommerce.me.view.setting.WithLoginAppSettingFragment
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
 import com.example.mcommerce.orders.model.Order
@@ -40,7 +40,9 @@ class MeWithLogin : Fragment(), FavouriteOnClickLisner, OnOrderClickListenerInte
     lateinit var settingICon: ImageView
     lateinit var shoppingCartIcon : ImageView
     lateinit var txtWelcomeUser : TextView
+    lateinit var txtNoFav:TextView
     lateinit var txtMoreFav:TextView
+    lateinit var tvNoOrder:TextView
     lateinit var tvMoreOrders : TextView
     lateinit var ordersrecycler:RecyclerView
     lateinit var favRecyclerView: RecyclerView
@@ -56,8 +58,6 @@ class MeWithLogin : Fragment(), FavouriteOnClickLisner, OnOrderClickListenerInte
     var userName : String = ""
     private var userId:String =""
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -65,11 +65,12 @@ class MeWithLogin : Fragment(), FavouriteOnClickLisner, OnOrderClickListenerInte
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
        val view = inflater.inflate(R.layout.fragment_me_with_login, container, false)
         initComponent(view)
+        txtNoFav=view.findViewById(R.id.txtNoFav)
         val sharedPreferences: SharedPreferences = context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
         val fname: String? = sharedPreferences.getString("fname","")
         val lname: String? = sharedPreferences.getString("lname","")
         userId = sharedPreferences.getString("cusomerID","").toString()
-
+        tvNoOrder.visibility=View.INVISIBLE
         //order array
         ordersAdapter=OrdersAdapter()
         ordersrecycler.adapter=ordersAdapter
@@ -84,9 +85,17 @@ class MeWithLogin : Fragment(), FavouriteOnClickLisner, OnOrderClickListenerInte
         ordersViewModel.allOnlineOrders.observe(viewLifecycleOwner) {
             if(it.size >=2){
                 ordersAdapter.setUpdatedData(it,requireContext(),this,2)
+                tvNoOrder.visibility=View.INVISIBLE
             }
             else{
                 ordersAdapter.setUpdatedData(it,requireContext(),this,it.size)
+               if(it.isEmpty()){
+                   tvNoOrder.visibility=View.VISIBLE
+                   tvMoreOrders.visibility=View.INVISIBLE
+               }else{
+                   tvNoOrder.visibility=View.INVISIBLE
+                   tvMoreOrders.visibility=View.VISIBLE
+               }
             }
 
         }
@@ -106,13 +115,23 @@ class MeWithLogin : Fragment(), FavouriteOnClickLisner, OnOrderClickListenerInte
         val note = "fav"
         favViewModel.getFavProducts()
         favViewModel.onlineFavProduct.observe(viewLifecycleOwner) { allFavProducts ->
-
+            favProducts.clear()
             for (i in 0..allFavProducts.size-1){
                 if(allFavProducts.get(i).note == note && allFavProducts.get(i).email == email){
-
                     favProducts.add(allFavProducts.get(i))
-
                 }
+
+            }
+            if(!favProducts.isEmpty() ){
+                txtMoreFav.visibility=View.VISIBLE
+                txtNoFav.visibility=View.INVISIBLE
+
+
+            }
+            else{
+                txtMoreFav.visibility=View.INVISIBLE
+                txtNoFav.visibility=View.VISIBLE
+
 
             }
 
@@ -127,7 +146,7 @@ class MeWithLogin : Fragment(), FavouriteOnClickLisner, OnOrderClickListenerInte
 
         txtWelcomeUser.append(" ${fname} ${lname}. ")
         settingICon.setOnClickListener {
-            replaceFragment(AppSettingFragment())
+            replaceFragment(WithLoginAppSettingFragment())
         }
         shoppingCartIcon.setOnClickListener {
             replaceFragment(ShoppingCartFragment())
@@ -151,6 +170,7 @@ class MeWithLogin : Fragment(), FavouriteOnClickLisner, OnOrderClickListenerInte
         tvMoreOrders=view.findViewById(R.id.tvMoreOrders)
         txtMoreFav=view.findViewById(R.id.txtMoreFav)
         ordersrecycler=view.findViewById(R.id.ordersrecycler)
+        tvNoOrder=view.findViewById(R.id.tvNoOrder)
     }
 
     fun replaceFragment(fragment: Fragment) {

@@ -4,12 +4,19 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
@@ -23,6 +30,8 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.snackbar.Snackbar
+import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -34,15 +43,63 @@ class MapActivity : AppCompatActivity() , OnMapReadyCallback {
     var currentMarker: Marker? = null
     lateinit var lastLocation : Location
 
-    private lateinit var map_search_bar : SearchView
+    private lateinit var mapSearchView : EditText
+    private lateinit var imgSearchBtn : ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
 
-        map_search_bar = findViewById(R.id.map_search_bar)
+        mapSearchView = findViewById(R.id.map_search_bar)
+        imgSearchBtn = findViewById(R.id.imgSearchBtn)
+
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         fetchLocation()
+        /*
+        mapSearchView.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+               // searchLocation()
+            }
+            override fun afterTextChanged(editable: Editable) {
+                searchLocation()
+            }
+        })
+        */
+        imgSearchBtn.setOnClickListener {
+            mapSearchView.onEditorAction(EditorInfo.IME_ACTION_DONE)
+            searchInLocation(it)
+        }
+    }
+
+    fun searchInLocation(view : View) {
+        lateinit var searchLocation: String
+        searchLocation = mapSearchView.text.toString()
+        var addressList: List<Address>? = null
+
+        if (searchLocation.isNullOrEmpty()) {
+            val snakbar: Snackbar = Snackbar.make(view,"Type Any Location",Snackbar.LENGTH_LONG)
+            snakbar.show()
+        }
+        else{
+            val searchGeoCoder = Geocoder(this)
+            try {
+                addressList = searchGeoCoder.getFromLocationName(searchLocation, 1)
+                if(addressList.size>0){
+                    val address = addressList!![0]
+                    val latLng = LatLng(address.latitude, address.longitude)
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10f))
+                }
+                else{
+                    val snakbar: Snackbar = Snackbar.make(view,"Not Found!!",Snackbar.LENGTH_LONG)
+                    snakbar.show()
+                }
+
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+
+        }
     }
 
     @SuppressLint("MissingPermission")

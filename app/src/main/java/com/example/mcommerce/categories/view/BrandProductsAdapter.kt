@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.R
+import com.example.mcommerce.me.viewmodel.SavedSetting
 import com.example.mcommerce.model.Product
 
 class BrandProductsAdapter(var currencyConvertor: CurrencyConvertor) : RecyclerView.Adapter<BrandProductsAdapter.ViewHolder>(){
@@ -34,16 +35,17 @@ class BrandProductsAdapter(var currencyConvertor: CurrencyConvertor) : RecyclerV
 
         fun bind(data: Product){
             productName.text=allBrands[position].title
-            tvProductPrice.text=allBrands[position].variants[0].price + "EGP"
-          //  tvProductPrice.text = currencyConvertor.onPriceConverter(position)
-            //Glide.with(context).load(allBrands[position].image.src).into(productImage)
+
+            val amount = SavedSetting.getPrice(allBrands[position].variants[0].price.toString(), context)
+            tvProductPrice.text = amount
+
+            Glide.with(context).load(allBrands[position].image.src).placeholder(R.drawable.mycardview_24).into(productImage)
             catCardView.setOnClickListener {
                 comminucator.passProductData(allBrands[position])
             }
             favIconImage.setOnClickListener {
                 currencyConvertor.addToFav(allBrands[position],favIconImage,position)
             }
-
             currencyConvertor.addFavImg(favIconImage,allBrands[position].variants[0].id)
 
         }

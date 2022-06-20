@@ -87,7 +87,7 @@ import java.util.*
           "Accept: application/json",
           "X-Shopify-Access-Token: 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"
       )
-      @GET("customers.json")
+      @GET("customers.json?limit=250")
       suspend fun getCustomers(): Customer
 
       @Headers(
@@ -121,7 +121,7 @@ import java.util.*
       @Headers(
           "Accept: application/json",
           "X-Shopify-Access-Token: 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",)
-      @GET("draft_orders.json")
+      @GET("draft_orders.json?limit=250")
       suspend fun getShoppingCartProducts(): DraftResponse
 
       @Headers(
@@ -164,6 +164,9 @@ import java.util.*
       // https://api.apilayer.com/exchangerates_data/convert?to=EGP&from=USD&amount=1&apikey=OdsWOfPbLEyojdjFR7FjcSzVpifcX23n
       @GET("convert?apikey=bvWIQqwc5PjLwYrSgElp83ZEktkQWLJB&amount=1&from=EGP")
       suspend fun getCurrencyValue(@Query("to") to: String): CurrencyConverter
+
+      @GET("convert?apikey=bvWIQqwc5PjLwYrSgElp83ZEktkQWLJB&amount=1&to=EGP")
+      suspend fun getCurrencyValuesInEgp(@Query("from") from: String): CurrencyConverter
 
       @Headers(
           "Accept: application/json",

@@ -10,12 +10,14 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.R
 import com.example.mcommerce.draftModel.DraftOrder
 import com.example.mcommerce.draftModel.DraftOrderX
+import com.example.mcommerce.me.viewmodel.SavedSetting
 import com.example.mcommerce.model.DiscountCode
 
-class ShoppingCartAdapter(private val listener: OnShoppingCartClickListener) : RecyclerView.Adapter<ShoppingCartAdapter.ViewHolder>(){
+class ShoppingCartAdapter(var comminicator: Communicator,private val listener: OnShoppingCartClickListener) : RecyclerView.Adapter<ShoppingCartAdapter.ViewHolder>(){
    // var userShoppingCartProducts:List<DraftOrderX> = ArrayList<DraftOrderX>()
     var userShoppingCartProducts:List<DraftOrder> = ArrayList<DraftOrder>()
     lateinit var context: Context
@@ -33,17 +35,22 @@ class ShoppingCartAdapter(private val listener: OnShoppingCartClickListener) : R
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.shoppingCartProductTitle.text = userShoppingCartProducts[position].draft_order?.line_items?.get(0)?.title.toString()
-        holder.shoppingCartProductPrice.text = ("Price: ${userShoppingCartProducts[position].draft_order?.line_items?.get(0)?.price} EGP")
-        counter = userShoppingCartProducts[position].draft_order?.line_items?.get(0)?.quantity!!.toInt()
+        val price = userShoppingCartProducts[position].draft_order?.line_items?.get(0)?.price.toString()
+        val amount = SavedSetting.getPrice(price, context)
+
+        holder.shoppingCartProductTitle.text = userShoppingCartProducts[position].draft_order?.line_items?.get(0)?.name.toString()
+        holder.shoppingCartProductPrice.text = ("Price: ${amount}")
+
         holder.ShoppingCartProductQuantity.text = userShoppingCartProducts[position].draft_order?.line_items?.get(0)?.quantity.toString()
         Glide.with(context).load(userShoppingCartProducts[position].draft_order?.note_attributes?.get(0)?.value).into(holder.shoppingCartItemImage)
         holder.shoppingCartIncreaseQuantity.setOnClickListener {
+            counter = userShoppingCartProducts[position].draft_order?.line_items?.get(0)?.quantity!!.toInt()
             counter++
             holder.ShoppingCartProductQuantity.text = counter.toString()
             listener.onIncrementClickListener(userShoppingCartProducts[position])
         }
         holder.shoppingCartDecreaseQuantity.setOnClickListener {
+            counter = userShoppingCartProducts[position].draft_order?.line_items?.get(0)?.quantity!!.toInt()
             if(counter>1) { counter-- }
             else{ counter = 1 }
             holder.ShoppingCartProductQuantity.text = counter.toString()
@@ -55,7 +62,7 @@ class ShoppingCartAdapter(private val listener: OnShoppingCartClickListener) : R
         }
 
         holder.shoppingCartItem.setOnClickListener {
-
+            comminicator.goToProductDetails(userShoppingCartProducts[position].draft_order?.line_items?.get(0)?.product_id!!)
         }
 
     }

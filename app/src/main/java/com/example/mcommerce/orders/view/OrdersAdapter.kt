@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mcommerce.R
+import com.example.mcommerce.me.viewmodel.SavedSetting
 import com.example.mcommerce.orders.model.Order
 
 class OrdersAdapter : RecyclerView.Adapter<OrdersAdapter.ViewHolder>(){
@@ -29,7 +30,9 @@ class OrdersAdapter : RecyclerView.Adapter<OrdersAdapter.ViewHolder>(){
         var tvOrderDate: TextView =itemView.findViewById(R.id.tvOrderDate)
         var orderCard:CardView=itemView.findViewById(R.id.orderCard)
         fun bind(data: Order) {
-            tvOrderPrice.text = allOrders[position].total_price
+            val amount = SavedSetting.getPrice(allOrders[position].total_price.toString(), context)
+            tvOrderPrice.text = amount
+           // tvOrderPrice.text = allOrders[position].total_price
             tvOrderDate.text = allOrders[position].created_at
             orderCard.setOnClickListener(View.OnClickListener {
                 onItemClickListener.onOrderClickListener(allOrders[position])

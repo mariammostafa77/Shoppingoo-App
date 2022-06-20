@@ -1,12 +1,10 @@
 package com.example.mcommerce.me.viewmodel
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.fragment.app.Fragment
-import com.example.mcommerce.R
-import com.example.mcommerce.me.view.setting.AppSettingFragment.Companion.languageSelected
+import com.example.mcommerce.me.view.setting.WithLoginAppSettingFragment.Companion.languageSelected
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.util.*
@@ -65,7 +63,8 @@ class SavedSetting {
 
         fun getPrice(price: String, context: Context): String{
             val amount: String = loadCurrencyResult(context)
-            if (amount.isNotEmpty()){
+            val to : String = loadCurrency(context)
+            if (amount.isNotEmpty() && to != "EGP"){
                 val result: Double = price.toDouble() * amount.toDouble()
                 val df = DecimalFormat("#.##")
                 df.roundingMode = RoundingMode.UP
@@ -76,6 +75,8 @@ class SavedSetting {
             }
 
         }
+
+
 
     }
 

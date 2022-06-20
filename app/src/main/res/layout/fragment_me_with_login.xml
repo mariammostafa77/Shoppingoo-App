@@ -139,19 +139,44 @@
                 android:text="@string/More"
                 android:textColor="#1E1EBC"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ordersrecycler" />
+                app:layout_constraintTop_toBottomOf="@+id/ordersrecycler"
+                android:visibility="invisible"/>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/wishListRecyclerview"
                 android:layout_width="0dp"
-                android:layout_height="182dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
+                android:nestedScrollingEnabled="false"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+            <TextView
+                android:id="@+id/tvNoOrder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="100dp"
+                android:layout_marginBottom="100dp"
+                android:text="@string/noOrder"
+                app:layout_constraintBottom_toTopOf="@+id/textView5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+            <TextView
+                android:id="@+id/txtNoFav"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/noWhishlist"
+                app:layout_constraintEnd_toEndOf="@+id/wishListRecyclerview"
+                app:layout_constraintStart_toStartOf="@+id/wishListRecyclerview"
+                app:layout_constraintTop_toTopOf="@+id/wishListRecyclerview"
+                android:visibility="invisible"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

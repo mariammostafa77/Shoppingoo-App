@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.R
+import com.example.mcommerce.me.viewmodel.SavedSetting
 import com.example.mcommerce.orders.model.LineItem
 
 class OrderItemsAdapter : RecyclerView.Adapter<OrderItemsAdapter.ViewHolder>(){
@@ -30,8 +31,9 @@ class OrderItemsAdapter : RecyclerView.Adapter<OrderItemsAdapter.ViewHolder>(){
         var tvQuantity:TextView=itemView.findViewById(R.id.tvQuantity)
 
         fun bind(data: LineItem) {
+            val amount = SavedSetting.getPrice(productInOrder[position].price.toString(), context)
+            tvItemPrice.text = amount
             tvItemTitle.text = productInOrder[position].title
-            tvItemPrice.text=("${productInOrder[position].price} EGP")
             tvQuantity.text=productInOrder[position].quantity.toString()
         }
 

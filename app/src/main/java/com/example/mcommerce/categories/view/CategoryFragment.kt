@@ -8,10 +8,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
@@ -24,6 +27,7 @@ import com.example.mcommerce.draftModel.DraftOrder
 import com.example.mcommerce.draftModel.DraftOrderX
 import com.example.mcommerce.draftModel.LineItem
 import com.example.mcommerce.draftModel.NoteAttribute
+import com.example.mcommerce.favourite.view.FavouriteFragment
 import com.example.mcommerce.me.viewmodel.CustomerViewModel
 import com.example.mcommerce.me.viewmodel.CustomerViewModelFactory
 import com.example.mcommerce.me.viewmodel.SavedSetting
@@ -33,12 +37,14 @@ import com.example.mcommerce.network.AppClient
 import com.example.mcommerce.search.viewModel.SearchViewModel
 import com.example.mcommerce.search.viewModel.SearchViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.slider.RangeSlider
+import com.google.android.material.slider.Slider
 import com.google.android.material.tabs.TabLayout
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.FieldPosition
 
-class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConvertor {
+class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, CurrencyConvertor {
     private lateinit var brandProductsAdapter: BrandProductsAdapter
     private lateinit var subCategoriesAdapter: SubCategoriesAdapter
     private lateinit var categoriesProductFactory: CategoriesViewFactory
@@ -46,25 +52,28 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
     private lateinit var categoryRecyclerView: RecyclerView
     private lateinit var categoriesTabLayout: TabLayout
     private lateinit var searchIcon:ImageView
+    private lateinit var favorite_icon:ImageView
     private lateinit var filterImg:ImageView
+    private lateinit var imgNoData:ImageView
+    private lateinit var tvNoData:TextView
+    private lateinit var applayBtn:Button
     private lateinit var communicator:Communicator
     private lateinit var categoryBarTitle:TextView
     private lateinit var dialog : BottomSheetDialog
+    private lateinit var priceSlider:RangeSlider
+    private lateinit var customerViewModel: CustomerViewModel
+    private lateinit var customerViewModelFactory: CustomerViewModelFactory
     lateinit var searchFactor: SearchViewModelFactory
     lateinit var searchViewModel: SearchViewModel
-    private var id:String=""
+    private var  collectionId:String=""
     private var brandName:String=""
     private var subCategorySelected:String=""
-    var allVariantsID:ArrayList<Long> = ArrayList<Long>()
-    var allFavProducts:ArrayList<DraftOrderX> = ArrayList<DraftOrderX>()
-
-    lateinit var customerViewModel: CustomerViewModel
-    lateinit var customerViewModelFactory: CustomerViewModelFactory
-
-     var userId = ""
-    var toCurrency = ""
-    var convertorResult: Double = 0.0
-    var allProducts: ArrayList<Product> = ArrayList()
+    private var maxPrice: Double=0.0
+    private var priceSliderPrice: Double=0.0
+    private var priceSelectesConverted:Double=0.0
+    private var allVariantsID:ArrayList<Long> = ArrayList<Long>()
+    private var allFavProducts:ArrayList<DraftOrderX> = ArrayList<DraftOrderX>()
+    private var allProducts: ArrayList<Product> = ArrayList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,6 +82,11 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
         // Inflate the layout for this fragment
         val view=inflater.inflate(R.layout.fragment_category, container, false)
         initComponents(view)
+        if(flag == 0){
+            checkArgs()
+        } else{
+            brandName=""
+        }
         searchFactor = SearchViewModelFactory(
             Repository.getInstance(AppClient.getInstance(), requireContext())
         )
@@ -85,11 +99,7 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
         customerViewModel = ViewModelProvider(this, customerViewModelFactory).get(CustomerViewModel::class.java)
         val sharedPreferences = requireContext().getSharedPreferences("userAuth", AppCompatActivity.MODE_PRIVATE)
         val email: String? = sharedPreferences.getString("email","")
-
-        //  userId = sharedPreferences.getString("cusomerID","").toString()
-
-        id=""
-       checkArgs()
+        collectionId=""
         categoriesProductFactory = CategoriesViewFactory(
             Repository.getInstance(
                 AppClient.getInstance(),
@@ -99,18 +109,49 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
         filterImg.setOnClickListener(View.OnClickListener {
             val view = layoutInflater.inflate(R.layout.custom_bottom_sheet, null)
             val subTypeRecycle:RecyclerView=view.findViewById(R.id.subTypeRecycle)
+            applayBtn=view.findViewById(R.id.applayBtn)
+            priceSlider=view.findViewById(R.id.priceSlider)
+            priceSlider.valueFrom = 0.0F
+            val strPrice =  SavedSetting.getPrice(maxPrice.toString(), requireContext())
+            val delim = " "
+            val list = strPrice.split(delim)
+            priceSlider.valueTo =list[0].toFloat()
+            priceSlider.addOnChangeListener { rangeSlider, value, fromUser ->
+                priceSliderPrice= value.toDouble()
+            }
+            applayBtn.setOnClickListener {
+                if(priceSliderPrice != 0.0){
+                    if(list[1] != "EGP"){
+                        categoriesProductViewModel.getAmountAfterConversionInEgp(list[1])
+                    }
+                    else{
+                        filterProductsByPrice(allProducts,priceSliderPrice)
+                    }
+                }
+                dialog.dismiss()
+            }
             subTypeRecycle.adapter = subCategoriesAdapter
+            priceSlider=view.findViewById(R.id.priceSlider)
             dialog.setContentView(view)
             dialog.show()
         })
-        categoriesProductViewModel.getAllProducts(brandName,"","")
-        categoriesProductViewModel.onlineProductsTypes.observe(viewLifecycleOwner) {
-            getProductTypes(it)
+        categoriesProductViewModel.onlineCurrencyChangedInEgp.observe(viewLifecycleOwner){
+            priceSelectesConverted=priceSliderPrice/it.result
+            filterProductsByPrice(allProducts,priceSelectesConverted)
         }
-        categoriesProductViewModel.getCategories(brandName,subCategorySelected,id)
+
+        categoriesProductViewModel.getCategories(brandName,subCategorySelected, collectionId)
+        getSubTypes()
         categoriesProductViewModel.onlinesubcategoriesProduct.observe(viewLifecycleOwner) {products ->
+            allProducts.clear()
             allProducts.addAll(products)
             brandProductsAdapter.setUpdatedData(products,requireContext(),communicator)
+            for(product in products){
+                if(product.variants[0].price.toDouble() > maxPrice){
+                    maxPrice = product.variants[0].price.toDouble()
+                }
+            }
+            checkEmptyArray(products)
         }
         categoriesProductViewModel.allOnlineProducts.observe(viewLifecycleOwner) {
             getProductTypes(it)
@@ -130,7 +171,7 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
         searchIcon.setOnClickListener {
             mySearchFlag=2
             //communicator.goToSearchWithID(id)
-            communicator.goToSearchWithAllData(id,brandName,subCategorySelected)
+            communicator.goToSearchWithAllData( collectionId,brandName,subCategorySelected)
 
         }
         searchViewModel.getFavProducts()
@@ -146,13 +187,21 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
             }
 
         }
+        favorite_icon.setOnClickListener {
+            val fragment: Fragment = FavouriteFragment()
+            val fragmentManager: FragmentManager = activity!!.supportFragmentManager
+            val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
+            fragmentTransaction.replace(com.example.mcommerce.R.id.frameLayout, fragment)
+            fragmentTransaction.addToBackStack(null)
+            fragmentTransaction.commit()
+        }
         return view
     }
 
     private fun checkArgs() {
-        Log.i("TAG","Brand name $brandName")
         if(arguments != null){
             brandName=arguments?.getString("brandTitle").toString()
+            Log.i("TAG","Brand name from category $brandName")
         }else{
             brandName=""
         }
@@ -160,35 +209,14 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
 
     override fun onStart() {
         super.onStart()
-        //checkArgs()
-        id=""
+        collectionId=""
         subCategorySelected=""
-        categoriesProductViewModel.getCategories(brandName,subCategorySelected,id)
     }
     override fun onSubCategoryClick(type:String) {
         subCategorySelected=type
-        categoriesProductViewModel.getCategories(brandName,subCategorySelected,id)
+        categoriesProductViewModel.getCategories(brandName,subCategorySelected, collectionId)
         Toast.makeText(requireContext(),subCategorySelected,Toast.LENGTH_LONG).show()
-        dialog.dismiss()
-    }
-    override fun onPriceConverter(position: Int) : String{
-        /*
-           toCurrency = SavedSetting.loadCurrency(context!!)
-            if(toCurrency.isNullOrEmpty()){
-                toCurrency = "EGP"
-            }
-            customerViewModel.getAmountAfterConversion(toCurrency)
-            customerViewModel.onlineCurrencyChanged.observe(viewLifecycleOwner) { result ->
-                convertorResult = result.result
-            }
-       // Log.i("Testttttttttt", (allProducts.get(position).variants.get(0).price.toDouble() * convertorResult).toString() +" " +toCurrency)
-        val df = DecimalFormat("#.##")
-        df.roundingMode = RoundingMode.UP
-        val result = (allProducts.get(position).variants.get(0).price.toDouble() * convertorResult)
-        val roundoff = df.format(result)
-        return "${roundoff}  ${toCurrency}"
-*/
-        return ""
+        //dialog.dismiss()
     }
 
     override fun addToFav(product: Product, img: ImageView, myIndex: Int) {
@@ -203,17 +231,13 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
             searchViewModel.deleteSelectedProduct(allFavProducts.get(myIndex).id.toString())
             searchViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
                 if (response.isSuccessful) {
-
                     Toast.makeText(requireContext(),
                         "Deleted Success!!!: " + response.code().toString(),
                         Toast.LENGTH_SHORT).show()
-
-
                 } else {
                     Toast.makeText(requireContext(),
                         "Deleted failed: " + response.code().toString(),
                         Toast.LENGTH_SHORT).show()
-
                 }
 
             }
@@ -279,7 +303,10 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
         searchIcon=view.findViewById(R.id.search_icon)
         categoryBarTitle=view.findViewById(R.id.categoryBarTitle)
         filterImg=view.findViewById(R.id.filterImg)
+        favorite_icon=view.findViewById(R.id.favorite_icon)
         dialog = BottomSheetDialog(requireContext())
+        tvNoData = view.findViewById(R.id.tvNoData)
+        imgNoData=view.findViewById(R.id.imgNoData)
 
     }
     private fun getProductTypes(allProductsTypes:List<Product>){
@@ -294,33 +321,37 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
     private fun onTabSelectedListener(tab: TabLayout.Tab){
         when (tab.position) {
             0 -> {
-                id=""
-                categoriesProductViewModel.getCategories(brandName,"",id)
+                collectionId=""
+                maxPrice=0.0
+                categoriesProductViewModel.getCategories(brandName,"", collectionId)
                 getSubTypes()
                 true
             }
             1 -> {
-                id="273053712523"
-                categoriesProductViewModel.getCategories(brandName,"",id)
+                collectionId="273053712523"
+                maxPrice=0.0
+                categoriesProductViewModel.getCategories(brandName,"", collectionId)
                 getSubTypes()
                 true
             }
             2 -> {
-                id="273053679755"
-                categoriesProductViewModel.getCategories(brandName,"",id)
+                collectionId="273053679755"
+                maxPrice=0.0
+                categoriesProductViewModel.getCategories(brandName,"", collectionId)
                 getSubTypes()
                 true
             }
             3 -> {
-                id="273053745291"
-                Log.i("TAG","")
-                categoriesProductViewModel.getCategories(brandName,"",id)
+                collectionId="273053745291"
+                maxPrice=0.0
+                categoriesProductViewModel.getCategories(brandName,"", collectionId)
                 getSubTypes()
                 true
             }
             4 -> {
-                id="273053778059"
-                categoriesProductViewModel.getCategories(brandName,"",id)
+                collectionId="273053778059"
+                maxPrice=0.0
+                categoriesProductViewModel.getCategories(brandName,"", collectionId)
                 getSubTypes()
                 true
             }
@@ -329,11 +360,29 @@ class CategoryFragment : Fragment() ,OnSubCategoryClickInterface, CurrencyConver
         }
     }
     private fun getSubTypes() {
-        if (id.isNotEmpty()) {
-            categoriesProductViewModel.getProductsType(id)
+        categoriesProductViewModel.getAllProducts(brandName,"",collectionId)
+    }
+    private fun checkEmptyArray(products:List<Product>){
+        if(products.isEmpty()){
+            tvNoData.visibility=View.VISIBLE
+            imgNoData.visibility=View.VISIBLE
+            filterImg.visibility=View.INVISIBLE
+
+        }else{
+            tvNoData.visibility=View.INVISIBLE
+            imgNoData.visibility=View.INVISIBLE
+            filterImg.visibility=View.VISIBLE
         }
-        else{
-            categoriesProductViewModel.getAllProducts(brandName,"","")
+    }
+    private fun filterProductsByPrice(productsList: List<Product>,priceSliderPrice:Double){
+        var filteredProduct:ArrayList<Product> = ArrayList<Product>()
+        filteredProduct.clear()
+        for (product in productsList){
+            if(product.variants[0].price.toDouble() <= priceSliderPrice){
+                filteredProduct.add(product)
+            }
         }
+        brandProductsAdapter.setUpdatedData(filteredProduct,requireContext(),communicator)
+        checkEmptyArray(filteredProduct)
     }
 }

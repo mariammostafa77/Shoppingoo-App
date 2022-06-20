@@ -112,6 +112,10 @@ class Repository private constructor(var remoteSource: RemoteSourceInterface, va
        return remoteSource.getCurrencyValue(to)
     }
 
+    override suspend fun getCurrencyValueInEgp(from: String): CurrencyConverter {
+        return remoteSource.getCurrencyValue(from)
+    }
+
     override suspend fun postNewOrder(orders: OrderResponse): Response<OrderResponse> {
         return remoteSource.postNewOrder(orders)
     }

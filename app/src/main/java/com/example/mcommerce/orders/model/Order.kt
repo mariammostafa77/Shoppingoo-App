@@ -2,7 +2,6 @@ package com.example.mcommerce.orders.model
 
 import com.example.mcommerce.draftModel.NoteAttribute
 import com.example.mcommerce.draftModel.TaxLine
-import com.paypal.android.sdk.payments.ShippingAddress
 import java.io.Serializable
 
 data class Order(
@@ -58,11 +57,11 @@ data class Order(
     val phone: Any? = null,
     val presentment_currency: String? = null,
     val processed_at: String? = null,
-    val processing_method: String? = null,
+    var processing_method: String? = null,
     val reference: Any? = null,
     val referring_site: Any? = null,
     val refunds: List<Any>? = null,
-    val shipping_address: ShippingAddress? = null,
+    var shipping_address:ShippingAddress? = null,
     val shipping_lines: List<Any>? = null,
     val source_identifier: Any? = null,
     val source_name: String? = null,
