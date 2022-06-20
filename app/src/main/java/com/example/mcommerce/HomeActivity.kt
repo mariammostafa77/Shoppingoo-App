@@ -109,6 +109,7 @@ class HomeActivity : AppCompatActivity(),Communicator {
     private fun replaceFragment(fragment: Fragment) {
         if (fragment != null) {
             var transaction = supportFragmentManager.beginTransaction()
+            transaction.addToBackStack(null)
             transaction.replace(R.id.frameLayout, fragment)
             transaction.commit()
         }
@@ -125,7 +126,9 @@ class HomeActivity : AppCompatActivity(),Communicator {
        val bundle=Bundle()
         bundle.putSerializable("productInfo",product)
         val transaction=this.supportFragmentManager.beginTransaction()
+
         val productInfoFragment=ProductInfoFragment()
+        transaction.addToBackStack(null)
         productInfoFragment.arguments=bundle
         transaction.replace(R.id.frameLayout,productInfoFragment).commit()
     }
@@ -145,6 +148,7 @@ class HomeActivity : AppCompatActivity(),Communicator {
         val bundle=Bundle()
         bundle.putString("catID",id)
         val transaction=this.supportFragmentManager.beginTransaction()
+        transaction.addToBackStack(null)
         val searchFragment=MysearchFragment()
         searchFragment.arguments=bundle
         transaction.replace(R.id.frameLayout,searchFragment).commit()
@@ -157,6 +161,7 @@ class HomeActivity : AppCompatActivity(),Communicator {
         bundle.putString("brandName",brandName)
         bundle.putString("subCatName",subCatName)
         val transaction=this.supportFragmentManager.beginTransaction()
+        transaction.addToBackStack(null)
         val searchFragment=MysearchFragment()
         searchFragment.arguments=bundle
         transaction.replace(R.id.frameLayout,searchFragment).commit()
