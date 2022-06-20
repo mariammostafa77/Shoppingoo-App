@@ -125,6 +125,7 @@
         android:layout_height="113dp"
         android:layout_marginTop="50dp"
         android:src="@drawable/noresults"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/categoryTabBar" />
@@ -135,6 +136,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="@string/noData"
+        android:visibility="invisible"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="@+id/imgNoData"
         app:layout_constraintStart_toStartOf="@+id/imgNoData"

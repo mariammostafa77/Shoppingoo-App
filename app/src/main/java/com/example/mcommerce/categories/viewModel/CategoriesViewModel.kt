@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mcommerce.model.*
+import com.example.mcommerce.model.currencies.convertor.CurrencyConverter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -47,6 +48,17 @@ class CategoriesViewModel(repo: RepositoryInterface) : ViewModel(){
                 Log.i("subcategoriesProduct",result.toString())
                 subcategoriesProduct.postValue(result.products)
 
+            }
+        }
+    }
+
+    private val currencyChangedInEgp = MutableLiveData<CurrencyConverter>()
+    val onlineCurrencyChangedInEgp: LiveData<CurrencyConverter> = currencyChangedInEgp
+    fun getAmountAfterConversionInEgp(from: String){
+        viewModelScope.launch {
+            val result = iRepo.getCurrencyValueInEgp(from)
+            withContext(Dispatchers.Main) {
+                currencyChangedInEgp.postValue(result)
             }
         }
     }
