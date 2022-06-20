@@ -13,6 +13,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
@@ -25,6 +27,7 @@ import com.example.mcommerce.draftModel.DraftOrder
 import com.example.mcommerce.draftModel.DraftOrderX
 import com.example.mcommerce.draftModel.LineItem
 import com.example.mcommerce.draftModel.NoteAttribute
+import com.example.mcommerce.favourite.view.FavouriteFragment
 import com.example.mcommerce.me.viewmodel.CustomerViewModel
 import com.example.mcommerce.me.viewmodel.CustomerViewModelFactory
 import com.example.mcommerce.me.viewmodel.SavedSetting
@@ -49,6 +52,7 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
     private lateinit var categoryRecyclerView: RecyclerView
     private lateinit var categoriesTabLayout: TabLayout
     private lateinit var searchIcon:ImageView
+    private lateinit var favorite_icon:ImageView
     private lateinit var filterImg:ImageView
     private lateinit var imgNoData:ImageView
     private lateinit var tvNoData:TextView
@@ -182,6 +186,14 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
             }
 
         }
+        favorite_icon.setOnClickListener {
+            val fragment: Fragment = FavouriteFragment()
+            val fragmentManager: FragmentManager = activity!!.supportFragmentManager
+            val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
+            fragmentTransaction.replace(com.example.mcommerce.R.id.frameLayout, fragment)
+            fragmentTransaction.addToBackStack(null)
+            fragmentTransaction.commit()
+        }
         return view
     }
 
@@ -290,6 +302,7 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
         searchIcon=view.findViewById(R.id.search_icon)
         categoryBarTitle=view.findViewById(R.id.categoryBarTitle)
         filterImg=view.findViewById(R.id.filterImg)
+        favorite_icon=view.findViewById(R.id.favorite_icon)
         dialog = BottomSheetDialog(requireContext())
         tvNoData = view.findViewById(R.id.tvNoData)
         imgNoData=view.findViewById(R.id.imgNoData)

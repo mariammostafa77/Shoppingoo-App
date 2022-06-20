@@ -19,6 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
         <TextView
+            android:id="@+id/txtDialogTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
@@ -30,6 +31,7 @@
             android:textSize="22sp"
             android:textStyle="bold" />
         <TextView
+            android:id="@+id/txtDialogSubTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginVertical="12dp"
@@ -39,6 +41,7 @@
             android:textSize="18sp"
             android:textStyle="bold" />
         <TextView
+            android:id="@+id/txtDialogInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
            android:layout_marginBottom="48dp"
@@ -50,6 +53,7 @@
     </LinearLayout>
 
     <ImageView
+        android:id="@+id/dialoImg"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:background="@drawable/contact_dialog_image_bg"

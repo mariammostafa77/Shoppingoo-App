@@ -28,6 +28,7 @@
     <string name="WishList">WishList</string>
     <string name="Price">Price </string>
     <string name="CreatedBy">Created at: </string>
+    <string name="noResultFound">No Result Found </string>
     <!--
     <string name="TotalPrice">Total Price:</string>
     <string name="Quantity">Quantity:</string>
@@ -44,6 +45,8 @@
     <string name="paymentMethod">Payment Method</string>
     <string name="noData">"Not available yet!"</string>
     <string name="noOrder">"You have no order in progress!"</string>
+    <string name="noWhishlist">"You have no Favourite in progress!"</string>
+    <string name="noFav">"You currently have nothing saved to your Favourite list!"</string>
 
 
 
