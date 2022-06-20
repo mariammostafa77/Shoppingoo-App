@@ -6,10 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,6 +26,9 @@ class UserAddressesFragment : Fragment() {
 
     lateinit var address_back_icon : ImageView
     lateinit var btnAddNewAddress : Button
+    lateinit var userAddressProgressBar: ProgressBar
+    lateinit var imgNoAddressProduct: ImageView
+    lateinit var txtNoSDataFound: TextView
     lateinit var customerAddressesRecyclerView: RecyclerView
     private lateinit var customerAddressAdapter: CustomerAddressAdapter
     lateinit var customerAddressesLayoutManager: LinearLayoutManager
@@ -48,7 +50,7 @@ class UserAddressesFragment : Fragment() {
         initComponent(view)
 
         communicator = activity as Communicator
-
+        userAddressProgressBar.isVisible = true
         if(arguments != null){
 
             lineItems = arguments?.getSerializable("line_items") as ArrayList<LineItem>
@@ -67,8 +69,15 @@ class UserAddressesFragment : Fragment() {
         customerViewModel.getUserDetails(customerId)
         customerViewModel.customerInfo.observe(viewLifecycleOwner) { response ->
             if(response != null) {
-                customerAddressAdapter.setCustomerAddressesData(requireContext(),
-                    response.addresses!!)
+                customerAddressAdapter.setCustomerAddressesData(requireContext(), response.addresses!!)
+                userAddressProgressBar.isVisible = false
+                imgNoAddressProduct.visibility=View.INVISIBLE
+                txtNoSDataFound.visibility=View.INVISIBLE
+            }
+            else{
+                userAddressProgressBar.isVisible = false
+                imgNoAddressProduct.visibility=View.VISIBLE
+                txtNoSDataFound.visibility=View.VISIBLE
             }
         }
         btnAddNewAddress.setOnClickListener {
@@ -83,6 +92,9 @@ class UserAddressesFragment : Fragment() {
         address_back_icon = view.findViewById(R.id.address_back_icon)
         btnAddNewAddress = view.findViewById(R.id.btnAddNewAddress)
         customerAddressesRecyclerView = view.findViewById(R.id.userAddressesRecyclerView)
+        txtNoSDataFound = view.findViewById(R.id.txtNoSDataFound)
+        imgNoAddressProduct = view.findViewById(R.id.imgNoAddressProduct)
+        userAddressProgressBar = view.findViewById(R.id.userAddressProgressBar)
     }
 
 

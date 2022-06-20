@@ -49,7 +49,6 @@
     <string name="noFav">"You currently have nothing saved to your Favourite list!"</string>
 
 
-
     <!-- Asmaa   -->
     <string name="product_name">Product Name</string>
     <string name="category">Category</string>
@@ -112,6 +111,19 @@
     <string name="please_select_your_shipping_address">Please Select Your Shipping Address</string>
     <string name="varaince">varaince</string>
     <string name="applay">applay</string>
+    <string name="no_data_to_display">No Data To Display</string>
+    <string name="click_here_to_choose_location">Click Here To Choose Location</string>
+    <string name="write_any_city_name">Write Any City Name</string>
+    <string name="shipping_info">Shipping Info</string>
+    <string name="_0_0">0.0</string>
+    <string name="place_order">Place Order</string>
+    <string name="discount">Discount:</string>
+    <string name="apply">Apply</string>
+    <string name="add_discount_code">Add Discount Code</string>
+    <string name="visa">Visa</string>
+    <string name="cash">Cash</string>
+    <string name="payment_method">Payment Method</string>
+    <string name="confirm_payment">Confirm Payment</string>
 
     <!-- Arrays -->
 
