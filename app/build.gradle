@@ -76,6 +76,13 @@ dependencies {
     implementation 'com.google.android.libraries.places:places:1.1.0'
     //// paypal
     implementation 'com.paypal.sdk:paypal-android-sdk:2.14.2'
+
+    // Dependencies for local unit tests
+    testImplementation "junit:junit:4.12"
+
+    // AndroidX Test - Instrumented testing
+    androidTestImplementation "androidx.test.ext:junit:1.1.1"
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.2.0-beta01"
     // Stripe
     implementation 'com.stripe:stripe-android:17.2.0'
     implementation 'com.android.volley:volley:1.0.0'
