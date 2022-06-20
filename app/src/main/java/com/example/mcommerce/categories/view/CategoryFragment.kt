@@ -90,6 +90,7 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
         searchFactor = SearchViewModelFactory(
             Repository.getInstance(AppClient.getInstance(), requireContext())
         )
+        Log.i("TAG","")
         searchViewModel = ViewModelProvider(this, searchFactor).get(SearchViewModel::class.java)
         subCategoriesAdapter= SubCategoriesAdapter()
         brandProductsAdapter= BrandProductsAdapter(this)
