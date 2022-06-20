@@ -40,6 +40,7 @@ class MeWithLogin : Fragment(), FavouriteOnClickLisner, OnOrderClickListenerInte
     lateinit var settingICon: ImageView
     lateinit var shoppingCartIcon : ImageView
     lateinit var txtWelcomeUser : TextView
+    lateinit var txtNoFav:TextView
     lateinit var txtMoreFav:TextView
     lateinit var tvNoOrder:TextView
     lateinit var tvMoreOrders : TextView
@@ -64,6 +65,7 @@ class MeWithLogin : Fragment(), FavouriteOnClickLisner, OnOrderClickListenerInte
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
        val view = inflater.inflate(R.layout.fragment_me_with_login, container, false)
         initComponent(view)
+        txtNoFav=view.findViewById(R.id.txtNoFav)
         val sharedPreferences: SharedPreferences = context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
         val fname: String? = sharedPreferences.getString("fname","")
         val lname: String? = sharedPreferences.getString("lname","")
@@ -120,6 +122,18 @@ class MeWithLogin : Fragment(), FavouriteOnClickLisner, OnOrderClickListenerInte
                     favProducts.add(allFavProducts.get(i))
 
                 }
+
+            }
+            if(!favProducts.isEmpty() ){
+                txtMoreFav.visibility=View.VISIBLE
+                txtNoFav.visibility=View.INVISIBLE
+
+
+            }
+            else{
+                txtMoreFav.visibility=View.INVISIBLE
+                txtNoFav.visibility=View.VISIBLE
+
 
             }
 

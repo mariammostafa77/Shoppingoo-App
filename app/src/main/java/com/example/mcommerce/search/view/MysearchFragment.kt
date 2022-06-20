@@ -1,7 +1,10 @@
 package com.example.mcommerce.search.view
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,6 +15,7 @@ import android.widget.*
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mcommerce.AuthActivity
 import com.example.mcommerce.HomeActivity.Companion.mySearchFlag
 import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.R
@@ -26,6 +30,7 @@ import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
 import com.example.mcommerce.search.viewModel.SearchViewModel
 import com.example.mcommerce.search.viewModel.SearchViewModelFactory
+import kotlinx.android.synthetic.main.dialog_view.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -36,6 +41,8 @@ class MysearchFragment : Fragment(),FavClicked {
     lateinit var productSearchAdapter: SearchAdapter
     lateinit var searchFactor:SearchViewModelFactory
     lateinit var searchViewModel:SearchViewModel
+    lateinit var noDataSearchImg:ImageView
+    lateinit var noDataSearchtxt:TextView
     lateinit var categoriesProductFactory: CategoriesViewFactory
     lateinit var categoriesProductViewModel: CategoriesViewModel
 //lateinit var linearLayoutManager:LinearLayoutManager
@@ -48,6 +55,7 @@ class MysearchFragment : Fragment(),FavClicked {
     var allFavProducts:ArrayList<DraftOrderX> = ArrayList<DraftOrderX>()
     var allVariantsID:ArrayList<Long> = ArrayList<Long>()
     var allProducts:List<Product> = ArrayList<Product>()
+    lateinit var email:String
 
     lateinit var allProductArrayList:ArrayList<Product>
     lateinit var filterProductArrayList:ArrayList<Product>
@@ -63,8 +71,10 @@ class MysearchFragment : Fragment(),FavClicked {
         // Inflate the layout for this fragment
         var view =inflater.inflate(R.layout.fragment_mysearch, container, false)
         communicator = activity as Communicator
+        noDataSearchImg=view.findViewById(R.id.noDataSearchImg)
+        noDataSearchtxt=view.findViewById(R.id.txtNoSearchData)
         val sharedPreferences: SharedPreferences = context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
-        val email: String? = sharedPreferences.getString("email","")
+         email= sharedPreferences.getString("email","").toString()
 
         edtSearch=view.findViewById(R.id.edtSearch)
         btnSearch=view.findViewById(R.id.btnSearch)
@@ -108,6 +118,14 @@ class MysearchFragment : Fragment(),FavClicked {
                                 {
                                     filterProductArrayList.add(it)
                                 }
+                            }
+                            if(filterProductArrayList.isEmpty()){
+                                noDataSearchImg.visibility=View.VISIBLE
+                                noDataSearchtxt.visibility=View.VISIBLE
+                            }
+                            else{
+                                noDataSearchtxt.visibility=View.INVISIBLE
+                                noDataSearchImg.visibility=View.INVISIBLE
                             }
 
                         }
@@ -164,6 +182,14 @@ class MysearchFragment : Fragment(),FavClicked {
                                     filterProductArrayList.add(it)
                                 }
                             }
+                            if(filterProductArrayList.isEmpty()){
+                                noDataSearchImg.visibility=View.VISIBLE
+                                noDataSearchtxt.visibility=View.VISIBLE
+                            }
+                            else{
+                                noDataSearchImg.visibility=View.INVISIBLE
+                                noDataSearchtxt.visibility=View.INVISIBLE
+                            }
 
                         }
                         else{
@@ -194,6 +220,14 @@ class MysearchFragment : Fragment(),FavClicked {
                         {
                             filterProductArrayList.add(it)
                         }
+                    }
+                    if(filterProductArrayList.isEmpty()){
+                        noDataSearchImg.visibility=View.VISIBLE
+                        noDataSearchtxt.visibility=View.VISIBLE
+                    }
+                    else{
+                        noDataSearchImg.visibility=View.INVISIBLE
+                        noDataSearchtxt.visibility=View.INVISIBLE
                     }
 
                 }
@@ -227,80 +261,85 @@ class MysearchFragment : Fragment(),FavClicked {
     }
 
     override fun addToFav(product:Product,img: ImageView,myIndex:Int) {
-        Toast.makeText(requireContext(),"Fav clicked",Toast.LENGTH_LONG).show()
-        val sharedPreferences: SharedPreferences = context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
-        val email: String? = sharedPreferences.getString("email","")
-        Log.i("filter","size of filter product: "+filterProductArrayList.size)
-        Log.i("filter","size of fav product: "+allFavProducts.size)
-        Log.i("filter","size of variants product: "+allVariantsID.size)
+        if(email!="") {
+            Toast.makeText(requireContext(), "Fav clicked", Toast.LENGTH_LONG).show()
+            val sharedPreferences: SharedPreferences =
+                context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
+            val email: String? = sharedPreferences.getString("email", "")
+            Log.i("filter", "size of filter product: " + filterProductArrayList.size)
+            Log.i("filter", "size of fav product: " + allFavProducts.size)
+            Log.i("filter", "size of variants product: " + allVariantsID.size)
 
 
-        if(filterProductArrayList[myIndex].variants[0].id in allVariantsID){
-            Log.i("exits","already exists")
+            if (filterProductArrayList[myIndex].variants[0].id in allVariantsID) {
+                Log.i("exits", "already exists")
 
-            img.setImageResource(R.drawable.ic_baseline_favorite_border_24)
-            searchViewModel.deleteSelectedProduct(allFavProducts.get(myIndex).id.toString())
-            searchViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
-                if (response.isSuccessful) {
+                img.setImageResource(R.drawable.ic_baseline_favorite_border_24)
+                searchViewModel.deleteSelectedProduct(allFavProducts.get(myIndex).id.toString())
+                searchViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
+                    if (response.isSuccessful) {
 
-                    Toast.makeText(requireContext(),
-                        "Deleted Success!!!: " + response.code().toString(),
-                        Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(),
+                            "Deleted Success!!!: " + response.code().toString(),
+                            Toast.LENGTH_SHORT).show()
 
 
-                } else {
-                    Toast.makeText(requireContext(),
-                        "Deleted failed: " + response.code().toString(),
-                        Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(requireContext(),
+                            "Deleted failed: " + response.code().toString(),
+                            Toast.LENGTH_SHORT).show()
+
+                    }
 
                 }
 
+            } else {
+                Log.i("exits", "not exists")
+                img.setImageResource(R.drawable.ic_favorite)
+                var variantId: Long = 0
+                var order = DraftOrderX()
+                order.note = "fav"
+                order.email = email
+
+                variantId = filterProductArrayList[myIndex].variants[0].id
+                Log.i("Index", "index: " + variantId.toString())
+                // order.line_items!![0].variant_id = variantId
+                var lineItem = LineItem()
+                lineItem.quantity = 1
+                lineItem.variant_id = variantId
+                order.line_items = listOf(lineItem)
+
+
+                // order.line_items!![0].variant_id = 40335555395723
+                var productImage = NoteAttribute()
+                productImage.name = "image"
+                productImage.value = filterProductArrayList[myIndex].images[0].src
+                order.note_attributes = listOf(productImage)
+
+                var draftOrder = DraftOrder(order)
+                searchViewModel.getCardOrder(draftOrder)
+                searchViewModel.onlineCardOrder.observe(viewLifecycleOwner) { cardOrder ->
+                    if (cardOrder.isSuccessful) {
+                        Toast.makeText(requireContext(),
+                            "add to card successfull: " + cardOrder.code().toString(),
+                            Toast.LENGTH_LONG).show()
+                    } else {
+
+                        Toast.makeText(requireContext(),
+                            "add to card failed: " + cardOrder.code()
+                                .toString() + "//" + cardOrder.body(),
+                            Toast.LENGTH_LONG).show()
+
+                    }
+                }
+
             }
+
 
         }
         else{
-            Log.i("exits","not exists")
-            img.setImageResource(R.drawable.ic_favorite)
-            var variantId: Long = 0
-            var order = DraftOrderX()
-            order.note = "fav"
-            order.email = email
-
-                    variantId = filterProductArrayList[myIndex].variants[0].id
-                    Log.i("Index", "index: " + variantId.toString())
-                    // order.line_items!![0].variant_id = variantId
-                    var lineItem = LineItem()
-                    lineItem.quantity = 1
-                    lineItem.variant_id = variantId
-                    order.line_items = listOf(lineItem)
-
-
-            // order.line_items!![0].variant_id = 40335555395723
-            var productImage = NoteAttribute()
-            productImage.name = "image"
-            productImage.value = filterProductArrayList[myIndex].images[0].src
-            order.note_attributes = listOf(productImage)
-
-            var draftOrder = DraftOrder(order)
-            searchViewModel.getCardOrder(draftOrder)
-            searchViewModel.onlineCardOrder.observe(viewLifecycleOwner) { cardOrder ->
-                if (cardOrder.isSuccessful) {
-                    Toast.makeText(requireContext(),
-                        "add to card successfull: " + cardOrder.code().toString(),
-                        Toast.LENGTH_LONG).show()
-                } else {
-
-                    Toast.makeText(requireContext(),
-                        "add to card failed: " + cardOrder.code().toString()+"//"+cardOrder.body(),
-                        Toast.LENGTH_LONG).show()
-
-                }
-            }
-
+            showLoginDialog("You can not add to Favourite without Login",requireContext())
         }
-
-
-
 
 
     }
@@ -313,6 +352,29 @@ class MysearchFragment : Fragment(),FavClicked {
                 img.setImageResource(R.drawable.ic_favorite)
             }
     }
+    fun showLoginDialog(dialogInfo: String,context:Context) {
+        val view = View.inflate(context, R.layout.dialog_view, null)
 
+        val builder = AlertDialog.Builder(context)
+        builder.setView(view)
+
+        val dialog = builder.create()
+        dialog.show()
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.setCancelable(false)
+        view.dialoImg.setImageResource(R.drawable.personlogin)
+        view.btn_confirm.text = "LOGIN"
+        view.btn_cancel.text = "CANCEL"
+        view.txtDialogTitle.text = "Warning"
+        view.txtDialogSubTitle.text = dialogInfo
+        view.txtDialogSubTitle.setTypeface(view.txtDialogSubTitle.getTypeface(), Typeface.ITALIC);
+        view.txtDialogInfo.text = ""
+        view.btn_confirm.setOnClickListener {
+            startActivity(Intent(context, AuthActivity::class.java))
+        }
+        view.btn_cancel.setOnClickListener {
+            dialog.dismiss()
+        }
+    }
 
 }

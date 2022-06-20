@@ -11,10 +11,7 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -24,9 +21,12 @@ import com.example.mcommerce.HomeActivity
 import com.example.mcommerce.R
 import com.example.mcommerce.auth.Register.viewModel.RegisterViewModel
 import com.example.mcommerce.auth.Register.viewModel.RegisterViewModelFactory
+import com.example.mcommerce.auth.login.view.LoginFormFragment
 import com.example.mcommerce.auth.model.*
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
+import com.example.mcommerce.shopping_cart.view.ShoppingCartFragment
+import com.google.android.gms.common.util.CollectionUtils.listOf
 import kotlinx.android.synthetic.main.fragment_register_form.*
 
 
@@ -49,6 +49,7 @@ class RegisterFormFragment : Fragment() {
     lateinit var registerPassword:String
     lateinit var registerConfirmPassword:String
     lateinit var registerPhone:String
+    lateinit var registerProgressbar:ProgressBar
 
 
 
@@ -58,7 +59,7 @@ class RegisterFormFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
        var view= inflater.inflate(R.layout.fragment_register_form, container, false)
-
+        registerProgressbar=view.findViewById(R.id.registerProgressBar)
         btnSkip=view.findViewById(R.id.btnSkip)
         txtLogin=view.findViewById(R.id.txtHaveAcc)
         edtFName=view.findViewById(R.id.edtFName)
@@ -72,10 +73,10 @@ class RegisterFormFragment : Fragment() {
         registerViewModel = ViewModelProvider(this, registerViewModelFactory).get(RegisterViewModel::class.java)
 
         txtLogin.setOnClickListener {
-
-            var navController: NavController = Navigation.findNavController(it)
-            var navDir: NavDirections =RegisterFormFragmentDirections.actionMyRegisterFragmentToMyLoginFragment()
-            navController.navigate(navDir)
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragmentContainerView, LoginFormFragment())
+            transaction.addToBackStack(null);
+            transaction.commit()
         }
         btnSkip.setOnClickListener {
             startActivity(Intent(requireContext(),HomeActivity::class.java))
@@ -94,7 +95,7 @@ class RegisterFormFragment : Fragment() {
                 Patterns.EMAIL_ADDRESS.matcher(registerEmail).matches()
             ) {
 
-
+            registerProgressbar.visibility = View.VISIBLE
 
             var customer = CustomerX()
             customer.first_name = registerFName
@@ -108,14 +109,14 @@ class RegisterFormFragment : Fragment() {
 
             //  customer.phone="01009843245"
             customer.tags = registerPassword
-            customer.addresses = listOf(Addresse(address1 = "Alkafal",
-                phone = "01203574583",
-                city = "Alex",
-                province = "",
-                zip = "21552",
-                last_name = "Lastnameson",
-                first_name = "Mother",
-                country = "CA"))
+//            customer.addresses = listOf(Addresse(address1 = "Alkafal",
+//                phone = "01203574583",
+//                city = "Alex",
+//                province = "",
+//                zip = "21552",
+//                last_name = "Lastnameson",
+//                first_name = "Mother",
+//                country = "EG"))
 
             var customDetai = CustomerDetail(customer)
             Toast.makeText(requireContext(), "" + myEdtPhone.text.toString(), Toast.LENGTH_LONG)
@@ -123,6 +124,7 @@ class RegisterFormFragment : Fragment() {
             registerViewModel.postCustomer(customDetai)
             registerViewModel.customer.observe(viewLifecycleOwner) { response ->
                 if (response.isSuccessful) {
+                    registerProgressbar.visibility = View.INVISIBLE
                     Toast.makeText(requireContext(),
                         "Register Successfull: " + response.code().toString(),
                         Toast.LENGTH_LONG).show()
@@ -140,6 +142,7 @@ class RegisterFormFragment : Fragment() {
                     editor.commit()
                     startActivity(Intent(requireContext(), HomeActivity::class.java))
                 } else {
+
                     Log.i("Reg", "messs: " + response.code().toString())
                     Log.i("Reg", "err: " + response.errorBody())
                     Toast.makeText(requireContext(),
