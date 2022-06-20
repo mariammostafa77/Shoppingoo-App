@@ -115,12 +115,10 @@ class MeWithLogin : Fragment(), FavouriteOnClickLisner, OnOrderClickListenerInte
         val note = "fav"
         favViewModel.getFavProducts()
         favViewModel.onlineFavProduct.observe(viewLifecycleOwner) { allFavProducts ->
-
+            favProducts.clear()
             for (i in 0..allFavProducts.size-1){
                 if(allFavProducts.get(i).note == note && allFavProducts.get(i).email == email){
-
                     favProducts.add(allFavProducts.get(i))
-
                 }
 
             }
