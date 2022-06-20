@@ -51,6 +51,7 @@ interface RepositoryInterface {
     suspend fun getAllCurrencies(): CurrencyResponse
 
     suspend fun getCurrencyValue(to: String): CurrencyConverter
+    suspend fun getCurrencyValueInEgp(from: String): CurrencyConverter
 
     suspend fun postNewOrder(orders: OrderResponse): Response<OrderResponse>
 
