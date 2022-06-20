@@ -66,6 +66,7 @@ class Repository private constructor(var remoteSource: RemoteSourceInterface, va
     }
     override suspend fun getSubCategories(vendor: String,productType:String,collectionId:String):AllProductsModel{
         return  remoteSource.getSubCategories(vendor,productType,collectionId)
+        Log.i("TAG","")
     }
 
     override suspend fun getProductTypes(id: String):AllProductsModel {
