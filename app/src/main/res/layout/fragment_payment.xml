@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".shopping_cart.view.PaymentFragment">
+    tools:context=".payment.view.PaymentFragment">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/confirmPaymentBar"
         android:layout_width="match_parent"
@@ -19,7 +19,7 @@
             android:id="@+id/confirmPaymentTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Confirm Payment"
+            android:text="@string/confirm_payment"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="22sp"
@@ -38,28 +38,106 @@
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/white" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
     <TextView
         android:id="@+id/paymentTitleTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Payment Supplement With "
+        android:text="@string/shipping_info"
         android:textSize="21sp"
         android:textStyle="bold"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="10dp"
         android:layout_marginStart="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/confirmPaymentBar" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/shippingInfoCardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginTop="2dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/paymentTitleTxt">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="8dp">
+            <ImageView
+                android:id="@+id/userShippingImageIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/person_24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="2dp"
+                />
+            <TextView
+                android:id="@+id/txtUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/first_name"
+                android:textSize="21sp"
+                android:textStyle="bold"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="2dp"
+                app:layout_constraintStart_toEndOf="@+id/userShippingImageIcon"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <ImageView
+                android:id="@+id/userShippingPhoneIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/phone_24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/userShippingImageIcon"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                />
+            <TextView
+                android:id="@+id/txtShippingPhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/phone"
+                android:textSize="18sp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="4dp"
+                app:layout_constraintStart_toEndOf="@+id/userShippingPhoneIcon"
+                app:layout_constraintTop_toBottomOf="@+id/txtUserName"/>
+
+            <ImageView
+                android:id="@+id/userShippingAddressIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_location_on"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/userShippingPhoneIcon"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="6dp"
+                />
+            <TextView
+                android:id="@+id/txtShippingAddress"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/address"
+                android:textSize="16sp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="4dp"
+                app:layout_constraintStart_toEndOf="@+id/userShippingAddressIcon"
+                app:layout_constraintTop_toBottomOf="@+id/txtShippingPhone"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/paymentMethodCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="8dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/paymentTitleTxt"
+        app:layout_constraintTop_toBottomOf="@id/shippingInfoCardView"
         >
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -69,7 +147,7 @@
                 android:id="@+id/paymentMethodTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Payment Method"
+                android:text="@string/payment_method"
                 android:textSize="21sp"
                 android:textStyle="bold"
                 android:layout_marginStart="8dp"
@@ -92,7 +170,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="Cash"
+                    android:text="@string/cash"
                     android:background="@drawable/radio_selector"
                     android:textColor="@drawable/radio_text_color"
                     android:button="@android:color/transparent"/>
@@ -101,23 +179,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="Visa"
+                    android:text="@string/visa"
                     android:layout_marginStart="4dp"
                     android:background="@drawable/radio_selector"
                     android:textColor="@drawable/radio_text_color"
                     android:button="@android:color/transparent" />
-               <!--
-                <RadioButton
-                    android:id="@+id/radioPaypal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:text="PayPal"
-                    android:layout_marginStart="4dp"
-                    android:background="@drawable/radio_selector"
-                    android:textColor="@drawable/radio_text_color"
-                    android:button="@android:color/transparent" />
-                    -->
             </RadioGroup>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
@@ -141,7 +207,7 @@
                 android:id="@+id/etCouponsField"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
-                android:hint="Add Discount Code"
+                android:hint="@string/add_discount_code"
                 android:background="@drawable/custom_input"
                 android:textSize="21sp"
                 android:textStyle="bold"
@@ -155,7 +221,7 @@
                 android:id="@+id/btnApplyDiscount"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
-                android:text="Apply"
+                android:text="@string/apply"
                 android:textStyle="bold"
                 android:textSize="18sp"
                 android:layout_marginStart="8dp"
@@ -171,7 +237,7 @@
                 android:id="@+id/discountTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Discount: "
+                android:text="@string/discount"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="2dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -181,7 +247,7 @@
                 android:id="@+id/txtDiscountCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0.0"
+                android:text="@string/_0_0"
                 android:layout_marginTop="4dp"
                 android:layout_marginStart="4dp"
                 app:layout_constraintStart_toEndOf="@+id/discountTitle"
@@ -196,7 +262,6 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="8dp"
         android:layout_marginTop="8dp"
-
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/discountCardView">
@@ -209,7 +274,7 @@
                 android:id="@+id/txtSubTotal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sub Total: "
+                android:text="@string/sub_total"
                 android:textSize="21sp"
                 android:textStyle="bold"
                 android:layout_marginStart="8dp"
@@ -221,7 +286,7 @@
                 android:id="@+id/txtSubTotalText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0.0"
+                android:text="@string/_0_0"
                 android:textSize="21sp"
                 android:textStyle="bold"
                 android:layout_marginEnd="16dp"
@@ -234,7 +299,7 @@
                 android:id="@+id/txtDelivery"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Fees: "
+                android:text="@string/fees"
                 android:textSize="21sp"
                 android:textStyle="bold"
                 android:layout_marginTop="4dp"
@@ -246,7 +311,7 @@
                 android:id="@+id/txtFeesText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0.0"
+                android:text="@string/_0_0"
                 android:textSize="21sp"
                 android:textStyle="bold"
                 android:layout_marginTop="4dp"
@@ -260,7 +325,7 @@
                 android:id="@+id/txtTotal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Total: "
+                android:text="@string/TotalPrice"
                 android:textSize="21sp"
                 android:textStyle="bold"
                 android:layout_marginStart="8dp"
@@ -272,7 +337,7 @@
                 android:id="@+id/txtTotalText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0.0"
+                android:text="@string/_0_0"
                 android:textSize="21sp"
                 android:textStyle="bold"
                 android:layout_marginStart="8dp"
@@ -290,7 +355,7 @@
         android:backgroundTintMode="src_over"
         android:padding="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Place Order"
+        android:text="@string/place_order"
         android:textSize="20sp"
         app:backgroundTint="@color/teal_700"
         app:cornerRadius="100dp"
@@ -298,6 +363,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintWidth_percent="0.8" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

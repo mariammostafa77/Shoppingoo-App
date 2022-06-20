@@ -1,16 +1,11 @@
 package com.example.mcommerce
 
-import android.app.PendingIntent.getActivity
 import android.content.Context
 import android.content.SharedPreferences
-import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
-import androidx.navigation.NavGraph
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
 import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.ProductInfo.view.ProductInfoFragment
@@ -23,18 +18,15 @@ import com.example.mcommerce.home.view.HomeFragment
 import com.example.mcommerce.me.view.MeWithLogin
 import com.example.mcommerce.me.view.MeWithoutLoginFragment
 import com.example.mcommerce.me.view.setting.AddNewAddressFragment
-import com.example.mcommerce.me.view.setting.UserAddressesFragment
 import com.example.mcommerce.me.viewmodel.SavedSetting
 import com.example.mcommerce.model.Product
 import com.example.mcommerce.orderDetails.view.OrderDetailsFragment
 import com.example.mcommerce.orders.model.Order
 import com.example.mcommerce.search.view.MysearchFragment
-import com.example.mcommerce.shopping_cart.view.PaymentAddressFragment
-import com.example.mcommerce.shopping_cart.view.PaymentFragment
+import com.example.mcommerce.payment.view.PaymentAddressFragment
+import com.example.mcommerce.payment.view.PaymentFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.android.synthetic.main.fragment_confirm_order.*
 import java.util.*
-import kotlin.math.log
 
 class HomeActivity : AppCompatActivity(),Communicator {
     private val homeFragment = HomeFragment()

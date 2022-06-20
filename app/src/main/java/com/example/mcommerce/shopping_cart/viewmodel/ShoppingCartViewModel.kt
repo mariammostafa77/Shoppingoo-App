@@ -25,13 +25,13 @@ class ShoppingCartViewModel(repo: RepositoryInterface) : ViewModel() {
     private var shopingCartProducts = MutableLiveData<List<DraftOrderX>>()
     private val itemDeleted = MutableLiveData<Response<DraftOrder>>()
     private val itemUpdated = MutableLiveData<Response<DraftOrder>>()
-    private val newOrder = MutableLiveData<Response<OrderResponse>>()
+    //private val newOrder = MutableLiveData<Response<OrderResponse>>()
 
     val onlineShoppingCartProduct: LiveData<List<DraftOrderX>> = shopingCartProducts
 
     val selectedItem : MutableLiveData<Response<DraftOrder>> = itemDeleted
     val onlineItemUpdated : MutableLiveData<Response<DraftOrder>> = itemUpdated
-    val onlineNewOrder : LiveData<Response<OrderResponse>> = newOrder
+    //val onlineNewOrder : LiveData<Response<OrderResponse>> = newOrder
 
 
     fun getShoppingCardProducts(){
@@ -59,7 +59,7 @@ class ShoppingCartViewModel(repo: RepositoryInterface) : ViewModel() {
             }
         }
     }
-
+/*
     fun postNewOrder(orderResponse: OrderResponse){
         viewModelScope.launch{
             val result = iRepo.postNewOrder(orderResponse)
@@ -70,6 +70,7 @@ class ShoppingCartViewModel(repo: RepositoryInterface) : ViewModel() {
         }
 
     }
+    */
 
 
 

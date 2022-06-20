@@ -1,4 +1,4 @@
-package com.example.mcommerce.shopping_cart.view
+package com.example.mcommerce.payment.view
 
 import android.content.Context
 import android.view.LayoutInflater

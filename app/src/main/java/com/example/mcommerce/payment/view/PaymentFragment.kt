@@ -1,12 +1,9 @@
-package com.example.mcommerce.shopping_cart.view
+package com.example.mcommerce.payment.view
 
-import android.app.Activity
-import android.app.AlertDialog
+import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -32,17 +29,16 @@ import com.example.mcommerce.shopping_cart.viewmodel.ShoppingCartViewModelFactor
 import com.paypal.android.sdk.payments.*
 import org.json.JSONException
 import org.json.JSONObject
-import java.math.BigDecimal
 
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.AuthFailureError
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.mcommerce.me.viewmodel.SavedSetting.Companion.loadCurrency
-import com.google.android.libraries.places.internal.it
+import com.example.mcommerce.payment.viewmodel.PaymentViewModel
+import com.example.mcommerce.payment.viewmodel.PaymentViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import com.stripe.android.PaymentConfiguration
 import com.stripe.android.paymentsheet.PaymentSheet
@@ -62,12 +58,15 @@ class PaymentFragment : Fragment() {
     lateinit var radioCash: RadioButton
     lateinit var radioVisa: RadioButton
     lateinit var txtDiscountCount: TextView
+    lateinit var txtUserName: TextView
+    lateinit var txtShippingPhone: TextView
+    lateinit var txtShippingAddress: TextView
 
     lateinit var couponsFactory: HomeViewModelFactory
     lateinit var couponsViewModel: HomeViewModel
 
-    lateinit var shoppingCartViewModelFactory: ShoppingCartViewModelFactory
-    lateinit var shoppingCartViewModel: ShoppingCartViewModel
+    lateinit var paymentViewModelFactory: PaymentViewModelFactory
+    lateinit var paymentViewModel: PaymentViewModel
 
     lateinit var communicator: Communicator
     lateinit var selectedAddress: Addresse
@@ -100,6 +99,7 @@ class PaymentFragment : Fragment() {
     }
 
 
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -117,16 +117,9 @@ class PaymentFragment : Fragment() {
             HomeViewModelFactory(Repository.getInstance(AppClient.getInstance(), requireContext()))
         couponsViewModel = ViewModelProvider(this, couponsFactory).get(HomeViewModel::class.java)
 
-        shoppingCartViewModelFactory = ShoppingCartViewModelFactory(
-            Repository.getInstance(
-                AppClient.getInstance(),
-                requireContext()
-            )
-        )
-        shoppingCartViewModel = ViewModelProvider(
-            this,
-            shoppingCartViewModelFactory
-        ).get(ShoppingCartViewModel::class.java)
+        paymentViewModelFactory = PaymentViewModelFactory(Repository.getInstance(AppClient.getInstance(),
+                requireContext()))
+        paymentViewModel = ViewModelProvider(this, paymentViewModelFactory).get(PaymentViewModel::class.java)
 
         val sharedPreferences: SharedPreferences =
             context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
@@ -140,8 +133,6 @@ class PaymentFragment : Fragment() {
 
         calculateOrderPrice()
         ///Asign Variable
-        paymentTitleTxt.append(" ${getUserName(requireContext())}")
-
         subTotoalAmount = SavedSetting.getPrice(subTotal.toString(), requireContext())
         totoalAmount = SavedSetting.getPrice(total.toString(), requireContext())
         taxAmount = SavedSetting.getPrice(fees.toString(), requireContext())
@@ -149,6 +140,10 @@ class PaymentFragment : Fragment() {
         txtSubTotalText.text = subTotoalAmount
         txtTotalText.text = totoalAmount
         txtFeesText.text = taxAmount
+        txtUserName.text = getUserName(requireContext())
+        txtShippingPhone.text = selectedAddress.phone
+        txtShippingAddress.text = "${selectedAddress.address1}, ${selectedAddress.city}, " +
+                "\n${selectedAddress.country}"
 
         btnApplyDiscount.setOnClickListener {
             applyDiscount(it)
@@ -184,7 +179,12 @@ class PaymentFragment : Fragment() {
         }
 
         btnPlaceOrder.setOnClickListener {
-            paymentFlow()
+            if(paymentMethod=="Visa"){
+                paymentFlow()
+            }
+            else{
+                postOrder()
+            }
         }
         return view
     }
@@ -200,6 +200,9 @@ class PaymentFragment : Fragment() {
         radioCash = view.findViewById(R.id.radioCash)
         radioVisa = view.findViewById(R.id.radioVisa)
         txtDiscountCount = view.findViewById(R.id.txtDiscountCount)
+        txtShippingAddress = view.findViewById(R.id.txtShippingAddress)
+        txtUserName = view.findViewById(R.id.txtUserName)
+        txtShippingPhone = view.findViewById(R.id.txtShippingPhone)
     }
 
     private fun calculateOrderPrice() {
@@ -237,9 +240,6 @@ class PaymentFragment : Fragment() {
     companion object {
         val clientKey =
             "ATWyXBtF8COKnCN1FG7AR_Sznijz2_WkTrhD7Cj2GzrwjVivPEacw2HE_AX_ndbR91_4dsEw0SEfrcuT"
-
-        // val PAYPAL_REQUEST_CODE = 123
-        val PAYPAL_REQUEST_CODE = 7171
         private val config = PayPalConfiguration()
             .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX).clientId(clientKey)
     }
@@ -247,30 +247,34 @@ class PaymentFragment : Fragment() {
     /// Stripe Methods
     fun onPaymentSheetResult(paymentSheetResult: PaymentSheetResult) {
         if (paymentSheetResult is PaymentSheetResult.Completed) {
-            val order = Order()
-            order.email = userEmail
-            val shippingAddress = ShippingAddress(
-                address1 = selectedAddress.address1.toString(), address2 = selectedAddress.address2.toString(),
-                city = selectedAddress.city.toString(), country = selectedAddress.country.toString(),
-                name = getUserName(requireContext()), phone = selectedAddress.phone.toString(),
-                zip = selectedAddress.zip.toString(),
-                company = "", country_code = selectedAddress.country_code.toString())
-            order.shipping_address = shippingAddress
-            //  order.discount_codes = listOf(discountCode)
-            order.processing_method = paymentMethod
-            order.line_items = lineItems as List<com.example.mcommerce.orders.model.LineItem>
-            val orderResponse = OrderResponse(order)
-            shoppingCartViewModel.postNewOrder(orderResponse)
-            shoppingCartViewModel.onlineNewOrder.observe(viewLifecycleOwner) { response ->
-                if (response.isSuccessful) {
-                    Toast.makeText(requireContext(), "Order Added Successfully. ", Toast.LENGTH_LONG
-                    ).show()
-                    communicator.goToOrderSummary(response.body()?.order!!, totoalAmount, subTotoalAmount, taxAmount)
-                    //response.body()?.order?.let { it1 -> communicator.goToOrderSummary(it1,fees) }
-                } else {
-                    Toast.makeText(requireContext(), "Order Not Placed.", Toast.LENGTH_LONG
-                    ).show()
-                }
+            postOrder()
+        }
+    }
+
+    private fun postOrder(){
+        val order = Order()
+        order.email = userEmail
+        val shippingAddress = ShippingAddress(
+            address1 = selectedAddress.address1.toString(), address2 = selectedAddress.address2.toString(),
+            city = selectedAddress.city.toString(), country = selectedAddress.country.toString(),
+            name = getUserName(requireContext()), phone = selectedAddress.phone.toString(),
+            zip = selectedAddress.zip.toString(),
+            company = "", country_code = selectedAddress.country_code.toString())
+        order.shipping_address = shippingAddress
+        //  order.discount_codes = listOf(discountCode)
+        order.processing_method = paymentMethod
+        order.line_items = lineItems as List<com.example.mcommerce.orders.model.LineItem>
+        val orderResponse = OrderResponse(order)
+        paymentViewModel.postNewOrder(orderResponse)
+        paymentViewModel.onlineNewOrder.observe(viewLifecycleOwner) { response ->
+            if (response.isSuccessful) {
+                Toast.makeText(requireContext(), "Order Added Successfully. ", Toast.LENGTH_LONG
+                ).show()
+                communicator.goToOrderSummary(response.body()?.order!!, totoalAmount, subTotoalAmount, taxAmount)
+                //response.body()?.order?.let { it1 -> communicator.goToOrderSummary(it1,fees) }
+            } else {
+                Toast.makeText(requireContext(), "Order Not Placed.", Toast.LENGTH_LONG
+                ).show()
             }
         }
     }

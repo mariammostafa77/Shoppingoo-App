@@ -1,4 +1,4 @@
-package com.example.mcommerce.shopping_cart.view
+package com.example.mcommerce.payment.view
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -19,7 +19,6 @@ import com.example.mcommerce.R
 import com.example.mcommerce.draftModel.LineItem
 import com.example.mcommerce.draftModel.OrderPrices
 import com.example.mcommerce.me.view.setting.AddNewAddressFragment
-import com.example.mcommerce.me.view.setting.CustomerAddressAdapter
 import com.example.mcommerce.me.viewmodel.CustomerViewModel
 import com.example.mcommerce.me.viewmodel.CustomerViewModelFactory
 import com.example.mcommerce.model.Repository

@@ -24,7 +24,7 @@ import com.example.mcommerce.favourite.view.FavouriteFragment
 import com.example.mcommerce.favourite.view.FavouriteOnClickLisner
 import com.example.mcommerce.favourite.viewModel.FavViewModel
 import com.example.mcommerce.favourite.viewModel.FavViewModelFactory
-import com.example.mcommerce.me.view.setting.AppSettingFragment
+import com.example.mcommerce.me.view.setting.WithLoginAppSettingFragment
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
 import com.example.mcommerce.orders.model.Order
@@ -56,8 +56,6 @@ class MeWithLogin : Fragment(), FavouriteOnClickLisner, OnOrderClickListenerInte
     var favProducts:ArrayList<DraftOrderX> = ArrayList<DraftOrderX>()
     var userName : String = ""
     private var userId:String =""
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -136,7 +134,7 @@ class MeWithLogin : Fragment(), FavouriteOnClickLisner, OnOrderClickListenerInte
 
         txtWelcomeUser.append(" ${fname} ${lname}. ")
         settingICon.setOnClickListener {
-            replaceFragment(AppSettingFragment())
+            replaceFragment(WithLoginAppSettingFragment())
         }
         shoppingCartIcon.setOnClickListener {
             replaceFragment(ShoppingCartFragment())
