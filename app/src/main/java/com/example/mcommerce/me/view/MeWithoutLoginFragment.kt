@@ -9,7 +9,8 @@ import android.widget.Button
 import android.widget.ImageView
 import com.example.mcommerce.R
 import com.example.mcommerce.auth.login.view.LoginFormFragment
-import com.example.mcommerce.me.view.setting.AppSettingFragment
+import com.example.mcommerce.me.view.setting.WithLoginAppSettingFragment
+import com.example.mcommerce.me.view.setting.WithoutLoginAppSettingFragment
 
 class MeWithoutLoginFragment : Fragment() {
 
@@ -18,7 +19,6 @@ class MeWithoutLoginFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -27,7 +27,7 @@ class MeWithoutLoginFragment : Fragment() {
         withoutLoginSettingICon = view.findViewById(R.id.withoutLoginSettingICon)
         withoutLoginSettingICon.setOnClickListener {
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.frameLayout, AppSettingFragment())
+            transaction.replace(R.id.frameLayout, WithoutLoginAppSettingFragment())
             transaction.addToBackStack(null);
             transaction.commit()
         }

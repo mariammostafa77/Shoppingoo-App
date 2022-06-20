@@ -1,12 +1,10 @@
 package com.example.mcommerce.me.viewmodel
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.fragment.app.Fragment
-import com.example.mcommerce.R
-import com.example.mcommerce.me.view.setting.AppSettingFragment.Companion.languageSelected
+import com.example.mcommerce.me.view.setting.WithLoginAppSettingFragment.Companion.languageSelected
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.util.*
@@ -77,6 +75,8 @@ class SavedSetting {
             }
 
         }
+
+
 
     }
 

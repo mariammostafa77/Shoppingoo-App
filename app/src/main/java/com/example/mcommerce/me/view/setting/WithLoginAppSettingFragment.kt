@@ -7,20 +7,17 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.lifecycle.ViewModelProvider
 import com.example.mcommerce.AuthActivity
 import com.example.mcommerce.R
 import com.example.mcommerce.me.viewmodel.CustomerViewModel
 import com.example.mcommerce.me.viewmodel.CustomerViewModelFactory
-import com.example.mcommerce.me.viewmodel.SavedSetting
 import com.example.mcommerce.me.viewmodel.SavedSetting.Companion.loadCurrency
 import com.example.mcommerce.me.viewmodel.SavedSetting.Companion.loadLocale
 import com.example.mcommerce.me.viewmodel.SavedSetting.Companion.setCurrency
@@ -28,12 +25,9 @@ import com.example.mcommerce.me.viewmodel.SavedSetting.Companion.setCurrencyResu
 import com.example.mcommerce.me.viewmodel.SavedSetting.Companion.setLocale
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
-import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.dialog_view.view.*
-import java.math.RoundingMode
-import java.text.DecimalFormat
 
-class AppSettingFragment : Fragment() {
+class WithLoginAppSettingFragment : Fragment() {
 
     lateinit var setting_back_icon: ImageView
     lateinit var userAddressCard: CardView
@@ -41,11 +35,11 @@ class AppSettingFragment : Fragment() {
     lateinit var currencyCard: CardView
     lateinit var contactUsCard: CardView
     lateinit var shareAppCard: CardView
-
     lateinit var txtSelectedLanguage: TextView
     lateinit var txtLastAddress: TextView
     lateinit var txtSignOutText: TextView
     lateinit var txtCurrency : TextView
+    lateinit var txtUserEmail: TextView
     lateinit var currencySpinner: Spinner
 
     lateinit var customerViewModel: CustomerViewModel
@@ -64,12 +58,15 @@ class AppSettingFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_app_setting, container, false)
+        val view = inflater.inflate(R.layout.fragment_with_login_app_setting, container, false)
         initComponent(view)
         loadLocale(requireContext())
         customerViewModelFactory = CustomerViewModelFactory(Repository.getInstance(AppClient.getInstance(), requireContext()))
         customerViewModel = ViewModelProvider(this, customerViewModelFactory).get(CustomerViewModel::class.java)
 
+        val sharedPreferences: SharedPreferences = context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
+        val userEmail: String? = sharedPreferences.getString("email","")
+        txtUserEmail.text = userEmail
         customerViewModel.getAllCurrencies()
         customerViewModel.onlineCurrencies.observe(viewLifecycleOwner) { currencies ->
             for (i in 0..currencies.size - 1) {
@@ -147,6 +144,7 @@ class AppSettingFragment : Fragment() {
         shareAppCard = view.findViewById(R.id.shareAppCard)
 
         txtSelectedLanguage = view.findViewById(R.id.txtSelectedLanguage)
+        txtUserEmail = view.findViewById(R.id.txtUserEmail)
        // txtLastAddress = view.findViewById(R.id.txtLastAddress)
         txtSignOutText = view.findViewById(R.id.txtSignOutText)
         txtCurrency = view.findViewById(R.id.txtCurrency)
@@ -169,12 +167,12 @@ class AppSettingFragment : Fragment() {
             when (which) {
                 0 -> {
                     setLocale("en", requireContext())
-                    replaceFragment(AppSettingFragment())
+                    replaceFragment(WithLoginAppSettingFragment())
                     languageSelected = getResources().getString(R.string.english)
                 }
                 1 -> {
                     setLocale("ar", requireContext())
-                    replaceFragment(AppSettingFragment())
+                    replaceFragment(WithLoginAppSettingFragment())
                     languageSelected = getResources().getString(R.string.arabic)
                 }
             }
