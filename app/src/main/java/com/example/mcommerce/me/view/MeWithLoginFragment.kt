@@ -176,7 +176,7 @@ class MeWithLogin : Fragment(), FavouriteOnClickLisner, OnOrderClickListenerInte
     fun replaceFragment(fragment: Fragment) {
         val transaction = requireActivity().supportFragmentManager.beginTransaction()
         transaction.replace(R.id.frameLayout, fragment)
-        transaction.addToBackStack(null);
+        transaction.addToBackStack(null)
         transaction.commit()
     }
     override fun onItemClickListener(draftOrderX: DraftOrderX) {

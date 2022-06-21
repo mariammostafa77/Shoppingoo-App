@@ -11,6 +11,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -31,6 +33,7 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
     lateinit var txtSubTotal: TextView
     lateinit var txtNoSDataFound: TextView
     lateinit var imgNoCartProduct: ImageView
+    lateinit var address_back_icon: ImageView
     lateinit var btnProceedToCheckout: Button
     lateinit var cartProgressBar: ProgressBar
     lateinit var shoppingCartRecyclerView: RecyclerView
@@ -62,6 +65,11 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
         initComponent(view)
         shoppingCartRecyclerView.setLayoutManager(linearLayoutManager)
         shoppingCartRecyclerView.setAdapter(shoppingCartAdapter)
+
+        address_back_icon.setOnClickListener {
+            val manager: FragmentManager = activity!!.supportFragmentManager
+            manager.popBackStack()
+        }
 
         cartProgressBar.isVisible = true
         shoppingCartViewModelFactory = ShoppingCartViewModelFactory(
@@ -137,6 +145,7 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
     }
 
     private fun initComponent(view: View) {
+        address_back_icon = view.findViewById(R.id.address_back_icon)
         cartProgressBar = view.findViewById(R.id.cartProgressBar)
         txtSubTotal = view.findViewById(R.id.txtSubTotal)
         imgNoCartProduct = view.findViewById(R.id.imgNoCartProduct)
@@ -266,7 +275,7 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
     fun replaceFragment(fragment: Fragment) {
         val transaction = requireActivity().supportFragmentManager.beginTransaction()
         transaction.replace(R.id.frameLayout, fragment)
-        transaction.addToBackStack(null);
+        transaction.addToBackStack(null)
         transaction.commit()
     }
     fun getItems() {

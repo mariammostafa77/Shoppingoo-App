@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.cardview.widget.CardView
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import com.example.mcommerce.R
 import com.example.mcommerce.me.viewmodel.CustomerViewModel
@@ -53,6 +54,10 @@ class WithoutLoginAppSettingFragment : Fragment() {
         }
         shareAppCardWithoutLogin.setOnClickListener {
             shareOurApp()
+        }
+        setting_back_icon_without_login.setOnClickListener {
+            val manager: FragmentManager = activity!!.supportFragmentManager
+            manager.popBackStack()
         }
 
         return view
