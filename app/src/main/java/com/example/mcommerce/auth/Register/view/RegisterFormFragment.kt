@@ -27,6 +27,7 @@ import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
 import com.example.mcommerce.shopping_cart.view.ShoppingCartFragment
 import com.google.android.gms.common.util.CollectionUtils.listOf
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_register_form.*
 
 
@@ -145,9 +146,8 @@ class RegisterFormFragment : Fragment() {
 
                     Log.i("Reg", "messs: " + response.code().toString())
                     Log.i("Reg", "err: " + response.errorBody())
-                    Toast.makeText(requireContext(),
-                        "Email or Phone already Register!!: " + response.code().toString(),
-                        Toast.LENGTH_LONG).show()
+                    val snack = Snackbar.make(it,"Email or Phone already Register!!", Snackbar.LENGTH_LONG)
+                    snack.show()
 
                 }
             }

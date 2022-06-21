@@ -27,6 +27,7 @@ import com.example.mcommerce.R
 import com.example.mcommerce.draftModel.DraftOrderX
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
+import com.google.android.material.snackbar.Snackbar
 
 
 class FavouriteFragment : Fragment(),FavouriteOnClickLisner {
@@ -56,7 +57,6 @@ class FavouriteFragment : Fragment(),FavouriteOnClickLisner {
         favBackImg=view.findViewById(R.id.favBackImg)
         favProgressbar=view.findViewById(R.id.favProgressBar)
         Log.i("FavArray","test Fav: ")
-        Toast.makeText(requireContext(),"fav Fragment",Toast.LENGTH_LONG).show()
         favAdapter= FavProductsAdapter(this,communicator)
         linearLayoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
         favRecyclerView.setLayoutManager(linearLayoutManager)
@@ -104,7 +104,7 @@ class FavouriteFragment : Fragment(),FavouriteOnClickLisner {
     }
 
     override fun onItemClickListener(draftOrderX: DraftOrderX) {
-        Toast.makeText(requireContext(),"clicked",Toast.LENGTH_LONG).show()
+
         val builder = AlertDialog.Builder(requireContext())
         builder.setMessage("Are you sure you want to delete?")
             .setTitle("Remove")
@@ -125,12 +125,11 @@ class FavouriteFragment : Fragment(),FavouriteOnClickLisner {
                         favAdapter.setFavtProducts(requireContext(),favProducts,favProducts.size)
 
 
-                        Toast.makeText(requireContext(),"Deleted Success!!!: "+response.code().toString(),Toast.LENGTH_SHORT).show()
-
 
                     }
                     else{
                         Toast.makeText(requireContext(),"Deleted failed: "+response.code().toString(),Toast.LENGTH_SHORT).show()
+
                     }
                 }
                 dialog.dismiss()

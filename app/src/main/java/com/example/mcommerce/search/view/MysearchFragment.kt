@@ -32,6 +32,8 @@ import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
 import com.example.mcommerce.search.viewModel.SearchViewModel
 import com.example.mcommerce.search.viewModel.SearchViewModelFactory
+import com.google.android.libraries.places.internal.it
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.dialog_view.view.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -119,7 +121,6 @@ class MysearchFragment : Fragment(),FavClicked {
                     filterProductArrayList.clear()
                     edtSearch.setOnItemClickListener { adapterView, view, i, l ->
                         filterProductArrayList.clear()
-                        Toast.makeText(requireContext(),"clicked"+ adapter.getItem(i).toString(),Toast.LENGTH_LONG).show()
                         var productName:String= adapter.getItem(i).toString()
                         if(productName.isNotEmpty()){
 
@@ -181,7 +182,6 @@ class MysearchFragment : Fragment(),FavClicked {
                     filterProductArrayList.clear()
                     edtSearch.setOnItemClickListener { adapterView, view, i, l ->
                         filterProductArrayList.clear()
-                      //  Toast.makeText(requireContext(),"clicked"+ adapter.getItem(i).toString(),Toast.LENGTH_LONG).show()
                         var productName:String= adapter.getItem(i).toString()
                         if(productName.isNotEmpty()){
 
@@ -271,7 +271,6 @@ class MysearchFragment : Fragment(),FavClicked {
 
     override fun addToFav(product:Product,img: ImageView,myIndex:Int) {
         if(email!="") {
-            Toast.makeText(requireContext(), "Fav clicked", Toast.LENGTH_LONG).show()
             val sharedPreferences: SharedPreferences =
                 context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
             val email: String? = sharedPreferences.getString("email", "")
@@ -279,7 +278,7 @@ class MysearchFragment : Fragment(),FavClicked {
             Log.i("filter", "size of fav product: " + allFavProducts.size)
             Log.i("filter", "size of variants product: " + allVariantsID.size)
 
-
+            loadFavData()
             if (filterProductArrayList[myIndex].variants[0].id in allVariantsID) {
                 Log.i("exits", "already exists")
 
@@ -291,6 +290,7 @@ class MysearchFragment : Fragment(),FavClicked {
                         Toast.makeText(requireContext(),
                             "Deleted Success!!!: " + response.code().toString(),
                             Toast.LENGTH_SHORT).show()
+                        loadFavData()
 
 
                     } else {
@@ -330,14 +330,16 @@ class MysearchFragment : Fragment(),FavClicked {
                 productInfoViewModel.onlineCardOrder.observe(viewLifecycleOwner) { cardOrder ->
                     if (cardOrder.isSuccessful) {
                         Toast.makeText(requireContext(),
-                            "add to card successfull: " + cardOrder.code().toString(),
+                            "add to favourite successfull",
                             Toast.LENGTH_LONG).show()
+                        loadFavData()
+
                     } else {
 
                         Toast.makeText(requireContext(),
-                            "add to card failed: " + cardOrder.code()
-                                .toString() + "//" + cardOrder.body(),
+                            "add to favourite failed",
                             Toast.LENGTH_LONG).show()
+
 
                     }
                 }
@@ -386,6 +388,20 @@ class MysearchFragment : Fragment(),FavClicked {
         }
     }
 
+fun loadFavData(){
+    productInfoViewModel.getFavProducts()
+    allFavProducts.clear()
+    productInfoViewModel.onlineFavProduct.observe(viewLifecycleOwner) { favProducts ->
+        allFavProducts.clear()
+        allVariantsID.clear()
+        for (i in 0..favProducts.size - 1) {
+            if (favProducts.get(i).note == "fav" && favProducts.get(i).email == email) {
+                allFavProducts.add(favProducts.get(i))
+                allVariantsID.add(favProducts.get(i).line_items!![0].variant_id!!)
+            }
+        }
 
+    }
+}
 
 }

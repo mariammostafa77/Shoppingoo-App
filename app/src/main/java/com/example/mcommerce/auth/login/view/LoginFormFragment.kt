@@ -25,6 +25,7 @@ import com.example.mcommerce.auth.login.viewModel.LoginViewModelFactory
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
 import com.example.mcommerce.shopping_cart.view.ShoppingCartFragment
+import com.google.android.material.snackbar.Snackbar
 
 
 class LoginFormFragment : Fragment() {
@@ -109,9 +110,8 @@ class LoginFormFragment : Fragment() {
                         }
                     }
                     if (isSuccess == false) {
-                        Toast.makeText(requireContext(),
-                            "Email or Password not matched",
-                            Toast.LENGTH_LONG).show()
+                        val snack = Snackbar.make(it,"Email or Password not matched", Snackbar.LENGTH_LONG)
+                        snack.show()
                     }
 
                 }
