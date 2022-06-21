@@ -1,10 +1,12 @@
-package com.example.mcommerce.auth.login.viewModel
+package com.example.mcommerce.ProductInfo.viewModel
 
+import junit.framework.TestCase
 import android.content.Context
 import android.os.Looper.getMainLooper
 import android.util.Log
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.mcommerce.auth.login.viewModel.LoginViewModel
 import com.example.mcommerce.getOrAwaitValue
 import com.example.mcommerce.home.viewModel.HomeViewModel
 import com.example.mcommerce.model.FakeRepository
@@ -14,7 +16,6 @@ import com.example.mcommerce.orders.model.Order
 import com.example.mcommerce.orders.model.Orders
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
-import junit.framework.TestCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.*
@@ -32,7 +33,7 @@ import java.util.Observer
 @RunWith(AndroidJUnit4::class)
 @LooperMode(LooperMode.Mode.PAUSED)
 @ExperimentalCoroutinesApi
-class LoginViewModelTest : TestCase() {
+class ProductInfoViewModelTest : TestCase(){
     private lateinit var remoteDataSource: FakeRepository
     private lateinit var repo: Repository
 
@@ -45,18 +46,17 @@ class LoginViewModelTest : TestCase() {
     }
 
     @Test
-    fun getCustomerTest_allCustomers() = runBlockingTest {
+    fun getDraftOrdersTest_allDraftOrders() = runBlockingTest {
         // When tasks are requested from the tasks repository
-        val viewModel = LoginViewModel(repo)
-        viewModel.getCustomer()
+        val viewModel = ProductInfoViewModel(repo)
+        viewModel.getFavProducts()
         shadowOf(getMainLooper()).idle();
 
-        val tasks = viewModel.customer.getOrAwaitValue()
+        val tasks = viewModel.onlineFavProduct.getOrAwaitValue()
 
         // Then tasks are loaded from the remote data source
-        assertEquals(1,tasks.customers.size)
+        assertEquals(2,tasks.size)
     }
-
 
 
 }

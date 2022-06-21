@@ -39,6 +39,7 @@ import com.example.mcommerce.network.AppClient
 import com.example.mcommerce.shopping_cart.view.ShoppingCartFragment
 import com.example.mcommerce.shopping_cart.viewmodel.ShoppingCartViewModel
 import com.example.mcommerce.shopping_cart.viewmodel.ShoppingCartViewModelFactory
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.dialog_view.*
 import kotlinx.android.synthetic.main.dialog_view.view.*
 
@@ -211,7 +212,7 @@ class ProductInfoFragment : Fragment() {
             //end
             productCount.text = "1"
             btnIncrease.setOnClickListener {
-                //Toast.makeText(requireContext(),"test",Toast.LENGTH_LONG).show()
+
                 count++
                 productCount.text = count.toString()
             }
@@ -278,9 +279,10 @@ class ProductInfoFragment : Fragment() {
                         newDraftOrder)
                     shoppingCartViewModel.onlineItemUpdated.observe(viewLifecycleOwner) { response ->
                         if (response.isSuccessful) {
-                            Toast.makeText(requireContext(),
-                                "update Success!!!: " + response.code().toString(),
-                                Toast.LENGTH_SHORT).show()
+
+                            val snack = Snackbar.make(it,"update Success",
+                                Snackbar.LENGTH_LONG)
+                            snack.show()
                             loadData()
 
                         }
@@ -317,15 +319,14 @@ class ProductInfoFragment : Fragment() {
                     specificProductsViewModel.getCardOrder(draftOrder)
                     specificProductsViewModel.onlineCardOrder.observe(viewLifecycleOwner) { cardOrder ->
                         if (cardOrder.isSuccessful) {
-                            Toast.makeText(requireContext(),
-                                "add to card successfull: " + cardOrder.code().toString(),
-                                Toast.LENGTH_LONG).show()
+
+                            val snack = Snackbar.make(it,"add to card successfull",Snackbar.LENGTH_LONG)
+                            snack.show()
                             loadData()
                         } else {
 
-                            Toast.makeText(requireContext(),
-                                "add to card failed: " + cardOrder.code().toString(),
-                                Toast.LENGTH_LONG).show()
+                            val snack = Snackbar.make(it,"add to card failed",Snackbar.LENGTH_LONG)
+                            snack.show()
 
                         }
                     }
@@ -356,16 +357,16 @@ class ProductInfoFragment : Fragment() {
                     specificProductsViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
                         if (response.isSuccessful) {
 
-                            Toast.makeText(requireContext(),
-                                "Deleted Success!!!: " + response.code().toString(),
-                                Toast.LENGTH_SHORT).show()
+
+                            val snack = Snackbar.make(it,"Deleted Success",Snackbar.LENGTH_LONG)
+                            snack.show()
                             loadData()
 
 
                         } else {
-                            Toast.makeText(requireContext(),
-                                "Deleted failed: " + response.code().toString(),
-                                Toast.LENGTH_SHORT).show()
+
+                            val snack = Snackbar.make(it,"Deleted failed",Snackbar.LENGTH_LONG)
+                            snack.show()
 
                         }
 
@@ -396,16 +397,15 @@ class ProductInfoFragment : Fragment() {
                     specificProductsViewModel.getCardOrder(draftOrder)
                     specificProductsViewModel.onlineCardOrder.observe(viewLifecycleOwner) { fav ->
                         if (fav.isSuccessful) {
-                            Toast.makeText(requireContext(),
-                                "add to Fav successfull: " + fav.code().toString(),
-                                Toast.LENGTH_LONG).show()
+
+                            val snack = Snackbar.make(it,"add to Fav successfull",Snackbar.LENGTH_LONG)
+                            snack.show()
                             loadData()
 
                         } else {
 
-                            Toast.makeText(requireContext(),
-                                "add to Fav failed: " + fav.code().toString(),
-                                Toast.LENGTH_LONG).show()
+                            val snack = Snackbar.make(it,"add to Fav failed",Snackbar.LENGTH_LONG)
+                            snack.show()
 
                         }
                     }
