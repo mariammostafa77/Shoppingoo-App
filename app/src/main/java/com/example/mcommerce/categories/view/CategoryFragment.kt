@@ -94,6 +94,7 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
         searchFactor = SearchViewModelFactory(
             Repository.getInstance(AppClient.getInstance(), requireContext())
         )
+        Log.i("TAG","")
         searchViewModel = ViewModelProvider(this, searchFactor).get(SearchViewModel::class.java)
         subCategoriesAdapter= SubCategoriesAdapter()
         brandProductsAdapter= BrandProductsAdapter(this)
@@ -165,6 +166,7 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
         }
         categoriesProductViewModel.allOnlineProducts.observe(viewLifecycleOwner) {
             getProductTypes(it)
+            Log.i("TAG","")
         }
         categoriesTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {

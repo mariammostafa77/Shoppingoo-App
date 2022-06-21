@@ -1,5 +1,6 @@
 package com.example.mcommerce.favourite.view
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.SharedPreferences
@@ -14,6 +15,8 @@ import android.widget.ProgressBar
 import android.widget.TextView
 
 import android.widget.Toast
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -36,6 +39,7 @@ class FavouriteFragment : Fragment(),FavouriteOnClickLisner {
     lateinit var noDataImage:ImageView
     lateinit var txtNoData:TextView
     lateinit var favProgressbar:ProgressBar
+    lateinit var favBackImg:ImageView
 
     var favProducts:ArrayList<DraftOrderX> = ArrayList<DraftOrderX>()
 
@@ -49,6 +53,7 @@ class FavouriteFragment : Fragment(),FavouriteOnClickLisner {
         favRecyclerView = view.findViewById(R.id.favRecyclerView)
         noDataImage=view.findViewById(R.id.noDataImg)
         txtNoData=view.findViewById(R.id.txtNoData)
+        favBackImg=view.findViewById(R.id.favBackImg)
         favProgressbar=view.findViewById(R.id.favProgressBar)
         Log.i("FavArray","test Fav: ")
         Toast.makeText(requireContext(),"fav Fragment",Toast.LENGTH_LONG).show()
@@ -85,6 +90,14 @@ class FavouriteFragment : Fragment(),FavouriteOnClickLisner {
             }
 
             favAdapter.setFavtProducts(requireContext(),favProducts,favProducts.size)
+
+        }
+        favBackImg.setOnClickListener {
+            val manager: FragmentManager = activity!!.supportFragmentManager
+            val trans: FragmentTransaction = manager.beginTransaction()
+            trans.remove(this)
+            trans.commit()
+            manager.popBackStack()
 
         }
         return view

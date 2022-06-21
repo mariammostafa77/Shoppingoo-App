@@ -1,6 +1,5 @@
 package com.example.mcommerce.ProductInfo.view
 
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
@@ -12,19 +11,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mcommerce.AuthActivity
 import com.example.mcommerce.HomeActivity.Companion.myDetailsFlag
-import com.example.mcommerce.HomeActivity.Companion.mySearchFlag
 import com.example.mcommerce.ProductInfo.model.Reviews
 import com.example.mcommerce.ProductInfo.viewModel.ProductInfoViewModel
 import com.example.mcommerce.ProductInfo.viewModel.ProductInfoViewModelFactory
 import com.example.mcommerce.R
-import com.example.mcommerce.categories.view.CategoryFragment
 import com.example.mcommerce.draftModel.DraftOrder
 import com.example.mcommerce.draftModel.DraftOrderX
 import com.example.mcommerce.draftModel.LineItem
@@ -38,14 +36,11 @@ import com.example.mcommerce.model.Image
 import com.example.mcommerce.model.Product
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
-import com.example.mcommerce.search.view.MysearchFragment
 import com.example.mcommerce.shopping_cart.view.ShoppingCartFragment
 import com.example.mcommerce.shopping_cart.viewmodel.ShoppingCartViewModel
 import com.example.mcommerce.shopping_cart.viewmodel.ShoppingCartViewModelFactory
 import kotlinx.android.synthetic.main.dialog_view.*
 import kotlinx.android.synthetic.main.dialog_view.view.*
-import java.math.RoundingMode
-import java.text.DecimalFormat
 
 
 class ProductInfoFragment : Fragment() {
@@ -62,8 +57,8 @@ class ProductInfoFragment : Fragment() {
     lateinit var productName:TextView
     lateinit var productPrice:TextView
     lateinit var productDesc:TextView
-    lateinit var btnIncrease:Button
-    lateinit var btnDecrease:Button
+    lateinit var btnIncrease:ImageView
+    lateinit var btnDecrease:ImageView
     lateinit var productCount:TextView
     lateinit var ratBar:RatingBar
     lateinit var addToFavImg:ImageView
@@ -99,7 +94,11 @@ class ProductInfoFragment : Fragment() {
     lateinit var customerViewModel: CustomerViewModel
     lateinit var customerViewModelFactory: CustomerViewModelFactory
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?, ): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         var view =inflater.inflate(R.layout.fragment_product_info, container, false)
         Log.i("test","test")
 
@@ -240,7 +239,7 @@ class ProductInfoFragment : Fragment() {
                     allFavProducts.add(allDraftProducts.get(i))
                     allVariantsID.add(allDraftProducts.get(i).line_items!![0].variant_id!!)
                 }
-               else if (allDraftProducts.get(i).note == "card" && allDraftProducts.get(i).email == customerEmail) {
+                else if (allDraftProducts.get(i).note == "card" && allDraftProducts.get(i).email == customerEmail) {
                     allCardProducts.add(allDraftProducts.get(i))
                     allCardVariantsID.add(allDraftProducts.get(i).line_items!![0].variant_id!!)
                 }
@@ -412,25 +411,30 @@ class ProductInfoFragment : Fragment() {
                     }
                 }
             }
-                else{
+            else{
 
                 showLoginDialog("You can not add to Favourite without Login",requireContext())
-                }
+            }
         }
         backImg.setOnClickListener {
-            if (mySearchFlag == 1) {
-
-                val transaction = requireActivity().supportFragmentManager.beginTransaction()
-                transaction.replace(R.id.frameLayout, MysearchFragment())
-                transaction.addToBackStack(null);
-                transaction.commit()
-            } else {
-
-                val transaction = requireActivity().supportFragmentManager.beginTransaction()
-                transaction.replace(R.id.frameLayout, CategoryFragment(1))
-                transaction.addToBackStack(null);
-                transaction.commit()
-            }
+//            if (mySearchFlag == 1) {
+//
+//                val transaction = requireActivity().supportFragmentManager.beginTransaction()
+//                transaction.replace(R.id.frameLayout, MysearchFragment())
+//                transaction.addToBackStack(null);
+//                transaction.commit()
+//            } else {
+//
+//                val transaction = requireActivity().supportFragmentManager.beginTransaction()
+//                transaction.replace(R.id.frameLayout, CategoryFragment(1))
+//                transaction.addToBackStack(null);
+//                transaction.commit()
+//            }
+            val manager: FragmentManager = activity!!.supportFragmentManager
+            val trans: FragmentTransaction = manager.beginTransaction()
+            trans.remove(this)
+            trans.commit()
+            manager.popBackStack()
         }
         cardImg.setOnClickListener {
             val transaction = requireActivity().supportFragmentManager.beginTransaction()

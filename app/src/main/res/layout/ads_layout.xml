@@ -3,12 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+   >
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="150dp"
         app:cardCornerRadius="40dp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -16,7 +19,7 @@
         <ImageView
             android:id="@+id/adsImg"
             android:layout_width="match_parent"
-            android:layout_height="140dp"
+            android:layout_height="130dp"
             android:scaleType="fitXY"
             app:srcCompat="@drawable/adss" />
     </androidx.cardview.widget.CardView>
