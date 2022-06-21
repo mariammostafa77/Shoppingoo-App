@@ -104,6 +104,7 @@ class FavouriteFragment : Fragment(),FavouriteOnClickLisner {
             trans.remove(this)
             trans.commit()
             manager.popBackStack()
+
         }
         return view
     }
