@@ -15,8 +15,7 @@ class AdsAdapter(private val imageList: ArrayList<Int>, private val viewPager2: 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
-        val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.image_container, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.image_container, parent, false)
         return ImageViewHolder(view)
     }
 

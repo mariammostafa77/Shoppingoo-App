@@ -11,6 +11,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -55,6 +56,10 @@ class PaymentAddressFragment : Fragment() {
         if(arguments != null){
             lineItems = arguments?.getSerializable("line_items") as ArrayList<LineItem>
             orderPrices = arguments?.getSerializable("order_price") as ArrayList<OrderPrices>
+        }
+        address_back_icon.setOnClickListener {
+            val manager: FragmentManager = activity!!.supportFragmentManager
+            manager.popBackStack()
         }
         paymentAddressesAdapter = PaymentAddressesAdapter(communicator,lineItems,orderPrices)
         customerAddressesLayoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)

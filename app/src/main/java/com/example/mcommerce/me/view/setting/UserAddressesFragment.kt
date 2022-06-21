@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -79,6 +80,10 @@ class UserAddressesFragment : Fragment() {
                 imgNoAddressProduct.visibility=View.VISIBLE
                 txtNoSDataFound.visibility=View.VISIBLE
             }
+        }
+        address_back_icon.setOnClickListener {
+            val manager: FragmentManager = activity!!.supportFragmentManager
+            manager.popBackStack()
         }
         btnAddNewAddress.setOnClickListener {
             val transaction = requireActivity().supportFragmentManager.beginTransaction()

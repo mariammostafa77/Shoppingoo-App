@@ -31,6 +31,7 @@ import org.json.JSONException
 import org.json.JSONObject
 
 import android.widget.Toast
+import androidx.fragment.app.FragmentManager
 import com.android.volley.AuthFailureError
 import com.android.volley.Request
 import com.android.volley.Response
@@ -61,6 +62,7 @@ class PaymentFragment : Fragment() {
     lateinit var txtUserName: TextView
     lateinit var txtShippingPhone: TextView
     lateinit var txtShippingAddress: TextView
+    lateinit var confirm_payment_back_icon: ImageView
 
     lateinit var couponsFactory: HomeViewModelFactory
     lateinit var couponsViewModel: HomeViewModel
@@ -103,8 +105,7 @@ class PaymentFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+        savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_payment, container, false)
 
         initComponent(view)
@@ -142,8 +143,12 @@ class PaymentFragment : Fragment() {
         txtFeesText.text = taxAmount
         txtUserName.text = getUserName(requireContext())
         txtShippingPhone.text = selectedAddress.phone
-        txtShippingAddress.text = "${selectedAddress.address1}, ${selectedAddress.city}, " +
-                "\n${selectedAddress.country}"
+        txtShippingAddress.text = "${selectedAddress.address1}, ${selectedAddress.city}. "
+
+        confirm_payment_back_icon.setOnClickListener {
+            val manager: FragmentManager = activity!!.supportFragmentManager
+            manager.popBackStack()
+        }
 
         btnApplyDiscount.setOnClickListener {
             applyDiscount(it)
@@ -203,6 +208,7 @@ class PaymentFragment : Fragment() {
         txtShippingAddress = view.findViewById(R.id.txtShippingAddress)
         txtUserName = view.findViewById(R.id.txtUserName)
         txtShippingPhone = view.findViewById(R.id.txtShippingPhone)
+        confirm_payment_back_icon = view.findViewById(R.id.confirm_payment_back_icon)
     }
 
     private fun calculateOrderPrice() {

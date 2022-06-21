@@ -34,7 +34,7 @@ class MeWithoutLoginFragment : Fragment() {
         btnGoToLogin.setOnClickListener {
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
             transaction.replace(R.id.frameLayout, LoginFormFragment())
-            transaction.addToBackStack(null);
+            transaction.addToBackStack(null)
             transaction.commit()
         }
         return view

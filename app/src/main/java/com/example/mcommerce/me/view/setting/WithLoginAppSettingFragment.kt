@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.cardview.widget.CardView
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import com.example.mcommerce.AuthActivity
 import com.example.mcommerce.R
@@ -87,6 +88,7 @@ class WithLoginAppSettingFragment : Fragment() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 currencySelected = parent?.getItemAtPosition(position).toString()
                 setCurrency(currencySelected, context!!)
+                txtCurrency.text = currencySelected
                 customerViewModel.getAmountAfterConversion(parent?.getItemAtPosition(position).toString())
                 customerViewModel.onlineCurrencyChanged.observe(viewLifecycleOwner) { result ->
                     convertorResult = result.result
@@ -95,6 +97,11 @@ class WithLoginAppSettingFragment : Fragment() {
             }
         }
         currencySelected = loadCurrency(requireContext())
+
+        setting_back_icon.setOnClickListener {
+            val manager: FragmentManager = activity!!.supportFragmentManager
+            manager.popBackStack()
+        }
 
         userAddressCard.setOnClickListener {
             replaceFragment(UserAddressesFragment())

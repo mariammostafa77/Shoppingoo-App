@@ -81,23 +81,29 @@ class AddNewAddressFragment : Fragment() {
             btnSaveNewAddress.isVisible = false
         }
         btnSaveNewAddress.setOnClickListener {
-            val customer = CustomerX()
-            customer.addresses = listOf(Addresse(address1 =txtAddressLine1.text.toString(), address2 = txtAddressLine2.text.toString(),
-                phone = txtPhoneNumber.text.toString(),city = userAddress.get(1),province = "",zip = userAddress.get(3),country = userAddress.get(0) ))
-            val customDetail = CustomerDetail(customer)
-            customerViewModel.addNewCustomerAddress(customerId,customDetail)
-            customerViewModel.newCustomerAddress.observe(viewLifecycleOwner) { response ->
-                if(response.isSuccessful){
-                    Toast.makeText(requireContext(),"Updated Successfull: "+response.code().toString(),Toast.LENGTH_LONG).show()
-                    Log.i("update","messs from success: "+response.body().toString())
-                    val transaction = requireActivity().supportFragmentManager.beginTransaction()
-                    transaction.replace(R.id.frameLayout, UserAddressesFragment())
-                    transaction.addToBackStack(null);
-                    transaction.commit()
+
+            if (txtAddressLine1.text.isNotEmpty() && txtAddressLine2.text.isNotEmpty() && txtPhoneNumber.text.isNotEmpty()){
+                val customer = CustomerX()
+                customer.addresses = listOf(Addresse(address1 =txtAddressLine1.text.toString(), address2 = txtAddressLine2.text.toString(),
+                    phone = txtPhoneNumber.text.toString(),city = userAddress.get(1),province = "",zip = userAddress.get(3),country = userAddress.get(0)))
+                val customDetail = CustomerDetail(customer)
+                customerViewModel.addNewCustomerAddress(customerId,customDetail)
+                customerViewModel.newCustomerAddress.observe(viewLifecycleOwner) { response ->
+                    if(response.isSuccessful){
+                        Toast.makeText(requireContext(),"Updated Successfull: "+response.code().toString(),Toast.LENGTH_LONG).show()
+                        Log.i("update","messs from success: "+response.body().toString())
+                        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+                        transaction.replace(R.id.frameLayout, UserAddressesFragment())
+                        transaction.addToBackStack(null);
+                        transaction.commit()
+                    }
+                    else{
+                        Toast.makeText(requireContext(),"Updated failed: "+response.code().toString(),Toast.LENGTH_LONG).show()
+                    }
                 }
-                else{
-                    Toast.makeText(requireContext(),"Updated failed: "+response.code().toString(),Toast.LENGTH_LONG).show()
-                }
+            }
+            else{
+                fieldsValidation()
             }
         }
         return view
@@ -163,6 +169,20 @@ class AddNewAddressFragment : Fragment() {
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
             LocationManager.NETWORK_PROVIDER
         )
+    }
+    private fun fieldsValidation(){
+        if(txtAddressLine1.text.isEmpty() || txtPhoneNumber.text.isEmpty()){
+            txtAddressLine1.setError("This Field Required!!")
+        }
+        if(txtAddressLine2.text.isEmpty()){
+            txtAddressLine2.setError("This Field Required!!")
+        }
+        if(txtPhoneNumber.text.isEmpty()){
+            txtPhoneNumber.setError("This Field Required!!")
+        }
+        if(txtPhoneNumber.text.length<11){
+            txtPhoneNumber.setError("Must Be Phone Number!")
+        }
     }
 
 }

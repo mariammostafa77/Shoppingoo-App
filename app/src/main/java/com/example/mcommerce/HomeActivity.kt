@@ -110,6 +110,7 @@ class HomeActivity : AppCompatActivity(),Communicator {
         if (fragment != null) {
             var transaction = supportFragmentManager.beginTransaction()
             transaction.replace(R.id.frameLayout, fragment)
+            transaction.addToBackStack(null)
             transaction.commit()
         }
     }
