@@ -168,7 +168,6 @@ class MysearchFragment : Fragment(),FavClicked {
                     var adapter: ArrayAdapter<String> = ArrayAdapter<String>(requireContext(),android.R.layout.simple_dropdown_item_1line,productsName)
                     edtSearch.threshold=1
                     edtSearch.setAdapter(adapter)
-
                     filterProductArrayList.clear()
                     edtSearch.setOnItemClickListener { adapterView, view, i, l ->
                         filterProductArrayList.clear()
@@ -376,5 +375,7 @@ class MysearchFragment : Fragment(),FavClicked {
             dialog.dismiss()
         }
     }
+
+
 
 }
