@@ -8,11 +8,19 @@ import com.example.mcommerce.home.model.BrandsModel
 import com.example.mcommerce.model.currencies.CurrencyResponse
 import com.example.mcommerce.model.currencies.convertor.CurrencyConverter
 import com.example.mcommerce.network.RemoteSourceInterface
+import com.example.mcommerce.orders.model.Order
 import com.example.mcommerce.orders.model.OrderResponse
 import com.example.mcommerce.orders.model.Orders
 import retrofit2.Response
 
 class FakeRepository:RemoteSourceInterface {
+    var ordersList:MutableList<Order> = mutableListOf()
+    lateinit var ordersObj:Orders
+
+    fun setOrders(orders:MutableList<Order>){
+        this.ordersList=orders
+        ordersObj= Orders(ordersList)
+    }
 
     override suspend fun getAllProducts(): AllProductsModel {
         TODO("Not yet implemented")
@@ -77,7 +85,12 @@ class FakeRepository:RemoteSourceInterface {
     }
 
     override suspend fun getOrders(id: String): Orders {
-        TODO("Not yet implemented")
+        val ordersList= mutableListOf<Order>(
+            Order(contact_email="mariammostafa@gmail.com"),
+            Order(contact_email="mariammostafa@gmail.com")
+        )
+        var ordersObj=Orders(ordersList)
+        return ordersObj
     }
 
     override suspend fun getCustomers(): Customer {

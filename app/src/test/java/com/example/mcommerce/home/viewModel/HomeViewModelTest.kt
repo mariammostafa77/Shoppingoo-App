@@ -2,7 +2,6 @@ package com.example.mcommerce.home.viewModel
 
 import junit.framework.TestCase
 import android.content.Context
-import android.os.Looper
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
@@ -14,7 +13,6 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.Shadows
 import org.robolectric.annotation.Config
 
 @Config(sdk=[30])
@@ -38,8 +36,6 @@ class HomeViewModelTest : TestCase(){
         val viewModel = HomeViewModel(Repository.getInstance(AppClient.getInstance(),context))
         viewModel.getDiscountCoupons()
        // val value = viewModel.onlineDiscountCodes.value
-        Shadows.shadowOf(Looper.getMainLooper()).idle();
-
         val value = viewModel.onlineDiscountCodes.getOrAwaitValue{}
         assertNotNull(value)
     }
