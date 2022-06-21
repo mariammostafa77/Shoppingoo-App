@@ -152,7 +152,7 @@ class ProductInfoFragment : Fragment() {
         }
         else {
             output= arguments?.getSerializable("productInfo") as Product
-            productID = output.id
+            productID = output.id!!
         }
 
         //start
@@ -173,34 +173,34 @@ class ProductInfoFragment : Fragment() {
                     allFavProducts.addAll(favProducts)
                     for (i in 0..favProducts.size-1) {
                         if (favProducts.get(i).note == noteStatus && favProducts.get(i).email == customerEmail) {
-                            if (product.variants[0].id == favProducts[i].line_items!![0].variant_id) {
+                            if (product.variants!![0].id == favProducts[i].line_items!![0].variant_id) {
                                 addToFavImg.setImageResource(R.drawable.ic_favorite)
                             }
                         }
                     }
                 }
-                productInfoAdapter.setProductImages(product.images, requireContext())
+                productInfoAdapter.setProductImages(product.images!!, requireContext())
                 productName.text = product.title
                 productDesc.text = product.body_html
 
-                amount = getPrice(product.variants[0].price,requireContext())
+                amount = getPrice(product.variants!![0].price!!,requireContext())
                 productPrice.text = amount
                 //productPrice.text = product.variants[0].price
-                for (i in 0..product.variants.size - 1) {
-                    totalRate += product.variants[i].inventory_quantity
+                for (i in 0..product.variants!!.size - 1) {
+                    totalRate += product.variants!![i].inventory_quantity!!
                 }
                 Log.i("totalRate", totalRate.toString())
-                totalRate = totalRate / (product.variants.size)
+                totalRate = totalRate / (product.variants!!.size)
                 ratBar.rating = totalRate.toFloat() / 4
 
             }
             //spinner of color and size
             var sizeAdapter: ArrayAdapter<String> = ArrayAdapter<String>(requireContext(),
                 android.R.layout.simple_spinner_item,
-                product.options[0].values)
+                product.options!![0].values)
             var colorAdapter: ArrayAdapter<String> = ArrayAdapter<String>(requireContext(),
                 android.R.layout.simple_spinner_item,
-                product.options[1].values)
+                product.options!![1].values)
             sizeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             colorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             sizeSpinner.adapter = sizeAdapter
@@ -251,13 +251,13 @@ class ProductInfoFragment : Fragment() {
             if(customerEmail !="") {
 
                 var variantId: Long = 0
-                for (i in 0..allProducts[0].variants.size - 1) {
-                    if (allProducts[0].variants[i].option1 == sizeSpinner.getSelectedItem()
+                for (i in 0..allProducts[0].variants!!.size - 1) {
+                    if (allProducts[0].variants!![i].option1 == sizeSpinner.getSelectedItem()
                             .toString() &&
-                        allProducts[0].variants[i].option2 == colorSpinner.getSelectedItem()
+                        allProducts[0].variants!![i].option2 == colorSpinner.getSelectedItem()
                             .toString()
                     ) {
-                        variantId = allProducts[0].variants[i].id
+                        variantId = allProducts[0].variants!![i].id!!
 
                         break
                     }
@@ -292,10 +292,10 @@ class ProductInfoFragment : Fragment() {
                     var order = DraftOrderX()
                     order.note = "card"
                     order.email = customerEmail
-                    for (i in 0..allProducts[0].variants.size - 1) {
-                        if (allProducts[0].variants[i].option1 == sizeSpinner.getSelectedItem()
+                    for (i in 0..allProducts[0].variants!!.size - 1) {
+                        if (allProducts[0].variants!![i].option1 == sizeSpinner.getSelectedItem()
                                 .toString() &&
-                            allProducts[0].variants[i].option2 == colorSpinner.getSelectedItem()
+                            allProducts[0].variants!![i].option2 == colorSpinner.getSelectedItem()
                                 .toString()
                         ) {
                             variantId = allProducts[0].variants[i].id

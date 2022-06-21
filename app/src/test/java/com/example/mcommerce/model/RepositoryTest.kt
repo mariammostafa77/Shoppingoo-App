@@ -1,10 +1,20 @@
 package com.example.mcommerce.orders.viewModel
 
+import android.content.Context
 import android.os.Looper.getMainLooper
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.mcommerce.auth.model.Addresse
+import com.example.mcommerce.auth.model.Customer
+import com.example.mcommerce.auth.model.CustomerX
 import com.example.mcommerce.getOrAwaitValue
+import com.example.mcommerce.model.FakeRepository
+import com.example.mcommerce.model.Product
+import com.example.mcommerce.model.ProductDetails
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.orders.model.Orders
+import com.google.android.gms.common.util.CollectionUtils
+import com.google.android.gms.common.util.CollectionUtils.listOf
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import junit.framework.TestCase
@@ -26,6 +36,22 @@ import java.util.Observer
 class RepositoryTest() : TestCase() {
     private lateinit var remoteDataSource: FakeRepository
     private lateinit var repo: Repository
+    //zeinab
+    var customer = CustomerX(first_name = "Zeinab",last_name = "Ibrahim",email = "zeinabibrahim541@gmail.com"
+        ,verified_email = true,phone = "01143232215",tags = "123456789",
+        addresses = listOf(Addresse(address1 = "Alkafal",
+            phone = "01203574583",
+            city = "Alex",
+            province = "",
+            zip = "21552",
+            last_name = "Lastnameson",
+            first_name = "Mother",
+            country = "EG"))
+    )
+
+   var myCustomer= Customer(CollectionUtils.listOf(customer))
+//    var product= Product(tags = "tags")
+//    var myProdct= ProductDetails(product)
 
     @Before
     fun createRepository() {
@@ -44,33 +70,19 @@ class RepositoryTest() : TestCase() {
         assertEquals(2,tasks.orders.size)
     }
 
-    /*private val testDispatcher = TestCoroutineDispatcher()
-    private val testScope = TestCoroutineScope(testDispatcher)
-
-    @Before
-    fun before() {
-        Dispatchers.setMain(testDispatcher)
-    }
-
-    @After
-    fun after() {
-        Dispatchers.resetMain()
-        testScope.cleanupTestCoroutines()
-    }
-
     @Test
-    fun getAllOrders_allOrder() = testScope.runBlockingTest {
-        val mockRepo = mock<Repository> {
-            onBlocking { getOrders("5758070096011") } doReturn Orders(listOf())
-        }
-        shadowOf(getMainLooper()).idle();
+    fun getCustomerTest_allCustomer()=  runBlockingTest {
 
-        //val result = mockRepo.getOrders("5758070096011")
+        assertEquals(repo.getCustomers().customers,myCustomer.customers)
 
-        // assert your case
-        //assertEquals(result.orders.size,5)
-        assertNotNull(mockRepo)
 
-    }*/
+
+    }
+//    @Test
+//    fun getSpecificProduct_specificProduct()= testScope.runBlockingTest {
+//
+//        assertEquals(repo.getSpecificProduct("6870135275659").product,myProdct.product)
+//
+//    }
 
 }

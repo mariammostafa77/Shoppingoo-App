@@ -17,13 +17,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mcommerce.ProductInfo.view.Communicator
+import com.example.mcommerce.ProductInfo.viewModel.ProductInfoViewModel
+import com.example.mcommerce.ProductInfo.viewModel.ProductInfoViewModelFactory
 import com.example.mcommerce.R
 import com.example.mcommerce.draftModel.DraftOrderX
 import com.example.mcommerce.favourite.view.FavProductsAdapter
 import com.example.mcommerce.favourite.view.FavouriteFragment
 import com.example.mcommerce.favourite.view.FavouriteOnClickLisner
-import com.example.mcommerce.favourite.viewModel.FavViewModel
-import com.example.mcommerce.favourite.viewModel.FavViewModelFactory
 import com.example.mcommerce.me.view.setting.WithLoginAppSettingFragment
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
@@ -48,8 +48,8 @@ class MeWithLogin : Fragment(), FavouriteOnClickLisner, OnOrderClickListenerInte
     lateinit var favRecyclerView: RecyclerView
     lateinit var favAdapter: FavProductsAdapter
     lateinit var linearLayoutManager: LinearLayoutManager
-    lateinit var favViewModelFactory : FavViewModelFactory
-    lateinit var favViewModel: FavViewModel
+    lateinit var favViewModelFactory : ProductInfoViewModelFactory
+    lateinit var favViewModel: ProductInfoViewModel
     lateinit var communicator: Communicator
     private lateinit var ordersAdapter: OrdersAdapter
     private lateinit var ordersViewFactory: OrdersViewFactory
@@ -108,8 +108,8 @@ class MeWithLogin : Fragment(), FavouriteOnClickLisner, OnOrderClickListenerInte
         favRecyclerView.setLayoutManager(linearLayoutManager)
         favRecyclerView.setAdapter(favAdapter)
 
-        favViewModelFactory = FavViewModelFactory(Repository.getInstance(AppClient.getInstance(), requireContext()))
-        favViewModel = ViewModelProvider(this, favViewModelFactory).get(FavViewModel::class.java)
+        favViewModelFactory = ProductInfoViewModelFactory(Repository.getInstance(AppClient.getInstance(), requireContext()))
+        favViewModel = ViewModelProvider(this, favViewModelFactory).get(ProductInfoViewModel::class.java)
 
         val email: String? = sharedPreferences.getString("email","")
         val note = "fav"
@@ -186,7 +186,7 @@ class MeWithLogin : Fragment(), FavouriteOnClickLisner, OnOrderClickListenerInte
             .setTitle("Remove")
             .setCancelable(false)
             .setPositiveButton("Yes"){ dialog , it ->
-                favViewModel.deleteSelectedProduct(draftOrderX.id.toString())
+                favViewModel.deleteFavProduct(draftOrderX.id.toString())
                 favViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
                     if(response.isSuccessful){
                         favProducts.remove(draftOrderX)

@@ -41,37 +41,5 @@ class SearchViewModel(repo: RepositoryInterface) : ViewModel(){
         }
 
     }
-    val onlineFavProduct: LiveData<List<DraftOrderX>> = allFavProducts
-    val selectedItem : MutableLiveData<Response<DraftOrder>> = itemDeleted
 
-    fun getFavProducts(){
-        viewModelScope.launch{
-            val result = iRepo.getShoppingCartProducts()
-            withContext(Dispatchers.Main){
-                allFavProducts.postValue(result.draft_orders)
-            }
-        }
-    }
-    fun deleteSelectedProduct(id: String){
-        viewModelScope.launch{
-            val result = iRepo.deleteProductFromShoppingCart(id)
-            withContext(Dispatchers.Main){
-                itemDeleted.value = result
-            }
-        }
-
-    }
-    val onlineCardOrder: LiveData<Response<DraftOrder>> = cardOrder
-    fun getCardOrder(order: DraftOrder){
-        viewModelScope.launch{
-            val result = iRepo.postNewDraftOrder(order)
-            //Log.i("pro","from model"+result)
-            withContext(Dispatchers.Main){
-
-                cardOrder.value=result
-
-            }
-        }
-
-    }
 }

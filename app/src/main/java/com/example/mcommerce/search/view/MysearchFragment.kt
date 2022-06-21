@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mcommerce.AuthActivity
 import com.example.mcommerce.HomeActivity.Companion.mySearchFlag
 import com.example.mcommerce.ProductInfo.view.Communicator
+import com.example.mcommerce.ProductInfo.viewModel.ProductInfoViewModel
+import com.example.mcommerce.ProductInfo.viewModel.ProductInfoViewModelFactory
 import com.example.mcommerce.R
 import com.example.mcommerce.categories.viewModel.CategoriesViewFactory
 import com.example.mcommerce.categories.viewModel.CategoriesViewModel
@@ -41,6 +43,8 @@ class MysearchFragment : Fragment(),FavClicked {
     lateinit var productSearchAdapter: SearchAdapter
     lateinit var searchFactor:SearchViewModelFactory
     lateinit var searchViewModel:SearchViewModel
+    lateinit var productInfoFactor: ProductInfoViewModelFactory
+    lateinit var productInfoViewModel: ProductInfoViewModel
     lateinit var noDataSearchImg:ImageView
     lateinit var noDataSearchtxt:TextView
     lateinit var categoriesProductFactory: CategoriesViewFactory
@@ -83,6 +87,12 @@ class MysearchFragment : Fragment(),FavClicked {
         productSearchRecyclerview=view.findViewById(R.id.searhProductRecyclerView)
         //linearLayoutManager= LinearLayoutManager(requireContext())
         //productSearchRecyclerview.setLayoutManager(linearLayoutManager)
+        productInfoFactor = ProductInfoViewModelFactory(
+            Repository.getInstance(
+                AppClient.getInstance(),
+                requireContext()))
+        productInfoViewModel = ViewModelProvider(this, productInfoFactor).get(ProductInfoViewModel::class.java)
+
         productSearchAdapter= SearchAdapter(communicator,filterProductArrayList,requireContext(),this)
         productSearchRecyclerview.setAdapter(productSearchAdapter)
 
@@ -243,9 +253,9 @@ class MysearchFragment : Fragment(),FavClicked {
         }
 
 
-        searchViewModel.getFavProducts()
+        productInfoViewModel.getFavProducts()
         allFavProducts.clear()
-        searchViewModel.onlineFavProduct.observe(viewLifecycleOwner) { favProducts ->
+        productInfoViewModel.onlineFavProduct.observe(viewLifecycleOwner) { favProducts ->
             allFavProducts.clear()
             allVariantsID.clear()
             for (i in 0..favProducts.size - 1) {
@@ -275,8 +285,8 @@ class MysearchFragment : Fragment(),FavClicked {
                 Log.i("exits", "already exists")
 
                 img.setImageResource(R.drawable.ic_baseline_favorite_border_24)
-                searchViewModel.deleteSelectedProduct(allFavProducts.get(myIndex).id.toString())
-                searchViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
+                productInfoViewModel.deleteFavProduct(allFavProducts.get(myIndex).id.toString())
+                productInfoViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
                     if (response.isSuccessful) {
 
                         Toast.makeText(requireContext(),
@@ -317,8 +327,8 @@ class MysearchFragment : Fragment(),FavClicked {
                 order.note_attributes = listOf(productImage)
 
                 var draftOrder = DraftOrder(order)
-                searchViewModel.getCardOrder(draftOrder)
-                searchViewModel.onlineCardOrder.observe(viewLifecycleOwner) { cardOrder ->
+                productInfoViewModel.getCardOrder(draftOrder)
+                productInfoViewModel.onlineCardOrder.observe(viewLifecycleOwner) { cardOrder ->
                     if (cardOrder.isSuccessful) {
                         Toast.makeText(requireContext(),
                             "add to card successfull: " + cardOrder.code().toString(),

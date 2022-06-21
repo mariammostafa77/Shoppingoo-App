@@ -20,6 +20,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mcommerce.HomeActivity.Companion.mySearchFlag
 import com.example.mcommerce.ProductInfo.view.Communicator
+import com.example.mcommerce.ProductInfo.viewModel.ProductInfoViewModel
+import com.example.mcommerce.ProductInfo.viewModel.ProductInfoViewModelFactory
 import com.example.mcommerce.R
 import com.example.mcommerce.categories.viewModel.CategoriesViewFactory
 import com.example.mcommerce.categories.viewModel.CategoriesViewModel
@@ -49,6 +51,8 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
     private lateinit var subCategoriesAdapter: SubCategoriesAdapter
     private lateinit var categoriesProductFactory: CategoriesViewFactory
     private lateinit var categoriesProductViewModel: CategoriesViewModel
+    lateinit var productInfoFactor: ProductInfoViewModelFactory
+    lateinit var productInfoViewModel: ProductInfoViewModel
     private lateinit var categoryRecyclerView: RecyclerView
     private lateinit var categoriesTabLayout: TabLayout
     private lateinit var searchIcon:ImageView
@@ -97,6 +101,12 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
         communicator = activity as Communicator
         customerViewModelFactory = CustomerViewModelFactory(Repository.getInstance(AppClient.getInstance(), requireContext()))
         customerViewModel = ViewModelProvider(this, customerViewModelFactory).get(CustomerViewModel::class.java)
+        productInfoFactor = ProductInfoViewModelFactory(
+            Repository.getInstance(
+                AppClient.getInstance(),
+                requireContext()))
+        productInfoViewModel = ViewModelProvider(this, productInfoFactor).get(ProductInfoViewModel::class.java)
+
         val sharedPreferences = requireContext().getSharedPreferences("userAuth", AppCompatActivity.MODE_PRIVATE)
         val email: String? = sharedPreferences.getString("email","")
         collectionId=""
@@ -147,8 +157,8 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
             allProducts.addAll(products)
             brandProductsAdapter.setUpdatedData(products,requireContext(),communicator)
             for(product in products){
-                if(product.variants[0].price.toDouble() > maxPrice){
-                    maxPrice = product.variants[0].price.toDouble()
+                if(product.variants!![0].price.toDouble() > maxPrice){
+                    maxPrice = product.variants!![0].price.toDouble()
                 }
             }
             checkEmptyArray(products)
@@ -173,9 +183,9 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
             communicator.goToSearchWithAllData( collectionId,brandName,subCategorySelected)
 
         }
-        searchViewModel.getFavProducts()
+        productInfoViewModel.getFavProducts()
         allFavProducts.clear()
-        searchViewModel.onlineFavProduct.observe(viewLifecycleOwner) { favProducts ->
+        productInfoViewModel.onlineFavProduct.observe(viewLifecycleOwner) { favProducts ->
             allFavProducts.clear()
             allVariantsID.clear()
             for (i in 0..favProducts.size - 1) {
@@ -227,8 +237,8 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
             Log.i("exits","already exists")
 
             img.setImageResource(R.drawable.ic_baseline_favorite_border_24)
-            searchViewModel.deleteSelectedProduct(allFavProducts.get(myIndex).id.toString())
-            searchViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
+            productInfoViewModel.deleteFavProduct(allFavProducts.get(myIndex).id.toString())
+            productInfoViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
                 if (response.isSuccessful) {
                     Toast.makeText(requireContext(),
                         "Deleted Success!!!: " + response.code().toString(),
@@ -266,8 +276,8 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
             order.note_attributes = listOf(productImage)
 
             var draftOrder = DraftOrder(order)
-            searchViewModel.getCardOrder(draftOrder)
-            searchViewModel.onlineCardOrder.observe(viewLifecycleOwner) { cardOrder ->
+            productInfoViewModel.getCardOrder(draftOrder)
+            productInfoViewModel.onlineCardOrder.observe(viewLifecycleOwner) { cardOrder ->
                 if (cardOrder.isSuccessful) {
                     Toast.makeText(requireContext(),
                         "add to card successfull: " + cardOrder.code().toString(),
