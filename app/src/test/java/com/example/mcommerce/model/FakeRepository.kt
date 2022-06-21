@@ -5,8 +5,10 @@ import com.example.mcommerce.auth.model.Customer
 import com.example.mcommerce.auth.model.CustomerDetail
 import com.example.mcommerce.auth.model.CustomerX
 import com.example.mcommerce.draftModel.DraftOrder
+import com.example.mcommerce.draftModel.DraftOrderX
 import com.example.mcommerce.draftModel.DraftResponse
 import com.example.mcommerce.home.model.BrandsModel
+import com.example.mcommerce.model.currencies.CurrencyModel
 import com.example.mcommerce.model.currencies.CurrencyResponse
 import com.example.mcommerce.model.currencies.convertor.CurrencyConverter
 import com.example.mcommerce.network.RemoteSourceInterface
@@ -56,7 +58,10 @@ class FakeRepository:RemoteSourceInterface {
     }
 
     override suspend fun getDiscountCodes(): DiscountCodesModel {
-        TODO("Not yet implemented")
+        val discountCode1 = DiscountCode(code = "SUMERSALE2022","",1,12345,"",0)
+        val discountCode2 = DiscountCode(code = "SALE2022","",2,12345,"",0)
+        val discount_codes_list = DiscountCodesModel(listOf(discountCode1,discountCode2))
+        return discount_codes_list
     }
 
     override suspend fun postNewCustomer(customer: CustomerDetail): Response<CustomerDetail> {
@@ -64,7 +69,10 @@ class FakeRepository:RemoteSourceInterface {
     }
 
     override suspend fun getUserDetails(id: String): CustomerDetail {
-        TODO("Not yet implemented")
+        val customerX = CustomerX(first_name= "Asmaa", last_name = "Youssef", currency= "EGP",
+            email= "asmaayoussef786@gmail.com" , phone= "01275280853",tags= "asmaa257")
+        val customerDetail = CustomerDetail(customerX)
+        return customerDetail
     }
 
     override suspend fun addNewAddress(
@@ -122,7 +130,10 @@ class FakeRepository:RemoteSourceInterface {
     }
 
     override suspend fun getShoppingCartProducts(): DraftResponse {
-        TODO("Not yet implemented")
+        val draftOrderX1 = DraftOrderX(email= "asmaaYoussef786@gmail.com",id= 1234567, note= "cart", total_price= "100",total_tax="10")
+        val draftOrderX2 = DraftOrderX(email= "asmaaYoussef786@gmail.com",id= 12345, note= "cart", total_price= "100",total_tax="10")
+        val draftResponse = DraftResponse(listOf(draftOrderX1,draftOrderX2))
+        return draftResponse
     }
 
     override suspend fun deleteProductFromShoppingCart(id: String?): Response<DraftOrder> {
@@ -134,7 +145,11 @@ class FakeRepository:RemoteSourceInterface {
     }
 
     override suspend fun getAllCurrencies(): CurrencyResponse {
-        TODO("Not yet implemented")
+       // TODO("Not yet implemented")
+        val currencyModel1 = CurrencyModel(currency = "EGP",enabled = true)
+        val currencyModel2 = CurrencyModel(currency = "USD",enabled = false)
+        val currencyResponse = CurrencyResponse(listOf(currencyModel1,currencyModel2))
+        return currencyResponse
     }
 
     override suspend fun getCurrencyValue(to: String): CurrencyConverter {

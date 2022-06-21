@@ -71,7 +71,7 @@ class WithLoginAppSettingFragment : Fragment() {
         customerViewModel.getAllCurrencies()
         customerViewModel.onlineCurrencies.observe(viewLifecycleOwner) { currencies ->
             for (i in 0..currencies.size - 1) {
-                spinnerArray.add(currencies.get(i).currency)
+                spinnerArray.add(currencies.get(i).currency!!)
             }
         }
         currencySelected = loadCurrency(context!!)
