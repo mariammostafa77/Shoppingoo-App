@@ -7,6 +7,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mcommerce.ProductInfo.view.Communicator
@@ -23,6 +26,7 @@ class OrdersFragment : Fragment(),OnOrderClickListenerInterface {
 
     private lateinit var ordersRecycleView:RecyclerView
     private lateinit var ordersAdapter: OrdersAdapter
+    private lateinit var orderDetailsBackIcon:ImageView
     private lateinit var ordersViewFactory: OrdersViewFactory
     private lateinit var ordersViewModel: OrdersViewModel
     private lateinit var communicator: Communicator
@@ -35,8 +39,16 @@ class OrdersFragment : Fragment(),OnOrderClickListenerInterface {
         // Inflate the layout for this fragment
         val view:View=inflater.inflate(R.layout.fragment_orders, container, false)
         ordersRecycleView=view.findViewById(R.id.ordersRecycleView)
+        orderDetailsBackIcon=view.findViewById(R.id.orderDetailsBackIcon)
         communicator = activity as Communicator
         ordersAdapter=OrdersAdapter()
+        orderDetailsBackIcon.setOnClickListener{
+            val manager: FragmentManager = activity!!.supportFragmentManager
+            val trans: FragmentTransaction = manager.beginTransaction()
+            trans.remove(this)
+            trans.commit()
+            manager.popBackStack()
+        }
         ordersRecycleView.adapter=ordersAdapter
         val sharedPreferences: SharedPreferences = context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
         id = sharedPreferences.getString("cusomerID","").toString()

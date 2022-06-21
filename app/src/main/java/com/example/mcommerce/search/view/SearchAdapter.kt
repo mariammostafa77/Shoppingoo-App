@@ -41,7 +41,7 @@ class SearchAdapter( var comminicator:Communicator,var allProducts: List<Product
         val productTitle: TextView = itemView.findViewById(R.id.productName)
         val productPrice:TextView=itemView.findViewById(R.id.tvProductPrice)
         val cardItem: CardView = itemView.findViewById(R.id.cardViewCategoryItem)
-        var favIconImage:ImageView=itemView.findViewById(R.id.favIconImage)
+        //var favIconImage:ImageView=itemView.findViewById(R.id.favIconImage)
 
     }
 
@@ -60,11 +60,11 @@ class SearchAdapter( var comminicator:Communicator,var allProducts: List<Product
             comminicator.passProductData(currentPosition)
 
         }
-        holder.favIconImage.setOnClickListener {
+        /*holder.favIconImage.setOnClickListener {
             listener.addToFav(currentPosition,holder.favIconImage,position)
         }
 
-         listener.addFavImg(holder.favIconImage,currentPosition.variants[0].id)
+         listener.addFavImg(holder.favIconImage,currentPosition.variants[0].id)*/
     }
 
     override fun getItemCount(): Int {

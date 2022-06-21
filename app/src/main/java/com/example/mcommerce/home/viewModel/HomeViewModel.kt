@@ -17,14 +17,14 @@ class HomeViewModel(repo: RepositoryInterface) : ViewModel(){
     private val allBrands = MutableLiveData<List<SmartCollection>>()
     private val discountCode = MutableLiveData<List<DiscountCode>>()
 
-    init {
-        getAllProducts()
+   /* init {
+        getAllBrands()
         getDiscountCoupons()
-    }
+    }*/
     val onlineDiscountCodes: LiveData<List<DiscountCode>> = discountCode
     //Expose returned online Data
     val onlineBrands: LiveData<List<SmartCollection>> = allBrands
-    fun getAllProducts(){
+    fun getAllBrands(){
         viewModelScope.launch{
             val result = iRepo.getAllBrands()
             withContext(Dispatchers.Main){

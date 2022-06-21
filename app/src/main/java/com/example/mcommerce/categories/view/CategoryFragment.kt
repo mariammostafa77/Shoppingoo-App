@@ -13,6 +13,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.LiveData
@@ -49,6 +50,7 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
     private lateinit var subCategoriesAdapter: SubCategoriesAdapter
     private lateinit var categoriesProductFactory: CategoriesViewFactory
     private lateinit var categoriesProductViewModel: CategoriesViewModel
+    private lateinit var noInternetCategoryLayout:ConstraintLayout
     private lateinit var categoryRecyclerView: RecyclerView
     private lateinit var categoriesTabLayout: TabLayout
     private lateinit var searchIcon:ImageView
@@ -306,6 +308,7 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
         dialog = BottomSheetDialog(requireContext())
         tvNoData = view.findViewById(R.id.tvNoData)
         imgNoData=view.findViewById(R.id.imgNoData)
+        noInternetCategoryLayout=view.findViewById(R.id.noInternetCategoryLayout)
 
     }
     private fun getProductTypes(allProductsTypes:List<Product>){

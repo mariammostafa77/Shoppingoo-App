@@ -31,7 +31,7 @@ class BrandProductsAdapter(var currencyConvertor: CurrencyConvertor) : RecyclerV
         val productImage: ImageView = itemView.findViewById(R.id.productImage)
         var catCardView:CardView=itemView.findViewById(R.id.cardViewCategoryItem)
         var tvProductPrice:TextView=itemView.findViewById(R.id.tvProductPrice)
-        var favIconImage:ImageView=itemView.findViewById(R.id.favIconImage)
+        //var favIconImage:ImageView=itemView.findViewById(R.id.favIconImage)
 
         fun bind(data: Product){
             productName.text=allBrands[position].title
@@ -43,10 +43,10 @@ class BrandProductsAdapter(var currencyConvertor: CurrencyConvertor) : RecyclerV
             catCardView.setOnClickListener {
                 comminucator.passProductData(allBrands[position])
             }
-            favIconImage.setOnClickListener {
+            /*favIconImage.setOnClickListener {
                 currencyConvertor.addToFav(allBrands[position],favIconImage,position)
             }
-            currencyConvertor.addFavImg(favIconImage,allBrands[position].variants[0].id)
+            currencyConvertor.addFavImg(favIconImage,allBrands[position].variants[0].id)*/
 
         }
     }
