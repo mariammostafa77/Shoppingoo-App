@@ -73,8 +73,7 @@ class RepositoryTest() : TestCase() {
 
     val customerXObj = CustomerX(
         first_name = "Asmaa", last_name = "Youssef", currency = "EGP",
-        email = "asmaayoussef786@gmail.com", phone = "01275280853", tags = "asmaa257"
-    )
+        email = "asmaayoussef786@gmail.com", phone = "01275280853", tags = "asmaa257")
     val customerDetail = CustomerDetail(customerXObj)
 
     val draftOrderX1 = DraftOrderX(
