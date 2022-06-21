@@ -27,7 +27,6 @@ import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
 import java.util.Observer
 
-
 @Config(sdk =[30])
 @RunWith(AndroidJUnit4::class)
 @LooperMode(LooperMode.Mode.PAUSED)
