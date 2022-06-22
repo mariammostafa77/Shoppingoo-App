@@ -92,6 +92,7 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
         searchFactor = SearchViewModelFactory(
             Repository.getInstance(AppClient.getInstance(), requireContext())
         )
+        Log.i("TAG","")
         searchViewModel = ViewModelProvider(this, searchFactor).get(SearchViewModel::class.java)
         subCategoriesAdapter= SubCategoriesAdapter()
         brandProductsAdapter= BrandProductsAdapter(this)
@@ -157,10 +158,11 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
         }
         categoriesProductViewModel.allOnlineProducts.observe(viewLifecycleOwner) {
             getProductTypes(it)
+            Log.i("TAG","")
         }
         categoriesTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-               onTabSelectedListener(tab)
+                onTabSelectedListener(tab)
             }
             override fun onTabUnselected(tab: TabLayout.Tab) {
 
@@ -175,27 +177,7 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
             communicator.goToSearchWithAllData( collectionId,brandName,subCategorySelected)
 
         }
-        searchViewModel.getFavProducts()
-        allFavProducts.clear()
-        searchViewModel.onlineFavProduct.observe(viewLifecycleOwner) { favProducts ->
-            allFavProducts.clear()
-            allVariantsID.clear()
-            for (i in 0..favProducts.size - 1) {
-                if (favProducts.get(i).note == "fav" && favProducts.get(i).email == email) {
-                    allFavProducts.add(favProducts.get(i))
-                    allVariantsID.add(favProducts.get(i).line_items!![0].variant_id!!)
-                }
-            }
 
-        }
-        favorite_icon.setOnClickListener {
-            val fragment: Fragment = FavouriteFragment()
-            val fragmentManager: FragmentManager = activity!!.supportFragmentManager
-            val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
-            fragmentTransaction.replace(com.example.mcommerce.R.id.frameLayout, fragment)
-            fragmentTransaction.addToBackStack(null)
-            fragmentTransaction.commit()
-        }
         return view
     }
 
@@ -220,83 +202,7 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
         //dialog.dismiss()
     }
 
-    override fun addToFav(product: Product, img: ImageView, myIndex: Int) {
-        Toast.makeText(requireContext(),"Fav clicked",Toast.LENGTH_LONG).show()
-        val sharedPreferences: SharedPreferences = context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
-        val email: String? = sharedPreferences.getString("email","")
 
-        if(allProducts[myIndex].variants?.get(0)?.id in allVariantsID){
-            Log.i("exits","already exists")
-
-            img.setImageResource(R.drawable.ic_baseline_favorite_border_24)
-            searchViewModel.deleteSelectedProduct(allFavProducts.get(myIndex).id.toString())
-            searchViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
-                if (response.isSuccessful) {
-                    Toast.makeText(requireContext(),
-                        "Deleted Success!!!: " + response.code().toString(),
-                        Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(requireContext(),
-                        "Deleted failed: " + response.code().toString(),
-                        Toast.LENGTH_SHORT).show()
-                }
-
-            }
-
-        }
-        else{
-            Log.i("exits","not exists")
-            img.setImageResource(R.drawable.ic_favorite)
-            var variantId: Long = 0
-            var order = DraftOrderX()
-            order.note = "fav"
-            order.email = email
-
-            variantId = allProducts[myIndex].variants?.get(0)?.id!!
-            Log.i("Index", "index: " + variantId.toString())
-            // order.line_items!![0].variant_id = variantId
-            var lineItem = LineItem()
-            lineItem.quantity = 1
-            lineItem.variant_id = variantId
-            order.line_items = listOf(lineItem)
-
-
-            // order.line_items!![0].variant_id = 40335555395723
-            var productImage = NoteAttribute()
-            productImage.name = "image"
-            productImage.value = allProducts[myIndex].images?.get(0)?.src
-            order.note_attributes = listOf(productImage)
-
-            var draftOrder = DraftOrder(order)
-            searchViewModel.getCardOrder(draftOrder)
-            searchViewModel.onlineCardOrder.observe(viewLifecycleOwner) { cardOrder ->
-                if (cardOrder.isSuccessful) {
-                    Toast.makeText(requireContext(),
-                        "add to card successfull: " + cardOrder.code().toString(),
-                        Toast.LENGTH_LONG).show()
-                } else {
-
-                    Toast.makeText(requireContext(),
-                        "add to card failed: " + cardOrder.code().toString()+"//"+cardOrder.body(),
-                        Toast.LENGTH_LONG).show()
-
-                }
-            }
-
-        }
-
-
-
-    }
-
-    override fun addFavImg(img: ImageView, id: Long) {
-        val sharedPreferences: SharedPreferences = context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
-        val email: String? = sharedPreferences.getString("email","")
-
-        if(id in allVariantsID){
-            img.setImageResource(R.drawable.ic_favorite)
-        }
-    }
 
     private fun initComponents(view:View){
         categoriesTabLayout = view.findViewById(R.id.categoryTabBar)
@@ -387,5 +293,13 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
         Log.i("","")
         brandProductsAdapter.setUpdatedData(filteredProduct,requireContext(),communicator)
         checkEmptyArray(filteredProduct)
+    }
+
+    override fun addToFav(product: Product, img: ImageView, myIndex: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun addFavImg(img: ImageView, id: Long) {
+        TODO("Not yet implemented")
     }
 }
