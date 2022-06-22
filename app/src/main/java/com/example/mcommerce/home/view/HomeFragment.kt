@@ -1,5 +1,6 @@
 package com.example.mcommerce.home.view
 
+import android.app.Application
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -9,6 +10,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
@@ -32,8 +35,13 @@ import kotlin.math.abs
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.example.mcommerce.favourite.view.FavouriteFragment
+import com.example.mcommerce.network.CheckInternetConnectionFirstTime
+import com.example.mcommerce.network.InternetConnectionChecker
 import com.example.mcommerce.search.view.MysearchFragment
 import com.example.mcommerce.shopping_cart.view.ShoppingCartFragment
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.image_container.*
+import java.lang.Exception
 
 
 class HomeFragment : Fragment() {
@@ -44,6 +52,7 @@ class HomeFragment : Fragment() {
     lateinit var couponsRecyclerView: RecyclerView
     lateinit var cardImg:ImageView
     lateinit var favImg:ImageView
+    lateinit var noInternetLayout:ConstraintLayout
 
     lateinit var homeFactory: HomeViewModelFactory
     lateinit var homeViewModel: HomeViewModel
@@ -55,6 +64,8 @@ class HomeFragment : Fragment() {
     private lateinit var adsAdapter: AdsAdapter
     lateinit var couponsLayoutManager: LinearLayoutManager
 
+    private lateinit var internetConnectionChecker: InternetConnectionChecker
+
     private val runnable = Runnable {
         adsViewPager.currentItem = adsViewPager.currentItem + 1
     }
@@ -65,6 +76,7 @@ class HomeFragment : Fragment() {
     ): View? {
         var view:View = inflater.inflate(R.layout.fragment_home, container, false)
         communicator = activity as Communicator
+        initComponent(view)
         initAdsViewPager(view)
         setUpTransformer()
         adsViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
@@ -74,11 +86,6 @@ class HomeFragment : Fragment() {
                 handler.postDelayed(runnable , 2000)
             }
         })
-
-        bradsRecyclerView=view.findViewById(R.id.bradsRecyclerView)
-        couponsRecyclerView = view.findViewById(R.id.couponsRecyclerView)
-        cardImg=view.findViewById(R.id.cardImg)
-        favImg=view.findViewById(R.id.favImg)
         couponsLayoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
         couponsRecyclerView.setLayoutManager(couponsLayoutManager)
         brandAdapter= BrandAdapter()
@@ -89,39 +96,51 @@ class HomeFragment : Fragment() {
                 AppClient.getInstance(),
                 requireContext()))
         couponsRecyclerView.setAdapter(discountCodeAdapter)
+
         homeFactory = HomeViewModelFactory( Repository.getInstance(AppClient.getInstance(), requireContext()))
         homeViewModel = ViewModelProvider(this, homeFactory).get(HomeViewModel::class.java)
-        ////
+        if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())){
+            homeViewModel.getAllBrands()
+            homeViewModel.getDiscountCoupons()
+            noInternetLayout.visibility=View.INVISIBLE
+        }else{
+            noInternetLayout.visibility=View.VISIBLE
+        }
+
+        internetConnectionChecker = InternetConnectionChecker(requireContext())
+        internetConnectionChecker.observe(this,{ isConnected ->
+            if (isConnected){
+                homeViewModel.getAllBrands()
+                homeViewModel.getDiscountCoupons()
+                noInternetLayout.visibility=View.INVISIBLE
+
+            }else{
+                var snake = Snackbar.make(view, "Ops! You Lost internet connection!!!", Snackbar.LENGTH_LONG)
+                snake.show()
+            }
+        })
 
         cardImg.setOnClickListener {
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
             transaction.replace(R.id.frameLayout, ShoppingCartFragment())
             transaction.addToBackStack(null);
             transaction.commit()
-          /*
-            var navController: NavController = Navigation.findNavController(it)
-            var navDir: NavDirections =HomeFragmentDirections.goToCart()
-            navController.navigate(navDir)
-           */
         }
 
         homeViewModel.onlineDiscountCodes.observe(viewLifecycleOwner) { coupons ->
-            //Log.i("getCodes","Get Discount Codes \n ${coupons.get(0)}")
             if (coupons != null){
                 discountCodeAdapter.setCouponsData(requireContext(), coupons)
             }
         }
-        homeViewModel.getAllProducts()
+
+
+
         homeViewModel.onlineBrands.observe(viewLifecycleOwner) { brands ->
-         //   Log.i("TAG","hello from home fragment ${homeViewModel.onlineBrands.value?.get(1)?.id}")
             homeViewModel.onlineBrands.value?.let { brandAdapter.setUpdatedData(it,requireContext(),communicator) }
         }
         var img: ImageView =view.findViewById(R.id.searchImg);
         img.setOnClickListener {
             mySearchFlag=1
-//            var navController: NavController = Navigation.findNavController(it)
-//            var navDir: NavDirections =HomeFragmentDirections.actionHomeFragmentToSearchFragment()
-//            navController.navigate(navDir)
             val fragment: Fragment = MysearchFragment()
             val fragmentManager: FragmentManager = activity!!.supportFragmentManager
             val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
@@ -145,6 +164,13 @@ class HomeFragment : Fragment() {
         super.onResume()
         handler.postDelayed(runnable , 2000)
     }
+    private fun initComponent(view:View){
+        bradsRecyclerView=view.findViewById(R.id.bradsRecyclerView)
+        couponsRecyclerView = view.findViewById(R.id.couponsRecyclerView)
+        cardImg=view.findViewById(R.id.cardImg)
+        favImg=view.findViewById(R.id.favImg)
+        noInternetLayout=view.findViewById(R.id.noInternetLayout)
+    }
     private fun initAdsViewPager(view : View){
         adsViewPager = view.findViewById(R.id.adsViewPager)
         handler = Handler(Looper.myLooper()!!)
@@ -163,6 +189,8 @@ class HomeFragment : Fragment() {
         adsViewPager.clipChildren = false
         adsViewPager.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
     }
+
+
 
     private fun setUpTransformer(){
         val transformer = CompositePageTransformer()

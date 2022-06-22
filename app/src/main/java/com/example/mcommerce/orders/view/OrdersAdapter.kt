@@ -32,8 +32,12 @@ class OrdersAdapter : RecyclerView.Adapter<OrdersAdapter.ViewHolder>(){
         fun bind(data: Order) {
             val amount = SavedSetting.getPrice(allOrders[position].total_price.toString(), context)
             tvOrderPrice.text = amount
-           // tvOrderPrice.text = allOrders[position].total_price
-            tvOrderDate.text = allOrders[position].created_at
+            val strCreatedAt = allOrders[position].created_at
+            val delim1 = "T"
+            val list1 = strCreatedAt?.split(delim1)
+            val delim2 = "+"
+            val list2 = list1?.get(1)?.split(delim2)
+            tvOrderDate.text = list1?.get(0) + "/"+list2?.get(0)
             orderCard.setOnClickListener(View.OnClickListener {
                 onItemClickListener.onOrderClickListener(allOrders[position])
             })

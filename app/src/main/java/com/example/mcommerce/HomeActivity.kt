@@ -5,6 +5,9 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
 import com.example.mcommerce.ProductInfo.view.Communicator
@@ -20,12 +23,14 @@ import com.example.mcommerce.me.view.MeWithoutLoginFragment
 import com.example.mcommerce.me.view.setting.AddNewAddressFragment
 import com.example.mcommerce.me.viewmodel.SavedSetting
 import com.example.mcommerce.model.Product
+import com.example.mcommerce.network.InternetConnectionChecker
 import com.example.mcommerce.orderDetails.view.OrderDetailsFragment
 import com.example.mcommerce.orders.model.Order
 import com.example.mcommerce.search.view.MysearchFragment
 import com.example.mcommerce.payment.view.PaymentAddressFragment
 import com.example.mcommerce.payment.view.PaymentFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 import java.util.*
 
 class HomeActivity : AppCompatActivity(),Communicator {
@@ -35,6 +40,7 @@ class HomeActivity : AppCompatActivity(),Communicator {
     private val meWithoutLoginFragment = MeWithoutLoginFragment()
     lateinit var bottomNavigationView: BottomNavigationView
     private var userId =""
+    private lateinit var internetConnectionChecker: InternetConnectionChecker
 
     companion object{
         var mySearchFlag:Int=0
@@ -51,30 +57,12 @@ class HomeActivity : AppCompatActivity(),Communicator {
         val favSharedPreferences = getSharedPreferences("favourite", AppCompatActivity.MODE_PRIVATE)
        myFavFlag= favSharedPreferences.getBoolean("favStatue",false)
 
-
         SavedSetting.loadLocale(this)
 
         val sharedPreferences: SharedPreferences = getSharedPreferences("userAuth", Context.MODE_PRIVATE)
         userId = sharedPreferences.getString("cusomerID","").toString()
-
         bottomNavigationView = findViewById(R.id.buttomNav)
-
         replaceFragment(homeFragment)
-
-        //getSupportFragmentManager().beginTransaction().replace(R.id.viewLayout,new HomeFragment()).commit();
-
-
-//        val navHostFragment =
-//            supportFragmentManager.findFragmentById(R.id.frameLayout) as NavHostFragment?
-//        val navController = navHostFragment!!.navController
-//        val navGraph = navHostFragment!!.navController.navInflater.inflate(R.navigation.my_nav_graph)
-
-
-        // navGraph.setStartDestination(R.id.fragmentAddMed1);
-        // navGraph.setStartDestination(R.id.fragmentAddMed1);
-
-//        navGraph.setStartDestination(R.id.homeFragment)
-//        navController.graph = navGraph
 
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -135,15 +123,22 @@ class HomeActivity : AppCompatActivity(),Communicator {
     }
 
     override fun goFromBrandToCategories(brandName:String) {
-        myDetailsFlag=0
-        val bundle=Bundle()
-        bundle.putString("brandTitle",brandName)
-        val categoryFragment = CategoryFragment(0)
-        categoryFragment.arguments=bundle
-        replaceFragment(categoryFragment)
-        //bottomNavigationView.setSelectedItemId(R.id.categoryTab);
-        Log.i("TAG","brandName from home $brandName")
+        internetConnectionChecker = InternetConnectionChecker(this)
+        internetConnectionChecker.observe(this,{ isConnected ->
+            if (isConnected){
+                myDetailsFlag=0
+                val bundle=Bundle()
+                bundle.putString("brandTitle",brandName)
+                val categoryFragment = CategoryFragment(0)
+                categoryFragment.arguments=bundle
+                replaceFragment(categoryFragment)
+                //bottomNavigationView.setSelectedItemId(R.id.categoryTab);
+                Log.i("TAG","brandName from home $brandName")
+            }
+        })
+
     }
+
     override fun goToSearchWithID(id: String) {
         myDetailsFlag=0
         val bundle=Bundle()

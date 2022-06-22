@@ -1,11 +1,15 @@
 package com.example.mcommerce.orderDetails.view
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mcommerce.ProductInfo.view.Communicator
@@ -17,6 +21,7 @@ import com.example.mcommerce.network.AppClient
 import com.example.mcommerce.orderDetails.viewModel.OrderDetailsViewModel
 import com.example.mcommerce.orderDetails.viewModel.OrderDetailsViewModelFactory
 import com.example.mcommerce.orders.model.Order
+import com.example.mcommerce.search.view.MysearchFragment
 
 class OrderDetailsFragment : Fragment() {
     private lateinit var tvOrderCreatedAt:TextView
@@ -27,10 +32,12 @@ class OrderDetailsFragment : Fragment() {
     private lateinit var orderDetailsViewModelFactory: OrderDetailsViewModelFactory
     private lateinit var orderDetailsViewModel: OrderDetailsViewModel
     private lateinit var communicator:Communicator
+    private lateinit var orderDetailsBackIcon:ImageView
 
     lateinit var selectedOrder: Order
 
 
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,6 +48,13 @@ class OrderDetailsFragment : Fragment() {
         orderItemsAdapter= OrderItemsAdapter()
         communicator = activity as Communicator
         orderItemsRecycle.adapter = orderItemsAdapter
+        orderDetailsBackIcon.setOnClickListener {
+            val manager: FragmentManager = activity!!.supportFragmentManager
+            val trans: FragmentTransaction = manager.beginTransaction()
+            trans.remove(this)
+            trans.commit()
+            manager.popBackStack()
+        }
         orderDetailsViewModelFactory = OrderDetailsViewModelFactory(
             Repository.getInstance(
                 AppClient.getInstance(),
@@ -52,7 +66,13 @@ class OrderDetailsFragment : Fragment() {
         }
         tvOrderAddress.text=
             "${selectedOrder.customer?.default_address?.address1},${selectedOrder.customer?.default_address?.city}"
-        tvOrderCreatedAt.text=selectedOrder.created_at
+
+        val strCreatedAt = selectedOrder.created_at
+        val delim1 = "T"
+        val list1 = strCreatedAt?.split(delim1)
+        val delim2 = "+"
+        val list2 = list1?.get(1)?.split(delim2)
+        tvOrderCreatedAt.text="${list1?.get(0)}/${list2?.get(0)}"
 
         val amount = SavedSetting.getPrice(selectedOrder.current_total_price.toString(), requireContext())
         tvOrderTotalPrice.text = amount
@@ -66,5 +86,6 @@ class OrderDetailsFragment : Fragment() {
         tvOrderCreatedAt=view.findViewById(R.id.tvOrderCreatedAt)
         orderItemsRecycle=view.findViewById(R.id.orderItemsRecycle)
         tvOrderTotalPrice=view.findViewById(R.id.tvOrderTotalPrice)
+        orderDetailsBackIcon=view.findViewById(R.id.orderDetailsBackIcon)
     }
 }

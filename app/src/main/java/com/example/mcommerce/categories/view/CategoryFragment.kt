@@ -13,6 +13,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.LiveData
@@ -20,8 +21,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mcommerce.HomeActivity.Companion.mySearchFlag
 import com.example.mcommerce.ProductInfo.view.Communicator
-import com.example.mcommerce.ProductInfo.viewModel.ProductInfoViewModel
-import com.example.mcommerce.ProductInfo.viewModel.ProductInfoViewModelFactory
 import com.example.mcommerce.R
 import com.example.mcommerce.categories.viewModel.CategoriesViewFactory
 import com.example.mcommerce.categories.viewModel.CategoriesViewModel
@@ -51,8 +50,7 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
     private lateinit var subCategoriesAdapter: SubCategoriesAdapter
     private lateinit var categoriesProductFactory: CategoriesViewFactory
     private lateinit var categoriesProductViewModel: CategoriesViewModel
-    lateinit var productInfoFactor: ProductInfoViewModelFactory
-    lateinit var productInfoViewModel: ProductInfoViewModel
+    private lateinit var noInternetCategoryLayout:ConstraintLayout
     private lateinit var categoryRecyclerView: RecyclerView
     private lateinit var categoriesTabLayout: TabLayout
     private lateinit var searchIcon:ImageView
@@ -94,7 +92,6 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
         searchFactor = SearchViewModelFactory(
             Repository.getInstance(AppClient.getInstance(), requireContext())
         )
-        Log.i("TAG","")
         searchViewModel = ViewModelProvider(this, searchFactor).get(SearchViewModel::class.java)
         subCategoriesAdapter= SubCategoriesAdapter()
         brandProductsAdapter= BrandProductsAdapter(this)
@@ -102,12 +99,6 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
         communicator = activity as Communicator
         customerViewModelFactory = CustomerViewModelFactory(Repository.getInstance(AppClient.getInstance(), requireContext()))
         customerViewModel = ViewModelProvider(this, customerViewModelFactory).get(CustomerViewModel::class.java)
-        productInfoFactor = ProductInfoViewModelFactory(
-            Repository.getInstance(
-                AppClient.getInstance(),
-                requireContext()))
-        productInfoViewModel = ViewModelProvider(this, productInfoFactor).get(ProductInfoViewModel::class.java)
-
         val sharedPreferences = requireContext().getSharedPreferences("userAuth", AppCompatActivity.MODE_PRIVATE)
         val email: String? = sharedPreferences.getString("email","")
         collectionId=""
@@ -158,15 +149,14 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
             allProducts.addAll(products)
             brandProductsAdapter.setUpdatedData(products,requireContext(),communicator)
             for(product in products){
-                if(product.variants!![0].price.toDouble() > maxPrice){
-                    maxPrice = product.variants!![0].price.toDouble()
+                if(product.variants[0].price.toDouble() > maxPrice){
+                    maxPrice = product.variants[0].price.toDouble()
                 }
             }
             checkEmptyArray(products)
         }
         categoriesProductViewModel.allOnlineProducts.observe(viewLifecycleOwner) {
             getProductTypes(it)
-            Log.i("TAG","")
         }
         categoriesTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
@@ -185,9 +175,9 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
             communicator.goToSearchWithAllData( collectionId,brandName,subCategorySelected)
 
         }
-        productInfoViewModel.getFavProducts()
+        searchViewModel.getFavProducts()
         allFavProducts.clear()
-        productInfoViewModel.onlineFavProduct.observe(viewLifecycleOwner) { favProducts ->
+        searchViewModel.onlineFavProduct.observe(viewLifecycleOwner) { favProducts ->
             allFavProducts.clear()
             allVariantsID.clear()
             for (i in 0..favProducts.size - 1) {
@@ -239,8 +229,8 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
             Log.i("exits","already exists")
 
             img.setImageResource(R.drawable.ic_baseline_favorite_border_24)
-            productInfoViewModel.deleteFavProduct(allFavProducts.get(myIndex).id.toString())
-            productInfoViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
+            searchViewModel.deleteSelectedProduct(allFavProducts.get(myIndex).id.toString())
+            searchViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
                 if (response.isSuccessful) {
                     Toast.makeText(requireContext(),
                         "Deleted Success!!!: " + response.code().toString(),
@@ -278,8 +268,8 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
             order.note_attributes = listOf(productImage)
 
             var draftOrder = DraftOrder(order)
-            productInfoViewModel.getCardOrder(draftOrder)
-            productInfoViewModel.onlineCardOrder.observe(viewLifecycleOwner) { cardOrder ->
+            searchViewModel.getCardOrder(draftOrder)
+            searchViewModel.onlineCardOrder.observe(viewLifecycleOwner) { cardOrder ->
                 if (cardOrder.isSuccessful) {
                     Toast.makeText(requireContext(),
                         "add to card successfull: " + cardOrder.code().toString(),
@@ -318,6 +308,7 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
         dialog = BottomSheetDialog(requireContext())
         tvNoData = view.findViewById(R.id.tvNoData)
         imgNoData=view.findViewById(R.id.imgNoData)
+        noInternetCategoryLayout=view.findViewById(R.id.noInternetCategoryLayout)
 
     }
     private fun getProductTypes(allProductsTypes:List<Product>){
