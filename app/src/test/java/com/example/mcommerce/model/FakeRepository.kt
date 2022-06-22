@@ -40,9 +40,13 @@ class FakeRepository:RemoteSourceInterface {
     }
 
     override suspend fun getSpecificProduct(id: String): ProductDetails {
-//        var product=Product()
-//        return myProdct
-        TODO("Not yet implemented")
+        var product=Product()
+        product.id=123456
+        product.title="Adidas"
+        product.tags="tags"
+        var myProdct=ProductDetails(product)
+        return myProdct
+
     }
 
     override suspend fun getVariant(id: String): Variants {

@@ -7,14 +7,11 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.mcommerce.auth.model.Addresse
 import com.example.mcommerce.auth.model.Customer
 import com.example.mcommerce.auth.model.CustomerX
-import com.example.mcommerce.model.FakeRepository
 import com.example.mcommerce.auth.model.CustomerDetail
 import com.example.mcommerce.draftModel.DraftOrderX
 import com.example.mcommerce.draftModel.DraftResponse
 import com.example.mcommerce.getOrAwaitValue
-import com.example.mcommerce.model.DiscountCode
-import com.example.mcommerce.model.DiscountCodesModel
-import com.example.mcommerce.model.Repository
+import com.example.mcommerce.model.*
 import com.google.android.gms.common.util.CollectionUtils
 import com.google.android.gms.common.util.CollectionUtils.listOf
 import com.example.mcommerce.model.currencies.CurrencyModel
@@ -61,8 +58,9 @@ class RepositoryTest() : TestCase() {
 
     var myCustomer = Customer(CollectionUtils.listOf(customer))
 
-    //    var product= Product(tags = "tags")
-//    var myProdct= ProductDetails(product)
+        var product= Product(id = 123456,title = "Adidas",tags = "tags")
+       var myProdct= ProductDetails(product)
+
     lateinit var context: Context
     private val testDispatcher = TestCoroutineDispatcher()
     private val testScope = TestCoroutineScope(testDispatcher)
@@ -129,21 +127,19 @@ class RepositoryTest() : TestCase() {
 
     @Test
     fun getOrdersFromViewModel() = runBlockingTest {
-        // When tasks are requested from the tasks repository
-        val viewModel = OrdersViewModel(repo)
-        viewModel.getAllOrders("")
-        shadowOf(getMainLooper()).idle();
-        val tasks = viewModel.allOnlineOrders.getOrAwaitValue()
+        val tasks = repo.getOrders("")
 
         // Then tasks are loaded from the remote data source
-        assertEquals(2,tasks.size)
+        assertEquals(2,tasks.orders.size)
+    }
+    @Test
+    fun getSpecificProduct_specificProduct()= testScope.runBlockingTest {
+
+         assertEquals(repo.getSpecificProduct("6870135275659").product,myProdct.product)
+
+
     }
 
 }
-//    @Test
-//    fun getSpecificProduct_specificProduct()= testScope.runBlockingTest {
-//
-//        assertEquals(repo.getSpecificProduct("6870135275659").product,myProdct.product)
-//
-//    }
+
 
