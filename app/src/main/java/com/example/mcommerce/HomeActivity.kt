@@ -23,6 +23,7 @@ import com.example.mcommerce.me.view.MeWithoutLoginFragment
 import com.example.mcommerce.me.view.setting.AddNewAddressFragment
 import com.example.mcommerce.me.viewmodel.SavedSetting
 import com.example.mcommerce.model.Product
+import com.example.mcommerce.network.CheckInternetConnectionFirstTime
 import com.example.mcommerce.network.InternetConnectionChecker
 import com.example.mcommerce.orderDetails.view.OrderDetailsFragment
 import com.example.mcommerce.orders.model.Order
@@ -214,12 +215,19 @@ class HomeActivity : AppCompatActivity(),Communicator {
     }
 
     override fun goToProductDetails(id: Long) {
-        myDetailsFlag=1
-        val bundle=Bundle()
-        val productInfo = ProductInfoFragment()
-        bundle.putLong("productID",id)
-        productInfo.arguments=bundle
-        replaceFragment(productInfo)
+        if (CheckInternetConnectionFirstTime.checkForInternet(this)) {
+            myDetailsFlag = 1
+            val bundle = Bundle()
+            val productInfo = ProductInfoFragment()
+            bundle.putLong("productID", id)
+            productInfo.arguments = bundle
+            replaceFragment(productInfo)
+        }
+        else{
+            Toast.makeText(this,
+                "Please check internet",
+                Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun passMapDataToFragment() {

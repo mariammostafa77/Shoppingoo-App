@@ -163,6 +163,8 @@
                 android:scrollbars="vertical"
                 android:text="TextView"
                 android:textSize="10dp"
+                android:padding="8dp"
+                android:background="@drawable/custom_input"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.342"
@@ -259,7 +261,6 @@
                 android:id="@+id/reviewsRecycleView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtComment" />

@@ -27,6 +27,8 @@ import com.example.mcommerce.R
 import com.example.mcommerce.draftModel.DraftOrderX
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
+import com.example.mcommerce.network.CheckInternetConnectionFirstTime
+import com.example.mcommerce.network.InternetConnectionChecker
 import com.google.android.material.snackbar.Snackbar
 
 
@@ -38,9 +40,11 @@ class FavouriteFragment : Fragment(),FavouriteOnClickLisner {
     lateinit var favViewModel: ProductInfoViewModel
     lateinit var communicator: Communicator
     lateinit var noDataImage:ImageView
+    lateinit var noInternet:ImageView
     lateinit var txtNoData:TextView
     lateinit var favProgressbar:ProgressBar
     lateinit var favBackImg:ImageView
+    private lateinit var internetConnectionChecker: InternetConnectionChecker
 
     var favProducts:ArrayList<DraftOrderX> = ArrayList<DraftOrderX>()
 
@@ -61,16 +65,37 @@ class FavouriteFragment : Fragment(),FavouriteOnClickLisner {
         linearLayoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
         favRecyclerView.setLayoutManager(linearLayoutManager)
         favRecyclerView.setAdapter(favAdapter)
-
+        noInternet=view.findViewById(R.id.noInternetImg)
         favViewModelFactory = ProductInfoViewModelFactory(Repository.getInstance(AppClient.getInstance(), requireContext()))
         favViewModel = ViewModelProvider(this, favViewModelFactory).get(ProductInfoViewModel::class.java)
         val sharedPreferences: SharedPreferences = context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
         val email: String? = sharedPreferences.getString("email","")
         val note = "fav"
-        favProgressbar.visibility = View.VISIBLE
-        favViewModel.getFavProducts()
-        favViewModel.onlineFavProduct.observe(viewLifecycleOwner) { allFavProducts ->
+        if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
 
+            favProgressbar.visibility = View.VISIBLE
+            noInternet.visibility = View.INVISIBLE
+            favViewModel.getFavProducts()
+
+        }else{
+            noInternet.visibility = View.VISIBLE
+        }
+        internetConnectionChecker = InternetConnectionChecker(requireContext())
+        internetConnectionChecker.observe(this,{ isConnected ->
+            if (isConnected){
+
+                favViewModel.getFavProducts()
+                noInternet.visibility = View.INVISIBLE
+
+            }
+        else{
+                var snake = Snackbar.make(view, "Ops! You Lost internet connection!!!", Snackbar.LENGTH_LONG)
+                snake.show()
+        }
+        })
+
+        favViewModel.onlineFavProduct.observe(viewLifecycleOwner) { allFavProducts ->
+            favProducts.clear()
             for (i in 0..allFavProducts.size-1){
                 if(allFavProducts.get(i).note == note && allFavProducts.get(i).email == email){
                     favProducts.add(allFavProducts.get(i))
@@ -104,40 +129,48 @@ class FavouriteFragment : Fragment(),FavouriteOnClickLisner {
     }
 
     override fun onItemClickListener(draftOrderX: DraftOrderX) {
+        if (CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setMessage("Are you sure you want to delete?")
+                .setTitle("Remove")
+                .setCancelable(false)
+                .setPositiveButton("Yes") { dialog, it ->
 
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setMessage("Are you sure you want to delete?")
-            .setTitle("Remove")
-            .setCancelable(false)
-            .setPositiveButton("Yes"){ dialog , it ->
-                favViewModel.deleteFavProduct(draftOrderX.id.toString())
-                favViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
-                    if(response.isSuccessful){
-                        favProducts.remove(draftOrderX)
-                        if(favProducts.isEmpty()){
-                            noDataImage.visibility=View.VISIBLE
-                            txtNoData.visibility=View.VISIBLE
+                    favViewModel.deleteFavProduct(draftOrderX.id.toString())
+                    favViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
+                        if (response.isSuccessful) {
+                            favProducts.remove(draftOrderX)
+                            if (favProducts.isEmpty()) {
+                                noDataImage.visibility = View.VISIBLE
+                                txtNoData.visibility = View.VISIBLE
+                            } else {
+                                noDataImage.visibility = View.INVISIBLE
+                                txtNoData.visibility = View.INVISIBLE
+                            }
+                            favAdapter.setFavtProducts(requireContext(),
+                                favProducts,
+                                favProducts.size)
+
+
+                        } else {
+                            Toast.makeText(requireContext(),
+                                "Deleted failed: " + response.code().toString(),
+                                Toast.LENGTH_SHORT).show()
+
                         }
-                        else{
-                            noDataImage.visibility=View.INVISIBLE
-                            txtNoData.visibility=View.INVISIBLE
-                        }
-                        favAdapter.setFavtProducts(requireContext(),favProducts,favProducts.size)
-
-
-
                     }
-                    else{
-                        Toast.makeText(requireContext(),"Deleted failed: "+response.code().toString(),Toast.LENGTH_SHORT).show()
-
-                    }
+                    dialog.dismiss()
                 }
-                dialog.dismiss()
-            }
-            .setNegativeButton("No"){ dialog , it ->
-                dialog.cancel()
-            }
-            .show()
+                .setNegativeButton("No") { dialog, it ->
+                    dialog.cancel()
+                }
+                .show()
+        }
+        else{
+            Toast.makeText(requireContext(),
+                "Please check internet",
+                Toast.LENGTH_SHORT).show()
+        }
     }
 
 }

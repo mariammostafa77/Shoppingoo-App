@@ -140,13 +140,19 @@ class HomeFragment : Fragment() {
         }
         var img: ImageView =view.findViewById(R.id.searchImg);
         img.setOnClickListener {
-            mySearchFlag=1
-            val fragment: Fragment = MysearchFragment()
-            val fragmentManager: FragmentManager = activity!!.supportFragmentManager
-            val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
-            fragmentTransaction.replace(com.example.mcommerce.R.id.frameLayout, fragment)
-            fragmentTransaction.addToBackStack(null)
-            fragmentTransaction.commit()
+            if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
+                mySearchFlag = 1
+                val fragment: Fragment = MysearchFragment()
+                val fragmentManager: FragmentManager = activity!!.supportFragmentManager
+                val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
+                fragmentTransaction.replace(com.example.mcommerce.R.id.frameLayout, fragment)
+                fragmentTransaction.addToBackStack(null)
+                fragmentTransaction.commit()
+            }
+            else{
+                var snake = Snackbar.make(view, "Please check internet", Snackbar.LENGTH_LONG)
+                snake.show()
+            }
         }
         favImg.setOnClickListener {
             val fragment: Fragment = FavouriteFragment()

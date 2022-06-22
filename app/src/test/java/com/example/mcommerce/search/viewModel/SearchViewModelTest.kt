@@ -1,6 +1,5 @@
-package com.example.mcommerce.ProductInfo.viewModel
+package com.example.mcommerce.search.viewModel
 
-import junit.framework.TestCase
 import android.content.Context
 import android.os.Looper.getMainLooper
 import android.util.Log
@@ -16,6 +15,7 @@ import com.example.mcommerce.orders.model.Order
 import com.example.mcommerce.orders.model.Orders
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
+import junit.framework.TestCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.*
@@ -33,7 +33,7 @@ import java.util.Observer
 @RunWith(AndroidJUnit4::class)
 @LooperMode(LooperMode.Mode.PAUSED)
 @ExperimentalCoroutinesApi
-class ProductInfoViewModelTest : TestCase(){
+class SearchViewModelTest : TestCase(){
     private lateinit var remoteDataSource: FakeRepository
     private lateinit var repo: Repository
 
@@ -46,29 +46,18 @@ class ProductInfoViewModelTest : TestCase(){
     }
 
     @Test
-    fun getDraftOrdersTest_allDraftOrders() = runBlockingTest {
-        // When tasks are requested from the tasks repository
-        val viewModel = ProductInfoViewModel(repo)
-        viewModel.getFavProducts()
-        shadowOf(getMainLooper()).idle();
-
-        val tasks = viewModel.onlineFavProduct.getOrAwaitValue()
-
-        // Then tasks are loaded from the remote data source
-        assertEquals(2,tasks.size)
+    fun getAllProductsTest_allProducts() = runBlockingTest {
+//        // When tasks are requested from the tasks repository
+//        val viewModel = SearchViewModel(repo)
+//        viewModel.getAllProducts()
+//        shadowOf(getMainLooper()).idle();
+//
+//        val tasks = viewModel.onlineProducts.getOrAwaitValue()
+//
+//        // Then tasks are loaded from the remote data source
+//        assertEquals(0,tasks.size)
     }
-    @Test
-    fun getSpecificProducts_specificProduct() = runBlockingTest {
-        // When tasks are requested from the tasks repository
-        val viewModel = ProductInfoViewModel(repo)
-        viewModel.getSpecificProducts("6870135275659")
-        shadowOf(getMainLooper()).idle();
 
-        val tasks = viewModel.onlineSpecificProducts.getOrAwaitValue()
-
-        // Then tasks are loaded from the remote data source
-        assertEquals("Adidas",tasks.title)
-    }
 
 
 

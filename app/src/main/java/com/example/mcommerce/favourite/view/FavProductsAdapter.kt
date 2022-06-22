@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.R
 import com.example.mcommerce.draftModel.DraftOrderX
+import com.example.mcommerce.me.viewmodel.SavedSetting
 
 class FavProductsAdapter(private val listener: FavouriteOnClickLisner,var comminicator: Communicator) : RecyclerView.Adapter<FavProductsAdapter.ViewHolder>(){
     var allFavProducts:List<DraftOrderX> = ArrayList<DraftOrderX>()
@@ -35,7 +36,9 @@ class FavProductsAdapter(private val listener: FavouriteOnClickLisner,var commin
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.favProductTitle.text = allFavProducts[position].line_items?.get(0)!!.title
-        holder.favProductPrice.text=allFavProducts[position].line_items?.get(0)!!.price
+        val price = allFavProducts[position].line_items?.get(0)!!.price.toString()
+        val amount = SavedSetting.getPrice(price, context)
+        holder.favProductPrice.text=("Price: ${amount}")
         Glide.with(context).load(allFavProducts[position].note_attributes?.get(0)?.value).into(holder.favProductImg)
 
 

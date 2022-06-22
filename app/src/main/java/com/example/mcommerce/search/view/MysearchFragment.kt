@@ -28,6 +28,8 @@ import com.example.mcommerce.draftModel.NoteAttribute
 import com.example.mcommerce.model.Product
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
+import com.example.mcommerce.network.CheckInternetConnectionFirstTime
+import com.example.mcommerce.network.InternetConnectionChecker
 import com.example.mcommerce.search.viewModel.SearchViewModel
 import com.example.mcommerce.search.viewModel.SearchViewModelFactory
 import kotlinx.android.synthetic.main.dialog_view.view.*
@@ -56,6 +58,7 @@ class MysearchFragment : Fragment(),FavClicked {
     var allVariantsID:ArrayList<Long> = ArrayList<Long>()
     var allProducts:List<Product> = ArrayList<Product>()
     lateinit var email:String
+    private lateinit var internetConnectionChecker: InternetConnectionChecker
 
     lateinit var allProductArrayList:ArrayList<Product>
     lateinit var filterProductArrayList:ArrayList<Product>
@@ -91,7 +94,22 @@ class MysearchFragment : Fragment(),FavClicked {
             )
            allProductArrayList = ArrayList<Product>()
             searchViewModel = ViewModelProvider(this, searchFactor).get(SearchViewModel::class.java)
-            searchViewModel.getAllProducts()
+
+         if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
+
+             searchViewModel.getAllProducts()
+
+        }else{
+
+        }
+        internetConnectionChecker = InternetConnectionChecker(requireContext())
+        internetConnectionChecker.observe(this,{ isConnected ->
+            if (isConnected){
+                searchViewModel.getAllProducts()
+            }
+        })
+
+
             if(mySearchFlag==1) {
                 searchViewModel.onlineProducts.observe(viewLifecycleOwner) { product ->
                  allProducts=product
@@ -153,8 +171,24 @@ class MysearchFragment : Fragment(),FavClicked {
                     Repository.getInstance(
                         AppClient.getInstance(),
                         requireContext()))
+
                 categoriesProductViewModel = ViewModelProvider(this, categoriesProductFactory).get(CategoriesViewModel::class.java)
-                categoriesProductViewModel.getCategories(brandName,subCatName,productID)
+
+                if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
+
+                    categoriesProductViewModel.getCategories(brandName,subCatName,productID)
+
+                }else{
+
+                }
+                internetConnectionChecker = InternetConnectionChecker(requireContext())
+                internetConnectionChecker.observe(this,{ isConnected ->
+                    if (isConnected){
+                        categoriesProductViewModel.getCategories(brandName,subCatName,productID)
+                    }})
+
+
+
                 categoriesProductViewModel.onlinesubcategoriesProduct.observe(viewLifecycleOwner)  {
 
                     Log.i("TAG","Count  ${it.size}")

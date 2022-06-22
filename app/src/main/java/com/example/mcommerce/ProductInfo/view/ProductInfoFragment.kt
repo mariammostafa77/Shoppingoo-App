@@ -36,9 +36,13 @@ import com.example.mcommerce.model.Image
 import com.example.mcommerce.model.Product
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
+import com.example.mcommerce.network.CheckInternetConnectionFirstTime
+import com.example.mcommerce.network.InternetConnectionChecker
 import com.example.mcommerce.shopping_cart.view.ShoppingCartFragment
 import com.example.mcommerce.shopping_cart.viewmodel.ShoppingCartViewModel
 import com.example.mcommerce.shopping_cart.viewmodel.ShoppingCartViewModelFactory
+import com.google.android.gms.common.util.CollectionUtils.listOf
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.dialog_view.*
 import kotlinx.android.synthetic.main.dialog_view.view.*
 
@@ -71,7 +75,7 @@ class ProductInfoFragment : Fragment() {
     var allCardProducts:ArrayList<DraftOrderX> = ArrayList<DraftOrderX>()
     var allVariantsID:ArrayList<Long> = ArrayList<Long>()
     var allCardVariantsID:ArrayList<Long> = ArrayList<Long>()
-    var allProducts:List<Product> = ArrayList<Product>()
+    var allProducts:ArrayList<Product> = ArrayList<Product>()
 
     lateinit var reviewsRecyclerview: RecyclerView
     lateinit var reviewsAdapter: ReviewAdapter
@@ -93,6 +97,7 @@ class ProductInfoFragment : Fragment() {
 
     lateinit var customerViewModel: CustomerViewModel
     lateinit var customerViewModelFactory: CustomerViewModelFactory
+    private lateinit var internetConnectionChecker: InternetConnectionChecker
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -161,14 +166,25 @@ class ProductInfoFragment : Fragment() {
                 AppClient.getInstance(),
                 requireContext()))
         specificProductsViewModel = ViewModelProvider(this, specificProductsFactory).get(ProductInfoViewModel::class.java)
+        internetConnectionChecker = InternetConnectionChecker(requireContext())
+        internetConnectionChecker.observe(this,{ isConnected ->
+            if (isConnected){
+                specificProductsViewModel.getSpecificProducts(productID.toString())
+                specificProductsViewModel.getFavProducts()
+            }
+        else{
+                var snake = Snackbar.make(view, "Ops! You Lost internet connection!!!", Snackbar.LENGTH_LONG)
+                snake.show()
+        }})
 
-        specificProductsViewModel.getSpecificProducts(productID.toString())
         specificProductsViewModel.onlineSpecificProducts.observe(viewLifecycleOwner) { product ->
-            allProducts=listOf(product)
+            allProducts.clear()
+            allProducts.add(product)
             Log.i("pro", "from fragment" + product.toString())
             specificProductsViewModel.onlineSpecificProducts.value?.let {
-                specificProductsViewModel.getFavProducts()
+
                 specificProductsViewModel.onlineFavProduct.observe(viewLifecycleOwner) { favProducts ->
+                    allFavProducts.clear()
                     allFavProducts.addAll(favProducts)
                     for (i in 0..favProducts.size-1) {
                         if (favProducts.get(i).note == noteStatus && favProducts.get(i).email == customerEmail) {
@@ -228,196 +244,187 @@ class ProductInfoFragment : Fragment() {
         }
 
 
-        specificProductsViewModel.getFavProducts()
-        allFavProducts.clear()
-        specificProductsViewModel.onlineFavProduct.observe(viewLifecycleOwner) { allDraftProducts ->
-            allFavProducts.clear()
-            allVariantsID.clear()
-            allCardProducts.clear()
-            allCardVariantsID.clear()
-            for (i in 0..allDraftProducts.size - 1) {
-                if (allDraftProducts.get(i).note == noteStatus && allDraftProducts.get(i).email == customerEmail) {
-                    allFavProducts.add(allDraftProducts.get(i))
-                    allVariantsID.add(allDraftProducts.get(i).line_items!![0].variant_id!!)
-                }
-                else if (allDraftProducts.get(i).note == "card" && allDraftProducts.get(i).email == customerEmail) {
-                    allCardProducts.add(allDraftProducts.get(i))
-                    allCardVariantsID.add(allDraftProducts.get(i).line_items!![0].variant_id!!)
-                }
-            }
-
-        }
+        loadData()
         btnAddToCard.setOnClickListener {
-            if(customerEmail !="") {
+            if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
+                if (customerEmail != "") {
 
-                var variantId: Long = 0
-                for (i in 0..allProducts[0].variants?.size!! - 1) {
-                    if (allProducts[0].variants?.get(i)?.option1!! == sizeSpinner.getSelectedItem()
-                            .toString() &&
-                        allProducts[0].variants?.get(i)?.option2 == colorSpinner.getSelectedItem()
-                            .toString()
-                    ) {
-                        variantId = allProducts?.get(0)?.variants?.get(i)?.id!!
-
-                        break
-                    }
-                }
-                if (variantId in allCardVariantsID) {
-                    Log.i("exits", "already exists")
-                    for (i in 0..allCardProducts.size - 1) {
-                        if (allCardProducts[i].line_items!![0].variant_id == variantId) {
-                            productIndex = i
-                            break
-                        }
-                    }
-                    var oldCount = allCardProducts[productIndex].line_items!![0].quantity
-                    var newCount = oldCount!! + count
-                    Log.i("exits", "count: " + newCount)
-                    val newDraftOrder = DraftOrder(allCardProducts[productIndex])
-                    newDraftOrder.draft_order?.line_items!![0].quantity = newCount
-                    shoppingCartViewModel.updateSelectedProduct(newDraftOrder.draft_order?.id.toString(),
-                        newDraftOrder)
-                    shoppingCartViewModel.onlineItemUpdated.observe(viewLifecycleOwner) { response ->
-                        if (response.isSuccessful) {
-                            Toast.makeText(requireContext(),
-                                "update Success!!!: " + response.code().toString(),
-                                Toast.LENGTH_SHORT).show()
-                            loadData()
-
-                        }
-                    }
-
-                } else {
                     var variantId: Long = 0
-                    var order = DraftOrderX()
-                    order.note = "card"
-                    order.email = customerEmail
                     for (i in 0..allProducts[0].variants?.size!! - 1) {
-                        if (allProducts.get(0)?.variants?.get(i)?.option1 == sizeSpinner.getSelectedItem()
+                        if (allProducts[0].variants?.get(i)?.option1!! == sizeSpinner.getSelectedItem()
                                 .toString() &&
-                            allProducts.get(0)?.variants?.get(i)?.option2 == colorSpinner.getSelectedItem()
+                            allProducts[0].variants?.get(i)?.option2 == colorSpinner.getSelectedItem()
                                 .toString()
                         ) {
-                            variantId = allProducts[0].variants?.get(i)?.id!!
-                            Log.i("Index", "index: $variantId")
-                            // order.line_items!![0].variant_id = variantId
-                            var lineItem = LineItem()
-                            lineItem.quantity = Integer.parseInt(productCount.text.toString())
-                            lineItem.variant_id = variantId
-                            order.line_items = listOf(lineItem)
+                            variantId = allProducts?.get(0)?.variants?.get(i)?.id!!
+
                             break
                         }
                     }
-                    // order.line_items!![0].variant_id = 40335555395723
-                    var productImage = NoteAttribute()
-                    productImage.name = "image"
-                    productImage.value = allProducts[0].images?.get(0)?.src
-                    order.note_attributes = listOf(productImage)
+                    if (variantId in allCardVariantsID) {
+                        Log.i("exits", "already exists")
+                        for (i in 0..allCardProducts.size - 1) {
+                            if (allCardProducts[i].line_items!![0].variant_id == variantId) {
+                                productIndex = i
+                                break
+                            }
+                        }
+                        var oldCount = allCardProducts[productIndex].line_items!![0].quantity
+                        var newCount = oldCount!! + count
+                        Log.i("exits", "count: " + newCount)
+                        val newDraftOrder = DraftOrder(allCardProducts[productIndex])
+                        newDraftOrder.draft_order?.line_items!![0].quantity = newCount
+                        shoppingCartViewModel.updateSelectedProduct(newDraftOrder.draft_order?.id.toString(),
+                            newDraftOrder)
+                        shoppingCartViewModel.onlineItemUpdated.observe(viewLifecycleOwner) { response ->
+                            if (response.isSuccessful) {
+                                var snake = Snackbar.make(view, "update Success", Snackbar.LENGTH_LONG)
+                                snake.show()
+                                loadData()
 
-                    var draftOrder = DraftOrder(order)
-                    specificProductsViewModel.getCardOrder(draftOrder)
-                    specificProductsViewModel.onlineCardOrder.observe(viewLifecycleOwner) { cardOrder ->
-                        if (cardOrder.isSuccessful) {
-                            Toast.makeText(requireContext(),
-                                "add to card successfull: " + cardOrder.code().toString(),
-                                Toast.LENGTH_LONG).show()
-                            loadData()
-                        } else {
+                            }
+                        }
 
-                            Toast.makeText(requireContext(),
-                                "add to card failed: " + cardOrder.code().toString(),
-                                Toast.LENGTH_LONG).show()
+                    } else {
+                        var variantId: Long = 0
+                        var order = DraftOrderX()
+                        order.note = "card"
+                        order.email = customerEmail
+                        for (i in 0..allProducts[0].variants?.size!! - 1) {
+                            if (allProducts.get(0)?.variants?.get(i)?.option1 == sizeSpinner.getSelectedItem()
+                                    .toString() &&
+                                allProducts.get(0)?.variants?.get(i)?.option2 == colorSpinner.getSelectedItem()
+                                    .toString()
+                            ) {
+                                variantId = allProducts[0].variants?.get(i)?.id!!
+                                Log.i("Index", "index: $variantId")
+                                // order.line_items!![0].variant_id = variantId
+                                var lineItem = LineItem()
+                                lineItem.quantity = Integer.parseInt(productCount.text.toString())
+                                lineItem.variant_id = variantId
+                                order.line_items = listOf(lineItem)
+                                break
+                            }
+                        }
+                        // order.line_items!![0].variant_id = 40335555395723
+                        var productImage = NoteAttribute()
+                        productImage.name = "image"
+                        productImage.value = allProducts[0].images?.get(0)?.src
+                        order.note_attributes = listOf(productImage)
 
+                        var draftOrder = DraftOrder(order)
+                        specificProductsViewModel.getCardOrder(draftOrder)
+                        specificProductsViewModel.onlineCardOrder.observe(viewLifecycleOwner) { cardOrder ->
+                            if (cardOrder.isSuccessful) {
+
+                                var snake = Snackbar.make(view, "add to card successfull", Snackbar.LENGTH_LONG)
+                                snake.show()
+                                loadData()
+                            } else {
+
+
+                                var snake = Snackbar.make(view, "add to card failed", Snackbar.LENGTH_LONG)
+                                snake.show()
+
+                            }
                         }
                     }
+                } else {
+
+                    showLoginDialog("You can not add to cart without Login", requireContext())
+
+
                 }
             }
             else{
-
-                showLoginDialog("You can not add to cart without Login",requireContext())
-
-
-
-
-
+                var snake = Snackbar.make(view, "Please check internet", Snackbar.LENGTH_LONG)
+                snake.show()
             }
         }
         addToFavImg.setOnClickListener {
-            if(customerEmail !="") {
-                if (allProducts[0].variants?.get(0)?.id!! in allVariantsID) {
-                    Log.i("exits", "already exists")
-                    for (i in 0..allFavProducts.size - 1) {
-                        if (allFavProducts[i].line_items!![0].variant_id == allProducts[0].variants?.get(0)?.id!!) {
-                            productIndex = i
-                            break
+            if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
+                if (customerEmail != "") {
+                    if (allProducts[0].variants?.get(0)?.id!! in allVariantsID) {
+                        Log.i("exits", "already exists")
+                        for (i in 0..allFavProducts.size - 1) {
+                            if (allFavProducts[i].line_items!![0].variant_id == allProducts[0].variants?.get(
+                                    0)?.id!!
+                            ) {
+                                productIndex = i
+                                break
+                            }
+                        }
+                        addToFavImg.setImageResource(R.drawable.ic_baseline_favorite_border_24)
+                        specificProductsViewModel.deleteFavProduct(allFavProducts.get(productIndex).id.toString())
+                        specificProductsViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
+                            if (response.isSuccessful) {
+
+                                var snake = Snackbar.make(view, "Deleted Success", Snackbar.LENGTH_LONG)
+                                snake.show()
+
+                                loadData()
+
+
+                            } else {
+
+                                var snake = Snackbar.make(view, "Deleted failed", Snackbar.LENGTH_LONG)
+                                snake.show()
+
+                            }
+
+                        }
+
+                    } else {
+                        Log.i("exits", "not exists")
+                        addToFavImg.setImageResource(R.drawable.ic_favorite)
+                        var variantId: Long = 0
+                        var order = DraftOrderX()
+                        order.note = "fav"
+                        order.email = customerEmail
+                        variantId = allProducts[0].variants?.get(0)?.id!!
+                        Log.i("Index", "index: " + variantId.toString())
+                        // order.line_items!![0].variant_id = variantId
+                        var lineItem = LineItem()
+                        lineItem.quantity = Integer.parseInt(productCount.text.toString())
+                        lineItem.variant_id = variantId
+                        order.line_items = listOf(lineItem)
+
+                        // order.line_items!![0].variant_id = 40335555395723
+                        var productImage = NoteAttribute()
+                        productImage.name = "image"
+                        productImage.value = allProducts[0].images?.get(0)?.src!!
+                        order.note_attributes = listOf(productImage)
+
+                        var draftOrder = DraftOrder(order)
+                        specificProductsViewModel.getCardOrder(draftOrder)
+                        specificProductsViewModel.onlineCardOrder.observe(viewLifecycleOwner) { fav ->
+                            if (fav.isSuccessful) {
+
+                                var snake = Snackbar.make(view, "add to Fav successfull", Snackbar.LENGTH_LONG)
+                                snake.show()
+                                loadData()
+
+                            } else {
+
+
+                                var snake = Snackbar.make(view, "add to Fav failed", Snackbar.LENGTH_LONG)
+                                snake.show()
+
+                            }
                         }
                     }
-                    addToFavImg.setImageResource(R.drawable.ic_baseline_favorite_border_24)
-                    specificProductsViewModel.deleteFavProduct(allFavProducts.get(productIndex).id.toString())
-                    specificProductsViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
-                        if (response.isSuccessful) {
-
-                            Toast.makeText(requireContext(),
-                                "Deleted Success!!!: " + response.code().toString(),
-                                Toast.LENGTH_SHORT).show()
-                            loadData()
-
-
-                        } else {
-                            Toast.makeText(requireContext(),
-                                "Deleted failed: " + response.code().toString(),
-                                Toast.LENGTH_SHORT).show()
-
-                        }
-
-                    }
-
                 } else {
-                    Log.i("exits", "not exists")
-                    addToFavImg.setImageResource(R.drawable.ic_favorite)
-                    var variantId: Long = 0
-                    var order = DraftOrderX()
-                    order.note = "fav"
-                    order.email = customerEmail
-                    variantId = allProducts[0].variants?.get(0)?.id!!
-                    Log.i("Index", "index: " + variantId.toString())
-                    // order.line_items!![0].variant_id = variantId
-                    var lineItem = LineItem()
-                    lineItem.quantity = Integer.parseInt(productCount.text.toString())
-                    lineItem.variant_id = variantId
-                    order.line_items = listOf(lineItem)
 
-                    // order.line_items!![0].variant_id = 40335555395723
-                    var productImage = NoteAttribute()
-                    productImage.name = "image"
-                    productImage.value = allProducts[0].images?.get(0)?.src!!
-                    order.note_attributes = listOf(productImage)
-
-                    var draftOrder = DraftOrder(order)
-                    specificProductsViewModel.getCardOrder(draftOrder)
-                    specificProductsViewModel.onlineCardOrder.observe(viewLifecycleOwner) { fav ->
-                        if (fav.isSuccessful) {
-                            Toast.makeText(requireContext(),
-                                "add to Fav successfull: " + fav.code().toString(),
-                                Toast.LENGTH_LONG).show()
-                            loadData()
-
-                        } else {
-
-                            Toast.makeText(requireContext(),
-                                "add to Fav failed: " + fav.code().toString(),
-                                Toast.LENGTH_LONG).show()
-
-                        }
-                    }
+                    showLoginDialog("You can not add to Favourite without Login", requireContext())
                 }
             }
             else{
-
-                showLoginDialog("You can not add to Favourite without Login",requireContext())
+                var snake = Snackbar.make(view, "Please check internet", Snackbar.LENGTH_LONG)
+                snake.show()
             }
         }
         backImg.setOnClickListener {
+
 //            if (mySearchFlag == 1) {
 //
 //                val transaction = requireActivity().supportFragmentManager.beginTransaction()
@@ -450,7 +457,15 @@ class ProductInfoFragment : Fragment() {
         val sharedPreferences = requireContext().getSharedPreferences("userAuth", AppCompatActivity.MODE_PRIVATE)
         val customerEmail = sharedPreferences.getString("email","").toString()
         val noteStatus = "fav"
-        specificProductsViewModel.getFavProducts()
+        internetConnectionChecker = InternetConnectionChecker(requireContext())
+        internetConnectionChecker.observe(this,{ isConnected ->
+            if (isConnected){
+                specificProductsViewModel.getFavProducts()
+            }
+            else{
+
+            }})
+
         allFavProducts.clear()
         specificProductsViewModel.onlineFavProduct.observe(viewLifecycleOwner) { allDraftProducts ->
             allFavProducts.clear()
