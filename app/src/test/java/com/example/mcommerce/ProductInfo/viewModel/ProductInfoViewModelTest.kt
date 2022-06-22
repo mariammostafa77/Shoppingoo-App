@@ -57,6 +57,18 @@ class ProductInfoViewModelTest : TestCase(){
         // Then tasks are loaded from the remote data source
         assertEquals(2,tasks.size)
     }
+    @Test
+    fun getSpecificProducts_specificProduct() = runBlockingTest {
+        // When tasks are requested from the tasks repository
+        val viewModel = ProductInfoViewModel(repo)
+        viewModel.getSpecificProducts("6870135275659")
+        shadowOf(getMainLooper()).idle();
+
+        val tasks = viewModel.onlineSpecificProducts.getOrAwaitValue()
+
+        // Then tasks are loaded from the remote data source
+        assertEquals("Adidas",tasks.title)
+    }
 
 
 }
