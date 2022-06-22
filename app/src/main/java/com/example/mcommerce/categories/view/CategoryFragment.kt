@@ -386,6 +386,7 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
                 filteredProduct.add(product)
             }
         }
+        Log.i("","")
         brandProductsAdapter.setUpdatedData(filteredProduct,requireContext(),communicator)
         checkEmptyArray(filteredProduct)
     }
