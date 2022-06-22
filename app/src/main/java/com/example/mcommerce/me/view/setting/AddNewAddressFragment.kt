@@ -29,6 +29,9 @@ import com.example.mcommerce.me.viewmodel.CustomerViewModel
 import com.example.mcommerce.me.viewmodel.CustomerViewModelFactory
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
+import com.example.mcommerce.network.CheckInternetConnectionFirstTime
+import com.example.mcommerce.network.InternetConnectionChecker
+import com.google.android.material.snackbar.Snackbar
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
@@ -47,9 +50,11 @@ class AddNewAddressFragment : Fragment() {
     lateinit var txtZipCode: TextView
     lateinit var btnSaveNewAddress : Button
     lateinit var addressDataLayout: ConstraintLayout
+    lateinit var noInternetLayoutAddNewAddress: ConstraintLayout
 
     lateinit var customerViewModel: CustomerViewModel
     lateinit var customerViewModelFactory: CustomerViewModelFactory
+    private lateinit var internetConnectionChecker: InternetConnectionChecker
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +70,13 @@ class AddNewAddressFragment : Fragment() {
         val customerId = sharedPreferences.getString("cusomerID",null).toString()
 
             chooseLocationImg.setOnClickListener {
-                checkLocationPermission()
+                if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
+                    checkLocationPermission()
+                }else{
+                    val snake = Snackbar.make(it, "Ops! You Lost internet connection!!!", Snackbar.LENGTH_LONG)
+                    snake.show()
+                }
+
             }
         val bundle = arguments
         var userAddress = emptyList<String>()
@@ -81,20 +92,35 @@ class AddNewAddressFragment : Fragment() {
             btnSaveNewAddress.isVisible = false
         }
         btnSaveNewAddress.setOnClickListener {
-
             if (txtAddressLine1.text.isNotEmpty() && txtAddressLine2.text.isNotEmpty() && txtPhoneNumber.text.isNotEmpty()){
                 val customer = CustomerX()
                 customer.addresses = listOf(Addresse(address1 =txtAddressLine1.text.toString(), address2 = txtAddressLine2.text.toString(),
                     phone = txtPhoneNumber.text.toString(),city = userAddress.get(1),province = "",zip = userAddress.get(3),country = userAddress.get(0)))
                 val customDetail = CustomerDetail(customer)
-                customerViewModel.addNewCustomerAddress(customerId,customDetail)
+
+                if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())){
+                    customerViewModel.addNewCustomerAddress(customerId,customDetail)
+                    noInternetLayoutAddNewAddress.visibility=View.INVISIBLE
+                }else{
+                    noInternetLayoutAddNewAddress.visibility=View.VISIBLE
+                }
+                internetConnectionChecker = InternetConnectionChecker(requireContext())
+                internetConnectionChecker.observe(this,{ isConnected ->
+                    if (isConnected){
+                        customerViewModel.addNewCustomerAddress(customerId,customDetail)
+                        noInternetLayoutAddNewAddress.visibility=View.INVISIBLE
+                    }else{
+                        var snake = Snackbar.make(view, "Ops! You Lost internet connection!!!", Snackbar.LENGTH_LONG)
+                        snake.show()
+                    }
+                })
+              //  customerViewModel.addNewCustomerAddress(customerId,customDetail)
                 customerViewModel.newCustomerAddress.observe(viewLifecycleOwner) { response ->
                     if(response.isSuccessful){
-                        Toast.makeText(requireContext(),"Updated Successfull: "+response.code().toString(),Toast.LENGTH_LONG).show()
-                        Log.i("update","messs from success: "+response.body().toString())
+                        Toast.makeText(requireContext(),"Updated Successfully!!",Toast.LENGTH_LONG).show()
                         val transaction = requireActivity().supportFragmentManager.beginTransaction()
                         transaction.replace(R.id.frameLayout, UserAddressesFragment())
-                        transaction.addToBackStack(null);
+                        transaction.addToBackStack(null)
                         transaction.commit()
                     }
                     else{
@@ -119,6 +145,7 @@ class AddNewAddressFragment : Fragment() {
         txtCity = view.findViewById(R.id.txtCity)
         txtZipCode = view.findViewById(R.id.txtZipCode)
         btnSaveNewAddress = view.findViewById(R.id.btnSaveNewAddress)
+        noInternetLayoutAddNewAddress = view.findViewById(R.id.noInternetLayoutAddNewAddress)
     }
     private fun checkLocationPermission(){
         if(ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED  ){

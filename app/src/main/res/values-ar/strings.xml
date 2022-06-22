@@ -90,19 +90,19 @@
     <string name="noFav">"حاليا لا يوجد محفوظ في المضلة لديك"</string>
 
 
-    <string name="choose_address">Choose Address</string>
-    <string name="please_select_your_shipping_address">Please Select Your Shipping Address</string>
-    <string name="varaince">varaince</string>
-    <string name="click_here_to_choose_location">Click Here To Choose Location</string>
-    <string name="write_any_city_name">Write Any City Name</string>
-    <string name="shipping_info">Shipping Info</string>
-    <string name="place_order">Place Order</string>
-    <string name="apply">Apply</string>
-    <string name="add_discount_code">Add Discount Code</string>
-    <string name="visa">Visa</string>
-    <string name="cash">Cash</string>
-    <string name="payment_method">Payment Method</string>
-    <string name="confirm_payment">Confirm Payment</string>
+    <string name="choose_address">احتار عنوان</string>
+    <string name="please_select_your_shipping_address">من فضلك اختار عنوانك </string>
+    <string name="varaince">ألأنواع</string>
+    <string name="click_here_to_choose_location">أضغط هنا لأختيار موقعك</string>
+    <string name="write_any_city_name">أكتب اسم اى مدينة </string>
+    <string name="shipping_info">بيانات التوصيل</string>
+    <string name="place_order">أتمام الطلب</string>
+    <string name="apply">تطبيق</string>
+    <string name="add_discount_code">أضافة كود خصم</string>
+    <string name="visa">الدفع بالبطاقة</string>
+    <string name="cash">نقدا</string>
+    <string name="payment_method">طريقة الدفع</string>
+    <string name="confirm_payment">تأكيد الدفع</string>
 
     <string-array name="currency_options">
     <item>جنيه مصرى</item>

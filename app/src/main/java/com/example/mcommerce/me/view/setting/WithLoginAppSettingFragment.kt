@@ -26,6 +26,8 @@ import com.example.mcommerce.me.viewmodel.SavedSetting.Companion.setCurrencyResu
 import com.example.mcommerce.me.viewmodel.SavedSetting.Companion.setLocale
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
+import com.example.mcommerce.network.CheckInternetConnectionFirstTime
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.dialog_view.view.*
 
 class WithLoginAppSettingFragment : Fragment() {
@@ -87,12 +89,18 @@ class WithLoginAppSettingFragment : Fragment() {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 currencySelected = parent?.getItemAtPosition(position).toString()
-                setCurrency(currencySelected, context!!)
-                txtCurrency.text = currencySelected
-                customerViewModel.getAmountAfterConversion(parent?.getItemAtPosition(position).toString())
-                customerViewModel.onlineCurrencyChanged.observe(viewLifecycleOwner) { result ->
-                    convertorResult = result.result
-                    setCurrencyResult(convertorResult.toString(),requireContext())
+                if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
+                    currencySelected = parent?.getItemAtPosition(position).toString()
+                    setCurrency(currencySelected, context!!)
+                    txtCurrency.text = currencySelected
+                    customerViewModel.getAmountAfterConversion(parent?.getItemAtPosition(position).toString())
+                    customerViewModel.onlineCurrencyChanged.observe(viewLifecycleOwner) { result ->
+                        convertorResult = result.result
+                        setCurrencyResult(convertorResult.toString(),requireContext())
+                    }
+                }else{
+                    val snake = Snackbar.make(currencySpinner, "Ops! You Lost internet connection!!!", Snackbar.LENGTH_LONG)
+                    snake.show()
                 }
             }
         }
@@ -104,7 +112,12 @@ class WithLoginAppSettingFragment : Fragment() {
         }
 
         userAddressCard.setOnClickListener {
-            replaceFragment(UserAddressesFragment())
+            if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
+                replaceFragment(UserAddressesFragment())
+            }else{
+                val snake = Snackbar.make(it, "Ops! You Lost internet connection!!!", Snackbar.LENGTH_LONG)
+                snake.show()
+            }
         }
         languageCard.setOnClickListener {
             showLanguagesList()

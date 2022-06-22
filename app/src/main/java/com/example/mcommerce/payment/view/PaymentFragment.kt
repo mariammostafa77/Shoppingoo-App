@@ -31,6 +31,8 @@ import org.json.JSONException
 import org.json.JSONObject
 
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentManager
 import com.android.volley.AuthFailureError
 import com.android.volley.Request
@@ -38,8 +40,11 @@ import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.mcommerce.me.viewmodel.SavedSetting.Companion.loadCurrency
+import com.example.mcommerce.network.CheckInternetConnectionFirstTime
+import com.example.mcommerce.network.InternetConnectionChecker
 import com.example.mcommerce.payment.viewmodel.PaymentViewModel
 import com.example.mcommerce.payment.viewmodel.PaymentViewModelFactory
+import com.google.android.libraries.places.internal.it
 import com.google.android.material.snackbar.Snackbar
 import com.stripe.android.PaymentConfiguration
 import com.stripe.android.paymentsheet.PaymentSheet
@@ -63,7 +68,9 @@ class PaymentFragment : Fragment() {
     lateinit var txtShippingPhone: TextView
     lateinit var txtShippingAddress: TextView
     lateinit var confirm_payment_back_icon: ImageView
+    lateinit var noInternetLayoutPayment: ConstraintLayout
 
+    private lateinit var internetConnectionChecker: InternetConnectionChecker
     lateinit var couponsFactory: HomeViewModelFactory
     lateinit var couponsViewModel: HomeViewModel
 
@@ -86,6 +93,7 @@ class PaymentFragment : Fragment() {
     var totoalAmount: String = ""
     var subTotoalAmount: String = ""
     var taxAmount: String = ""
+
     //// Stripe
     val SECRET_KEY =
         "sk_test_51LAg1sALiJRoQbXz8YOr3C8y0Na1dCdhJHjTTXZyFmo5tfS2MJAHkU6z5a5gNMXsXPglc9aI4nYaJvX2awqPi9sD00692V2P2U"
@@ -105,7 +113,8 @@ class PaymentFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?): View? {
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.fragment_payment, container, false)
 
         initComponent(view)
@@ -118,9 +127,14 @@ class PaymentFragment : Fragment() {
             HomeViewModelFactory(Repository.getInstance(AppClient.getInstance(), requireContext()))
         couponsViewModel = ViewModelProvider(this, couponsFactory).get(HomeViewModel::class.java)
 
-        paymentViewModelFactory = PaymentViewModelFactory(Repository.getInstance(AppClient.getInstance(),
-                requireContext()))
-        paymentViewModel = ViewModelProvider(this, paymentViewModelFactory).get(PaymentViewModel::class.java)
+        paymentViewModelFactory = PaymentViewModelFactory(
+            Repository.getInstance(
+                AppClient.getInstance(),
+                requireContext()
+            )
+        )
+        paymentViewModel =
+            ViewModelProvider(this, paymentViewModelFactory).get(PaymentViewModel::class.java)
 
         val sharedPreferences: SharedPreferences =
             context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
@@ -151,45 +165,62 @@ class PaymentFragment : Fragment() {
         }
 
         btnApplyDiscount.setOnClickListener {
-            applyDiscount(it)
+            if (CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
+                applyDiscount(it)
+            }
+            else{
+                val snake = Snackbar.make(it, "Ops! You Lost internet connection!!!", Snackbar.LENGTH_LONG)
+                snake.show()
+            }
         }
         radioCash.setOnClickListener {
             paymentMethod = "Cash"
         }
         radioVisa.setOnClickListener {
             paymentMethod = "Visa"
-            val request: StringRequest =
-                object : StringRequest(Request.Method.POST, "https://api.stripe.com/v1/customers",
-                    Response.Listener { response ->
-                        try {
-                            val jsonObject = JSONObject(response)
-                            customerId = jsonObject.getString("id")
-                            // Toast.makeText(requireContext(), "Customer Id: " + customerId, Toast.LENGTH_SHORT).show()
-                            getEphericalKey(customerId)
-                        } catch (e: JSONException) {
-                            e.printStackTrace()
+            if (CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
+                val request: StringRequest =
+                    object :
+                        StringRequest(Request.Method.POST, "https://api.stripe.com/v1/customers",
+                            Response.Listener { response ->
+                                try {
+                                    val jsonObject = JSONObject(response)
+                                    customerId = jsonObject.getString("id")
+                                    getEphericalKey(customerId)
+                                } catch (e: JSONException) {
+                                    e.printStackTrace()
+                                }
+                            },
+                            Response.ErrorListener {
+                            }) {
+                        @Throws(AuthFailureError::class)
+                        override fun getHeaders(): Map<String, String> {
+                            val header: HashMap<String, String> = HashMap<String, String>()
+                            header.put("Authorization", "Bearer $SECRET_KEY")
+                            return header
                         }
-                    },
-                    Response.ErrorListener {
-                    }) {
-                    @Throws(AuthFailureError::class)
-                    override fun getHeaders(): Map<String, String> {
-                        val header: HashMap<String, String> = HashMap<String, String>()
-                        header.put("Authorization", "Bearer $SECRET_KEY")
-                        return header
                     }
-                }
-            val requestQueue = Volley.newRequestQueue(requireContext())
-            requestQueue.add(request)
+                val requestQueue = Volley.newRequestQueue(requireContext())
+                requestQueue.add(request)
+            }else{
+                val snake = Snackbar.make(it, "Ops! You Lost internet connection!!!", Snackbar.LENGTH_LONG)
+                snake.show()
+            }
         }
 
         btnPlaceOrder.setOnClickListener {
-            if(paymentMethod=="Visa"){
-                paymentFlow()
+            if (CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
+                if (paymentMethod == "Visa") {
+                    paymentFlow()
+                } else {
+                    postOrder()
+                }
+            } else {
+                val snake =
+                    Snackbar.make(it, "Ops! You Lost internet connection!!!", Snackbar.LENGTH_LONG)
+                snake.show()
             }
-            else{
-                postOrder()
-            }
+
         }
         return view
     }
@@ -209,6 +240,7 @@ class PaymentFragment : Fragment() {
         txtUserName = view.findViewById(R.id.txtUserName)
         txtShippingPhone = view.findViewById(R.id.txtShippingPhone)
         confirm_payment_back_icon = view.findViewById(R.id.confirm_payment_back_icon)
+        noInternetLayoutPayment = view.findViewById(R.id.noInternetLayoutPayment)
     }
 
     private fun calculateOrderPrice() {
@@ -243,12 +275,6 @@ class PaymentFragment : Fragment() {
         }
     }
 
-    companion object {
-        val clientKey =
-            "ATWyXBtF8COKnCN1FG7AR_Sznijz2_WkTrhD7Cj2GzrwjVivPEacw2HE_AX_ndbR91_4dsEw0SEfrcuT"
-        private val config = PayPalConfiguration()
-            .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX).clientId(clientKey)
-    }
 
     /// Stripe Methods
     fun onPaymentSheetResult(paymentSheetResult: PaymentSheetResult) {
@@ -257,29 +283,45 @@ class PaymentFragment : Fragment() {
         }
     }
 
-    private fun postOrder(){
+    private fun postOrder() {
         val order = Order()
         order.email = userEmail
         val shippingAddress = ShippingAddress(
-            address1 = selectedAddress.address1.toString(), address2 = selectedAddress.address2.toString(),
-            city = selectedAddress.city.toString(), country = selectedAddress.country.toString(),
-            name = getUserName(requireContext()), phone = selectedAddress.phone.toString(),
+            address1 = selectedAddress.address1.toString(),
+            address2 = selectedAddress.address2.toString(),
+            city = selectedAddress.city.toString(),
+            country = selectedAddress.country.toString(),
+            name = getUserName(requireContext()),
+            phone = selectedAddress.phone.toString(),
             zip = selectedAddress.zip.toString(),
-            company = "", country_code = selectedAddress.country_code.toString())
+            company = "",
+            country_code = selectedAddress.country_code.toString()
+        )
         order.shipping_address = shippingAddress
         //  order.discount_codes = listOf(discountCode)
         order.processing_method = paymentMethod
         order.line_items = lineItems as List<com.example.mcommerce.orders.model.LineItem>
         val orderResponse = OrderResponse(order)
+
+        val sharedPreferences =
+            requireContext().getSharedPreferences("userAuth", AppCompatActivity.MODE_PRIVATE)
+        val customerId = sharedPreferences.getString("cusomerID", null).toString()
         paymentViewModel.postNewOrder(orderResponse)
         paymentViewModel.onlineNewOrder.observe(viewLifecycleOwner) { response ->
             if (response.isSuccessful) {
-                Toast.makeText(requireContext(), "Order Added Successfully. ", Toast.LENGTH_LONG
+                Toast.makeText(
+                    requireContext(), "Order Added Successfully. ", Toast.LENGTH_LONG
                 ).show()
-                communicator.goToOrderSummary(response.body()?.order!!, totoalAmount, subTotoalAmount, taxAmount)
+                communicator.goToOrderSummary(
+                    response.body()?.order!!,
+                    totoalAmount,
+                    subTotoalAmount,
+                    taxAmount
+                )
                 //response.body()?.order?.let { it1 -> communicator.goToOrderSummary(it1,fees) }
             } else {
-                Toast.makeText(requireContext(), "Order Not Placed.", Toast.LENGTH_LONG
+                Toast.makeText(
+                    requireContext(), "Order Not Placed.", Toast.LENGTH_LONG
                 ).show()
             }
         }
@@ -326,11 +368,7 @@ class PaymentFragment : Fragment() {
                     try {
                         val jsonObject = JSONObject(response)
                         clientSecret = jsonObject.getString("client_secret")
-                        Toast.makeText(
-                            requireContext(),
-                            "Client Secret: " + clientSecret,
-                            Toast.LENGTH_SHORT
-                        ).show()
+                      //  Toast.makeText(requireContext(), "Client Secret: " + clientSecret, Toast.LENGTH_SHORT).show()
                     } catch (e: JSONException) {
                         e.printStackTrace()
                     }

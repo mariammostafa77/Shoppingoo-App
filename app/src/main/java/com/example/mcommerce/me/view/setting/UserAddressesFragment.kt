@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
@@ -22,6 +23,9 @@ import com.example.mcommerce.me.viewmodel.CustomerViewModel
 import com.example.mcommerce.me.viewmodel.CustomerViewModelFactory
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
+import com.example.mcommerce.network.CheckInternetConnectionFirstTime
+import com.example.mcommerce.network.InternetConnectionChecker
+import com.google.android.material.snackbar.Snackbar
 
 class UserAddressesFragment : Fragment() {
 
@@ -31,17 +35,17 @@ class UserAddressesFragment : Fragment() {
     lateinit var imgNoAddressProduct: ImageView
     lateinit var txtNoSDataFound: TextView
     lateinit var customerAddressesRecyclerView: RecyclerView
+    lateinit var noInternetLayoutUserAddress : ConstraintLayout
     private lateinit var customerAddressAdapter: CustomerAddressAdapter
     lateinit var customerAddressesLayoutManager: LinearLayoutManager
     lateinit var customerViewModel: CustomerViewModel
     lateinit var customerViewModelFactory: CustomerViewModelFactory
 
     lateinit var communicator: Communicator
-
+    private lateinit var internetConnectionChecker: InternetConnectionChecker
     var lineItems : ArrayList<LineItem> = ArrayList()
     var orderPrices : ArrayList<OrderPrices> = ArrayList()
 
-   // var amount = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -67,7 +71,26 @@ class UserAddressesFragment : Fragment() {
 
         val sharedPreferences = requireContext().getSharedPreferences("userAuth", AppCompatActivity.MODE_PRIVATE)
         val customerId = sharedPreferences.getString("cusomerID",null).toString()
-        customerViewModel.getUserDetails(customerId)
+
+        if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())){
+            customerViewModel.getUserDetails(customerId)
+            noInternetLayoutUserAddress.visibility=View.INVISIBLE
+        }else{
+            noInternetLayoutUserAddress.visibility=View.VISIBLE
+        }
+        internetConnectionChecker = InternetConnectionChecker(requireContext())
+        internetConnectionChecker.observe(this,{ isConnected ->
+            if (isConnected){
+                customerViewModel.getUserDetails(customerId)
+                noInternetLayoutUserAddress.visibility=View.INVISIBLE
+            }else{
+                var snake = Snackbar.make(view, "Ops! You Lost internet connection!!!", Snackbar.LENGTH_LONG)
+                snake.show()
+            }
+        })
+
+
+      //  customerViewModel.getUserDetails(customerId)
         customerViewModel.customerInfo.observe(viewLifecycleOwner) { response ->
             if(response != null) {
                 customerAddressAdapter.setCustomerAddressesData(requireContext(), response.addresses!!)
@@ -100,6 +123,7 @@ class UserAddressesFragment : Fragment() {
         txtNoSDataFound = view.findViewById(R.id.txtNoSDataFound)
         imgNoAddressProduct = view.findViewById(R.id.imgNoAddressProduct)
         userAddressProgressBar = view.findViewById(R.id.userAddressProgressBar)
+        noInternetLayoutUserAddress = view.findViewById(R.id.noInternetLayoutUserAddress)
     }
 
 

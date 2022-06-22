@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -16,9 +17,10 @@ import com.example.mcommerce.draftModel.DraftOrder
 import com.example.mcommerce.draftModel.DraftOrderX
 import com.example.mcommerce.me.viewmodel.SavedSetting
 import com.example.mcommerce.model.DiscountCode
+import com.example.mcommerce.network.CheckInternetConnectionFirstTime
+import com.google.android.material.snackbar.Snackbar
 
 class ShoppingCartAdapter(var comminicator: Communicator,private val listener: OnShoppingCartClickListener) : RecyclerView.Adapter<ShoppingCartAdapter.ViewHolder>(){
-   // var userShoppingCartProducts:List<DraftOrderX> = ArrayList<DraftOrderX>()
     var userShoppingCartProducts:List<DraftOrder> = ArrayList<DraftOrder>()
     lateinit var context: Context
     var counter: Int = 1
@@ -44,23 +46,40 @@ class ShoppingCartAdapter(var comminicator: Communicator,private val listener: O
         holder.ShoppingCartProductQuantity.text = userShoppingCartProducts[position].draft_order?.line_items?.get(0)?.quantity.toString()
         Glide.with(context).load(userShoppingCartProducts[position].draft_order?.note_attributes?.get(0)?.value).into(holder.shoppingCartItemImage)
         holder.shoppingCartIncreaseQuantity.setOnClickListener {
-            counter = userShoppingCartProducts[position].draft_order?.line_items?.get(0)?.quantity!!.toInt()
-            counter++
-            holder.ShoppingCartProductQuantity.text = counter.toString()
-            listener.onIncrementClickListener(userShoppingCartProducts[position])
+            if(CheckInternetConnectionFirstTime.checkForInternet(context)){
+                counter = userShoppingCartProducts[position].draft_order?.line_items?.get(0)?.quantity!!.toInt()
+                counter++
+                holder.ShoppingCartProductQuantity.text = counter.toString()
+                listener.onIncrementClickListener(userShoppingCartProducts[position])
+            }else{
+                val snake = Snackbar.make(it, "Ops! You Lost internet connection!!!", Snackbar.LENGTH_LONG)
+                snake.show()
+            }
         }
         holder.shoppingCartDecreaseQuantity.setOnClickListener {
-            counter = userShoppingCartProducts[position].draft_order?.line_items?.get(0)?.quantity!!.toInt()
-            if(counter>1) { counter-- }
-            else{ counter = 1 }
-            holder.ShoppingCartProductQuantity.text = counter.toString()
-            listener.onDecrementClickListener(userShoppingCartProducts[position])
-
+            if(CheckInternetConnectionFirstTime.checkForInternet(context)) {
+                counter =
+                    userShoppingCartProducts[position].draft_order?.line_items?.get(0)?.quantity!!.toInt()
+                if (counter > 1) {
+                    counter--
+                } else {
+                    counter = 1
+                }
+                holder.ShoppingCartProductQuantity.text = counter.toString()
+                listener.onDecrementClickListener(userShoppingCartProducts[position])
+            }else{
+                val snake = Snackbar.make(it, "Ops! You Lost internet connection!!!", Snackbar.LENGTH_LONG)
+                snake.show()
+            }
         }
         holder.deleteProductImage.setOnClickListener {
-            listener.onDeleteItemClickListener(userShoppingCartProducts[position])
+            if(CheckInternetConnectionFirstTime.checkForInternet(context)) {
+                listener.onDeleteItemClickListener(userShoppingCartProducts[position])
+            }else{
+                val snake = Snackbar.make(it, "Ops! You Lost internet connection!!!", Snackbar.LENGTH_LONG)
+                snake.show()
+            }
         }
-
         holder.shoppingCartItem.setOnClickListener {
             comminicator.goToProductDetails(userShoppingCartProducts[position].draft_order?.line_items?.get(0)?.product_id!!)
         }

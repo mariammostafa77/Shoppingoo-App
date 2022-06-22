@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -24,8 +25,11 @@ import com.example.mcommerce.draftModel.OrderPrices
 import com.example.mcommerce.me.viewmodel.SavedSetting
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
+import com.example.mcommerce.network.CheckInternetConnectionFirstTime
+import com.example.mcommerce.network.InternetConnectionChecker
 import com.example.mcommerce.shopping_cart.viewmodel.ShoppingCartViewModel
 import com.example.mcommerce.shopping_cart.viewmodel.ShoppingCartViewModelFactory
+import com.google.android.libraries.places.internal.it
 import com.google.android.material.snackbar.Snackbar
 
 class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
@@ -37,6 +41,7 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
     lateinit var btnProceedToCheckout: Button
     lateinit var cartProgressBar: ProgressBar
     lateinit var shoppingCartRecyclerView: RecyclerView
+    lateinit var noInternetLayoutShoppingCart: ConstraintLayout
     lateinit var shoppingCartAdapter: ShoppingCartAdapter
     lateinit var linearLayoutManager: LinearLayoutManager
     lateinit var shoppingCartViewModelFactory: ShoppingCartViewModelFactory
@@ -46,6 +51,7 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
     var lineItems: ArrayList<LineItem> = ArrayList()
     var orderPrices: ArrayList<OrderPrices> = ArrayList()
     var amount: String = ""
+    private lateinit var internetConnectionChecker: InternetConnectionChecker
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,7 +93,25 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
             context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
         val email: String? = sharedPreferences.getString("email", "")
         val note = "card"
-        shoppingCartViewModel.getShoppingCardProducts()
+
+        if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())){
+            shoppingCartViewModel.getShoppingCardProducts()
+            noInternetLayoutShoppingCart.visibility=View.INVISIBLE
+        }else{
+            noInternetLayoutShoppingCart.visibility=View.VISIBLE
+        }
+        internetConnectionChecker = InternetConnectionChecker(requireContext())
+        internetConnectionChecker.observe(this,{ isConnected ->
+            if (isConnected){
+                shoppingCartViewModel.getShoppingCardProducts()
+                noInternetLayoutShoppingCart.visibility=View.INVISIBLE
+            }else{
+                var snake = Snackbar.make(view, "Ops! You Lost internet connection!!!", Snackbar.LENGTH_LONG)
+                snake.show()
+            }
+        })
+
+       // shoppingCartViewModel.getShoppingCardProducts()
         shoppingCartViewModel.onlineShoppingCartProduct.observe(viewLifecycleOwner) { cartProducts ->
             userShoppingCartProducts.clear()
             for (i in 0..cartProducts.size - 1) {
@@ -151,6 +175,7 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
         imgNoCartProduct = view.findViewById(R.id.imgNoCartProduct)
         txtNoSDataFound = view.findViewById(R.id.txtNoSDataFound)
         shoppingCartRecyclerView = view.findViewById(R.id.shoppingCartRecyclerView)
+        noInternetLayoutShoppingCart = view.findViewById(R.id.noInternetLayoutShoppingCart)
         communicator = activity as Communicator
         shoppingCartAdapter = ShoppingCartAdapter(communicator, this)
         linearLayoutManager =
@@ -165,9 +190,29 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
             .setTitle("Alert!!!")
             .setCancelable(false)
             .setPositiveButton("Yes") { dialog, it ->
-                shoppingCartViewModel.deleteSelectedProduct(draftOrder.draft_order?.id.toString())
+              //  shoppingCartViewModel.deleteSelectedProduct(draftOrder.draft_order?.id.toString())
+
+                if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())){
+                    shoppingCartViewModel.deleteSelectedProduct(draftOrder.draft_order?.id.toString())
+                    noInternetLayoutShoppingCart.visibility=View.INVISIBLE
+                }else{
+                    noInternetLayoutShoppingCart.visibility=View.VISIBLE
+                }
+                internetConnectionChecker = InternetConnectionChecker(requireContext())
+                internetConnectionChecker.observe(this,{ isConnected ->
+                    if (isConnected){
+                        shoppingCartViewModel.deleteSelectedProduct(draftOrder.draft_order?.id.toString())
+                        noInternetLayoutShoppingCart.visibility=View.INVISIBLE
+                    }else{
+                        noInternetLayoutShoppingCart.visibility=View.VISIBLE
+                        //   val snake = Snackbar.make(it, "Ops! You Lost internet connection!!!", Snackbar.LENGTH_LONG)
+                        // snake.show()
+                    }
+                })
+
                 shoppingCartViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
                     if (response.isSuccessful) {
+
                         userShoppingCartProducts.remove(draftOrder)
                         shoppingCartAdapter.notifyDataSetChanged()
                         if (userShoppingCartProducts.isEmpty()) {
@@ -244,10 +289,7 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
         val newDraftOrder = draftOrder
         newDraftOrder.draft_order?.line_items!![0].quantity =
             draftOrder.draft_order?.line_items!![0].quantity?.minus(1)
-        shoppingCartViewModel.updateSelectedProduct(
-            newDraftOrder.draft_order?.id.toString(),
-            newDraftOrder
-        )
+        shoppingCartViewModel.updateSelectedProduct( newDraftOrder.draft_order?.id.toString(), newDraftOrder )
         shoppingCartViewModel.onlineItemUpdated.observe(viewLifecycleOwner) { response ->
             if (response.isSuccessful) {
                 Toast.makeText(
@@ -283,7 +325,23 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
             context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
         val email: String? = sharedPreferences.getString("email", "")
         val note = "card"
-        shoppingCartViewModel.getShoppingCardProducts()
+        if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())){
+            shoppingCartViewModel.getShoppingCardProducts()
+            noInternetLayoutShoppingCart.visibility=View.INVISIBLE
+        }else{
+            noInternetLayoutShoppingCart.visibility=View.VISIBLE
+        }
+        internetConnectionChecker = InternetConnectionChecker(requireContext())
+        internetConnectionChecker.observe(this,{ isConnected ->
+            if (isConnected){
+                shoppingCartViewModel.getShoppingCardProducts()
+                noInternetLayoutShoppingCart.visibility=View.INVISIBLE
+            }else{
+                //noInternetLayoutShoppingCart.visibility=View.VISIBLE
+            }
+        })
+
+        //shoppingCartViewModel.getShoppingCardProducts()
         shoppingCartViewModel.onlineShoppingCartProduct.observe(viewLifecycleOwner) { cartProducts ->
             userShoppingCartProducts.clear()
             for (i in 0..cartProducts.size - 1) {

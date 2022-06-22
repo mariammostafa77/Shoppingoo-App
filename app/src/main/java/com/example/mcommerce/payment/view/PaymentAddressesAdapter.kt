@@ -34,17 +34,13 @@ class PaymentAddressesAdapter (var communicator: Communicator, var lineItems: Ar
         holder.userAddressLine1.text = "Area:  ${customerAddresses[position].address1}"
         holder.phoneText.text = "Phone:  ${customerAddresses[position].phone}"
         holder.addressCardView.setOnClickListener {
-
             val selectedAddresses: Addresse = customerAddresses[position]
             communicator.goToPaymentFromAddress(selectedAddresses,lineItems,orderPrices)
-
         }
-
     }
     override fun getItemCount(): Int {
         return customerAddresses.size
     }
-
     inner class ViewHolder(private val itemView: View): RecyclerView.ViewHolder(itemView) {
         val countryText: TextView = itemView.findViewById(R.id.userCountryText)
         val cityText: TextView = itemView.findViewById(R.id.userCityText)

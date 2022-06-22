@@ -118,4 +118,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintWidth_percent="0.85" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/noInternetLayoutPaymentAddress"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#FFFFFF"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/SelectAddressBar">
+
+        <ImageView
+            android:id="@+id/noInternetImage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/internet_error"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

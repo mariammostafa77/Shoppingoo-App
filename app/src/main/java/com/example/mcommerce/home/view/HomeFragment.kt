@@ -110,10 +110,10 @@ class HomeFragment : Fragment() {
         internetConnectionChecker = InternetConnectionChecker(requireContext())
         internetConnectionChecker.observe(this,{ isConnected ->
             if (isConnected){
+                Log.i("TAGGGGG","eNTERETE")
                 homeViewModel.getAllBrands()
                 homeViewModel.getDiscountCoupons()
                 noInternetLayout.visibility=View.INVISIBLE
-
             }else{
                 var snake = Snackbar.make(view, "Ops! You Lost internet connection!!!", Snackbar.LENGTH_LONG)
                 snake.show()
@@ -132,8 +132,6 @@ class HomeFragment : Fragment() {
                 discountCodeAdapter.setCouponsData(requireContext(), coupons)
             }
         }
-
-
 
         homeViewModel.onlineBrands.observe(viewLifecycleOwner) { brands ->
             homeViewModel.onlineBrands.value?.let { brandAdapter.setUpdatedData(it,requireContext(),communicator) }
