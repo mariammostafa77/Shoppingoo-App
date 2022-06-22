@@ -36,10 +36,10 @@ class BrandProductsAdapter(var currencyConvertor: CurrencyConvertor) : RecyclerV
         fun bind(data: Product){
             productName.text=allBrands[position].title
 
-            val amount = SavedSetting.getPrice(allBrands[position].variants[0].price.toString(), context)
+            val amount = SavedSetting.getPrice(allBrands[position].variants?.get(0)?.price.toString(), context)
             tvProductPrice.text = amount
 
-            Glide.with(context).load(allBrands[position].image.src).placeholder(R.drawable.mycardview_24).into(productImage)
+            Glide.with(context).load(allBrands[position].image?.src).placeholder(R.drawable.mycardview_24).into(productImage)
             catCardView.setOnClickListener {
                 comminucator.passProductData(allBrands[position])
             }

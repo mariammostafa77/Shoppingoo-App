@@ -18,8 +18,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mcommerce.AuthActivity
 import com.example.mcommerce.HomeActivity.Companion.mySearchFlag
 import com.example.mcommerce.ProductInfo.view.Communicator
-import com.example.mcommerce.ProductInfo.viewModel.ProductInfoViewModel
-import com.example.mcommerce.ProductInfo.viewModel.ProductInfoViewModelFactory
 import com.example.mcommerce.R
 import com.example.mcommerce.categories.viewModel.CategoriesViewFactory
 import com.example.mcommerce.categories.viewModel.CategoriesViewModel
@@ -32,8 +30,6 @@ import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
 import com.example.mcommerce.search.viewModel.SearchViewModel
 import com.example.mcommerce.search.viewModel.SearchViewModelFactory
-import com.google.android.libraries.places.internal.it
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.dialog_view.view.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -45,8 +41,6 @@ class MysearchFragment : Fragment(),FavClicked {
     lateinit var productSearchAdapter: SearchAdapter
     lateinit var searchFactor:SearchViewModelFactory
     lateinit var searchViewModel:SearchViewModel
-    lateinit var productInfoFactor: ProductInfoViewModelFactory
-    lateinit var productInfoViewModel: ProductInfoViewModel
     lateinit var noDataSearchImg:ImageView
     lateinit var noDataSearchtxt:TextView
     lateinit var categoriesProductFactory: CategoriesViewFactory
@@ -89,12 +83,6 @@ class MysearchFragment : Fragment(),FavClicked {
         productSearchRecyclerview=view.findViewById(R.id.searhProductRecyclerView)
         //linearLayoutManager= LinearLayoutManager(requireContext())
         //productSearchRecyclerview.setLayoutManager(linearLayoutManager)
-        productInfoFactor = ProductInfoViewModelFactory(
-            Repository.getInstance(
-                AppClient.getInstance(),
-                requireContext()))
-        productInfoViewModel = ViewModelProvider(this, productInfoFactor).get(ProductInfoViewModel::class.java)
-
         productSearchAdapter= SearchAdapter(communicator,filterProductArrayList,requireContext(),this)
         productSearchRecyclerview.setAdapter(productSearchAdapter)
 
@@ -113,7 +101,7 @@ class MysearchFragment : Fragment(),FavClicked {
                     }
                     productsName.clear()
                     for(i in 0..product.size-1) {
-                        productsName.add(product[i].title)
+                        product[i].title?.let { productsName.add(it) }
                     }
                     var adapter: ArrayAdapter<String> = ArrayAdapter<String>(requireContext(),android.R.layout.simple_dropdown_item_1line,productsName)
                     edtSearch.threshold=1
@@ -121,11 +109,12 @@ class MysearchFragment : Fragment(),FavClicked {
                     filterProductArrayList.clear()
                     edtSearch.setOnItemClickListener { adapterView, view, i, l ->
                         filterProductArrayList.clear()
+                        Toast.makeText(requireContext(),"clicked"+ adapter.getItem(i).toString(),Toast.LENGTH_LONG).show()
                         var productName:String= adapter.getItem(i).toString()
                         if(productName.isNotEmpty()){
 
                             allProductArrayList.forEach{
-                                if(it.title.contains(productName))
+                                if(it.title?.contains(productName) == true)
                                 {
                                     filterProductArrayList.add(it)
                                 }
@@ -174,7 +163,7 @@ class MysearchFragment : Fragment(),FavClicked {
                     productsName.clear()
                     it.forEach {
 
-                        productsName.add(it.title)
+                        productsName.add(it.title!!)
                     }
                     var adapter: ArrayAdapter<String> = ArrayAdapter<String>(requireContext(),android.R.layout.simple_dropdown_item_1line,productsName)
                     edtSearch.threshold=1
@@ -182,11 +171,12 @@ class MysearchFragment : Fragment(),FavClicked {
                     filterProductArrayList.clear()
                     edtSearch.setOnItemClickListener { adapterView, view, i, l ->
                         filterProductArrayList.clear()
+                      //  Toast.makeText(requireContext(),"clicked"+ adapter.getItem(i).toString(),Toast.LENGTH_LONG).show()
                         var productName:String= adapter.getItem(i).toString()
                         if(productName.isNotEmpty()){
 
                             allProductArrayList.forEach{
-                                if(it.title.contains(productName))
+                                if(it.title?.contains(productName) == true)
                                 {
                                     filterProductArrayList.add(it)
                                 }
@@ -225,7 +215,7 @@ class MysearchFragment : Fragment(),FavClicked {
                 if(productName.isNotEmpty()){
 
                     allProductArrayList.forEach{
-                        if(it.title.toLowerCase(Locale.getDefault()).contains(productName))
+                        if(it.title?.toLowerCase(Locale.getDefault())?.contains(productName) == true)
                         {
                             filterProductArrayList.add(it)
                         }
@@ -252,9 +242,9 @@ class MysearchFragment : Fragment(),FavClicked {
         }
 
 
-        productInfoViewModel.getFavProducts()
+        searchViewModel.getFavProducts()
         allFavProducts.clear()
-        productInfoViewModel.onlineFavProduct.observe(viewLifecycleOwner) { favProducts ->
+        searchViewModel.onlineFavProduct.observe(viewLifecycleOwner) { favProducts ->
             allFavProducts.clear()
             allVariantsID.clear()
             for (i in 0..favProducts.size - 1) {
@@ -271,6 +261,7 @@ class MysearchFragment : Fragment(),FavClicked {
 
     override fun addToFav(product:Product,img: ImageView,myIndex:Int) {
         if(email!="") {
+            Toast.makeText(requireContext(), "Fav clicked", Toast.LENGTH_LONG).show()
             val sharedPreferences: SharedPreferences =
                 context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
             val email: String? = sharedPreferences.getString("email", "")
@@ -278,19 +269,18 @@ class MysearchFragment : Fragment(),FavClicked {
             Log.i("filter", "size of fav product: " + allFavProducts.size)
             Log.i("filter", "size of variants product: " + allVariantsID.size)
 
-            loadFavData()
-            if (filterProductArrayList[myIndex].variants[0].id in allVariantsID) {
+
+            if (filterProductArrayList[myIndex].variants?.get(0)?.id in allVariantsID) {
                 Log.i("exits", "already exists")
 
                 img.setImageResource(R.drawable.ic_baseline_favorite_border_24)
-                productInfoViewModel.deleteFavProduct(allFavProducts.get(myIndex).id.toString())
-                productInfoViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
+                searchViewModel.deleteSelectedProduct(allFavProducts.get(myIndex).id.toString())
+                searchViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
                     if (response.isSuccessful) {
 
                         Toast.makeText(requireContext(),
                             "Deleted Success!!!: " + response.code().toString(),
                             Toast.LENGTH_SHORT).show()
-                        loadFavData()
 
 
                     } else {
@@ -310,7 +300,7 @@ class MysearchFragment : Fragment(),FavClicked {
                 order.note = "fav"
                 order.email = email
 
-                variantId = filterProductArrayList[myIndex].variants[0].id
+                variantId = filterProductArrayList[myIndex].variants?.get(0)?.id!!
                 Log.i("Index", "index: " + variantId.toString())
                 // order.line_items!![0].variant_id = variantId
                 var lineItem = LineItem()
@@ -322,24 +312,22 @@ class MysearchFragment : Fragment(),FavClicked {
                 // order.line_items!![0].variant_id = 40335555395723
                 var productImage = NoteAttribute()
                 productImage.name = "image"
-                productImage.value = filterProductArrayList[myIndex].images[0].src
+                productImage.value = filterProductArrayList[myIndex].images?.get(0)?.src
                 order.note_attributes = listOf(productImage)
 
                 var draftOrder = DraftOrder(order)
-                productInfoViewModel.getCardOrder(draftOrder)
-                productInfoViewModel.onlineCardOrder.observe(viewLifecycleOwner) { cardOrder ->
+                searchViewModel.getCardOrder(draftOrder)
+                searchViewModel.onlineCardOrder.observe(viewLifecycleOwner) { cardOrder ->
                     if (cardOrder.isSuccessful) {
                         Toast.makeText(requireContext(),
-                            "add to favourite successfull",
+                            "add to card successfull: " + cardOrder.code().toString(),
                             Toast.LENGTH_LONG).show()
-                        loadFavData()
-
                     } else {
 
                         Toast.makeText(requireContext(),
-                            "add to favourite failed",
+                            "add to card failed: " + cardOrder.code()
+                                .toString() + "//" + cardOrder.body(),
                             Toast.LENGTH_LONG).show()
-
 
                     }
                 }
@@ -388,20 +376,6 @@ class MysearchFragment : Fragment(),FavClicked {
         }
     }
 
-fun loadFavData(){
-    productInfoViewModel.getFavProducts()
-    allFavProducts.clear()
-    productInfoViewModel.onlineFavProduct.observe(viewLifecycleOwner) { favProducts ->
-        allFavProducts.clear()
-        allVariantsID.clear()
-        for (i in 0..favProducts.size - 1) {
-            if (favProducts.get(i).note == "fav" && favProducts.get(i).email == email) {
-                allFavProducts.add(favProducts.get(i))
-                allVariantsID.add(favProducts.get(i).line_items!![0].variant_id!!)
-            }
-        }
 
-    }
-}
 
 }

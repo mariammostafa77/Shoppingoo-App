@@ -15,7 +15,7 @@
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/dialog_view.xml" value="0.1082427536231884" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/discount_codes_layout.xml" value="0.1082427536231884" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/dtails_layout.xml" value="0.1082427536231884" />
-        <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/favourite_item.xml" value="0.1082427536231884" />
+        <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/favourite_item.xml" value="0.21" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/fragment_add_new_address.xml" value="0.17753623188405798" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/fragment_app_setting.xml" value="0.17753623188405798" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/fragment_brand_products.xml" value="0.17346014492753623" />
@@ -64,8 +64,6 @@
         <entry key="..\:/Users/elshamey/OneDrive/Desktop/MCommerce-App/app/src/main/res/layout/fragment_product_info.xml" value="0.25" />
         <entry key="..\:/Users/elshamey/OneDrive/Desktop/MCommerce-App/app/src/main/res/layout/fragment_register.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/elshamey/OneDrive/Desktop/MCommerce-App/app/src/main/res/layout/fragment_search.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/drawable/ic_baseline_favorite_border_24.xml" value="0.23425925925925925" />
-        <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/drawable/ic_favorite.xml" value="0.23425925925925925" />
         <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/layout/activity_auth.xml" value="0.13020833333333334" />
         <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/layout/activity_home.xml" value="0.20625" />
         <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/layout/ads_layout.xml" value="0.25416666666666665" />
@@ -78,11 +76,9 @@
         <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/layout/fragment_me_with_login.xml" value="0.14479166666666668" />
         <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/layout/fragment_my_login.xml" value="0.13020833333333334" />
         <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/layout/fragment_mysearch.xml" value="0.17777777777777778" />
-        <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/layout/fragment_product_info.xml" value="0.264" />
+        <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/layout/fragment_product_info.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/layout/fragment_register.xml" value="0.2" />
         <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/layout/fragment_register_form.xml" value="0.11614583333333334" />
-        <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/layout/review_layout.xml" value="0.16296296296296298" />
-        <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/layout/shopping_cart_item.xml" value="0.23055555555555557" />
         <entry key="..\:/Work Files/My projects/ITI Projects/Graduation Project/app/src/main/res/layout/ads_layout.xml" value="0.18489583333333334" />
         <entry key="..\:/Work Files/My projects/ITI Projects/Graduation Project/app/src/main/res/layout/category_cell.xml" value="0.27291666666666664" />
         <entry key="..\:/Work Files/My projects/ITI Projects/Graduation Project/app/src/main/res/layout/discount_codes_layout.xml" value="0.16" />
