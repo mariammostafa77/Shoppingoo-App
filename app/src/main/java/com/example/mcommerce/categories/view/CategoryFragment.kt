@@ -150,8 +150,8 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
             allProducts.addAll(products)
             brandProductsAdapter.setUpdatedData(products,requireContext(),communicator)
             for(product in products){
-                if(product.variants[0].price.toDouble() > maxPrice){
-                    maxPrice = product.variants[0].price.toDouble()
+                if(product.variants?.get(0)?.price?.toDouble()!! > maxPrice){
+                    maxPrice = product.variants?.get(0)?.price?.toDouble()!!
                 }
             }
             checkEmptyArray(products)
@@ -227,7 +227,7 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
         val sharedPreferences: SharedPreferences = context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
         val email: String? = sharedPreferences.getString("email","")
 
-        if(allProducts[myIndex].variants[0].id in allVariantsID){
+        if(allProducts[myIndex].variants?.get(0)?.id in allVariantsID){
             Log.i("exits","already exists")
 
             img.setImageResource(R.drawable.ic_baseline_favorite_border_24)
@@ -254,7 +254,7 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
             order.note = "fav"
             order.email = email
 
-            variantId = allProducts[myIndex].variants[0].id
+            variantId = allProducts[myIndex].variants?.get(0)?.id!!
             Log.i("Index", "index: " + variantId.toString())
             // order.line_items!![0].variant_id = variantId
             var lineItem = LineItem()
@@ -266,7 +266,7 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
             // order.line_items!![0].variant_id = 40335555395723
             var productImage = NoteAttribute()
             productImage.name = "image"
-            productImage.value = allProducts[myIndex].images[0].src
+            productImage.value = allProducts[myIndex].images?.get(0)?.src
             order.note_attributes = listOf(productImage)
 
             var draftOrder = DraftOrder(order)
@@ -317,7 +317,7 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
         val typesSet= mutableSetOf<String>()
         if(allProductsTypes.isNotEmpty()){
             for(element in allProductsTypes){
-                typesSet.add(element.product_type)
+                element.product_type?.let { typesSet.add(it) }
             }
         }
         subCategoriesAdapter.setUpdatedData(typesSet.toList(),requireContext(),this)
@@ -382,7 +382,7 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
         var filteredProduct:ArrayList<Product> = ArrayList<Product>()
         filteredProduct.clear()
         for (product in productsList){
-            if(product.variants[0].price.toDouble() <= priceSliderPrice){
+            if(product.variants?.get(0)?.price?.toDouble()!! <= priceSliderPrice){
                 filteredProduct.add(product)
             }
         }

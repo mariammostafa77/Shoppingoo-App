@@ -101,7 +101,7 @@ class MysearchFragment : Fragment(),FavClicked {
                     }
                     productsName.clear()
                     for(i in 0..product.size-1) {
-                        productsName.add(product[i].title)
+                        product[i].title?.let { productsName.add(it) }
                     }
                     var adapter: ArrayAdapter<String> = ArrayAdapter<String>(requireContext(),android.R.layout.simple_dropdown_item_1line,productsName)
                     edtSearch.threshold=1
@@ -114,7 +114,7 @@ class MysearchFragment : Fragment(),FavClicked {
                         if(productName.isNotEmpty()){
 
                             allProductArrayList.forEach{
-                                if(it.title.contains(productName))
+                                if(it.title?.contains(productName) == true)
                                 {
                                     filterProductArrayList.add(it)
                                 }
@@ -163,7 +163,7 @@ class MysearchFragment : Fragment(),FavClicked {
                     productsName.clear()
                     it.forEach {
 
-                        productsName.add(it.title)
+                        productsName.add(it.title!!)
                     }
                     var adapter: ArrayAdapter<String> = ArrayAdapter<String>(requireContext(),android.R.layout.simple_dropdown_item_1line,productsName)
                     edtSearch.threshold=1
@@ -176,7 +176,7 @@ class MysearchFragment : Fragment(),FavClicked {
                         if(productName.isNotEmpty()){
 
                             allProductArrayList.forEach{
-                                if(it.title.contains(productName))
+                                if(it.title?.contains(productName) == true)
                                 {
                                     filterProductArrayList.add(it)
                                 }
@@ -215,7 +215,7 @@ class MysearchFragment : Fragment(),FavClicked {
                 if(productName.isNotEmpty()){
 
                     allProductArrayList.forEach{
-                        if(it.title.toLowerCase(Locale.getDefault()).contains(productName))
+                        if(it.title?.toLowerCase(Locale.getDefault())?.contains(productName) == true)
                         {
                             filterProductArrayList.add(it)
                         }
@@ -270,7 +270,7 @@ class MysearchFragment : Fragment(),FavClicked {
             Log.i("filter", "size of variants product: " + allVariantsID.size)
 
 
-            if (filterProductArrayList[myIndex].variants[0].id in allVariantsID) {
+            if (filterProductArrayList[myIndex].variants?.get(0)?.id in allVariantsID) {
                 Log.i("exits", "already exists")
 
                 img.setImageResource(R.drawable.ic_baseline_favorite_border_24)
@@ -300,7 +300,7 @@ class MysearchFragment : Fragment(),FavClicked {
                 order.note = "fav"
                 order.email = email
 
-                variantId = filterProductArrayList[myIndex].variants[0].id
+                variantId = filterProductArrayList[myIndex].variants?.get(0)?.id!!
                 Log.i("Index", "index: " + variantId.toString())
                 // order.line_items!![0].variant_id = variantId
                 var lineItem = LineItem()
@@ -312,7 +312,7 @@ class MysearchFragment : Fragment(),FavClicked {
                 // order.line_items!![0].variant_id = 40335555395723
                 var productImage = NoteAttribute()
                 productImage.name = "image"
-                productImage.value = filterProductArrayList[myIndex].images[0].src
+                productImage.value = filterProductArrayList[myIndex].images?.get(0)?.src
                 order.note_attributes = listOf(productImage)
 
                 var draftOrder = DraftOrder(order)

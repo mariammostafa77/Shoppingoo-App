@@ -3,15 +3,15 @@ package com.example.mcommerce.model
 import java.io.Serializable
 
 data class Image(
-    val admin_graphql_api_id: String,
-    val alt: Any,
-    val created_at: String,
-    val height: Int,
-    val id: Long,
-    val position: Int,
-    val product_id: Long,
-    val src: String,
-    val updated_at: String,
-    val variant_ids: List<Any>,
-    val width: Int
+    val admin_graphql_api_id: String? = null,
+    val alt: Any? = null,
+    val created_at: String? = null,
+    val height: Int? = null,
+    val id: Long? = null,
+    val position: Int? = null,
+    val product_id: Long? = null,
+    val src: String? = null,
+    val updated_at: String? = null,
+    val variant_ids: List<Any>? = null,
+    val width: Int? = null
 ): Serializable

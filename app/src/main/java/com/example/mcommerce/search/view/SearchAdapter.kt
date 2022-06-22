@@ -52,10 +52,10 @@ class SearchAdapter( var comminicator:Communicator,var allProducts: List<Product
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currentPosition=allProducts[position]
-        val amount = SavedSetting.getPrice(currentPosition.variants[0].price.toString(), context)
+        val amount = SavedSetting.getPrice(currentPosition.variants?.get(0)?.price.toString(), context)
         holder.productPrice.text=amount
         holder.productTitle.text=currentPosition.title
-        Glide.with(context).load(currentPosition.image.src).into(holder.productImg)
+        Glide.with(context).load(currentPosition.image?.src).into(holder.productImg)
         holder.cardItem.setOnClickListener{
             comminicator.passProductData(currentPosition)
 
