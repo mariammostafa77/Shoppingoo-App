@@ -41,12 +41,7 @@ import java.util.*
       )
       @GET("products/"+"{id}"+".json")
       suspend fun getSpecificProduct(@Path("id") id: String?): ProductDetails
-      @Headers(
-          "Accept: application/json",
-          "X-Shopify-Access-Token: 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",
-      )
-      @GET("products/"+"{id}"+"/variants.json")
-      suspend fun getVariant(@Path("id") id: String?): Variants
+
       @Headers(
           "Accept: application/json",
           "X-Shopify-Access-Token: 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",
@@ -56,7 +51,6 @@ import java.util.*
                                    @Query("product_type") productType: String?,
                                     @Query("collection_id") collectionId: String?): AllProductsModel
 
-    //// https://madalex20220.myshopify.com/admin/api/2022-04/price_rules/1089622311051/discount_codes.json
       @Headers(
           "Accept: application/json",
           "X-Shopify-Access-Token: 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",
@@ -132,12 +126,6 @@ import java.util.*
       )
       @DELETE("draft_orders/"+"{draft_order_id}"+".json")
       suspend fun deleteProductFromShoppingCart(@Path("draft_order_id") id: String?): Response<DraftOrder>
-      /*@Headers(
-          "Accept: application/json",
-          "X-Shopify-Access-Token: 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",
-      )
-      @GET("collections/"+"{id}"+"/products.json?fields=product_type")
-      suspend fun getProductTypes(@Path("id") id:String?): AllProductsModel*/
       @Headers(
           "Accept: application/json",
           "X-Shopify-Access-Token: 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",
@@ -153,30 +141,17 @@ import java.util.*
       @PUT("draft_orders/{id}.json")
       suspend fun updateDraftOrder(@Path("id") id: String? , @Body order: DraftOrder):Response<DraftOrder>
 
-      // https://9d169ad72dd7620e70f56b28ae6146d9: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@madalex20220.myshopify.com/admin/api/2022-04/currencies.json
-
       @Headers(
           "Accept: application/json",
           "X-Shopify-Access-Token: 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",)
       @GET("currencies.json")
       suspend fun getAllCurrencies(): CurrencyResponse
 
-      // https://api.apilayer.com/exchangerates_data/convert?to=EGP&from=USD&amount=1&apikey=OdsWOfPbLEyojdjFR7FjcSzVpifcX23n
       @GET("convert?apikey=bvWIQqwc5PjLwYrSgElp83ZEktkQWLJB&amount=1&from=EGP")
       suspend fun getCurrencyValue(@Query("to") to: String): CurrencyConverter
 
       @GET("convert?apikey=bvWIQqwc5PjLwYrSgElp83ZEktkQWLJB&amount=1&to=EGP")
       suspend fun getCurrencyValuesInEgp(@Query("from") from: String): CurrencyConverter
-
-      @Headers(
-          "Accept: application/json",
-          "X-Shopify-Access-Token: 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",
-      )
-      @GET("collections/"+"{id}"+"/products.json?fields=product_type")
-      suspend fun getProductTypes(@Path("id") id:String?): AllProductsModel
-
-
-
 
       @Headers(
           "Accept: application/json",

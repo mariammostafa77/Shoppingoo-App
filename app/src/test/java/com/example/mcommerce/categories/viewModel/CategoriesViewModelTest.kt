@@ -1,6 +1,5 @@
-package com.example.mcommerce.home.viewModel
+package com.example.mcommerce.categories.viewModel
 
-import junit.framework.TestCase
 import android.content.Context
 import android.os.Looper.getMainLooper
 import androidx.test.core.app.ApplicationProvider
@@ -8,6 +7,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.mcommerce.getOrAwaitValue
 import com.example.mcommerce.model.FakeRepository
 import com.example.mcommerce.model.Repository
+import junit.framework.TestCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.*
 import org.junit.Before
@@ -21,8 +21,7 @@ import org.robolectric.annotation.LooperMode
 @RunWith(AndroidJUnit4::class)
 @LooperMode(LooperMode.Mode.PAUSED)
 @ExperimentalCoroutinesApi
-class HomeViewModelTest : TestCase(){
-
+class CategoriesViewModelTest() : TestCase() {
     private lateinit var remoteDataSource: FakeRepository
     private lateinit var repo: Repository
 
@@ -34,20 +33,13 @@ class HomeViewModelTest : TestCase(){
     }
 
     @Test
-    fun getDiscountCoupons_allCoupons() = runBlockingTest {
-        val viewModel = HomeViewModel(repo)
-        viewModel.getDiscountCoupons()
-        shadowOf(getMainLooper()).idle()
-        val tasks = viewModel.onlineDiscountCodes.getOrAwaitValue()
-        assertEquals(2,tasks.size)
+    fun getCategoriesProduct_threeProducts() = runBlockingTest {
+        val viewModel = CategoriesViewModel(repo)
+        viewModel.getCategoriesProduct("","","")
+        shadowOf(getMainLooper()).idle();
+        val tasks = viewModel.onlinesubcategoriesProduct.getOrAwaitValue()
+        assertEquals(3,tasks.size)
     }
-    @Test
-    fun getAllBrands_oneBrand() = runBlockingTest {
-        val viewModel = HomeViewModel(repo)
-        viewModel.getAllBrands()
-        shadowOf(getMainLooper()).idle()
-        val tasks = viewModel.onlineBrands.getOrAwaitValue()
-        assertEquals(1,tasks.size)
-    }
+
 
 }

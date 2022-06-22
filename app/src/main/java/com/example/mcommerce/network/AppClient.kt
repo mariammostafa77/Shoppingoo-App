@@ -6,6 +6,7 @@ import com.example.mcommerce.auth.model.CustomerDetail
 import com.example.mcommerce.draftModel.DraftOrder
 import com.example.mcommerce.draftModel.DraftResponse
 import com.example.mcommerce.home.model.BrandsModel
+import com.example.mcommerce.home.model.SmartCollection
 import com.example.mcommerce.model.*
 import com.example.mcommerce.orders.model.Orders
 import com.example.mcommerce.model.currencies.CurrencyResponse
@@ -32,8 +33,16 @@ class AppClient : RemoteSourceInterface {
 
         override suspend fun getAllBrands(): BrandsModel {
             val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
-            val response = service?.getBrands()
-            return response!!
+            val smartCollection= mutableListOf<SmartCollection>(SmartCollection(title= ""))
+            var brandsModel=BrandsModel(smartCollection)
+
+            try {
+                val response = service?.getBrands()
+                return response!!
+            }catch (e:Exception){
+                return brandsModel
+            }
+
         }
 
 
@@ -49,12 +58,6 @@ class AppClient : RemoteSourceInterface {
             val response = service?.getSpecificProduct(id)
             return response!!
         }
-
-    override suspend fun getVariant(id: String): Variants {
-        val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
-        val response = service?.getVariant(id)
-        return response!!
-    }
 
     override suspend fun getDiscountCodes(): DiscountCodesModel {
             val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
@@ -77,12 +80,6 @@ class AppClient : RemoteSourceInterface {
     override suspend fun getCustomers(): Customer {
         val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
         val response = service?.getCustomers()
-        return response!!
-    }
-
-    override suspend fun getProductTypes(id: String): AllProductsModel {
-        val service = RetrofitHelper.getRetrofit()?.create(ServiceApi::class.java)
-        val response = service?.getProductTypes(id)
         return response!!
     }
 

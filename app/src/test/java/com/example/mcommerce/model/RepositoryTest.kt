@@ -126,18 +126,33 @@ class RepositoryTest() : TestCase() {
     }
 
     @Test
-    fun getOrdersFromViewModel() = runBlockingTest {
+    fun getOrders_twoOrders() = runBlockingTest {
         val tasks = repo.getOrders("")
-
-        // Then tasks are loaded from the remote data source
         assertEquals(2,tasks.orders.size)
     }
     @Test
     fun getSpecificProduct_specificProduct()= testScope.runBlockingTest {
-
          assertEquals(repo.getSpecificProduct("6870135275659").product,myProdct.product)
-
-
+    }
+    @Test
+    fun getSubCategories_threeProducts() = runBlockingTest {
+        val tasks = repo.getSubCategories("","","")
+        assertEquals(3,tasks.products.size)
+    }
+    @Test
+    fun getAllBrands_oneBrand() = runBlockingTest {
+        val tasks = repo.getAllBrands()
+        assertEquals(1,tasks.smart_collections.size)
+    }
+    @Test
+    fun getAllProducts_threeProducts() = runBlockingTest {
+        val tasks = repo.getAllProducts()
+        assertEquals(3,tasks.products.size)
+    }
+    @Test
+    fun getBrandProducts_twoProducts() = runBlockingTest {
+        val tasks = repo.getBrandProducts("")
+        assertEquals(2,tasks.products.size)
     }
 
 }

@@ -176,7 +176,7 @@ class MysearchFragment : Fragment(),FavClicked {
 
                 if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
 
-                    categoriesProductViewModel.getCategories(brandName,subCatName,productID)
+                    categoriesProductViewModel.getCategoriesProduct(brandName,subCatName,productID)
 
                 }else{
 
@@ -184,7 +184,7 @@ class MysearchFragment : Fragment(),FavClicked {
                 internetConnectionChecker = InternetConnectionChecker(requireContext())
                 internetConnectionChecker.observe(this,{ isConnected ->
                     if (isConnected){
-                        categoriesProductViewModel.getCategories(brandName,subCatName,productID)
+                        categoriesProductViewModel.getCategoriesProduct(brandName,subCatName,productID)
                     }})
 
 
@@ -192,7 +192,6 @@ class MysearchFragment : Fragment(),FavClicked {
                 categoriesProductViewModel.onlinesubcategoriesProduct.observe(viewLifecycleOwner)  {
 
                     Log.i("TAG","Count  ${it.size}")
-
                     allProductArrayList.addAll(it)
                     productsName.clear()
                     it.forEach {

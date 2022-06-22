@@ -41,6 +41,7 @@ import com.example.mcommerce.search.view.MysearchFragment
 import com.example.mcommerce.shopping_cart.view.ShoppingCartFragment
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.image_container.*
+import java.io.IOException
 import java.lang.Exception
 
 
@@ -101,7 +102,7 @@ class HomeFragment : Fragment() {
         homeViewModel = ViewModelProvider(this, homeFactory).get(HomeViewModel::class.java)
         if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())){
             homeViewModel.getAllBrands()
-            homeViewModel.getDiscountCoupons()
+            //homeViewModel.getDiscountCoupons()
             noInternetLayout.visibility=View.INVISIBLE
         }else{
             noInternetLayout.visibility=View.VISIBLE
@@ -110,9 +111,15 @@ class HomeFragment : Fragment() {
         internetConnectionChecker = InternetConnectionChecker(requireContext())
         internetConnectionChecker.observe(this,{ isConnected ->
             if (isConnected){
-                homeViewModel.getAllBrands()
-                homeViewModel.getDiscountCoupons()
-                noInternetLayout.visibility=View.INVISIBLE
+                try {
+                    homeViewModel.getAllBrands()
+                    homeViewModel.getDiscountCoupons()
+                    noInternetLayout.visibility=View.INVISIBLE
+
+                }catch (e:IOException){
+
+                }
+
 
             }else{
                 var snake = Snackbar.make(view, "Ops! You Lost internet connection!!!", Snackbar.LENGTH_LONG)
