@@ -15,8 +15,11 @@ import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.R
 import com.example.mcommerce.draftModel.DraftOrder
 import com.example.mcommerce.draftModel.DraftOrderX
+import com.example.mcommerce.home.view.HomeFragment
+import com.example.mcommerce.home.view.HomeFragment.Companion.homeAllProducts
 import com.example.mcommerce.me.viewmodel.SavedSetting
 import com.example.mcommerce.model.DiscountCode
+import com.example.mcommerce.model.Product
 import com.example.mcommerce.network.CheckInternetConnectionFirstTime
 import com.google.android.material.snackbar.Snackbar
 
@@ -39,18 +42,35 @@ class ShoppingCartAdapter(var comminicator: Communicator,private val listener: O
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val price = userShoppingCartProducts[position].draft_order?.line_items?.get(0)?.price.toString()
         val amount = SavedSetting.getPrice(price, context)
-
         holder.shoppingCartProductTitle.text = userShoppingCartProducts[position].draft_order?.line_items?.get(0)?.name.toString()
         holder.shoppingCartProductPrice.text = ("Price: ${amount}")
-
         holder.ShoppingCartProductQuantity.text = userShoppingCartProducts[position].draft_order?.line_items?.get(0)?.quantity.toString()
         Glide.with(context).load(userShoppingCartProducts[position].draft_order?.note_attributes?.get(0)?.value).into(holder.shoppingCartItemImage)
+
         holder.shoppingCartIncreaseQuantity.setOnClickListener {
+            counter = userShoppingCartProducts[position].draft_order?.line_items?.get(0)?.quantity!!.toInt()
+            var productSelected : Int = 1
+            for(i in 0..homeAllProducts.size-1) {
+                if (homeAllProducts.get(position).title == userShoppingCartProducts[position].draft_order?.line_items?.get(0)?.title) {
+                    productSelected = homeAllProducts.get(position).variants?.get(0)?.inventory_quantity!!
+                    break
+                }
+                else{
+                  //  productSelected = 0
+                }
+            }
             if(CheckInternetConnectionFirstTime.checkForInternet(context)){
-                counter = userShoppingCartProducts[position].draft_order?.line_items?.get(0)?.quantity!!.toInt()
-                counter++
-                holder.ShoppingCartProductQuantity.text = counter.toString()
-                listener.onIncrementClickListener(userShoppingCartProducts[position])
+               // counter = userShoppingCartProducts[position].draft_order?.line_items?.get(0)?.quantity!!.toInt()
+                   Toast.makeText(context,productSelected.toString(),Toast.LENGTH_SHORT).show()
+                if (counter < productSelected){
+                    counter++
+                    holder.ShoppingCartProductQuantity.text = counter.toString()
+                    listener.onIncrementClickListener(userShoppingCartProducts[position])
+                }
+                else{
+                    val snake = Snackbar.make(it, "Sorry, there is no such number  in stock!!", Snackbar.LENGTH_LONG)
+                    snake.show()
+                }
             }else{
                 val snake = Snackbar.make(it, "Ops! You Lost internet connection!!!", Snackbar.LENGTH_LONG)
                 snake.show()
@@ -58,11 +78,11 @@ class ShoppingCartAdapter(var comminicator: Communicator,private val listener: O
         }
         holder.shoppingCartDecreaseQuantity.setOnClickListener {
             if(CheckInternetConnectionFirstTime.checkForInternet(context)) {
-                counter =
-                    userShoppingCartProducts[position].draft_order?.line_items?.get(0)?.quantity!!.toInt()
+                counter = userShoppingCartProducts[position].draft_order?.line_items?.get(0)?.quantity!!.toInt()
                 if (counter > 1) {
                     counter--
-                } else {
+                } else
+                {
                     counter = 1
                 }
                 holder.ShoppingCartProductQuantity.text = counter.toString()

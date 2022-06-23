@@ -97,7 +97,7 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
         if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())){
             shoppingCartViewModel.getShoppingCardProducts()
             noInternetLayoutShoppingCart.visibility=View.INVISIBLE
-            Log.i("TAG","texttt")
+          //  Log.i("TAG","texttt")
         }else{
             noInternetLayoutShoppingCart.visibility=View.VISIBLE
         }
@@ -111,8 +111,6 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
                 snake.show()
             }
         })
-
-       // shoppingCartViewModel.getShoppingCardProducts()
         shoppingCartViewModel.onlineShoppingCartProduct.observe(viewLifecycleOwner) { cartProducts ->
             userShoppingCartProducts.clear()
             for (i in 0..cartProducts.size - 1) {
@@ -191,8 +189,6 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
             .setTitle("Alert!!!")
             .setCancelable(false)
             .setPositiveButton("Yes") { dialog, it ->
-              //  shoppingCartViewModel.deleteSelectedProduct(draftOrder.draft_order?.id.toString())
-
                 if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())){
                     shoppingCartViewModel.deleteSelectedProduct(draftOrder.draft_order?.id.toString())
                     noInternetLayoutShoppingCart.visibility=View.INVISIBLE
@@ -206,14 +202,10 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
                         noInternetLayoutShoppingCart.visibility=View.INVISIBLE
                     }else{
                         noInternetLayoutShoppingCart.visibility=View.VISIBLE
-                        //   val snake = Snackbar.make(it, "Ops! You Lost internet connection!!!", Snackbar.LENGTH_LONG)
-                        // snake.show()
                     }
                 })
-
                 shoppingCartViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
                     if (response.isSuccessful) {
-
                         userShoppingCartProducts.remove(draftOrder)
                         shoppingCartAdapter.notifyDataSetChanged()
                         if (userShoppingCartProducts.isEmpty()) {
@@ -230,7 +222,6 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
                             userShoppingCartProducts
                         )
                         subTotal = 0.0
-
                         for (i in 0..userShoppingCartProducts.size - 1) {
                             val price =
                                 (userShoppingCartProducts[i].draft_order?.subtotal_price)?.toDouble()!!
@@ -240,9 +231,9 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
                         }
                         amount = SavedSetting.getPrice(subTotal.toString(), requireContext())
                         txtSubTotal.text = amount
-                        Toast.makeText(requireContext(), "Deleted Success!!", Toast.LENGTH_SHORT).show()
+                       // Toast.makeText(requireContext(), "Deleted Success!!", Toast.LENGTH_SHORT).show()
                     } else {
-                        Toast.makeText(requireContext(), "Deleted failed!! ", Toast.LENGTH_SHORT).show()
+                      //  Toast.makeText(requireContext(), "Deleted failed!! ", Toast.LENGTH_SHORT).show()
                     }
                 }
                 dialog.dismiss()
@@ -259,17 +250,12 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
         shoppingCartViewModel.updateSelectedProduct(newDraftOrder.draft_order?.id.toString(), newDraftOrder)
         shoppingCartViewModel.onlineItemUpdated.observe(viewLifecycleOwner) { response ->
             if (response.isSuccessful) {
-                Toast.makeText(
-                    requireContext(),
-                    "Increased Success!! ",
-                    Toast.LENGTH_SHORT
-                ).show()
+              //  Toast.makeText(requireContext(), "Increased Success!! ", Toast.LENGTH_SHORT).show()
                 subTotal = 0.0
                 for (i in 0..userShoppingCartProducts.size - 1) {
                     val price =
                         ((userShoppingCartProducts[i].draft_order?.line_items?.get(0)!!.price)?.toDouble())?.times(
-                            (userShoppingCartProducts[i].draft_order?.line_items?.get(0)!!.quantity!!)
-                        )
+                            (userShoppingCartProducts[i].draft_order?.line_items?.get(0)!!.quantity!!))
                     if (price != null) {
                         subTotal += price
                     }
@@ -278,11 +264,7 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
                 txtSubTotal.text = amount
                 getItems()
             } else {
-                Toast.makeText(
-                    requireContext(),
-                    "Increased Faild!! ",
-                    Toast.LENGTH_SHORT
-                ).show()
+               // Toast.makeText(requireContext(), "Increased Faild!! ", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -293,13 +275,8 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
         shoppingCartViewModel.updateSelectedProduct( newDraftOrder.draft_order?.id.toString(), newDraftOrder )
         shoppingCartViewModel.onlineItemUpdated.observe(viewLifecycleOwner) { response ->
             if (response.isSuccessful) {
-                Toast.makeText(
-                    requireContext(),
-                    "Decreased Success!! ",
-                    Toast.LENGTH_SHORT
-                ).show()
+              //  Toast.makeText(requireContext(), "Decreased Success!! ", Toast.LENGTH_SHORT).show()
                 subTotal = 0.0
-
                 for (i in 0..userShoppingCartProducts.size - 1) {
                     val price =
                         ((userShoppingCartProducts[i].draft_order?.line_items?.get(0)!!.price)?.toDouble())?.times(
@@ -314,12 +291,6 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
                 getItems()
             }
         }
-    }
-    fun replaceFragment(fragment: Fragment) {
-        val transaction = requireActivity().supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.frameLayout, fragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
     }
     fun getItems() {
         val sharedPreferences: SharedPreferences =
@@ -338,7 +309,6 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
                 shoppingCartViewModel.getShoppingCardProducts()
                 noInternetLayoutShoppingCart.visibility=View.INVISIBLE
             }else{
-                //noInternetLayoutShoppingCart.visibility=View.VISIBLE
             }
         })
 

@@ -34,7 +34,10 @@ import kotlin.math.abs
 
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import com.example.mcommerce.categories.viewModel.CategoriesViewFactory
+import com.example.mcommerce.categories.viewModel.CategoriesViewModel
 import com.example.mcommerce.favourite.view.FavouriteFragment
+import com.example.mcommerce.model.Product
 import com.example.mcommerce.network.CheckInternetConnectionFirstTime
 import com.example.mcommerce.network.InternetConnectionChecker
 import com.example.mcommerce.search.view.MysearchFragment
@@ -57,6 +60,8 @@ class HomeFragment : Fragment() {
 
     lateinit var homeFactory: HomeViewModelFactory
     lateinit var homeViewModel: HomeViewModel
+    lateinit var categoriesViewModel: CategoriesViewModel
+    lateinit var categoriesViewFactory: CategoriesViewFactory
     lateinit var communicator: Communicator
 
     private lateinit var  adsViewPager: ViewPager2
@@ -66,6 +71,10 @@ class HomeFragment : Fragment() {
     lateinit var couponsLayoutManager: LinearLayoutManager
 
     private lateinit var internetConnectionChecker: InternetConnectionChecker
+
+    companion object{
+        var homeAllProducts:ArrayList<Product> = ArrayList<Product>()
+    }
 
     private val runnable = Runnable {
         adsViewPager.currentItem = adsViewPager.currentItem + 1
@@ -92,39 +101,29 @@ class HomeFragment : Fragment() {
         brandAdapter= BrandAdapter()
         discountCodeAdapter = DiscountCodeAdapter()
         bradsRecyclerView.setAdapter(brandAdapter)
-        homeFactory = HomeViewModelFactory(
-            Repository.getInstance(
-                AppClient.getInstance(),
-                requireContext()))
         couponsRecyclerView.setAdapter(discountCodeAdapter)
 
         homeFactory = HomeViewModelFactory( Repository.getInstance(AppClient.getInstance(), requireContext()))
         homeViewModel = ViewModelProvider(this, homeFactory).get(HomeViewModel::class.java)
+
+        categoriesViewFactory = CategoriesViewFactory(Repository.getInstance(AppClient.getInstance(), requireContext()))
+        categoriesViewModel = ViewModelProvider(this, categoriesViewFactory).get(CategoriesViewModel::class.java)
+
         if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())){
             homeViewModel.getAllBrands()
             homeViewModel.getDiscountCoupons()
+            categoriesViewModel.getCategoriesProduct("","","")
             noInternetLayout.visibility=View.INVISIBLE
         }else{
             noInternetLayout.visibility=View.VISIBLE
         }
-
         internetConnectionChecker = InternetConnectionChecker(requireContext())
         internetConnectionChecker.observe(this,{ isConnected ->
             if (isConnected){
-                try {
                     homeViewModel.getAllBrands()
                     homeViewModel.getDiscountCoupons()
+                    categoriesViewModel.getCategoriesProduct("","","")
                     noInternetLayout.visibility=View.INVISIBLE
-
-                }catch (e:IOException){
-
-                }
-
-
-                Log.i("TAGGGGG","eNTERETE")
-                homeViewModel.getAllBrands()
-                homeViewModel.getDiscountCoupons()
-                noInternetLayout.visibility=View.INVISIBLE
             }else{
                 var snake = Snackbar.make(view, "Ops! You Lost internet connection!!!", Snackbar.LENGTH_LONG)
                 snake.show()
@@ -147,6 +146,14 @@ class HomeFragment : Fragment() {
         homeViewModel.onlineBrands.observe(viewLifecycleOwner) { brands ->
             homeViewModel.onlineBrands.value?.let { brandAdapter.setUpdatedData(it,requireContext(),communicator) }
         }
+
+        categoriesViewModel.onlinesubcategoriesProduct.observe(viewLifecycleOwner){ allProducts ->
+            homeAllProducts.clear()
+            for (i in 0..allProducts.size-1){
+                homeAllProducts.add(allProducts[i])
+            }
+        }
+
         var img: ImageView =view.findViewById(R.id.searchImg);
         img.setOnClickListener {
            if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
