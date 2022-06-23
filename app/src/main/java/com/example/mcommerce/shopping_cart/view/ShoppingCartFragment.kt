@@ -97,6 +97,7 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
         if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())){
             shoppingCartViewModel.getShoppingCardProducts()
             noInternetLayoutShoppingCart.visibility=View.INVISIBLE
+            Log.i("TAG","texttt")
         }else{
             noInternetLayoutShoppingCart.visibility=View.VISIBLE
         }
