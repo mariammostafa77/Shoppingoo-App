@@ -61,11 +61,7 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
         var userShoppingCartProducts: ArrayList<DraftOrder> = ArrayList<DraftOrder>()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_shopping_cart, container, false)
 
         initComponent(view)
@@ -163,7 +159,6 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
                 snack.show()
             }
         }
-
         return view
     }
 
@@ -177,8 +172,7 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
         noInternetLayoutShoppingCart = view.findViewById(R.id.noInternetLayoutShoppingCart)
         communicator = activity as Communicator
         shoppingCartAdapter = ShoppingCartAdapter(communicator, this)
-        linearLayoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        linearLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         btnProceedToCheckout = view.findViewById(R.id.btnProceedToCheckout)
 
     }
@@ -231,10 +225,7 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
                         }
                         amount = SavedSetting.getPrice(subTotal.toString(), requireContext())
                         txtSubTotal.text = amount
-                       // Toast.makeText(requireContext(), "Deleted Success!!", Toast.LENGTH_SHORT).show()
-                    } else {
-                      //  Toast.makeText(requireContext(), "Deleted failed!! ", Toast.LENGTH_SHORT).show()
-                    }
+                    } else { }
                 }
                 dialog.dismiss()
             }
@@ -244,14 +235,15 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
             .show()
     }
 
-    override fun onIncrementClickListener(draftOrder: DraftOrder) {
+    override fun onIncrementClickListener(draftOrder: DraftOrder,position : Int) {
         val newDraftOrder = draftOrder
         newDraftOrder.draft_order?.line_items!![0].quantity = draftOrder.draft_order?.line_items!![0].quantity?.plus(1)
         shoppingCartViewModel.updateSelectedProduct(newDraftOrder.draft_order?.id.toString(), newDraftOrder)
         shoppingCartViewModel.onlineItemUpdated.observe(viewLifecycleOwner) { response ->
             if (response.isSuccessful) {
-              //  Toast.makeText(requireContext(), "Increased Success!! ", Toast.LENGTH_SHORT).show()
-                subTotal = 0.0
+                userShoppingCartProducts[position] = response.body()!!
+                shoppingCartAdapter.setUserShoppingCartProducts(requireContext(), userShoppingCartProducts)
+                  subTotal = 0.0
                 for (i in 0..userShoppingCartProducts.size - 1) {
                     val price =
                         ((userShoppingCartProducts[i].draft_order?.line_items?.get(0)!!.price)?.toDouble())?.times(
@@ -262,24 +254,25 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
                 }
                 val amount = SavedSetting.getPrice(subTotal.toString(), requireContext())
                 txtSubTotal.text = amount
-                getItems()
             } else {
                // Toast.makeText(requireContext(), "Increased Faild!! ", Toast.LENGTH_SHORT).show()
             }
         }
     }
-    override fun onDecrementClickListener(draftOrder: DraftOrder) {
+
+    override fun onDecrementClickListener(draftOrder: DraftOrder,position: Int) {
         val newDraftOrder = draftOrder
         newDraftOrder.draft_order?.line_items!![0].quantity =
             draftOrder.draft_order?.line_items!![0].quantity?.minus(1)
-        shoppingCartViewModel.updateSelectedProduct( newDraftOrder.draft_order?.id.toString(), newDraftOrder )
+        shoppingCartViewModel.updateSelectedProduct( newDraftOrder.draft_order?.id.toString(), newDraftOrder)
         shoppingCartViewModel.onlineItemUpdated.observe(viewLifecycleOwner) { response ->
             if (response.isSuccessful) {
               //  Toast.makeText(requireContext(), "Decreased Success!! ", Toast.LENGTH_SHORT).show()
-                subTotal = 0.0
+                userShoppingCartProducts[position] = response.body()!!
+                shoppingCartAdapter.setUserShoppingCartProducts(requireContext(), userShoppingCartProducts)
+                  subTotal = 0.0
                 for (i in 0..userShoppingCartProducts.size - 1) {
-                    val price =
-                        ((userShoppingCartProducts[i].draft_order?.line_items?.get(0)!!.price)?.toDouble())?.times(
+                    val price = ((userShoppingCartProducts[i].draft_order?.line_items?.get(0)!!.price)?.toDouble())?.times(
                             (userShoppingCartProducts[i].draft_order?.line_items?.get(0)!!.quantity!!)
                         )
                     if (price != null) {
@@ -288,10 +281,10 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
                 }
                 val amount = SavedSetting.getPrice(subTotal.toString(), requireContext())
                 txtSubTotal.text = amount
-                getItems()
             }
         }
     }
+
     fun getItems() {
         val sharedPreferences: SharedPreferences =
             context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
@@ -308,11 +301,8 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
             if (isConnected){
                 shoppingCartViewModel.getShoppingCardProducts()
                 noInternetLayoutShoppingCart.visibility=View.INVISIBLE
-            }else{
-            }
+            }else{ }
         })
-
-        //shoppingCartViewModel.getShoppingCardProducts()
         shoppingCartViewModel.onlineShoppingCartProduct.observe(viewLifecycleOwner) { cartProducts ->
             userShoppingCartProducts.clear()
             for (i in 0..cartProducts.size - 1) {
@@ -322,10 +312,7 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
                     userShoppingCartProducts.add(draftObj)
                 }
             }
-            shoppingCartAdapter.setUserShoppingCartProducts(
-                requireContext(),
-                userShoppingCartProducts
-            )
+            shoppingCartAdapter.setUserShoppingCartProducts(requireContext(), userShoppingCartProducts)
             subTotal = 0.0
             for (i in 0..userShoppingCartProducts.size - 1) {
                 val price = (userShoppingCartProducts[i].draft_order?.subtotal_price)?.toDouble()!!

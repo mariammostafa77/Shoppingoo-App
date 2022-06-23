@@ -55,20 +55,16 @@ class ShoppingCartAdapter(var comminicator: Communicator,private val listener: O
                     productSelected = homeAllProducts.get(position).variants?.get(0)?.inventory_quantity!!
                     break
                 }
-                else{
-                  //  productSelected = 0
-                }
             }
             if(CheckInternetConnectionFirstTime.checkForInternet(context)){
-               // counter = userShoppingCartProducts[position].draft_order?.line_items?.get(0)?.quantity!!.toInt()
                    Toast.makeText(context,productSelected.toString(),Toast.LENGTH_SHORT).show()
                 if (counter < productSelected){
                     counter++
                     holder.ShoppingCartProductQuantity.text = counter.toString()
-                    listener.onIncrementClickListener(userShoppingCartProducts[position])
+                    listener.onIncrementClickListener(userShoppingCartProducts[position],position)
                 }
                 else{
-                    val snake = Snackbar.make(it, "Sorry, there is no such number  in stock!!", Snackbar.LENGTH_LONG)
+                    val snake = Snackbar.make(it, "Sorry, there is no such number in inventory!!", Snackbar.LENGTH_LONG)
                     snake.show()
                 }
             }else{
@@ -81,12 +77,11 @@ class ShoppingCartAdapter(var comminicator: Communicator,private val listener: O
                 counter = userShoppingCartProducts[position].draft_order?.line_items?.get(0)?.quantity!!.toInt()
                 if (counter > 1) {
                     counter--
-                } else
-                {
+                } else {
                     counter = 1
                 }
                 holder.ShoppingCartProductQuantity.text = counter.toString()
-                listener.onDecrementClickListener(userShoppingCartProducts[position])
+                listener.onDecrementClickListener(userShoppingCartProducts[position],position)
             }else{
                 val snake = Snackbar.make(it, "Ops! You Lost internet connection!!!", Snackbar.LENGTH_LONG)
                 snake.show()
@@ -103,7 +98,6 @@ class ShoppingCartAdapter(var comminicator: Communicator,private val listener: O
         holder.shoppingCartItem.setOnClickListener {
             comminicator.goToProductDetails(userShoppingCartProducts[position].draft_order?.line_items?.get(0)?.product_id!!)
         }
-
     }
 
     override fun getItemCount(): Int {
@@ -119,7 +113,5 @@ class ShoppingCartAdapter(var comminicator: Communicator,private val listener: O
         val shoppingCartIncreaseQuantity : ImageView = itemView.findViewById(R.id.shoppingCartIncreaseQuantity)
         val shoppingCartDecreaseQuantity : ImageView = itemView.findViewById(R.id.shoppingCartDecreaseQuantity)
         val ShoppingCartProductQuantity : TextView = itemView.findViewById(R.id.ShoppingCartProductQuantity)
-       // val selectedItemCheckBox : CheckBox = itemView.findViewById(R.id.selectedItemCheckBox)
-
     }
 }
