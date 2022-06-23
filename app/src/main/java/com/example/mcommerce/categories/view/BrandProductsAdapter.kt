@@ -14,7 +14,7 @@ import com.example.mcommerce.R
 import com.example.mcommerce.me.viewmodel.SavedSetting
 import com.example.mcommerce.model.Product
 
-class BrandProductsAdapter(var currencyConvertor: CurrencyConvertor) : RecyclerView.Adapter<BrandProductsAdapter.ViewHolder>(){
+class BrandProductsAdapter : RecyclerView.Adapter<BrandProductsAdapter.ViewHolder>(){
     var allBrands:List<Product> = ArrayList<Product>()
     //var variant:List<Variants> = ArrayList<Variants>()
     lateinit var context: Context

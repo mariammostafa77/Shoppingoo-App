@@ -8,19 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.R
-import com.example.mcommerce.categories.viewModel.CategoriesViewFactory
-import com.example.mcommerce.categories.viewModel.CategoriesViewModel
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
 import com.example.mcommerce.orderDetails.view.OrderItemsAdapter
-import com.example.mcommerce.orderDetails.viewModel.OrderDetailsViewModel
-import com.example.mcommerce.orderDetails.viewModel.OrderDetailsViewModelFactory
 import com.example.mcommerce.orders.model.Order
 import com.example.mcommerce.shopping_cart.view.ShoppingCartFragment
 import com.example.mcommerce.shopping_cart.viewmodel.ShoppingCartViewModel
@@ -39,8 +33,6 @@ class ConfirmOrderFragment : Fragment() {
     private lateinit var okBtn:Button
 
     private lateinit var orderItemsAdapter: OrderItemsAdapter
-    private lateinit var orderDetailsViewModelFactory: OrderDetailsViewModelFactory
-    private lateinit var orderDetailsViewModel: OrderDetailsViewModel
     private lateinit var communicator: Communicator
 
     lateinit var shoppingCartViewModelFactory : ShoppingCartViewModelFactory
@@ -65,11 +57,6 @@ class ConfirmOrderFragment : Fragment() {
         orderItemsAdapter= OrderItemsAdapter()
         communicator = activity as Communicator
         itemRecycleView.adapter = orderItemsAdapter
-        orderDetailsViewModelFactory = OrderDetailsViewModelFactory(
-            Repository.getInstance(
-                AppClient.getInstance(),
-                requireContext()))
-        orderDetailsViewModel = ViewModelProvider(this, orderDetailsViewModelFactory)[OrderDetailsViewModel::class.java]
         if(arguments != null){
             myOrder=arguments?.getSerializable("order") as Order
             //fees= arguments?.getDouble("fees")!!

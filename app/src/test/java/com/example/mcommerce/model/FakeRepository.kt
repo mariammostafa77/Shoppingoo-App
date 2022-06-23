@@ -8,6 +8,7 @@ import com.example.mcommerce.draftModel.DraftOrder
 import com.example.mcommerce.draftModel.DraftOrderX
 import com.example.mcommerce.draftModel.DraftResponse
 import com.example.mcommerce.home.model.BrandsModel
+import com.example.mcommerce.home.model.SmartCollection
 import com.example.mcommerce.model.currencies.CurrencyModel
 import com.example.mcommerce.model.currencies.CurrencyResponse
 import com.example.mcommerce.model.currencies.convertor.CurrencyConverter
@@ -19,24 +20,31 @@ import com.google.android.gms.common.util.CollectionUtils.listOf
 import retrofit2.Response
 
 class FakeRepository:RemoteSourceInterface {
-    var ordersList:MutableList<Order> = mutableListOf()
-    lateinit var ordersObj:Orders
-
-    fun setOrders(orders:MutableList<Order>){
-        this.ordersList=orders
-        ordersObj= Orders(ordersList)
-    }
 
     override suspend fun getAllProducts(): AllProductsModel {
-        TODO("Not yet implemented")
+        val productsList= mutableListOf<Product>(
+            Product(title = "BlackBag",vendor= "Adidas"),
+            Product(title = "WhiteBag",vendor= "Adidas"),
+            Product(title = "RedBag",vendor= "Active")
+        )
+        var allProductsObj=AllProductsModel(productsList)
+        return allProductsObj
     }
 
     override suspend fun getAllBrands(): BrandsModel {
-        TODO("Not yet implemented")
+        val smartCollectionList= mutableListOf<SmartCollection>(
+            SmartCollection(title="Adidas")
+        )
+        var brandsModelObj=BrandsModel(smartCollectionList)
+        return brandsModelObj
     }
 
     override suspend fun getBrandProducts(id: String): AllProductsModel {
-        TODO("Not yet implemented")
+        val productsList= mutableListOf<Product>(
+            Product(title = "BlackBag",vendor= "Adidas"),
+            Product(title = "WhiteBag",vendor= "Adidas"))
+        var allProductsObj=AllProductsModel(productsList)
+        return allProductsObj
     }
 
     override suspend fun getSpecificProduct(id: String): ProductDetails {
@@ -49,16 +57,14 @@ class FakeRepository:RemoteSourceInterface {
 
     }
 
-    override suspend fun getVariant(id: String): Variants {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getSubCategories(
-        vendor: String,
-        productType: String,
-        collectionId: String
-    ): AllProductsModel {
-        TODO("Not yet implemented")
+    override suspend fun getSubCategories(vendor: String, productType: String, collectionId: String): AllProductsModel {
+        val productsList= mutableListOf<Product>(
+            Product(title = "BlackBag",vendor= "Adidas"),
+            Product(title = "WhiteBag",vendor= "Adidas"),
+            Product(title = "RedBag",vendor= "Active")
+        )
+        var allProductsObj=AllProductsModel(productsList)
+        return allProductsObj
     }
 
     override suspend fun getDiscountCodes(): DiscountCodesModel {
@@ -97,9 +103,6 @@ class FakeRepository:RemoteSourceInterface {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getProductTypes(id: String): AllProductsModel {
-        TODO("Not yet implemented")
-    }
 
     override suspend fun getOrders(id: String): Orders {
         val ordersList= mutableListOf<Order>(

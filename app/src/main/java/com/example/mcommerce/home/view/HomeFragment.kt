@@ -41,6 +41,7 @@ import com.example.mcommerce.search.view.MysearchFragment
 import com.example.mcommerce.shopping_cart.view.ShoppingCartFragment
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.image_container.*
+import java.io.IOException
 import java.lang.Exception
 
 
@@ -101,7 +102,7 @@ class HomeFragment : Fragment() {
         homeViewModel = ViewModelProvider(this, homeFactory).get(HomeViewModel::class.java)
         if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())){
             homeViewModel.getAllBrands()
-            homeViewModel.getDiscountCoupons()
+            //homeViewModel.getDiscountCoupons()
             noInternetLayout.visibility=View.INVISIBLE
         }else{
             noInternetLayout.visibility=View.VISIBLE
@@ -110,6 +111,16 @@ class HomeFragment : Fragment() {
         internetConnectionChecker = InternetConnectionChecker(requireContext())
         internetConnectionChecker.observe(this,{ isConnected ->
             if (isConnected){
+                try {
+                    homeViewModel.getAllBrands()
+                    homeViewModel.getDiscountCoupons()
+                    noInternetLayout.visibility=View.INVISIBLE
+
+                }catch (e:IOException){
+
+                }
+
+
                 Log.i("TAGGGGG","eNTERETE")
                 homeViewModel.getAllBrands()
                 homeViewModel.getDiscountCoupons()
@@ -138,13 +149,19 @@ class HomeFragment : Fragment() {
         }
         var img: ImageView =view.findViewById(R.id.searchImg);
         img.setOnClickListener {
-            mySearchFlag=1
-            val fragment: Fragment = MysearchFragment()
-            val fragmentManager: FragmentManager = activity!!.supportFragmentManager
-            val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
-            fragmentTransaction.replace(com.example.mcommerce.R.id.frameLayout, fragment)
-            fragmentTransaction.addToBackStack(null)
-            fragmentTransaction.commit()
+           if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
+                mySearchFlag = 1
+                val fragment: Fragment = MysearchFragment()
+                val fragmentManager: FragmentManager = activity!!.supportFragmentManager
+                val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
+                fragmentTransaction.replace(com.example.mcommerce.R.id.frameLayout, fragment)
+                fragmentTransaction.addToBackStack(null)
+                fragmentTransaction.commit()
+            }
+            else{
+                var snake = Snackbar.make(view, "Please check internet", Snackbar.LENGTH_LONG)
+                snake.show()
+            }
         }
         favImg.setOnClickListener {
             val fragment: Fragment = FavouriteFragment()

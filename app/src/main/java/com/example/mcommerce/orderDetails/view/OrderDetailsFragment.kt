@@ -14,14 +14,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.R
-import com.example.mcommerce.draftModel.DraftOrder
 import com.example.mcommerce.me.viewmodel.SavedSetting
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
-import com.example.mcommerce.orderDetails.viewModel.OrderDetailsViewModel
-import com.example.mcommerce.orderDetails.viewModel.OrderDetailsViewModelFactory
 import com.example.mcommerce.orders.model.Order
-import com.example.mcommerce.search.view.MysearchFragment
 
 class OrderDetailsFragment : Fragment() {
     private lateinit var tvOrderCreatedAt:TextView
@@ -29,8 +25,6 @@ class OrderDetailsFragment : Fragment() {
     private lateinit var tvOrderTotalPrice:TextView
     private lateinit var orderItemsRecycle:RecyclerView
     private lateinit var orderItemsAdapter: OrderItemsAdapter
-    private lateinit var orderDetailsViewModelFactory: OrderDetailsViewModelFactory
-    private lateinit var orderDetailsViewModel: OrderDetailsViewModel
     private lateinit var communicator:Communicator
     private lateinit var orderDetailsBackIcon:ImageView
 
@@ -55,11 +49,6 @@ class OrderDetailsFragment : Fragment() {
             trans.commit()
             manager.popBackStack()
         }
-        orderDetailsViewModelFactory = OrderDetailsViewModelFactory(
-            Repository.getInstance(
-                AppClient.getInstance(),
-                requireContext()))
-        orderDetailsViewModel = ViewModelProvider(this, orderDetailsViewModelFactory)[OrderDetailsViewModel::class.java]
 
         if(arguments != null){
             selectedOrder=arguments?.getSerializable("selectedOrder") as Order

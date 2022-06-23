@@ -23,7 +23,7 @@ import com.example.mcommerce.me.viewmodel.SavedSetting
 
 import com.example.mcommerce.model.Product
 
-class SearchAdapter( var comminicator:Communicator,var allProducts: List<Product>,var context: Context,private val listener:FavClicked):RecyclerView.Adapter<SearchAdapter.MyViewHolder>(){
+class SearchAdapter( var comminicator:Communicator,var allProducts: List<Product>,var context: Context):RecyclerView.Adapter<SearchAdapter.MyViewHolder>(){
 
    // var allProducts: List<Product> = ArrayList<Product>()
     //lateinit var context: Context
@@ -60,11 +60,7 @@ class SearchAdapter( var comminicator:Communicator,var allProducts: List<Product
             comminicator.passProductData(currentPosition)
 
         }
-        /*holder.favIconImage.setOnClickListener {
-            listener.addToFav(currentPosition,holder.favIconImage,position)
-        }
 
-         listener.addFavImg(holder.favIconImage,currentPosition.variants[0].id)*/
     }
 
     override fun getItemCount(): Int {

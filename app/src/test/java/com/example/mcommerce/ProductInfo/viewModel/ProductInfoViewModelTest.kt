@@ -71,4 +71,5 @@ class ProductInfoViewModelTest : TestCase(){
     }
 
 
+
 }

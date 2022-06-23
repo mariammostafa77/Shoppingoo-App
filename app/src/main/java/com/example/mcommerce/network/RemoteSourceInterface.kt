@@ -32,7 +32,6 @@ interface RemoteSourceInterface {
     suspend fun getAllBrands():BrandsModel
     suspend fun getBrandProducts(id:String):AllProductsModel
     suspend fun getSpecificProduct(id:String): ProductDetails
-    suspend fun getVariant(id:String): Variants
     suspend fun getSubCategories(vendor: String,productType:String,collectionId:String):AllProductsModel
 
     suspend fun getDiscountCodes() : DiscountCodesModel
@@ -45,7 +44,6 @@ interface RemoteSourceInterface {
 
     suspend fun postNewDraftOrder(order: DraftOrder):Response<DraftOrder>
 
-    suspend fun getProductTypes(id : String): AllProductsModel
     suspend fun getOrders(id : String): Orders
     suspend fun getCustomers(): Customer
 

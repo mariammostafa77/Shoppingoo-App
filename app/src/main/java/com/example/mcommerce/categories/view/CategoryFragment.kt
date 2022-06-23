@@ -45,7 +45,7 @@ import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.FieldPosition
 
-class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, CurrencyConvertor {
+class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface {
     private lateinit var brandProductsAdapter: BrandProductsAdapter
     private lateinit var subCategoriesAdapter: SubCategoriesAdapter
     private lateinit var categoriesProductFactory: CategoriesViewFactory
@@ -95,7 +95,7 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
         Log.i("TAG","")
         searchViewModel = ViewModelProvider(this, searchFactor).get(SearchViewModel::class.java)
         subCategoriesAdapter= SubCategoriesAdapter()
-        brandProductsAdapter= BrandProductsAdapter(this)
+        brandProductsAdapter= BrandProductsAdapter()
         categoryRecyclerView.adapter = brandProductsAdapter
         communicator = activity as Communicator
         customerViewModelFactory = CustomerViewModelFactory(Repository.getInstance(AppClient.getInstance(), requireContext()))
@@ -143,7 +143,7 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
             filterProductsByPrice(allProducts,priceSelectesConverted)
         }
 
-        categoriesProductViewModel.getCategories(brandName,subCategorySelected, collectionId)
+        categoriesProductViewModel.getCategoriesProduct(brandName,subCategorySelected, collectionId)
         getSubTypes()
         categoriesProductViewModel.onlinesubcategoriesProduct.observe(viewLifecycleOwner) {products ->
             allProducts.clear()
@@ -156,7 +156,7 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
             }
             checkEmptyArray(products)
         }
-        categoriesProductViewModel.allOnlineProducts.observe(viewLifecycleOwner) {
+        categoriesProductViewModel.allOnlineProductsSubTypes.observe(viewLifecycleOwner) {
             getProductTypes(it)
             Log.i("TAG","")
         }
@@ -175,6 +175,9 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
             mySearchFlag=2
             //communicator.goToSearchWithID(id)
             communicator.goToSearchWithAllData( collectionId,brandName,subCategorySelected)
+
+        }
+        favorite_icon.setOnClickListener {
 
         }
 
@@ -197,7 +200,7 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
     }
     override fun onSubCategoryClick(type:String) {
         subCategorySelected=type
-        categoriesProductViewModel.getCategories(brandName,subCategorySelected, collectionId)
+        categoriesProductViewModel.getCategoriesProduct(brandName,subCategorySelected, collectionId)
         Toast.makeText(requireContext(),subCategorySelected,Toast.LENGTH_LONG).show()
         //dialog.dismiss()
     }
@@ -231,35 +234,35 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
             0 -> {
                 collectionId=""
                 maxPrice=0.0
-                categoriesProductViewModel.getCategories(brandName,"", collectionId)
+                categoriesProductViewModel.getCategoriesProduct(brandName,"", collectionId)
                 getSubTypes()
                 true
             }
             1 -> {
                 collectionId="273053712523"
                 maxPrice=0.0
-                categoriesProductViewModel.getCategories(brandName,"", collectionId)
+                categoriesProductViewModel.getCategoriesProduct(brandName,"", collectionId)
                 getSubTypes()
                 true
             }
             2 -> {
                 collectionId="273053679755"
                 maxPrice=0.0
-                categoriesProductViewModel.getCategories(brandName,"", collectionId)
+                categoriesProductViewModel.getCategoriesProduct(brandName,"", collectionId)
                 getSubTypes()
                 true
             }
             3 -> {
                 collectionId="273053745291"
                 maxPrice=0.0
-                categoriesProductViewModel.getCategories(brandName,"", collectionId)
+                categoriesProductViewModel.getCategoriesProduct(brandName,"", collectionId)
                 getSubTypes()
                 true
             }
             4 -> {
                 collectionId="273053778059"
                 maxPrice=0.0
-                categoriesProductViewModel.getCategories(brandName,"", collectionId)
+                categoriesProductViewModel.getCategoriesProduct(brandName,"", collectionId)
                 getSubTypes()
                 true
             }
@@ -268,7 +271,7 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
         }
     }
     private fun getSubTypes() {
-        categoriesProductViewModel.getAllProducts(brandName,"",collectionId)
+        categoriesProductViewModel.getSubType(brandName,"",collectionId)
     }
     private fun checkEmptyArray(products:List<Product>){
         if(products.isEmpty()){
@@ -295,11 +298,4 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
         checkEmptyArray(filteredProduct)
     }
 
-    override fun addToFav(product: Product, img: ImageView, myIndex: Int) {
-        TODO("Not yet implemented")
-    }
-
-    override fun addFavImg(img: ImageView, id: Long) {
-        TODO("Not yet implemented")
-    }
 }

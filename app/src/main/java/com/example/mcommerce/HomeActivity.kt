@@ -23,6 +23,7 @@ import com.example.mcommerce.me.view.MeWithoutLoginFragment
 import com.example.mcommerce.me.view.setting.AddNewAddressFragment
 import com.example.mcommerce.me.viewmodel.SavedSetting
 import com.example.mcommerce.model.Product
+import com.example.mcommerce.network.CheckInternetConnectionFirstTime
 import com.example.mcommerce.network.InternetConnectionChecker
 import com.example.mcommerce.orderDetails.view.OrderDetailsFragment
 import com.example.mcommerce.orders.model.Order
@@ -54,8 +55,8 @@ class HomeActivity : AppCompatActivity(),Communicator {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-        val favSharedPreferences = getSharedPreferences("favourite", AppCompatActivity.MODE_PRIVATE)
-       myFavFlag= favSharedPreferences.getBoolean("favStatue",false)
+//        val favSharedPreferences = getSharedPreferences("favourite", AppCompatActivity.MODE_PRIVATE)
+//       myFavFlag= favSharedPreferences.getBoolean("favStatue",false)
 
         SavedSetting.loadLocale(this)
 
@@ -111,15 +112,22 @@ class HomeActivity : AppCompatActivity(),Communicator {
     }
 
     override fun passProductData(product: Product) {
-        myDetailsFlag=0
-       val bundle=Bundle()
-        bundle.putSerializable("productInfo",product)
-        val transaction=this.supportFragmentManager.beginTransaction()
+        if (CheckInternetConnectionFirstTime.checkForInternet(this)) {
+            myDetailsFlag = 0
+            val bundle = Bundle()
+            bundle.putSerializable("productInfo", product)
+            val transaction = this.supportFragmentManager.beginTransaction()
 
-        val productInfoFragment=ProductInfoFragment()
-        transaction.addToBackStack(null)
-        productInfoFragment.arguments=bundle
-        transaction.replace(R.id.frameLayout,productInfoFragment).commit()
+            val productInfoFragment = ProductInfoFragment()
+            transaction.addToBackStack(null)
+            productInfoFragment.arguments = bundle
+            transaction.replace(R.id.frameLayout, productInfoFragment).commit()
+        }
+        else{
+            Toast.makeText(this,
+                "Please check internet",
+                Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun goFromBrandToCategories(brandName:String) {
@@ -214,12 +222,19 @@ class HomeActivity : AppCompatActivity(),Communicator {
     }
 
     override fun goToProductDetails(id: Long) {
-        myDetailsFlag=1
-        val bundle=Bundle()
-        val productInfo = ProductInfoFragment()
-        bundle.putLong("productID",id)
-        productInfo.arguments=bundle
-        replaceFragment(productInfo)
+        if (CheckInternetConnectionFirstTime.checkForInternet(this)) {
+            myDetailsFlag = 1
+            val bundle = Bundle()
+            val productInfo = ProductInfoFragment()
+            bundle.putLong("productID", id)
+            productInfo.arguments = bundle
+            replaceFragment(productInfo)
+        }
+        else{
+            Toast.makeText(this,
+                "Please check internet",
+                Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun passMapDataToFragment() {

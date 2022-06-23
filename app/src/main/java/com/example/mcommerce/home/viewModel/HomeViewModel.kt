@@ -11,30 +11,21 @@ import com.example.mcommerce.model.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.IOException
 
 class HomeViewModel(repo: RepositoryInterface) : ViewModel(){
     private val iRepo: RepositoryInterface = repo
     private val allBrands = MutableLiveData<List<SmartCollection>>()
     private val discountCode = MutableLiveData<List<DiscountCode>>()
-
-   /* init {
-        getAllBrands()
-        getDiscountCoupons()
-    }*/
     val onlineDiscountCodes: LiveData<List<DiscountCode>> = discountCode
-    //Expose returned online Data
     val onlineBrands: LiveData<List<SmartCollection>> = allBrands
     fun getAllBrands(){
         viewModelScope.launch{
             val result = iRepo.getAllBrands()
             withContext(Dispatchers.Main){
-                Log.i("TAG","from home model view ${result.smart_collections[1].id}")
                 allBrands.postValue(result.smart_collections)
-
             }
         }
-        //Log.i("TAG","from home model view ${allProducts.value}")
-        //Log.i("TAG","from home model view ${onlineProducts.value}")
     }
 
     //// Discount Codes

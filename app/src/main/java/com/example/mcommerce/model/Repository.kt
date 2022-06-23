@@ -53,10 +53,6 @@ class Repository private constructor(var remoteSource: RemoteSourceInterface, va
         return remoteSource.getSpecificProduct(id)
     }
 
-    override suspend fun getVariant(id: String):Variants{
-        return remoteSource.getVariant(id)
-    }
-
     override suspend fun getDiscountsCods(): DiscountCodesModel {
         return  remoteSource.getDiscountCodes()
     }
@@ -66,10 +62,6 @@ class Repository private constructor(var remoteSource: RemoteSourceInterface, va
     }
     override suspend fun getSubCategories(vendor: String,productType:String,collectionId:String):AllProductsModel{
         return  remoteSource.getSubCategories(vendor,productType,collectionId)
-    }
-
-    override suspend fun getProductTypes(id: String):AllProductsModel {
-        return remoteSource.getProductTypes(id)
     }
 
     override suspend fun getCustomerDetails(id: String): CustomerDetail {

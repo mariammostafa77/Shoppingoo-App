@@ -25,10 +25,7 @@ interface RepositoryInterface {
     suspend fun getAllBrands():BrandsModel
     suspend fun getBrandProducts(id:String):AllProductsModel
     suspend fun getSpecificProduct(id:String):ProductDetails
-    suspend fun getVariant(id:String): Variants
     suspend fun getSubCategories(vendor: String,productType:String,collectionId:String):AllProductsModel
-
-    suspend fun getProductTypes(id : String):AllProductsModel
 
     suspend fun getDiscountsCods() : DiscountCodesModel
     suspend fun postNewCustomer(customer: CustomerDetail): Response<CustomerDetail>

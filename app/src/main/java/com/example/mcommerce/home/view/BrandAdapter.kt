@@ -49,9 +49,9 @@ class BrandAdapter() : RecyclerView.Adapter<BrandAdapter.ViewHolder>(){
         val brandCard:CardView = itemView.findViewById(R.id.brandCard)
         fun bind(data: SmartCollection){
             Log.i("TAG","from onBind ${allBrands[position]}")
-            Glide.with(context).load(allBrands[position].image.src).into(brandImg)
+            Glide.with(context).load(allBrands[position].image?.src).into(brandImg)
             brandCard.setOnClickListener(View.OnClickListener {
-                communicator.goFromBrandToCategories(allBrands[position].title)
+                allBrands[position].title?.let { it1 -> communicator.goFromBrandToCategories(it1) }
                 Log.i("TAG","brand name from adapter ${allBrands[position].title}")
 
             })
