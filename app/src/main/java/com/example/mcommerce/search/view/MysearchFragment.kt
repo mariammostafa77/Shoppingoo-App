@@ -32,12 +32,13 @@ import com.example.mcommerce.network.CheckInternetConnectionFirstTime
 import com.example.mcommerce.network.InternetConnectionChecker
 import com.example.mcommerce.search.viewModel.SearchViewModel
 import com.example.mcommerce.search.viewModel.SearchViewModelFactory
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.dialog_view.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-class MysearchFragment : Fragment(),FavClicked {
+class MysearchFragment : Fragment() {
     lateinit var communicator: Communicator
     lateinit var productSearchRecyclerview:RecyclerView
     lateinit var productSearchAdapter: SearchAdapter
@@ -84,9 +85,7 @@ class MysearchFragment : Fragment(),FavClicked {
         filterProductArrayList= ArrayList<Product>()
 
         productSearchRecyclerview=view.findViewById(R.id.searhProductRecyclerView)
-        //linearLayoutManager= LinearLayoutManager(requireContext())
-        //productSearchRecyclerview.setLayoutManager(linearLayoutManager)
-        productSearchAdapter= SearchAdapter(communicator,filterProductArrayList,requireContext(),this)
+        productSearchAdapter= SearchAdapter(communicator,filterProductArrayList,requireContext())
         productSearchRecyclerview.setAdapter(productSearchAdapter)
 
             searchFactor = SearchViewModelFactory(
@@ -95,24 +94,28 @@ class MysearchFragment : Fragment(),FavClicked {
            allProductArrayList = ArrayList<Product>()
             searchViewModel = ViewModelProvider(this, searchFactor).get(SearchViewModel::class.java)
 
-         if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
-
-             searchViewModel.getAllProducts()
-
-        }else{
-
-        }
-        internetConnectionChecker = InternetConnectionChecker(requireContext())
-        internetConnectionChecker.observe(this,{ isConnected ->
-            if (isConnected){
-                searchViewModel.getAllProducts()
-            }
-        })
-
-
             if(mySearchFlag==1) {
+                if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
+                    searchViewModel.getAllProducts()
+
+                }else{
+                   Toast.makeText(requireContext(),"Please check internet",Toast.LENGTH_LONG).show()
+                }
+                internetConnectionChecker = InternetConnectionChecker(requireContext())
+                internetConnectionChecker.observe(this,{ isConnected ->
+                    if (isConnected){
+                        searchViewModel.getAllProducts()
+                    }
+                    else{
+                        Toast.makeText(requireContext(),"Ops! You Lost internet connection!!!",Toast.LENGTH_LONG).show()
+
+
+                    }
+                })
                 searchViewModel.onlineProducts.observe(viewLifecycleOwner) { product ->
-                 allProducts=product
+
+                    allProductArrayList.clear()
+                     allProducts=product
                     if (allProductArrayList.size == 0) {
                         allProductArrayList.addAll(product)
 
@@ -127,7 +130,6 @@ class MysearchFragment : Fragment(),FavClicked {
                     filterProductArrayList.clear()
                     edtSearch.setOnItemClickListener { adapterView, view, i, l ->
                         filterProductArrayList.clear()
-                        Toast.makeText(requireContext(),"clicked"+ adapter.getItem(i).toString(),Toast.LENGTH_LONG).show()
                         var productName:String= adapter.getItem(i).toString()
                         if(productName.isNotEmpty()){
 
@@ -179,19 +181,26 @@ class MysearchFragment : Fragment(),FavClicked {
                     categoriesProductViewModel.getCategoriesProduct(brandName,subCatName,productID)
 
                 }else{
-
+                    var snake = Snackbar.make(view, "Please check internet", Snackbar.LENGTH_LONG)
+                    snake.show()
                 }
                 internetConnectionChecker = InternetConnectionChecker(requireContext())
                 internetConnectionChecker.observe(this,{ isConnected ->
                     if (isConnected){
                         categoriesProductViewModel.getCategoriesProduct(brandName,subCatName,productID)
-                    }})
+                    }
+                    else{
+                        var snake = Snackbar.make(view, "Ops! You Lost internet connection!!!", Snackbar.LENGTH_LONG)
+                        snake.show()
+                    }
+                })
 
 
 
                 categoriesProductViewModel.onlinesubcategoriesProduct.observe(viewLifecycleOwner)  {
 
                     Log.i("TAG","Count  ${it.size}")
+                    allProductArrayList.clear()
                     allProductArrayList.addAll(it)
                     productsName.clear()
                     it.forEach {
@@ -279,40 +288,5 @@ class MysearchFragment : Fragment(),FavClicked {
 
         return view
     }
-
-    override fun addToFav(product:Product,img: ImageView,myIndex:Int) {
-
-    }
-
-    override fun addFavImg(img: ImageView,id: Long) {
-
-
-    }
-    fun showLoginDialog(dialogInfo: String,context:Context) {
-        val view = View.inflate(context, R.layout.dialog_view, null)
-
-        val builder = AlertDialog.Builder(context)
-        builder.setView(view)
-
-        val dialog = builder.create()
-        dialog.show()
-        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-        dialog.setCancelable(false)
-        view.dialoImg.setImageResource(R.drawable.personlogin)
-        view.btn_confirm.text = "LOGIN"
-        view.btn_cancel.text = "CANCEL"
-        view.txtDialogTitle.text = "Warning"
-        view.txtDialogSubTitle.text = dialogInfo
-        view.txtDialogSubTitle.setTypeface(view.txtDialogSubTitle.getTypeface(), Typeface.ITALIC);
-        view.txtDialogInfo.text = ""
-        view.btn_confirm.setOnClickListener {
-            startActivity(Intent(context, AuthActivity::class.java))
-        }
-        view.btn_cancel.setOnClickListener {
-            dialog.dismiss()
-        }
-    }
-
-
 
 }

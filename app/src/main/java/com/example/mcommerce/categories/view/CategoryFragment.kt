@@ -177,6 +177,9 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface {
             communicator.goToSearchWithAllData( collectionId,brandName,subCategorySelected)
 
         }
+        favorite_icon.setOnClickListener {
+
+        }
 
         return view
     }

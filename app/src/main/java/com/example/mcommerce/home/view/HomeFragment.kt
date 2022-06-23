@@ -147,7 +147,7 @@ class HomeFragment : Fragment() {
         }
         var img: ImageView =view.findViewById(R.id.searchImg);
         img.setOnClickListener {
-            if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
+           if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
                 mySearchFlag = 1
                 val fragment: Fragment = MysearchFragment()
                 val fragmentManager: FragmentManager = activity!!.supportFragmentManager

@@ -55,8 +55,8 @@ class HomeActivity : AppCompatActivity(),Communicator {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-        val favSharedPreferences = getSharedPreferences("favourite", AppCompatActivity.MODE_PRIVATE)
-       myFavFlag= favSharedPreferences.getBoolean("favStatue",false)
+//        val favSharedPreferences = getSharedPreferences("favourite", AppCompatActivity.MODE_PRIVATE)
+//       myFavFlag= favSharedPreferences.getBoolean("favStatue",false)
 
         SavedSetting.loadLocale(this)
 
@@ -112,15 +112,22 @@ class HomeActivity : AppCompatActivity(),Communicator {
     }
 
     override fun passProductData(product: Product) {
-        myDetailsFlag=0
-       val bundle=Bundle()
-        bundle.putSerializable("productInfo",product)
-        val transaction=this.supportFragmentManager.beginTransaction()
+        if (CheckInternetConnectionFirstTime.checkForInternet(this)) {
+            myDetailsFlag = 0
+            val bundle = Bundle()
+            bundle.putSerializable("productInfo", product)
+            val transaction = this.supportFragmentManager.beginTransaction()
 
-        val productInfoFragment=ProductInfoFragment()
-        transaction.addToBackStack(null)
-        productInfoFragment.arguments=bundle
-        transaction.replace(R.id.frameLayout,productInfoFragment).commit()
+            val productInfoFragment = ProductInfoFragment()
+            transaction.addToBackStack(null)
+            productInfoFragment.arguments = bundle
+            transaction.replace(R.id.frameLayout, productInfoFragment).commit()
+        }
+        else{
+            Toast.makeText(this,
+                "Please check internet",
+                Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun goFromBrandToCategories(brandName:String) {
