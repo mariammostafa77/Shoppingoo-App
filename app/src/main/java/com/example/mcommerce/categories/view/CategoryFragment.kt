@@ -35,11 +35,14 @@ import com.example.mcommerce.me.viewmodel.SavedSetting
 import com.example.mcommerce.model.Product
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
+import com.example.mcommerce.network.CheckInternetConnectionFirstTime
 import com.example.mcommerce.search.viewModel.SearchViewModel
 import com.example.mcommerce.search.viewModel.SearchViewModelFactory
+import com.example.mcommerce.shopping_cart.view.ShoppingCartFragment
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.slider.RangeSlider
 import com.google.android.material.slider.Slider
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -55,6 +58,7 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface {
     private lateinit var categoriesTabLayout: TabLayout
     private lateinit var searchIcon:ImageView
     private lateinit var favorite_icon:ImageView
+    private lateinit var shipping_bag_icon:ImageView
     private lateinit var filterImg:ImageView
     private lateinit var imgNoData:ImageView
     private lateinit var tvNoData:TextView
@@ -172,13 +176,32 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface {
             }
         })
         searchIcon.setOnClickListener {
-            mySearchFlag=2
-            //communicator.goToSearchWithID(id)
-            communicator.goToSearchWithAllData( collectionId,brandName,subCategorySelected)
+            if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
+                mySearchFlag = 2
+                //communicator.goToSearchWithID(id)
+                communicator.goToSearchWithAllData(collectionId, brandName, subCategorySelected)
+            }
+            else{
+                var snake = Snackbar.make(view, "Please check internet", Snackbar.LENGTH_LONG)
+                snake.show()
+            }
 
         }
         favorite_icon.setOnClickListener {
-
+            val fragment: Fragment = FavouriteFragment()
+            val fragmentManager: FragmentManager = activity!!.supportFragmentManager
+            val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
+            fragmentTransaction.replace(com.example.mcommerce.R.id.frameLayout, fragment)
+            fragmentTransaction.addToBackStack(null)
+            fragmentTransaction.commit()
+        }
+        shipping_bag_icon.setOnClickListener {
+            val fragment: Fragment = ShoppingCartFragment()
+            val fragmentManager: FragmentManager = activity!!.supportFragmentManager
+            val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
+            fragmentTransaction.replace(com.example.mcommerce.R.id.frameLayout, fragment)
+            fragmentTransaction.addToBackStack(null)
+            fragmentTransaction.commit()
         }
 
         return view
@@ -214,6 +237,7 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface {
         categoryBarTitle=view.findViewById(R.id.categoryBarTitle)
         filterImg=view.findViewById(R.id.filterImg)
         favorite_icon=view.findViewById(R.id.favorite_icon)
+        shipping_bag_icon=view.findViewById(R.id.shipping_bag_icon)
         dialog = BottomSheetDialog(requireContext())
         tvNoData = view.findViewById(R.id.tvNoData)
         imgNoData=view.findViewById(R.id.imgNoData)

@@ -182,7 +182,8 @@
                 android:stepSize="0.5"
                 app:layout_constraintBottom_toBottomOf="@+id/textView17"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtProductName" />
+                app:layout_constraintTop_toBottomOf="@+id/txtProductName"
+                android:theme="@style/RatingBar"/>
 
             <Button
                 android:id="@+id/btnAddToCard"

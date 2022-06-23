@@ -102,7 +102,7 @@ class HomeFragment : Fragment() {
         homeViewModel = ViewModelProvider(this, homeFactory).get(HomeViewModel::class.java)
         if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())){
             homeViewModel.getAllBrands()
-            //homeViewModel.getDiscountCoupons()
+            homeViewModel.getDiscountCoupons()
             noInternetLayout.visibility=View.INVISIBLE
         }else{
             noInternetLayout.visibility=View.VISIBLE

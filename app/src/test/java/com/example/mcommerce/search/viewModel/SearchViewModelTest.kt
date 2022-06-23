@@ -47,15 +47,15 @@ class SearchViewModelTest : TestCase(){
 
     @Test
     fun getAllProductsTest_allProducts() = runBlockingTest {
-//        // When tasks are requested from the tasks repository
-//        val viewModel = SearchViewModel(repo)
-//        viewModel.getAllProducts()
-//        shadowOf(getMainLooper()).idle();
-//
-//        val tasks = viewModel.onlineProducts.getOrAwaitValue()
-//
-//        // Then tasks are loaded from the remote data source
-//        assertEquals(0,tasks.size)
+        // When tasks are requested from the tasks repository
+        val viewModel = SearchViewModel(repo)
+        viewModel.getAllProducts()
+        shadowOf(getMainLooper()).idle();
+
+        val tasks = viewModel.onlineProducts.getOrAwaitValue()
+
+        // Then tasks are loaded from the remote data source
+        assertEquals(3,tasks.size)
     }
 
 
