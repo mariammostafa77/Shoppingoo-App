@@ -128,6 +128,7 @@ class FavouriteFragment : Fragment(),FavouriteOnClickLisner {
         return view
     }
 
+
     override fun onItemClickListener(draftOrderX: DraftOrderX) {
         if (CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
             val builder = AlertDialog.Builder(requireContext())
@@ -154,7 +155,7 @@ class FavouriteFragment : Fragment(),FavouriteOnClickLisner {
 
                         } else {
                             Toast.makeText(requireContext(),
-                                "Deleted failed: " + response.code().toString(),
+                                "Deleted failed",
                                 Toast.LENGTH_SHORT).show()
 
                         }
@@ -171,6 +172,8 @@ class FavouriteFragment : Fragment(),FavouriteOnClickLisner {
                 "Please check internet",
                 Toast.LENGTH_SHORT).show()
         }
+
     }
+
 
 }

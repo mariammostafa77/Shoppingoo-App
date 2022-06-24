@@ -67,7 +67,9 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/fname_txt"
                     android:background="@color/black"
-
+                    app:endIconTint="@color/purple_200"
+                    android:foregroundTint="@color/purple_200"
+                    android:textColorHint="@color/purple_200"
                     >
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/edtLName"
@@ -76,6 +78,13 @@
                         android:inputType="textPersonName"
                         android:minHeight="48dp"
                         android:background="@color/white"
+                        android:drawableTint="@color/purple_200"
+                        android:drawableRight="@drawable/person_24"
+                        android:foregroundTint="@color/purple_200"
+                        android:textColorHint="@color/purple_200"
+                        android:textColor="@color/purple_200"
+
+
                         />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -92,6 +101,10 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     android:background="@color/black"
+                    app:endIconTint="@color/purple_200"
+                    android:foregroundTint="@color/purple_200"
+                    android:textColorHint="@color/purple_200"
+
 
                     >
                     <com.google.android.material.textfield.TextInputEditText
@@ -100,7 +113,14 @@
                         android:layout_height="wrap_content"
                         android:inputType="textPersonName"
                         android:minHeight="48dp"
+                        android:drawableTint="@color/purple_200"
                         android:background="@color/white"
+                        android:drawableRight="@drawable/person_24"
+                        android:foregroundTint="@color/purple_200"
+                        android:textColorHint="@color/purple_200"
+                        android:textColor="@color/purple_200"
+
+
                         />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -117,6 +137,10 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/lname_txt"
                     android:background="@color/black"
+                    app:endIconTint="@color/purple_200"
+                    android:foregroundTint="@color/purple_200"
+                    android:textColorHint="@color/purple_200"
+
                     >
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/edtRegisterEmail"
@@ -125,6 +149,12 @@
                         android:inputType="textEmailAddress"
                         android:minHeight="48dp"
                         android:background="@color/white"
+                        android:drawableTint="@color/purple_200"
+                        android:drawableRight="@drawable/authemail_24"
+                        android:foregroundTint="@color/purple_200"
+                        android:textColorHint="@color/purple_200"
+                        android:textColor="@color/purple_200"
+
                         />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -140,6 +170,10 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/email_txt"
                     android:background="@color/black"
+                    app:endIconTint="@color/purple_200"
+                    android:foregroundTint="@color/purple_200"
+                    android:textColorHint="@color/purple_200"
+
                     >
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/edtRegisterPassword"
@@ -148,6 +182,10 @@
                         android:inputType="textPassword"
                         android:minHeight="48dp"
                         android:background="@color/white"
+                        android:drawableTint="@color/purple_200"
+                        android:foregroundTint="@color/purple_200"
+                        android:textColorHint="@color/purple_200"
+                        android:textColor="@color/purple_200"
                         />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -155,14 +193,18 @@
 
 
 
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnRegister"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="40dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="40dp"
-                    android:backgroundTint="#021139"
+                    android:backgroundTintMode="src_over"
+                    android:padding="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="25sp"
+                    android:textSize="20sp"
+                    android:backgroundTint="@color/purple_200"
+                    app:cornerRadius="10dp"
+                    app:layout_constraintWidth_percent="0.9"
                     android:text="@string/register"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -174,8 +216,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
+                    android:layout_marginTop="10dp"
                     android:text="@string/haveAcc"
                     android:textColor="#149EDC"
+
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -193,6 +237,9 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/password_txt"
                     android:background="@color/black"
+                    app:endIconTint="@color/purple_200"
+                    android:foregroundTint="@color/purple_200"
+                    android:textColorHint="@color/purple_200"
                     >
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/edtConfirmPass"
@@ -201,6 +248,10 @@
                         android:inputType="textPassword"
                         android:minHeight="48dp"
                         android:background="@color/white"
+                        android:drawableTint="@color/purple_200"
+                        android:textColorHint="@color/purple_200"
+                        android:foregroundTint="@color/purple_200"
+                        android:textColor="@color/purple_200"
                         />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -218,6 +269,10 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/password_txt2"
                     android:background="@color/black"
+                    app:endIconTint="@color/purple_200"
+                    android:foregroundTint="@color/purple_200"
+                    android:textColorHint="@color/purple_200"
+
                     >
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/edtPhone"
@@ -226,6 +281,11 @@
                         android:inputType="phone"
                         android:minHeight="48dp"
                         android:background="@color/white"
+                        android:drawableTint="@color/purple_200"
+                        android:drawableRight="@drawable/phone_24"
+                        android:textColorHint="@color/purple_200"
+                        android:foregroundTint="@color/purple_200"
+                        android:textColor="@color/purple_200"
                         />
 
                 </com.google.android.material.textfield.TextInputLayout>

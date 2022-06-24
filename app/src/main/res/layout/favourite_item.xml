@@ -43,6 +43,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="12dp"
             android:text="Title"
+            android:textColor="@color/purple_200"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/deleteFav"
@@ -56,6 +57,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:text="@string/Price"
+            android:textColor="@color/purple_200"
             android:textSize="14sp"
             app:layout_constraintStart_toEndOf="@+id/favProductImg"
             app:layout_constraintTop_toBottomOf="@+id/favProductTitle" />

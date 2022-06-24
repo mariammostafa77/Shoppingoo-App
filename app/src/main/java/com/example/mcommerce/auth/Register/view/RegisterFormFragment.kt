@@ -76,7 +76,6 @@ class RegisterFormFragment : Fragment() {
         txtLogin.setOnClickListener {
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
             transaction.replace(R.id.fragmentContainerView, LoginFormFragment())
-            transaction.addToBackStack(null);
             transaction.commit()
         }
         btnSkip.setOnClickListener {
@@ -102,33 +101,18 @@ class RegisterFormFragment : Fragment() {
             customer.first_name = registerFName
             customer.last_name = registerLName
             customer.email = registerEmail
-            // customer.password = edtPassword.text.toString()
-            // customer.password_confirmation = edtConfirmPASS.text.toString()
             customer.verified_email = true
             var phoneNumber: String = registerPhone
             customer.phone = phoneNumber
-
-            //  customer.phone="01009843245"
             customer.tags = registerPassword
-//            customer.addresses = listOf(Addresse(address1 = "Alkafal",
-//                phone = "01203574583",
-//                city = "Alex",
-//                province = "",
-//                zip = "21552",
-//                last_name = "Lastnameson",
-//                first_name = "Mother",
-//                country = "EG"))
 
             var customDetai = CustomerDetail(customer)
-            Toast.makeText(requireContext(), "" + myEdtPhone.text.toString(), Toast.LENGTH_LONG)
-                .show()
             registerViewModel.postCustomer(customDetai)
             registerViewModel.customer.observe(viewLifecycleOwner) { response ->
                 if (response.isSuccessful) {
                     registerProgressbar.visibility = View.INVISIBLE
-                    Toast.makeText(requireContext(),
-                        "Register Successfull: " + response.code().toString(),
-                        Toast.LENGTH_LONG).show()
+                    val snack = Snackbar.make(it,"Register Succefully", Snackbar.LENGTH_LONG)
+                    snack.show()
                     Log.i("Reg", "messs from success: " + response.body().toString())
                     val editor =
                         requireContext().getSharedPreferences("userAuth", Context.MODE_PRIVATE)
@@ -142,10 +126,9 @@ class RegisterFormFragment : Fragment() {
                     editor.putBoolean("isLogin", true)
                     editor.commit()
                     startActivity(Intent(requireContext(), HomeActivity::class.java))
-                } else {
 
-                    Log.i("Reg", "messs: " + response.code().toString())
-                    Log.i("Reg", "err: " + response.errorBody())
+                } else {
+                    registerProgressbar.visibility = View.INVISIBLE
                     val snack = Snackbar.make(it,"Email or Phone already Register!!", Snackbar.LENGTH_LONG)
                     snack.show()
 

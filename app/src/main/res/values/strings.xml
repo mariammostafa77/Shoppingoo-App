@@ -15,8 +15,8 @@
     <string name="register">Register</string>
     <string name="forgetPass">Forget Password?</string>
     <string name="login">Login</string>
-    <string name="createNewAcc">If you do not have an account pleas click here</string>
-    <string name="haveAcc">If you  already have an account pleas click here</string>
+    <string name="createNewAcc"><u>If you do not have an account pleas click here</u></string>
+    <string name="haveAcc"><u>If you  already have an account pleas click here</u></string>
     <string name="search">Search Here</string>
     <string name="All">All</string>
     <string name="Me">Me</string>
@@ -28,6 +28,8 @@
     <string name="WishList">WishList</string>
     <string name="Price">Price </string>
     <string name="CreatedBy">Created at: </string>
+    <string name="removeItem">Delete Item</string>
+    <string name="message">Are Yoy Sure you want to delete Iteme?</string>
     <string name="noResultFound">No Result Found </string>
     <!--
     <string name="TotalPrice">Total Price:</string>
@@ -124,6 +126,7 @@
     <string name="cash">Cash</string>
     <string name="payment_method">Payment Method</string>
     <string name="confirm_payment">Confirm Payment</string>
+    <string name="delete">Delete</string>
 
     <!-- Arrays -->
 
