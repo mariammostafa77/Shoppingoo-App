@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MCommerce</string>
+    <string name="app_name">Shoppingoo</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="brandname">Brand Name</string>
@@ -124,6 +124,7 @@
     <string name="cash">Cash</string>
     <string name="payment_method">Payment Method</string>
     <string name="confirm_payment">Confirm Payment</string>
+    <string name="reload">reload</string>
 
     <!-- Arrays -->
 

@@ -2,6 +2,7 @@ package com.example.mcommerce.categories.view
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,6 +13,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentManager
@@ -36,6 +38,7 @@ import com.example.mcommerce.model.Product
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
 import com.example.mcommerce.network.CheckInternetConnectionFirstTime
+import com.example.mcommerce.network.InternetConnectionChecker
 import com.example.mcommerce.search.viewModel.SearchViewModel
 import com.example.mcommerce.search.viewModel.SearchViewModelFactory
 import com.example.mcommerce.shopping_cart.view.ShoppingCartFragment
@@ -63,6 +66,7 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface {
     private lateinit var imgNoData:ImageView
     private lateinit var tvNoData:TextView
     private lateinit var applayBtn:Button
+    private lateinit var reloadBtn:Button
     private lateinit var communicator:Communicator
     private lateinit var categoryBarTitle:TextView
     private lateinit var dialog : BottomSheetDialog
@@ -74,13 +78,14 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface {
     private var  collectionId:String=""
     private var brandName:String=""
     private var subCategorySelected:String=""
-    private var maxPrice: Double=0.0
+    private var maxPrice: Double=0.1
     private var priceSliderPrice: Double=0.0
     private var priceSelectesConverted:Double=0.0
     private var allVariantsID:ArrayList<Long> = ArrayList<Long>()
     private var allFavProducts:ArrayList<DraftOrderX> = ArrayList<DraftOrderX>()
     private var allProducts: ArrayList<Product> = ArrayList()
 
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -88,7 +93,6 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface {
         // Inflate the layout for this fragment
         val view=inflater.inflate(R.layout.fragment_category, container, false)
         initComponents(view)
-        Log.i("categoryFragmentId","categoryFragmentId from category $flag")
         if(flag == 0){
             checkArgs()
         } else{
@@ -97,59 +101,72 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface {
         searchFactor = SearchViewModelFactory(
             Repository.getInstance(AppClient.getInstance(), requireContext())
         )
-        Log.i("TAG","")
-        searchViewModel = ViewModelProvider(this, searchFactor).get(SearchViewModel::class.java)
         subCategoriesAdapter= SubCategoriesAdapter()
         brandProductsAdapter= BrandProductsAdapter()
         categoryRecyclerView.adapter = brandProductsAdapter
         communicator = activity as Communicator
         customerViewModelFactory = CustomerViewModelFactory(Repository.getInstance(AppClient.getInstance(), requireContext()))
         customerViewModel = ViewModelProvider(this, customerViewModelFactory).get(CustomerViewModel::class.java)
-        val sharedPreferences = requireContext().getSharedPreferences("userAuth", AppCompatActivity.MODE_PRIVATE)
-        val email: String? = sharedPreferences.getString("email","")
         collectionId=""
         categoriesProductFactory = CategoriesViewFactory(
             Repository.getInstance(
                 AppClient.getInstance(),
                 requireContext()))
-        categoriesProductViewModel = ViewModelProvider(this, categoriesProductFactory)[CategoriesViewModel::class.java]
+        categoriesProductViewModel =
+            ViewModelProvider(this, categoriesProductFactory)[CategoriesViewModel::class.java]
         categoryBarTitle.text=brandName
+        callData()
+        reloadBtn.setOnClickListener {
+            callData()
+        }
         filterImg.setOnClickListener(View.OnClickListener {
             val view = layoutInflater.inflate(R.layout.custom_bottom_sheet, null)
             val subTypeRecycle:RecyclerView=view.findViewById(R.id.subTypeRecycle)
             applayBtn=view.findViewById(R.id.applayBtn)
             priceSlider=view.findViewById(R.id.priceSlider)
             priceSlider.valueFrom = 0.0F
-            val strPrice =  SavedSetting.getPrice(maxPrice.toString(), requireContext())
-            val delim = " "
-            val list = strPrice.split(delim)
-            priceSlider.valueTo =list[0].toFloat()
-            priceSlider.addOnChangeListener { rangeSlider, value, fromUser ->
-                priceSliderPrice= value.toDouble()
-            }
-            applayBtn.setOnClickListener {
-                if(priceSliderPrice != 0.0){
-                    if(list[1] != "EGP"){
-                        categoriesProductViewModel.getAmountAfterConversionInEgp(list[1])
-                    }
-                    else{
-                        filterProductsByPrice(allProducts,priceSliderPrice)
-                    }
+
+            if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())){
+                val strPrice =  SavedSetting.getPrice(maxPrice.toString(), requireContext())
+                val delim = " "
+                val list = strPrice.split(delim)
+                priceSlider.valueTo =list[0].toFloat()
+                priceSlider.addOnChangeListener { rangeSlider, value, fromUser ->
+                    priceSliderPrice= value.toDouble()
                 }
-                dialog.dismiss()
+                applayBtn.setOnClickListener {
+                    if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())){
+                        if(priceSliderPrice != 0.0){
+                            if(list[1] != "EGP"){
+                                categoriesProductViewModel.getAmountAfterConversionInEgp(list[1])
+                            }
+                            else{
+                                filterProductsByPrice(allProducts,priceSliderPrice)
+                            }
+                        }
+                        noInternetCategoryLayout.visibility=View.INVISIBLE
+                    }else{
+                        Toast.makeText(requireContext(),
+                            "Please check internet",
+                            Toast.LENGTH_SHORT).show()
+                    }
+                    dialog.dismiss()
+
+                }
+                subTypeRecycle.adapter = subCategoriesAdapter
+                priceSlider=view.findViewById(R.id.priceSlider)
+                dialog.setContentView(view)
+                dialog.show()
+                noInternetCategoryLayout.visibility=View.INVISIBLE
+            }else{
+                noInternetCategoryLayout.visibility=View.VISIBLE
             }
-            subTypeRecycle.adapter = subCategoriesAdapter
-            priceSlider=view.findViewById(R.id.priceSlider)
-            dialog.setContentView(view)
-            dialog.show()
+
         })
         categoriesProductViewModel.onlineCurrencyChangedInEgp.observe(viewLifecycleOwner){
             priceSelectesConverted=priceSliderPrice/it.result
             filterProductsByPrice(allProducts,priceSelectesConverted)
         }
-
-        categoriesProductViewModel.getCategoriesProduct(brandName,subCategorySelected, collectionId)
-        getSubTypes()
         categoriesProductViewModel.onlinesubcategoriesProduct.observe(viewLifecycleOwner) {products ->
             allProducts.clear()
             allProducts.addAll(products)
@@ -163,7 +180,6 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface {
         }
         categoriesProductViewModel.allOnlineProductsSubTypes.observe(viewLifecycleOwner) {
             getProductTypes(it)
-            Log.i("TAG","")
         }
         categoriesTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
@@ -211,7 +227,6 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface {
     private fun checkArgs() {
         if(arguments != null){
             brandName=arguments?.getString("brandTitle").toString()
-            Log.i("TAG","Brand name from category $brandName")
         }else{
             brandName=""
         }
@@ -224,13 +239,15 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface {
     }
     override fun onSubCategoryClick(type:String) {
         subCategorySelected=type
-        categoriesProductViewModel.getCategoriesProduct(brandName,subCategorySelected, collectionId)
-        Toast.makeText(requireContext(),subCategorySelected,Toast.LENGTH_LONG).show()
-        //dialog.dismiss()
+        if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())){
+            categoriesProductViewModel.getCategoriesProduct(brandName,subCategorySelected, collectionId)
+        }else{
+            Toast.makeText(requireContext(),
+                "Please check internet",
+                Toast.LENGTH_SHORT).show()
+        }
+
     }
-
-
-
     private fun initComponents(view:View){
         categoriesTabLayout = view.findViewById(R.id.categoryTabBar)
         categoryRecyclerView=view.findViewById(R.id.categoryRecyclerView)
@@ -242,6 +259,7 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface {
         dialog = BottomSheetDialog(requireContext())
         tvNoData = view.findViewById(R.id.tvNoData)
         imgNoData=view.findViewById(R.id.imgNoData)
+        reloadBtn=view.findViewById(R.id.reloadBtn)
         noInternetCategoryLayout=view.findViewById(R.id.noInternetCategoryLayout)
 
     }
@@ -258,42 +276,46 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface {
         when (tab.position) {
             0 -> {
                 collectionId=""
-                maxPrice=0.0
-                categoriesProductViewModel.getCategoriesProduct(brandName,"", collectionId)
-                getSubTypes()
+                onTabSelected(brandName,collectionId)
                 true
             }
             1 -> {
                 collectionId="273053712523"
-                maxPrice=0.0
-                categoriesProductViewModel.getCategoriesProduct(brandName,"", collectionId)
-                getSubTypes()
+                onTabSelected(brandName,collectionId)
                 true
             }
             2 -> {
                 collectionId="273053679755"
-                maxPrice=0.0
-                categoriesProductViewModel.getCategoriesProduct(brandName,"", collectionId)
-                getSubTypes()
+                onTabSelected(brandName,collectionId)
                 true
             }
             3 -> {
                 collectionId="273053745291"
-                maxPrice=0.0
-                categoriesProductViewModel.getCategoriesProduct(brandName,"", collectionId)
-                getSubTypes()
+                onTabSelected(brandName,collectionId)
                 true
             }
             4 -> {
                 collectionId="273053778059"
-                maxPrice=0.0
-                categoriesProductViewModel.getCategoriesProduct(brandName,"", collectionId)
-                getSubTypes()
+                onTabSelected(brandName,collectionId)
                 true
             }
             else -> false
 
         }
+    }
+    private fun onTabSelected(brandName:String,collectionId:String){
+        maxPrice=0.1
+        subCategorySelected=""
+        if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())){
+            categoriesProductViewModel.getCategoriesProduct(brandName,subCategorySelected, collectionId)
+            getSubTypes()
+            noInternetCategoryLayout.visibility=View.INVISIBLE
+        }else{
+            noInternetCategoryLayout.visibility=View.VISIBLE
+        }
+
+
+
     }
     private fun getSubTypes() {
         categoriesProductViewModel.getSubType(brandName,"",collectionId)
@@ -321,6 +343,16 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface {
         Log.i("","")
         brandProductsAdapter.setUpdatedData(filteredProduct,requireContext(),communicator)
         checkEmptyArray(filteredProduct)
+    }
+    private fun callData(){
+        if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())){
+            searchViewModel = ViewModelProvider(this, searchFactor).get(SearchViewModel::class.java)
+            categoriesProductViewModel.getCategoriesProduct(brandName,subCategorySelected, collectionId)
+            getSubTypes()
+            noInternetCategoryLayout.visibility=View.INVISIBLE
+        }else{
+            noInternetCategoryLayout.visibility=View.VISIBLE
+        }
     }
 
 }

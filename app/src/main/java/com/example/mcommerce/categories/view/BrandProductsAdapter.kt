@@ -16,7 +16,6 @@ import com.example.mcommerce.model.Product
 
 class BrandProductsAdapter : RecyclerView.Adapter<BrandProductsAdapter.ViewHolder>(){
     var allBrands:List<Product> = ArrayList<Product>()
-    //var variant:List<Variants> = ArrayList<Variants>()
     lateinit var context: Context
     lateinit var comminucator:Communicator
 
@@ -31,7 +30,6 @@ class BrandProductsAdapter : RecyclerView.Adapter<BrandProductsAdapter.ViewHolde
         val productImage: ImageView = itemView.findViewById(R.id.productImage)
         var catCardView:CardView=itemView.findViewById(R.id.cardViewCategoryItem)
         var tvProductPrice:TextView=itemView.findViewById(R.id.tvProductPrice)
-        //var favIconImage:ImageView=itemView.findViewById(R.id.favIconImage)
 
         fun bind(data: Product){
             productName.text=allBrands[position].title
@@ -43,10 +41,7 @@ class BrandProductsAdapter : RecyclerView.Adapter<BrandProductsAdapter.ViewHolde
             catCardView.setOnClickListener {
                 comminucator.passProductData(allBrands[position])
             }
-            /*favIconImage.setOnClickListener {
-                currencyConvertor.addToFav(allBrands[position],favIconImage,position)
-            }
-            currencyConvertor.addFavImg(favIconImage,allBrands[position].variants[0].id)*/
+
 
         }
     }

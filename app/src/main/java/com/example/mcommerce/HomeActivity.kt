@@ -137,9 +137,7 @@ class HomeActivity : AppCompatActivity(),Communicator {
     }
 
     override fun goFromBrandToCategories(brandName:String) {
-        internetConnectionChecker = InternetConnectionChecker(this)
-        internetConnectionChecker.observe(this,{ isConnected ->
-            if (isConnected){
+            if (CheckInternetConnectionFirstTime.checkForInternet(this)) {
                 myDetailsFlag=0
                 categoryFragmentId=0
                 val bundle=Bundle()
@@ -149,8 +147,13 @@ class HomeActivity : AppCompatActivity(),Communicator {
                 replaceFragment(myCategoryFragment)
                 bottomNavigationView.setSelectedItemId(R.id.categoryTab)
                 categoryFragmentId=1
+                Log.i("TAG","")
+            }else{
+                Toast.makeText(this,
+                    "Please check internet",
+                    Toast.LENGTH_SHORT).show()
             }
-        })
+        
 
     }
 

@@ -20,7 +20,7 @@
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/fragment_add_new_address.xml" value="0.17753623188405798" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/fragment_app_setting.xml" value="0.17753623188405798" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/fragment_brand_products.xml" value="0.17346014492753623" />
-        <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/fragment_category.xml" value="0.2027194066749073" />
+        <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/fragment_category.xml" value="0.33" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/fragment_confirm_order.xml" value="0.25" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/fragment_favourite.xml" value="0.1082427536231884" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/fragment_home.xml" value="0.1" />
@@ -46,6 +46,7 @@
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/shopping_cart_item.xml" value="0.17753623188405798" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/sub_category_item.xml" value="0.12273550724637682" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/menu/hom_tabs.xml" value="0.1787037037037037" />
+        <entry key="..\:/ITI/GraduationProject/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.15625" />
         <entry key="..\:/Users/elshamey/OneDrive/Desktop/MCommerce-App/app/src/main/res/layout/activity_home.xml" value="0.13020833333333334" />
         <entry key="..\:/Users/elshamey/OneDrive/Desktop/MCommerce-App/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/elshamey/OneDrive/Desktop/MCommerce-App/app/src/main/res/layout/ads_layout.xml" value="0.25" />
