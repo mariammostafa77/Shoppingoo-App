@@ -51,7 +51,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="8dp">
-
+<!--
     <TextView
         android:id="@+id/paymentTitleTxt"
         android:layout_width="wrap_content"
@@ -144,7 +144,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/txtShippingPhone"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
-
+-->
     <androidx.cardview.widget.CardView
         android:id="@+id/paymentMethodCardView"
         android:layout_width="match_parent"
@@ -153,7 +153,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/shippingInfoCardView"
+        app:layout_constraintTop_toTopOf="parent"
         >
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -340,6 +340,20 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtSubTotalText"
                 />
+
+            <LinearLayout
+                android:id="@+id/line"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                app:layout_constraintWidth_percent="0.4"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="10dp"
+                android:background="#6E6E6E"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtFeesText"/>
+
             <TextView
                 android:id="@+id/txtTotal"
                 android:layout_width="wrap_content"

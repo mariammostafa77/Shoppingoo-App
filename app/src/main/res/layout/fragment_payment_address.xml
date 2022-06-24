@@ -29,7 +29,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-       <!--
+
         <ImageView
             android:id="@+id/address_add_new_address"
             android:layout_width="wrap_content"
@@ -40,7 +40,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/white"/>
-        -->
         <ImageView
             android:id="@+id/address_back_icon"
             android:layout_width="wrap_content"
@@ -121,7 +120,7 @@
         android:padding="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:text="@string/add_new_address"
+        android:text="@string/continue_to_payment"
         android:textSize="20sp"
         app:backgroundTint="@color/buttons"
         app:cornerRadius="10dp"

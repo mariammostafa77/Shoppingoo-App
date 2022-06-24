@@ -49,6 +49,7 @@ class HomeActivity : AppCompatActivity(),Communicator {
         var mySearchFlag:Int=0
         var myDetailsFlag:Int=0
         var myFavFlag:Boolean=false
+        var addAddressFrom = 0
 
     }
 
@@ -250,7 +251,7 @@ class HomeActivity : AppCompatActivity(),Communicator {
             Log.i("Testttt","from Home Activity ${userAdress?.get(0)}")
 
             val mBundle = Bundle()
-            var addressFragment = AddNewAddressFragment()
+            val addressFragment = AddNewAddressFragment()
             mBundle.putStringArrayList("adress",userAdress)
             addressFragment.arguments = mBundle
             replaceFragment(addressFragment)

@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.*
 import androidx.lifecycle.ViewModelProvider
 import com.example.mcommerce.ProductInfo.view.Communicator
@@ -49,6 +50,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.stripe.android.PaymentConfiguration
 import com.stripe.android.paymentsheet.PaymentSheet
 import com.stripe.android.paymentsheet.PaymentSheetResult
+import java.math.RoundingMode
+import java.text.DecimalFormat
 import java.util.*
 
 
@@ -64,13 +67,9 @@ class PaymentFragment : Fragment() {
     lateinit var radioCash: RadioButton
     lateinit var radioVisa: RadioButton
     lateinit var txtDiscountCount: TextView
-    lateinit var txtUserName: TextView
-    lateinit var txtShippingPhone: TextView
-    lateinit var txtShippingAddress: TextView
     lateinit var confirm_payment_back_icon: ImageView
     lateinit var noInternetLayoutPayment: ConstraintLayout
 
-    private lateinit var internetConnectionChecker: InternetConnectionChecker
     lateinit var couponsFactory: HomeViewModelFactory
     lateinit var couponsViewModel: HomeViewModel
 
@@ -107,7 +106,6 @@ class PaymentFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
-
 
     @SuppressLint("SetTextI18n")
     override fun onCreateView(
@@ -155,9 +153,9 @@ class PaymentFragment : Fragment() {
         txtSubTotalText.text = subTotoalAmount
         txtTotalText.text = totoalAmount
         txtFeesText.text = taxAmount
-        txtUserName.text = getUserName(requireContext())
-        txtShippingPhone.text = selectedAddress.phone
-        txtShippingAddress.text = "${selectedAddress.address1}, ${selectedAddress.city}. "
+     //   txtUserName.text = getUserName(requireContext())
+     //   txtShippingPhone.text = selectedAddress.phone
+     //   txtShippingAddress.text = "${selectedAddress.address1}, ${selectedAddress.city}. "
 
         confirm_payment_back_icon.setOnClickListener {
             val manager: FragmentManager = activity!!.supportFragmentManager
@@ -165,9 +163,10 @@ class PaymentFragment : Fragment() {
         }
 
         btnApplyDiscount.setOnClickListener {
+            etCouponsField.onEditorAction(EditorInfo.IME_ACTION_DONE)
             if (CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
                 applyDiscount(it)
-            }
+           }
             else{
                 val snake = Snackbar.make(it, "Ops! You Lost internet connection!!!", Snackbar.LENGTH_LONG)
                 snake.show()
@@ -226,7 +225,7 @@ class PaymentFragment : Fragment() {
     }
 
     private fun initComponent(view: View) {
-        paymentTitleTxt = view.findViewById(R.id.paymentTitleTxt)
+        //paymentTitleTxt = view.findViewById(R.id.paymentTitleTxt)
         txtSubTotalText = view.findViewById(R.id.txtSubTotalText)
         txtFeesText = view.findViewById(R.id.txtFeesText)
         txtTotalText = view.findViewById(R.id.txtTotalText)
@@ -236,9 +235,9 @@ class PaymentFragment : Fragment() {
         radioCash = view.findViewById(R.id.radioCash)
         radioVisa = view.findViewById(R.id.radioVisa)
         txtDiscountCount = view.findViewById(R.id.txtDiscountCount)
-        txtShippingAddress = view.findViewById(R.id.txtShippingAddress)
-        txtUserName = view.findViewById(R.id.txtUserName)
-        txtShippingPhone = view.findViewById(R.id.txtShippingPhone)
+      //  txtShippingAddress = view.findViewById(R.id.txtShippingAddress)
+      //  txtUserName = view.findViewById(R.id.txtUserName)
+      //  txtShippingPhone = view.findViewById(R.id.txtShippingPhone)
         confirm_payment_back_icon = view.findViewById(R.id.confirm_payment_back_icon)
         noInternetLayoutPayment = view.findViewById(R.id.noInternetLayoutPayment)
     }
@@ -253,29 +252,36 @@ class PaymentFragment : Fragment() {
 
     private fun applyDiscount(view: View) {
         var discountCode = etCouponsField.text.toString()
+        couponsViewModel.getDiscountCoupons()
+        var validDiscount = false
         couponsViewModel.onlineDiscountCodes.observe(viewLifecycleOwner) { coupons ->
             if (coupons != null) {
                 for (i in 0..coupons.size - 1) {
                     if (coupons[i].code.equals(discountCode)) {
-                        btnApplyDiscount.setText("Verified!")
-                        etCouponsField.setEnabled(false)
-                        discountCode = etCouponsField.text.toString()
-                        txtDiscountCount.text = (total * 0.1).toString()
-                        total = total.toDouble() - txtDiscountCount.text.toString().toDouble()
-                        txtTotalText.text =
-                            SavedSetting.getPrice(total.toString(), requireContext())
+                        validDiscount = true
                         break
-                    } else {
-                        val snake = Snackbar.make(view, "Invalid Coupons.", Snackbar.LENGTH_LONG)
-                        snake.show()
-
+                    }else{
+                        validDiscount= false
                     }
                 }
             }
         }
+        if(validDiscount==true){
+            btnApplyDiscount.setText("Verified!")
+            etCouponsField.setEnabled(false)
+            discountCode = etCouponsField.text.toString()
+            txtDiscountCount.text = (total * 0.1).toString()
+            total = total.toDouble() - txtDiscountCount.text.toString().toDouble()
+            val df = DecimalFormat("#.##")
+            df.roundingMode = RoundingMode.UP
+            val roundoff = df.format(total)
+            txtTotalText.text = SavedSetting.getPrice(roundoff.toString(), requireContext())
+        }else{
+            val snake = Snackbar.make(view, "Invalid Coupons.", Snackbar.LENGTH_LONG)
+            snake.show()
+
+        }
     }
-
-
     /// Stripe Methods
     fun onPaymentSheetResult(paymentSheetResult: PaymentSheetResult) {
         if (paymentSheetResult is PaymentSheetResult.Completed) {
@@ -298,7 +304,6 @@ class PaymentFragment : Fragment() {
             country_code = selectedAddress.country_code.toString()
         )
         order.shipping_address = shippingAddress
-        //  order.discount_codes = listOf(discountCode)
         order.processing_method = paymentMethod
         order.line_items = lineItems as List<com.example.mcommerce.orders.model.LineItem>
         val orderResponse = OrderResponse(order)

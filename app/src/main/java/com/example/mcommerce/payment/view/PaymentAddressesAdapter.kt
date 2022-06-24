@@ -14,7 +14,7 @@ import com.example.mcommerce.auth.model.Addresse
 import com.example.mcommerce.draftModel.LineItem
 import com.example.mcommerce.draftModel.OrderPrices
 
-class PaymentAddressesAdapter (var communicator: Communicator, var lineItems: ArrayList<LineItem>, var orderPrices: ArrayList<OrderPrices>)
+class PaymentAddressesAdapter (var paymentAddressClickListener: PaymentAddressClickListener,var communicator: Communicator, var lineItems: ArrayList<LineItem>, var orderPrices: ArrayList<OrderPrices>)
     : RecyclerView.Adapter<PaymentAddressesAdapter.ViewHolder>(){
     var customerAddresses :List<Addresse> = ArrayList<Addresse>()
     lateinit var context: Context
@@ -40,16 +40,17 @@ class PaymentAddressesAdapter (var communicator: Communicator, var lineItems: Ar
             row_index = position
             notifyDataSetChanged()
             val selectedAddresses: Addresse = customerAddresses[position]
-            communicator.goToPaymentFromAddress(selectedAddresses,lineItems,orderPrices)
+            paymentAddressClickListener.goFromAddressToPayment(selectedAddresses)
+            //communicator.goToPaymentFromAddress(selectedAddresses,lineItems,orderPrices)
         }
-        /*
+
         if(row_index == position){
             holder.addressCardView.setBackgroundColor(ContextCompat.getColor(context, R.color.buttons))
         }
         else{
             holder.addressCardView.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
         }
-         */
+
 
     }
     override fun getItemCount(): Int {

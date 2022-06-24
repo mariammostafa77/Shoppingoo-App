@@ -75,7 +75,7 @@
     <string name="Orders">الطلبات</string>
     <string name="orderDetails">تفاصيل الطلب</string>
     <string name="address2">العنوان:</string>
-    <string name="TotalPrice">السعر الكلي</string>
+    <string name="TotalPrice">الأجمالى:</string>
     <string name="Quantity">الكمية:</string>
     <string name="orderSummary">ملخص الطلب</string>
     <string name="phoneNum">رقم التليفون</string>
@@ -94,7 +94,7 @@
     <string name="no_data_to_display">لا يوجد بيانات للعرض</string>
 
     <string name="choose_address">احتار عنوان</string>
-    <string name="please_select_your_shipping_address">من فضلك اختار عنوانك </string>
+    <string name="please_select_your_shipping_address">من فضلك اختار عنوانك او اضغط على علامة الاضافة لاضافة عنوان جديد.</string>
     <string name="varaince">ألأنواع</string>
     <string name="_0_0">0.0</string>
     <string name="discount">خصم:</string>

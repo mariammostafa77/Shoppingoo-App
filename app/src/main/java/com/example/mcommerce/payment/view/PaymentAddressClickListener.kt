@@ -6,6 +6,6 @@ import com.example.mcommerce.draftModel.OrderPrices
 
 interface PaymentAddressClickListener {
 
-    fun goFromAddressToPayment(selectedAddress: Addresse, lineItems: ArrayList<LineItem>, orderPrices: ArrayList<OrderPrices>)
+    fun goFromAddressToPayment(selectedAddress: Addresse)
 
 }

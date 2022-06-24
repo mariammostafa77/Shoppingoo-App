@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mcommerce.HomeActivity
 import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.R
 import com.example.mcommerce.auth.model.Addresse
@@ -89,8 +90,6 @@ class UserAddressesFragment : Fragment() {
             }
         })
 
-
-      //  customerViewModel.getUserDetails(customerId)
         customerViewModel.customerInfo.observe(viewLifecycleOwner) { response ->
             if(response != null) {
                 customerAddressAdapter.setCustomerAddressesData(requireContext(), response.addresses!!)
@@ -109,6 +108,7 @@ class UserAddressesFragment : Fragment() {
             manager.popBackStack()
         }
         btnAddNewAddress.setOnClickListener {
+            HomeActivity.addAddressFrom = 0
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
             transaction.replace(R.id.frameLayout, AddNewAddressFragment())
             transaction.addToBackStack(null)

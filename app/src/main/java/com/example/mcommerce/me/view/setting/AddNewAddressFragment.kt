@@ -21,6 +21,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import com.example.mcommerce.HomeActivity
+import com.example.mcommerce.HomeActivity.Companion.addAddressFrom
 import com.example.mcommerce.R
 import com.example.mcommerce.auth.model.Addresse
 import com.example.mcommerce.auth.model.CustomerDetail
@@ -31,6 +32,7 @@ import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
 import com.example.mcommerce.network.CheckInternetConnectionFirstTime
 import com.example.mcommerce.network.InternetConnectionChecker
+import com.example.mcommerce.payment.view.PaymentAddressFragment
 import com.google.android.material.snackbar.Snackbar
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
@@ -76,7 +78,6 @@ class AddNewAddressFragment : Fragment() {
                     val snake = Snackbar.make(it, "Ops! You Lost internet connection!!!", Snackbar.LENGTH_LONG)
                     snake.show()
                 }
-
             }
         val bundle = arguments
         var userAddress = emptyList<String>()
@@ -92,7 +93,9 @@ class AddNewAddressFragment : Fragment() {
             btnSaveNewAddress.isVisible = false
         }
         btnSaveNewAddress.setOnClickListener {
-            if (txtAddressLine1.text.isNotEmpty() && txtAddressLine2.text.isNotEmpty() && txtPhoneNumber.text.isNotEmpty()){
+            if (txtAddressLine1.text.isNotEmpty() && txtAddressLine2.text.isNotEmpty() && txtPhoneNumber.text.isNotEmpty()
+                && !(txtAddressLine1.text.isEmpty()) && !(txtAddressLine2.text.isEmpty()) && !(txtPhoneNumber.text.isEmpty())
+                && !(txtPhoneNumber.text.length != 11)){
                 val customer = CustomerX()
                 customer.addresses = listOf(Addresse(address1 =txtAddressLine1.text.toString(), address2 = txtAddressLine2.text.toString(),
                     phone = txtPhoneNumber.text.toString(),city = userAddress.get(1),province = "",zip = userAddress.get(3),country = userAddress.get(0)))
@@ -110,18 +113,25 @@ class AddNewAddressFragment : Fragment() {
                         customerViewModel.addNewCustomerAddress(customerId,customDetail)
                         noInternetLayoutAddNewAddress.visibility=View.INVISIBLE
                     }else{
-                        var snake = Snackbar.make(view, "Ops! You Lost internet connection!!!", Snackbar.LENGTH_LONG)
+                        val snake = Snackbar.make(view, "Ops! You Lost internet connection!!!", Snackbar.LENGTH_LONG)
                         snake.show()
                     }
                 })
-              //  customerViewModel.addNewCustomerAddress(customerId,customDetail)
                 customerViewModel.newCustomerAddress.observe(viewLifecycleOwner) { response ->
                     if(response.isSuccessful){
-                        Toast.makeText(requireContext(),"Updated Successfully!!",Toast.LENGTH_LONG).show()
-                        val transaction = requireActivity().supportFragmentManager.beginTransaction()
-                        transaction.replace(R.id.frameLayout, UserAddressesFragment())
-                        transaction.addToBackStack(null)
-                        transaction.commit()
+                        Toast.makeText(requireContext(),"Added Successfully!!",Toast.LENGTH_LONG).show()
+                        if (addAddressFrom == 0) {
+                            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+                            transaction.replace(R.id.frameLayout, UserAddressesFragment())
+                            transaction.addToBackStack(null)
+                            transaction.commit()
+                        }
+                        else{
+                            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+                            transaction.replace(R.id.frameLayout, PaymentAddressFragment())
+                            transaction.addToBackStack(null)
+                            transaction.commit()
+                        }
                     }
                     else{
                         Toast.makeText(requireContext(),"Updated failed: "+response.code().toString(),Toast.LENGTH_LONG).show()
@@ -207,7 +217,7 @@ class AddNewAddressFragment : Fragment() {
         if(txtPhoneNumber.text.isEmpty()){
             txtPhoneNumber.setError("This Field Required!!")
         }
-        if(txtPhoneNumber.text.length<11){
+        if(txtPhoneNumber.text.length != 11){
             txtPhoneNumber.setError("Must Be Phone Number!")
         }
     }

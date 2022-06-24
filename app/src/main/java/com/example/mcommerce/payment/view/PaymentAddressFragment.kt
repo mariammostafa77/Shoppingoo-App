@@ -16,6 +16,9 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mcommerce.HomeActivity
+import com.example.mcommerce.HomeActivity.Companion.addAddressFrom
+import com.example.mcommerce.HomeActivity.Companion.myDetailsFlag
 import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.R
 import com.example.mcommerce.auth.model.Addresse
@@ -29,13 +32,13 @@ import com.example.mcommerce.network.AppClient
 import com.example.mcommerce.network.CheckInternetConnectionFirstTime
 import com.example.mcommerce.network.InternetConnectionChecker
 
-class PaymentAddressFragment : Fragment() {
+class PaymentAddressFragment : Fragment(), PaymentAddressClickListener {
 
     lateinit var txtNoAddressDataFound: TextView
     lateinit var imgNoAddress: ImageView
     lateinit var paymentAddressProgressBar: ProgressBar
     lateinit var address_back_icon : ImageView
-   // lateinit var address_add_new_address : ImageView
+    lateinit var address_add_new_address : ImageView
     lateinit var btnContinueToPayment : Button
     lateinit var paymentUserAddressesRecyclerView: RecyclerView
     lateinit var noInternetLayoutPaymentAddress: ConstraintLayout
@@ -48,7 +51,9 @@ class PaymentAddressFragment : Fragment() {
 
     var lineItems : ArrayList<LineItem> = ArrayList()
     var orderPrices : ArrayList<OrderPrices> = ArrayList()
-    
+    var selectedAddressFromAdapter: Addresse = Addresse()
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -67,7 +72,7 @@ class PaymentAddressFragment : Fragment() {
             val manager: FragmentManager = activity!!.supportFragmentManager
             manager.popBackStack()
         }
-        paymentAddressesAdapter = PaymentAddressesAdapter(communicator,lineItems,orderPrices)
+        paymentAddressesAdapter = PaymentAddressesAdapter(this,communicator,lineItems,orderPrices)
         customerAddressesLayoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
         paymentUserAddressesRecyclerView.setLayoutManager(customerAddressesLayoutManager)
         paymentUserAddressesRecyclerView.setAdapter(paymentAddressesAdapter)
@@ -106,13 +111,21 @@ class PaymentAddressFragment : Fragment() {
                 txtNoAddressDataFound.visibility=View.VISIBLE
             }
         }
-        /*
+
         address_add_new_address.setOnClickListener {
+            addAddressFrom = 1
             replaceFragment(AddNewAddressFragment())
         }
-         */
+
         btnContinueToPayment.setOnClickListener {
-            replaceFragment(AddNewAddressFragment())
+            myDetailsFlag=0
+            val bundle=Bundle()
+            val paymentFragment = PaymentFragment()
+            bundle.putSerializable("selectedAddress", selectedAddressFromAdapter)
+            bundle.putSerializable("lineItems",lineItems)
+            bundle.putSerializable("orderPrice",orderPrices)
+            paymentFragment.arguments=bundle
+            replaceFragment(paymentFragment)
         }
         return view
     }
@@ -120,7 +133,7 @@ class PaymentAddressFragment : Fragment() {
     private fun initComponent(view: View){
         address_back_icon = view.findViewById(R.id.address_back_icon)
         imgNoAddress = view.findViewById(R.id.imgNoAddress)
-       // address_add_new_address = view.findViewById(R.id.address_add_new_address)
+        address_add_new_address = view.findViewById(R.id.address_add_new_address)
         paymentAddressProgressBar = view.findViewById(R.id.paymentAddressProgressBar)
         txtNoAddressDataFound = view.findViewById(R.id.txtNoAddressDataFound)
         btnContinueToPayment = view.findViewById(R.id.btnContinueToPayment)
@@ -132,6 +145,11 @@ class PaymentAddressFragment : Fragment() {
         transaction.replace(R.id.frameLayout, fragment)
         transaction.addToBackStack(null)
         transaction.commit()
+    }
+
+    override fun goFromAddressToPayment(selectedAddress: Addresse) {
+        selectedAddressFromAdapter = selectedAddress
+
     }
 
 

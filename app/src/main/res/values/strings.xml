@@ -107,10 +107,10 @@
     <string name="address2">Address:</string>
 
 
-    <string name="TotalPrice">Total Price:</string>
+    <string name="TotalPrice">Total:</string>
     <string name="Quantity">Quantity:</string>
     <string name="choose_address">Choose Address</string>
-    <string name="please_select_your_shipping_address">Please select your shipping address </string>
+    <string name="please_select_your_shipping_address">Please select your shipping address or click in plus icon to add new.</string>
     <string name="varaince">varaince</string>
     <string name="applay">applay</string>
     <string name="no_data_to_display">No Data To Display</string>
