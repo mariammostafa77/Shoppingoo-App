@@ -125,7 +125,6 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface {
             applayBtn=view.findViewById(R.id.applayBtn)
             priceSlider=view.findViewById(R.id.priceSlider)
             priceSlider.valueFrom = 0.0F
-
             if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())){
                 val strPrice =  SavedSetting.getPrice(maxPrice.toString(), requireContext())
                 val delim = " "
@@ -242,9 +241,7 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface {
         if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())){
             categoriesProductViewModel.getCategoriesProduct(brandName,subCategorySelected, collectionId)
         }else{
-            Toast.makeText(requireContext(),
-                "Please check internet",
-                Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Please check internet", Toast.LENGTH_SHORT).show()
         }
 
     }
@@ -313,9 +310,6 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface {
         }else{
             noInternetCategoryLayout.visibility=View.VISIBLE
         }
-
-
-
     }
     private fun getSubTypes() {
         categoriesProductViewModel.getSubType(brandName,"",collectionId)

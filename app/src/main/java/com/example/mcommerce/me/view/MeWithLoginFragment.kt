@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
@@ -27,6 +28,8 @@ import com.example.mcommerce.favourite.view.FavouriteOnClickLisner
 import com.example.mcommerce.me.view.setting.WithLoginAppSettingFragment
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
+import com.example.mcommerce.network.CheckInternetConnectionFirstTime
+import com.example.mcommerce.network.InternetConnectionChecker
 import com.example.mcommerce.orders.model.Order
 import com.example.mcommerce.orders.view.OnOrderClickListenerInterface
 import com.example.mcommerce.orders.view.OrdersAdapter
@@ -34,6 +37,7 @@ import com.example.mcommerce.orders.view.OrdersFragment
 import com.example.mcommerce.orders.viewModel.OrdersViewFactory
 import com.example.mcommerce.orders.viewModel.OrdersViewModel
 import com.example.mcommerce.shopping_cart.view.ShoppingCartFragment
+import com.google.android.material.snackbar.Snackbar
 
 class MeWithLogin : Fragment(), FavouriteOnClickLisner, OnOrderClickListenerInterface {
 
@@ -51,9 +55,11 @@ class MeWithLogin : Fragment(), FavouriteOnClickLisner, OnOrderClickListenerInte
     lateinit var favViewModelFactory : ProductInfoViewModelFactory
     lateinit var favViewModel: ProductInfoViewModel
     lateinit var communicator: Communicator
+    lateinit var meLoginNoInternetView:ConstraintLayout
     private lateinit var ordersAdapter: OrdersAdapter
     private lateinit var ordersViewFactory: OrdersViewFactory
     private lateinit var ordersViewModel: OrdersViewModel
+    private lateinit var internetConnectionChecker: InternetConnectionChecker
     var favProducts:ArrayList<DraftOrderX> = ArrayList<DraftOrderX>()
     var userName : String = ""
     private var userId:String =""
@@ -79,9 +85,35 @@ class MeWithLogin : Fragment(), FavouriteOnClickLisner, OnOrderClickListenerInte
                 AppClient.getInstance(),
                 requireContext()))
         ordersViewModel = ViewModelProvider(this, ordersViewFactory)[OrdersViewModel::class.java]
-        if(userId.isNotEmpty()){
-            ordersViewModel.getAllOrders(userId)
+        favViewModelFactory = ProductInfoViewModelFactory(Repository.getInstance(AppClient.getInstance(), requireContext()))
+        favViewModel = ViewModelProvider(this, favViewModelFactory).get(ProductInfoViewModel::class.java)
+
+
+        if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())){
+            if(userId.isNotEmpty()){
+                ordersViewModel.getAllOrders(userId)
+            }
+            favViewModel.getFavProducts()
+            meLoginNoInternetView.visibility=View.INVISIBLE
+        }else{
+            meLoginNoInternetView.visibility=View.VISIBLE
         }
+        internetConnectionChecker = InternetConnectionChecker(requireContext())
+        internetConnectionChecker.observe(this,{ isConnected ->
+            if (isConnected){
+                if(userId.isNotEmpty()){
+                    ordersViewModel.getAllOrders(userId)
+                }
+                favViewModel.getFavProducts()
+                meLoginNoInternetView.visibility=View.INVISIBLE
+            }else{
+                var snake = Snackbar.make(view, "Ops! You Lost internet connection!!!", Snackbar.LENGTH_LONG)
+                snake.show()
+            }
+        })
+
+
+
         ordersViewModel.allOnlineOrders.observe(viewLifecycleOwner) {
             if(it.size >=2){
                 ordersAdapter.setUpdatedData(it,requireContext(),this,2)
@@ -102,18 +134,14 @@ class MeWithLogin : Fragment(), FavouriteOnClickLisner, OnOrderClickListenerInte
         //favourite arrayList
         communicator = activity as Communicator
         favRecyclerView = view.findViewById(R.id.wishListRecyclerview)
-
         favAdapter= FavProductsAdapter(this,communicator)
         linearLayoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
         favRecyclerView.setLayoutManager(linearLayoutManager)
         favRecyclerView.setAdapter(favAdapter)
 
-        favViewModelFactory = ProductInfoViewModelFactory(Repository.getInstance(AppClient.getInstance(), requireContext()))
-        favViewModel = ViewModelProvider(this, favViewModelFactory).get(ProductInfoViewModel::class.java)
 
         val email: String? = sharedPreferences.getString("email","")
         val note = "fav"
-        favViewModel.getFavProducts()
         favViewModel.onlineFavProduct.observe(viewLifecycleOwner) { allFavProducts ->
             favProducts.clear()
             for (i in 0..allFavProducts.size-1){
@@ -171,6 +199,7 @@ class MeWithLogin : Fragment(), FavouriteOnClickLisner, OnOrderClickListenerInte
         txtMoreFav=view.findViewById(R.id.txtMoreFav)
         ordersrecycler=view.findViewById(R.id.ordersrecycler)
         tvNoOrder=view.findViewById(R.id.tvNoOrder)
+        meLoginNoInternetView=view.findViewById(R.id.meLoginNoInternetView)
     }
 
     fun replaceFragment(fragment: Fragment) {

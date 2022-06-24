@@ -18,7 +18,6 @@ import com.bumptech.glide.Glide
 import com.example.mcommerce.ProductInfo.view.Communicator
 
 import com.example.mcommerce.R
-import com.example.mcommerce.home.view.HomeFragmentDirections
 import com.example.mcommerce.me.viewmodel.SavedSetting
 
 import com.example.mcommerce.model.Product

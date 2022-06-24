@@ -1,6 +1,8 @@
 package com.example.mcommerce.categories.view
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.service.autofill.OnClickAction
 import android.util.Log
 import android.view.LayoutInflater
@@ -35,11 +37,13 @@ class SubCategoriesAdapter : RecyclerView.Adapter<SubCategoriesAdapter.ViewHolde
         var subCategoryConstraintLayout : ConstraintLayout=itemView.findViewById(R.id.subCategoryConstraintLayout)
 
         fun bind(data: String) {
+            subCategoryConstraintLayout.background= ContextCompat.getDrawable(context, R.color.gray_edit_text)
             tvType.text = allTypes[position]
             Log.i("TAG","adapter on bind ${allTypes[position]}")
             tvType.setOnClickListener(View.OnClickListener {
+                notifyItemChanged(position)
                 onClickAction.onSubCategoryClick(allTypes[position])
-                //subCategoryConstraintLayout.background= ContextCompat.getDrawable(context, R.color.orange)
+                subCategoryConstraintLayout.background= ContextCompat.getDrawable(context, R.color.buttons)
 
             })
         }
