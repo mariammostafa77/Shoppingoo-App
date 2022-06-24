@@ -26,4 +26,8 @@
         <item name="colorControlNormal">@color/orange</item>
         <item name="colorControlActivated">@color/orange</item>
     </style>
+    <style name="TabLayoutStyle" parent="Base.Widget.Design.TabLayout">
+        <item name="android:textSize">14sp</item>
+    </style>
+
 </resources>

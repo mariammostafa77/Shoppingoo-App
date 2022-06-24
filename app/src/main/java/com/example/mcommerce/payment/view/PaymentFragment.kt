@@ -316,7 +316,8 @@ class PaymentFragment : Fragment() {
                     response.body()?.order!!,
                     totoalAmount,
                     subTotoalAmount,
-                    taxAmount
+                    taxAmount,
+                    paymentMethod
                 )
                 //response.body()?.order?.let { it1 -> communicator.goToOrderSummary(it1,fees) }
             } else {
