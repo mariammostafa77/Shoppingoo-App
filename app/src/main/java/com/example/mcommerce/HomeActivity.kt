@@ -1,5 +1,6 @@
 package com.example.mcommerce
 
+import android.app.PendingIntent.getActivity
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
@@ -37,10 +38,11 @@ import java.util.*
 class HomeActivity : AppCompatActivity(),Communicator {
     private val homeFragment = HomeFragment()
     private val meWithLogin = MeWithLogin()
-    private val myCategoryFragment = CategoryFragment(1)
     private val meWithoutLoginFragment = MeWithoutLoginFragment()
     lateinit var bottomNavigationView: BottomNavigationView
     private var userId =""
+    private var categoryFragmentId:Int = 1
+    private lateinit var myCategoryFragment: CategoryFragment
     private lateinit var internetConnectionChecker: InternetConnectionChecker
 
     companion object{
@@ -63,26 +65,25 @@ class HomeActivity : AppCompatActivity(),Communicator {
         val sharedPreferences: SharedPreferences = getSharedPreferences("userAuth", Context.MODE_PRIVATE)
         userId = sharedPreferences.getString("cusomerID","").toString()
         bottomNavigationView = findViewById(R.id.buttomNav)
-        replaceFragment(homeFragment)
 
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.homeTab -> {
-                    //removeFragment(get)
-                    replaceFragment(homeFragment)
+                    replaceFragmentWithoutAddToBackStack(homeFragment)
                     true
                 }
                 R.id.categoryTab -> {
-                   // finish()
-                    replaceFragment(myCategoryFragment)
+                    if(categoryFragmentId == 1){
+                        myCategoryFragment = CategoryFragment(categoryFragmentId)
+                        replaceFragmentWithoutAddToBackStack(myCategoryFragment)
+                    }
                     true
                 }
                 R.id.meTab -> {
-                   // finish()
                     if(userId.isNullOrEmpty()){
-                        replaceFragment(meWithoutLoginFragment)
+                        replaceFragmentWithoutAddToBackStack(meWithoutLoginFragment)
                     }else{
-                        replaceFragment(meWithLogin)
+                        replaceFragmentWithoutAddToBackStack(meWithLogin)
                     }
                     true
                 }
@@ -94,21 +95,26 @@ class HomeActivity : AppCompatActivity(),Communicator {
         passMapDataToFragment()
     }
 
+    override fun onStop() {
+        super.onStop()
+        categoryFragmentId=1
+    }
 
     private fun replaceFragment(fragment: Fragment) {
         if (fragment != null) {
             var transaction = supportFragmentManager.beginTransaction()
-            transaction.addToBackStack(null)
             transaction.replace(R.id.frameLayout, fragment)
             transaction.addToBackStack(null)
             transaction.commit()
         }
     }
 
-    fun removeFragment(fragment: Fragment) {
-        var transaction = supportFragmentManager.beginTransaction()
-        transaction.remove(fragment)
-        transaction.commit()
+    private fun replaceFragmentWithoutAddToBackStack(fragment: Fragment) {
+        if (fragment != null) {
+            var transaction = supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.frameLayout, fragment)
+            transaction.commit()
+        }
     }
 
     override fun passProductData(product: Product) {
@@ -135,13 +141,14 @@ class HomeActivity : AppCompatActivity(),Communicator {
         internetConnectionChecker.observe(this,{ isConnected ->
             if (isConnected){
                 myDetailsFlag=0
+                categoryFragmentId=0
                 val bundle=Bundle()
                 bundle.putString("brandTitle",brandName)
-                val categoryFragment = CategoryFragment(0)
-                categoryFragment.arguments=bundle
-                replaceFragment(categoryFragment)
-                //bottomNavigationView.setSelectedItemId(R.id.categoryTab);
-                Log.i("TAG","brandName from home $brandName")
+                myCategoryFragment = CategoryFragment(categoryFragmentId)
+                myCategoryFragment.arguments=bundle
+                replaceFragment(myCategoryFragment)
+                bottomNavigationView.setSelectedItemId(R.id.categoryTab)
+                categoryFragmentId=1
             }
         })
 
@@ -204,12 +211,13 @@ class HomeActivity : AppCompatActivity(),Communicator {
         replaceFragment(orderDetailsFragment)
     }
 
-    override fun goToOrderSummary(order: Order, totoalAmount: String, subTotal: String, taxAmount: String) {
+    override fun goToOrderSummary(order: Order, totoalAmount: String, subTotal: String, taxAmount: String, paymentMethod:String) {
         val bundle=Bundle()
         bundle.putSerializable("order",order)
         bundle.putString("totoalAmount",totoalAmount)
         bundle.putString("subTotal",subTotal)
         bundle.putString("taxAmount",taxAmount)
+        bundle.putString("paymentMethod",paymentMethod)
         val confirmOrderFragment= ConfirmOrderFragment()
         confirmOrderFragment.arguments=bundle
         replaceFragment(confirmOrderFragment)

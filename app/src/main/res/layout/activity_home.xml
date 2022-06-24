@@ -7,7 +7,7 @@
     tools:context=".HomeActivity">
 
     <fragment
-        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:name="com.example.mcommerce.home.view.HomeFragment"
         android:id="@+id/frameLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -21,6 +21,8 @@
         android:layout_height="60dp"
         android:id="@+id/buttomNav"
         app:menu="@menu/hom_tabs"
+        app:itemIconTint="@color/button_nav_style"
+        app:itemTextColor="@color/button_nav_style"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

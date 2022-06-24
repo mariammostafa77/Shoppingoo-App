@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/drawable/border.xml" value="0.2203125" />
+        <entry key="..\:/ITI/GraduationProject/app/src/main/res/drawable/button_nav_style.xml" value="0.20925925925925926" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/activity_auth.xml" value="0.1082427536231884" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/activity_home.xml" value="0.1" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/activity_main.xml" value="0.1" />
@@ -11,7 +12,7 @@
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/ads_layout.xml" value="0.17346014492753623" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/brand_layout.xml" value="0.18" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/category_cell.xml" value="0.33" />
-        <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/custom_bottom_sheet.xml" value="0.22" />
+        <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/custom_bottom_sheet.xml" value="0.33" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/dialog_view.xml" value="0.1082427536231884" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/discount_codes_layout.xml" value="0.1082427536231884" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/dtails_layout.xml" value="0.1082427536231884" />
@@ -34,7 +35,7 @@
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/fragment_product_info.xml" value="0.22" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/fragment_register.xml" value="0.17753623188405798" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/fragment_register_form.xml" value="0.21" />
-        <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/fragment_shopping_cart.xml" value="0.17" />
+        <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/fragment_shopping_cart.xml" value="0.25" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/fragment_user_addresses.xml" value="0.25" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/fragment_user_profile.xml" value="0.17753623188405798" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/image_container.xml" value="0.1082427536231884" />

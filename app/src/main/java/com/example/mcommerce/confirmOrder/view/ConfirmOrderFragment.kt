@@ -66,7 +66,7 @@ class ConfirmOrderFragment : Fragment() {
             tvSubTotal.text= arguments?.getString("subTotal")!!
             tvFees.text=arguments?.getString("taxAmount")!!
             tvPhoneNum.text=myOrder.shipping_address?.phone.toString()
-            tvPaymentMethod.text=myOrder.processing_method
+            tvPaymentMethod.text=arguments?.getString("paymentMethod")!!
             myOrder.line_items?.let { orderItemsAdapter.setUpdatedData(it,requireContext(),communicator) }
 
         }

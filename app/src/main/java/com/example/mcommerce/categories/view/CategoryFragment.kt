@@ -88,6 +88,7 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface {
         // Inflate the layout for this fragment
         val view=inflater.inflate(R.layout.fragment_category, container, false)
         initComponents(view)
+        Log.i("categoryFragmentId","categoryFragmentId from category $flag")
         if(flag == 0){
             checkArgs()
         } else{
