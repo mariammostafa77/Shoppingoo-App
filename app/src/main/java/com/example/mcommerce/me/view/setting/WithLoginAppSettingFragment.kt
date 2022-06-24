@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -41,7 +42,7 @@ class WithLoginAppSettingFragment : Fragment() {
     lateinit var txtSelectedLanguage: TextView
     lateinit var txtLastAddress: TextView
     lateinit var txtSignOutText: TextView
-    lateinit var txtCurrency : TextView
+   // lateinit var txtCurrency : TextView
     lateinit var txtUserEmail: TextView
     lateinit var currencySpinner: Spinner
 
@@ -67,7 +68,12 @@ class WithLoginAppSettingFragment : Fragment() {
         customerViewModelFactory = CustomerViewModelFactory(Repository.getInstance(AppClient.getInstance(), requireContext()))
         customerViewModel = ViewModelProvider(this, customerViewModelFactory).get(CustomerViewModel::class.java)
 
-        val sharedPreferences: SharedPreferences = context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
+        val storedCurrency = loadCurrency(requireContext())
+       // txtCurrency.text = storedCurrency
+       // Log.i("selected","selected: ${loadCurrency(requireContext())}")
+        txtSelectedLanguage.text = languageSelected
+
+        val sharedPreferences: SharedPreferences = requireContext().getSharedPreferences("userAuth", Context.MODE_PRIVATE)
         val userEmail: String? = sharedPreferences.getString("email","")
         txtUserEmail.text = userEmail
         customerViewModel.getAllCurrencies()
@@ -76,9 +82,7 @@ class WithLoginAppSettingFragment : Fragment() {
                 spinnerArray.add(currencies.get(i).currency!!)
             }
         }
-        currencySelected = loadCurrency(context!!)
-        txtCurrency.text = currencySelected
-        txtSelectedLanguage.text = languageSelected
+
         spinnerArray.add("EGP")
         val currencyAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
             requireContext(), android.R.layout.simple_spinner_item, spinnerArray)
@@ -90,9 +94,9 @@ class WithLoginAppSettingFragment : Fragment() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 currencySelected = parent?.getItemAtPosition(position).toString()
                 if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
-                    currencySelected = parent?.getItemAtPosition(position).toString()
-                    setCurrency(currencySelected, context!!)
-                    txtCurrency.text = currencySelected
+                   // currencySelected = parent?.getItemAtPosition(position).toString()
+                    setCurrency(currencySelected, requireContext())
+                 //   txtCurrency.text = currencySelected
                     customerViewModel.getAmountAfterConversion(parent?.getItemAtPosition(position).toString())
                     customerViewModel.onlineCurrencyChanged.observe(viewLifecycleOwner) { result ->
                         convertorResult = result.result
@@ -162,12 +166,10 @@ class WithLoginAppSettingFragment : Fragment() {
         currencyCard = view.findViewById(R.id.currencyCard)
         contactUsCard = view.findViewById(R.id.contactUsCard)
         shareAppCard = view.findViewById(R.id.shareAppCard)
-
         txtSelectedLanguage = view.findViewById(R.id.txtSelectedLanguage)
         txtUserEmail = view.findViewById(R.id.txtUserEmail)
-       // txtLastAddress = view.findViewById(R.id.txtLastAddress)
         txtSignOutText = view.findViewById(R.id.txtSignOutText)
-        txtCurrency = view.findViewById(R.id.txtCurrency)
+      //  txtCurrency = view.findViewById(R.id.txtCurrency)
         currencySpinner = view.findViewById(R.id.currencySpinner)
     }
 

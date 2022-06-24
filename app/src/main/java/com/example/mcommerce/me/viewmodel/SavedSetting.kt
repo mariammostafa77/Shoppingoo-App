@@ -36,7 +36,7 @@ class SavedSetting {
         }
         fun loadCurrency(context: Context) : String{
             val sharedPreferences: SharedPreferences = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
-            val currency: String? = sharedPreferences.getString("currency_to","EGP")
+            val currency: String? = sharedPreferences.getString("currency_to","")
             setCurrency(currency!!,context)
             return currency
         }

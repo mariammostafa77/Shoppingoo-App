@@ -147,7 +147,10 @@ import java.util.*
       @GET("currencies.json")
       suspend fun getAllCurrencies(): CurrencyResponse
 
-      @GET("convert?apikey=bvWIQqwc5PjLwYrSgElp83ZEktkQWLJB&amount=1&from=EGP")
+      // old
+      // bvWIQqwc5PjLwYrSgElp83ZEktkQWLJB
+      //
+      @GET("convert?apikey=ZZBiC6W0KTnat8KLnoTRNad8YmkDWnVK&amount=1&from=EGP")
       suspend fun getCurrencyValue(@Query("to") to: String): CurrencyConverter
 
       @GET("convert?apikey=bvWIQqwc5PjLwYrSgElp83ZEktkQWLJB&amount=1&to=EGP")
