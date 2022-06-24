@@ -153,9 +153,6 @@ class PaymentFragment : Fragment() {
         txtSubTotalText.text = subTotoalAmount
         txtTotalText.text = totoalAmount
         txtFeesText.text = taxAmount
-     //   txtUserName.text = getUserName(requireContext())
-     //   txtShippingPhone.text = selectedAddress.phone
-     //   txtShippingAddress.text = "${selectedAddress.address1}, ${selectedAddress.city}. "
 
         confirm_payment_back_icon.setOnClickListener {
             val manager: FragmentManager = activity!!.supportFragmentManager
@@ -235,9 +232,6 @@ class PaymentFragment : Fragment() {
         radioCash = view.findViewById(R.id.radioCash)
         radioVisa = view.findViewById(R.id.radioVisa)
         txtDiscountCount = view.findViewById(R.id.txtDiscountCount)
-      //  txtShippingAddress = view.findViewById(R.id.txtShippingAddress)
-      //  txtUserName = view.findViewById(R.id.txtUserName)
-      //  txtShippingPhone = view.findViewById(R.id.txtShippingPhone)
         confirm_payment_back_icon = view.findViewById(R.id.confirm_payment_back_icon)
         noInternetLayoutPayment = view.findViewById(R.id.noInternetLayoutPayment)
     }
@@ -324,7 +318,6 @@ class PaymentFragment : Fragment() {
                     taxAmount,
                     paymentMethod
                 )
-                //response.body()?.order?.let { it1 -> communicator.goToOrderSummary(it1,fees) }
             } else {
                 Toast.makeText(
                     requireContext(), "Order Not Placed.", Toast.LENGTH_LONG
@@ -374,7 +367,6 @@ class PaymentFragment : Fragment() {
                     try {
                         val jsonObject = JSONObject(response)
                         clientSecret = jsonObject.getString("client_secret")
-                      //  Toast.makeText(requireContext(), "Client Secret: " + clientSecret, Toast.LENGTH_SHORT).show()
                     } catch (e: JSONException) {
                         e.printStackTrace()
                     }

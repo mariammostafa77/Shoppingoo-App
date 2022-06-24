@@ -41,7 +41,6 @@ class PaymentAddressesAdapter (var paymentAddressClickListener: PaymentAddressCl
             notifyDataSetChanged()
             val selectedAddresses: Addresse = customerAddresses[position]
             paymentAddressClickListener.goFromAddressToPayment(selectedAddresses)
-            //communicator.goToPaymentFromAddress(selectedAddresses,lineItems,orderPrices)
         }
 
         if(row_index == position){
