@@ -181,11 +181,9 @@ class HomeActivity : AppCompatActivity(),Communicator {
     override fun goToUserAddresses(lineItems: ArrayList<LineItem>, orderPrices: ArrayList<OrderPrices> ){
         myDetailsFlag=0
         val bundle=Bundle()
-       // val userAddressesFragment = UserAddressesFragment()
         val paymentAddressFragment = PaymentAddressFragment()
         bundle.putSerializable("line_items",lineItems)
         bundle.putSerializable("order_price",orderPrices)
-        //Log.i("paymenttt","payment From Home${lineItems.get(0).quantity},,,, ${orderPrices.get(0).subTotal}")
         paymentAddressFragment.arguments = bundle
         replaceFragment(paymentAddressFragment)
     }
@@ -199,7 +197,6 @@ class HomeActivity : AppCompatActivity(),Communicator {
         bundle.putSerializable("orderPrice",orderPrices)
         paymentFragment.arguments=bundle
         replaceFragment(paymentFragment)
-
     }
 
 

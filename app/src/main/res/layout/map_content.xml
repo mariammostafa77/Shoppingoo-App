@@ -32,28 +32,16 @@
         android:background="@drawable/map_search_background"
         android:layout_centerHorizontal="true"
         />
+
     <ImageView
         android:id="@+id/imgSearchBtn"
         android:layout_width="24dp"
         android:layout_height="24dp"
+        android:layout_alignTop="@id/map_search_bar"
+        android:layout_alignEnd="@id/map_search_bar"
+        android:layout_alignBottom="@id/map_search_bar"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="32dp"
-        android:layout_alignTop="@id/map_search_bar"
-        android:layout_alignBottom="@id/map_search_bar"
-        android:layout_alignEnd="@id/map_search_bar"
         android:src="@drawable/ic_search" />
-<!--
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/map_search_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        app:queryHint="Search Place"
-        android:layout_marginHorizontal="8dp"
-        app:iconifiedByDefault="false"
-        android:background="@drawable/map_search_background"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentTop="true"
-        app:layout_constraintWidth_percent="0.9" />
-        -->
+
 </RelativeLayout>

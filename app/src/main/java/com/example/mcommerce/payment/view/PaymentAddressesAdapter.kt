@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.R
@@ -17,6 +18,7 @@ class PaymentAddressesAdapter (var communicator: Communicator, var lineItems: Ar
     : RecyclerView.Adapter<PaymentAddressesAdapter.ViewHolder>(){
     var customerAddresses :List<Addresse> = ArrayList<Addresse>()
     lateinit var context: Context
+    var row_index = -1
 
     fun setCustomerAddressesData(context: Context, _customerAddresses: List<Addresse>){
         this.context= context
@@ -33,10 +35,22 @@ class PaymentAddressesAdapter (var communicator: Communicator, var lineItems: Ar
         holder.cityText.text = "City  ${customerAddresses[position].city}"
         holder.userAddressLine1.text = "Area:  ${customerAddresses[position].address1}"
         holder.phoneText.text = "Phone:  ${customerAddresses[position].phone}"
+
         holder.addressCardView.setOnClickListener {
+            row_index = position
+            notifyDataSetChanged()
             val selectedAddresses: Addresse = customerAddresses[position]
             communicator.goToPaymentFromAddress(selectedAddresses,lineItems,orderPrices)
         }
+        /*
+        if(row_index == position){
+            holder.addressCardView.setBackgroundColor(ContextCompat.getColor(context, R.color.buttons))
+        }
+        else{
+            holder.addressCardView.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
+        }
+         */
+
     }
     override fun getItemCount(): Int {
         return customerAddresses.size

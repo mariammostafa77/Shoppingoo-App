@@ -4,7 +4,6 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/drawable/border.xml" value="0.2203125" />
-        <entry key="..\:/ITI/GraduationProject/app/src/main/res/drawable/button_nav_style.xml" value="0.20925925925925926" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/activity_auth.xml" value="0.1082427536231884" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/activity_home.xml" value="0.1" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/activity_main.xml" value="0.1" />
@@ -12,7 +11,7 @@
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/ads_layout.xml" value="0.17346014492753623" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/brand_layout.xml" value="0.18" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/category_cell.xml" value="0.33" />
-        <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/custom_bottom_sheet.xml" value="0.33" />
+        <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/custom_bottom_sheet.xml" value="0.22" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/dialog_view.xml" value="0.1082427536231884" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/discount_codes_layout.xml" value="0.1082427536231884" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/dtails_layout.xml" value="0.1082427536231884" />
@@ -35,7 +34,7 @@
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/fragment_product_info.xml" value="0.22" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/fragment_register.xml" value="0.17753623188405798" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/fragment_register_form.xml" value="0.21" />
-        <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/fragment_shopping_cart.xml" value="0.25" />
+        <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/fragment_shopping_cart.xml" value="0.17" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/fragment_user_addresses.xml" value="0.25" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/fragment_user_profile.xml" value="0.17753623188405798" />
         <entry key="..\:/ITI/GraduationProject/app/src/main/res/layout/image_container.xml" value="0.1082427536231884" />
@@ -65,9 +64,6 @@
         <entry key="..\:/Users/elshamey/OneDrive/Desktop/MCommerce-App/app/src/main/res/layout/fragment_product_info.xml" value="0.25" />
         <entry key="..\:/Users/elshamey/OneDrive/Desktop/MCommerce-App/app/src/main/res/layout/fragment_register.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/elshamey/OneDrive/Desktop/MCommerce-App/app/src/main/res/layout/fragment_search.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/drawable/custom_input.xml" value="0.22870370370370371" />
-        <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/drawable/ic_baseline_favorite_border_24.xml" value="0.23425925925925925" />
-        <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/drawable/ic_favorite.xml" value="0.23425925925925925" />
         <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/layout/activity_auth.xml" value="0.13020833333333334" />
         <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/layout/activity_home.xml" value="0.20625" />
         <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/layout/ads_layout.xml" value="0.25416666666666665" />
@@ -80,11 +76,9 @@
         <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/layout/fragment_me_with_login.xml" value="0.14479166666666668" />
         <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/layout/fragment_my_login.xml" value="0.13020833333333334" />
         <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/layout/fragment_mysearch.xml" value="0.17777777777777778" />
-        <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/layout/fragment_product_info.xml" value="0.264" />
+        <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/layout/fragment_product_info.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/layout/fragment_register.xml" value="0.2" />
         <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/layout/fragment_register_form.xml" value="0.11614583333333334" />
-        <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/layout/review_layout.xml" value="0.16296296296296298" />
-        <entry key="..\:/Users/elshamey/OneDrive/Desktop/NewGraduationProjct/MCommerce-App/app/src/main/res/layout/shopping_cart_item.xml" value="0.23055555555555557" />
         <entry key="..\:/Work Files/My projects/ITI Projects/Graduation Project/app/src/main/res/layout/ads_layout.xml" value="0.18489583333333334" />
         <entry key="..\:/Work Files/My projects/ITI Projects/Graduation Project/app/src/main/res/layout/category_cell.xml" value="0.27291666666666664" />
         <entry key="..\:/Work Files/My projects/ITI Projects/Graduation Project/app/src/main/res/layout/discount_codes_layout.xml" value="0.16" />
@@ -109,8 +103,12 @@
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/drawable/home_24.xml" value="0.15520833333333334" />
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/drawable/ic_baseline_supervised_user_circle_24.xml" value="0.15520833333333334" />
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/drawable/ic_launcher_background.xml" value="0.15520833333333334" />
+        <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/drawable/ic_location_on.xml" value="0.21510416666666668" />
+        <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/drawable/ic_search.xml" value="0.2490740740740741" />
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/drawable/map_search_background.xml" value="0.15520833333333334" />
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/drawable/my_search_24.xml" value="0.15520833333333334" />
+        <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/drawable/person_24.xml" value="0.21510416666666668" />
+        <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/drawable/phone_24.xml" value="0.21510416666666668" />
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/drawable/radio_normal.xml" value="0.20989583333333334" />
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/drawable/radio_selected.xml" value="0.20989583333333334" />
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/drawable/radio_selector.xml" value="0.20989583333333334" />
@@ -118,11 +116,16 @@
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/activity_home.xml" value="0.17314814814814813" />
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/activity_map.xml" value="0.19166666666666668" />
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/address_item.xml" value="0.15104166666666666" />
+        <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/ads_layout.xml" value="0.27291666666666664" />
+        <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/brand_layout.xml" value="0.27291666666666664" />
+        <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/custom_bottom_sheet.xml" value="0.27291666666666664" />
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/dialog_view.xml" value="0.27291666666666664" />
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/discount_codes_layout.xml" value="0.27291666666666664" />
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/dropdwon_currency_item.xml" value="0.20260416666666667" />
+        <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/dtails_layout.xml" value="0.27291666666666664" />
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/fragment_add_new_address.xml" value="0.16145833333333334" />
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/fragment_app_setting.xml" value="0.16145833333333334" />
+        <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/fragment_confirm_order.xml" value="0.2064814814814815" />
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/fragment_home.xml" value="0.18645833333333334" />
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/fragment_login_form.xml" value="0.19444444444444445" />
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/fragment_me_with_login.xml" value="0.16145833333333334" />
@@ -138,6 +141,7 @@
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/fragment_user_profile.xml" value="0.16145833333333334" />
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/fragment_with_login_app_setting.xml" value="0.15677083333333333" />
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/fragment_without_login_app_setting.xml" value="0.15677083333333333" />
+        <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/image_container.xml" value="0.27291666666666664" />
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/map_content.xml" value="0.17" />
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/order_item.xml" value="0.16302083333333334" />
         <entry key="..\:/Work Files/My projects/ITI Projects/ITI Graduation Project/Graduation Project  M Commerce/GraduationProject/app/src/main/res/layout/shopping_cart_item.xml" value="0.22" />

@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.R
+import com.example.mcommerce.auth.model.Addresse
 import com.example.mcommerce.draftModel.LineItem
 import com.example.mcommerce.draftModel.OrderPrices
 import com.example.mcommerce.me.view.setting.AddNewAddressFragment
@@ -30,12 +31,12 @@ import com.example.mcommerce.network.InternetConnectionChecker
 
 class PaymentAddressFragment : Fragment() {
 
-
     lateinit var txtNoAddressDataFound: TextView
     lateinit var imgNoAddress: ImageView
     lateinit var paymentAddressProgressBar: ProgressBar
     lateinit var address_back_icon : ImageView
-    lateinit var btnPaymentAddNewAddress : Button
+    lateinit var address_add_new_address : ImageView
+    lateinit var btnContinueToPayment : Button
     lateinit var paymentUserAddressesRecyclerView: RecyclerView
     lateinit var noInternetLayoutPaymentAddress: ConstraintLayout
     private lateinit var paymentAddressesAdapter: PaymentAddressesAdapter
@@ -44,7 +45,6 @@ class PaymentAddressFragment : Fragment() {
     lateinit var customerViewModelFactory: CustomerViewModelFactory
     lateinit var communicator: Communicator
     private lateinit var internetConnectionChecker: InternetConnectionChecker
-
 
     var lineItems : ArrayList<LineItem> = ArrayList()
     var orderPrices : ArrayList<OrderPrices> = ArrayList()
@@ -93,7 +93,6 @@ class PaymentAddressFragment : Fragment() {
             }
         })
 
-        //customerViewModel.getUserDetails(customerId)
         customerViewModel.customerInfo.observe(viewLifecycleOwner) { response ->
             if(response != null) {
                 paymentAddressesAdapter.setCustomerAddressesData(requireContext(), response.addresses!!)
@@ -107,11 +106,11 @@ class PaymentAddressFragment : Fragment() {
                 txtNoAddressDataFound.visibility=View.VISIBLE
             }
         }
-        btnPaymentAddNewAddress.setOnClickListener {
-            val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.frameLayout, AddNewAddressFragment())
-            transaction.addToBackStack(null)
-            transaction.commit()
+        address_add_new_address.setOnClickListener {
+            replaceFragment(AddNewAddressFragment())
+        }
+        btnContinueToPayment.setOnClickListener {
+            replaceFragment(AddNewAddressFragment())
         }
         return view
     }
@@ -119,10 +118,19 @@ class PaymentAddressFragment : Fragment() {
     private fun initComponent(view: View){
         address_back_icon = view.findViewById(R.id.address_back_icon)
         imgNoAddress = view.findViewById(R.id.imgNoAddress)
+        address_add_new_address = view.findViewById(R.id.address_add_new_address)
         paymentAddressProgressBar = view.findViewById(R.id.paymentAddressProgressBar)
         txtNoAddressDataFound = view.findViewById(R.id.txtNoAddressDataFound)
-        btnPaymentAddNewAddress = view.findViewById(R.id.btnPaymentAddNewAddress)
+        btnContinueToPayment = view.findViewById(R.id.btnContinueToPayment)
         paymentUserAddressesRecyclerView = view.findViewById(R.id.paymentUserAddressesRecyclerView)
         noInternetLayoutPaymentAddress = view.findViewById(R.id.noInternetLayoutPaymentAddress)
     }
+    fun replaceFragment(fragment: Fragment) {
+        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.frameLayout, fragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
+    }
+
+
 }

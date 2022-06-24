@@ -24,7 +24,7 @@
         android:id="@+id/chooseLocationImg"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="14dp"
         app:layout_constraintHeight_percent="0.3"
         android:src="@drawable/add_new_location"
         app:layout_constraintEnd_toEndOf="parent"
@@ -42,7 +42,7 @@
             android:id="@+id/addressDataLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/chooseLocationImg"
@@ -61,7 +61,6 @@
                 android:gravity="center_vertical"
                 android:padding="16dp"
                 app:layout_constraintWidth_percent="0.8"/>
-
             <EditText
                 android:id="@+id/txtAddressLine2"
                 android:layout_width="0dp"
@@ -161,8 +160,8 @@
             android:layout_marginBottom="4dp"
             android:text="@string/save_address"
             android:textSize="20sp"
-            app:backgroundTint="@color/teal_700"
-            app:cornerRadius="100dp"
+            app:backgroundTint="@color/buttons"
+            app:cornerRadius="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

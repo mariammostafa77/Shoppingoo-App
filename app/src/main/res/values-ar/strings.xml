@@ -89,10 +89,13 @@
     <string name="noWhishlist">لا يوجد مفضلة لديك</string>
     <string name="noFav">"حاليا لا يوجد محفوظ في المضلة لديك"</string>
 
+    <string name="no_data_to_display">لا يوجد بيانات للعرض</string>
 
     <string name="choose_address">احتار عنوان</string>
     <string name="please_select_your_shipping_address">من فضلك اختار عنوانك </string>
     <string name="varaince">ألأنواع</string>
+    <string name="_0_0">0.0</string>
+    <string name="discount">خصم:</string>
     <string name="click_here_to_choose_location">أضغط هنا لأختيار موقعك</string>
     <string name="write_any_city_name">أكتب اسم اى مدينة </string>
     <string name="shipping_info">بيانات التوصيل</string>
@@ -103,6 +106,7 @@
     <string name="cash">نقدا</string>
     <string name="payment_method">طريقة الدفع</string>
     <string name="confirm_payment">تأكيد الدفع</string>
+    <string name="continue_to_payment">التكملة الى الدفع</string>
 
     <string-array name="currency_options">
     <item>جنيه مصرى</item>
