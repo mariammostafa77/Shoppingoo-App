@@ -53,6 +53,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -138,9 +139,9 @@
                 android:layout_marginEnd="10dp"
                 android:text="@string/More"
                 android:textColor="#1E1EBC"
+                android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ordersrecycler"
-                android:visibility="invisible"/>
+                app:layout_constraintTop_toBottomOf="@+id/ordersrecycler" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/wishListRecyclerview"
@@ -175,11 +176,32 @@
                 android:layout_height="wrap_content"
                 android:text="@string/noWhishlist"
                 android:textColor="@color/purple_200"
+                android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="@+id/wishListRecyclerview"
                 app:layout_constraintStart_toStartOf="@+id/wishListRecyclerview"
-                app:layout_constraintTop_toTopOf="@+id/wishListRecyclerview"
-                android:visibility="invisible"/>
+                app:layout_constraintTop_toTopOf="@+id/wishListRecyclerview" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/meLoginNoInternetView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+        <ImageView
+            android:id="@+id/imageView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/internet_error"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">MCommerce</string>
+    <string name="app_name">Shoppingoo</string>
     <string name="brandname">اسم العلامة التجارية</string>
     <string name="reviewerName">الاسم</string>
     <string name="comment">التعليق</string>
@@ -108,6 +108,10 @@
     <string name="cash">نقدا</string>
     <string name="payment_method">طريقة الدفع</string>
     <string name="confirm_payment">تأكيد الدفع</string>
+    <string name="reload">اعادةالتحميل</string>
+    <string name="no_data_to_display">عثر الوصول لذلك </string>
+    <string name="discount">خصم</string>
+    <string name="_0_0">0.0</string>
     <string name="delete">Delete</string>
     <string name="continue_to_payment">التكملة الى الدفع</string>
 

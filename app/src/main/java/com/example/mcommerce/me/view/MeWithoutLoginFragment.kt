@@ -11,6 +11,8 @@ import com.example.mcommerce.R
 import com.example.mcommerce.auth.login.view.LoginFormFragment
 import com.example.mcommerce.me.view.setting.WithLoginAppSettingFragment
 import com.example.mcommerce.me.view.setting.WithoutLoginAppSettingFragment
+import com.example.mcommerce.network.CheckInternetConnectionFirstTime
+import com.google.android.material.snackbar.Snackbar
 
 class MeWithoutLoginFragment : Fragment() {
 
@@ -32,10 +34,16 @@ class MeWithoutLoginFragment : Fragment() {
             transaction.commit()
         }
         btnGoToLogin.setOnClickListener {
-            val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.frameLayout, LoginFormFragment())
-            transaction.addToBackStack(null)
-            transaction.commit()
+            if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())){
+                val transaction = requireActivity().supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.frameLayout, LoginFormFragment())
+                transaction.addToBackStack(null)
+                transaction.commit()
+            }else{
+                var snake = Snackbar.make(view, "Check internet connection", Snackbar.LENGTH_LONG)
+                snake.show()
+            }
+
         }
         return view
     }
