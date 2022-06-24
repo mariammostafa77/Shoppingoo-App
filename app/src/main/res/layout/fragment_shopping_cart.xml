@@ -131,7 +131,7 @@
             android:padding="8dp"
             android:layout_marginBottom="8dp"
             android:text="@string/proceed_to_checkout"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:backgroundTint="@color/buttons"
             app:cornerRadius="10dp"
             app:icon="@drawable/ic_next_24"

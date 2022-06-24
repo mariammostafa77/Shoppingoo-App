@@ -7,7 +7,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -42,7 +41,8 @@ class WithLoginAppSettingFragment : Fragment() {
     lateinit var txtSelectedLanguage: TextView
     lateinit var txtLastAddress: TextView
     lateinit var txtSignOutText: TextView
-   // lateinit var txtCurrency : TextView
+
+    lateinit var txtCurrency : TextView
     lateinit var txtUserEmail: TextView
     lateinit var currencySpinner: Spinner
 
@@ -50,7 +50,7 @@ class WithLoginAppSettingFragment : Fragment() {
     lateinit var customerViewModelFactory: CustomerViewModelFactory
     val spinnerArray: ArrayList<String> = ArrayList()
 
-    var convertorResult : Double = 1.0
+    var convertorResult: Double = 1.0
 
     companion object {
         var languageSelected: String = ""
@@ -61,54 +61,73 @@ class WithLoginAppSettingFragment : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.fragment_with_login_app_setting, container, false)
         initComponent(view)
         loadLocale(requireContext())
         customerViewModelFactory = CustomerViewModelFactory(Repository.getInstance(AppClient.getInstance(), requireContext()))
-        customerViewModel = ViewModelProvider(this, customerViewModelFactory).get(CustomerViewModel::class.java)
+        customerViewModel =
+            ViewModelProvider(this, customerViewModelFactory).get(CustomerViewModel::class.java)
 
         val storedCurrency = loadCurrency(requireContext())
-       // txtCurrency.text = storedCurrency
-       // Log.i("selected","selected: ${loadCurrency(requireContext())}")
+         txtCurrency.text = storedCurrency
         txtSelectedLanguage.text = languageSelected
 
-        val sharedPreferences: SharedPreferences = requireContext().getSharedPreferences("userAuth", Context.MODE_PRIVATE)
-        val userEmail: String? = sharedPreferences.getString("email","")
+        val sharedPreferences: SharedPreferences =
+            requireContext().getSharedPreferences("userAuth", Context.MODE_PRIVATE)
+        val userEmail: String? = sharedPreferences.getString("email", "")
         txtUserEmail.text = userEmail
-        customerViewModel.getAllCurrencies()
+        if (CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
+            customerViewModel.getAllCurrencies()
+        }
+        else {
+            val snake = Snackbar.make(currencySpinner, "Ops! You Lost internet connection!!!", Snackbar.LENGTH_LONG)
+            snake.show()
+        }
         customerViewModel.onlineCurrencies.observe(viewLifecycleOwner) { currencies ->
             for (i in 0..currencies.size - 1) {
                 spinnerArray.add(currencies.get(i).currency!!)
             }
         }
-
+        spinnerArray.add("Choose Currency")
         spinnerArray.add("EGP")
         val currencyAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
-            requireContext(), android.R.layout.simple_spinner_item, spinnerArray)
+            requireContext(), android.R.layout.simple_spinner_item, spinnerArray
+        )
         currencyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         currencySpinner.adapter = currencyAdapter
 
-        currencySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+        currencySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 currencySelected = parent?.getItemAtPosition(position).toString()
-                if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
-                   // currencySelected = parent?.getItemAtPosition(position).toString()
-                    setCurrency(currencySelected, requireContext())
-                 //   txtCurrency.text = currencySelected
-                    customerViewModel.getAmountAfterConversion(parent?.getItemAtPosition(position).toString())
-                    customerViewModel.onlineCurrencyChanged.observe(viewLifecycleOwner) { result ->
-                        convertorResult = result.result
-                        setCurrencyResult(convertorResult.toString(),requireContext())
+                if (CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
+                    if (parent?.getItemAtPosition(position) == "Choose Currency") {
+                    } else {
+                        setCurrency(currencySelected, requireContext())
+                           txtCurrency.text = currencySelected
+                        customerViewModel.getAmountAfterConversion(parent?.getItemAtPosition(position).toString())
+                        customerViewModel.onlineCurrencyChanged.observe(viewLifecycleOwner) { result ->
+                            convertorResult = result.result
+                            setCurrencyResult(convertorResult.toString(), requireContext())
+                        }
                     }
-                }else{
+                } else {
                     val snake = Snackbar.make(currencySpinner, "Ops! You Lost internet connection!!!", Snackbar.LENGTH_LONG)
                     snake.show()
                 }
             }
         }
-        currencySelected = loadCurrency(requireContext())
+       // currencySelected = loadCurrency(requireContext())
 
         setting_back_icon.setOnClickListener {
             val manager: FragmentManager = activity!!.supportFragmentManager
@@ -116,10 +135,11 @@ class WithLoginAppSettingFragment : Fragment() {
         }
 
         userAddressCard.setOnClickListener {
-            if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
+            if (CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
                 replaceFragment(UserAddressesFragment())
-            }else{
-                val snake = Snackbar.make(it, "Ops! You Lost internet connection!!!", Snackbar.LENGTH_LONG)
+            } else {
+                val snake =
+                    Snackbar.make(it, "Ops! You Lost internet connection!!!", Snackbar.LENGTH_LONG)
                 snake.show()
             }
         }
@@ -133,8 +153,10 @@ class WithLoginAppSettingFragment : Fragment() {
             shareOurApp()
         }
         txtSignOutText.setOnClickListener {
-            val sharedPreferences: SharedPreferences = context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
-            val editor = requireContext().getSharedPreferences("userAuth", Context.MODE_PRIVATE).edit()
+            val sharedPreferences: SharedPreferences =
+                context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
+            val editor =
+                requireContext().getSharedPreferences("userAuth", Context.MODE_PRIVATE).edit()
             val isLogin = sharedPreferences.getBoolean("isLogin", true)
             if (isLogin == true) {
                 editor.remove("email")
@@ -154,7 +176,8 @@ class WithLoginAppSettingFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         val currencyAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
-            requireContext(), R.layout.dropdwon_currency_item, spinnerArray)
+            requireContext(), R.layout.dropdwon_currency_item, spinnerArray
+        )
         currencyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         currencySpinner.setAdapter(currencyAdapter)
     }
@@ -169,7 +192,7 @@ class WithLoginAppSettingFragment : Fragment() {
         txtSelectedLanguage = view.findViewById(R.id.txtSelectedLanguage)
         txtUserEmail = view.findViewById(R.id.txtUserEmail)
         txtSignOutText = view.findViewById(R.id.txtSignOutText)
-      //  txtCurrency = view.findViewById(R.id.txtCurrency)
+        txtCurrency = view.findViewById(R.id.txtCurrency)
         currencySpinner = view.findViewById(R.id.currencySpinner)
     }
 
@@ -224,6 +247,7 @@ class WithLoginAppSettingFragment : Fragment() {
             dialog.dismiss()
         }
     }
+
     private fun shareOurApp() {
         val txtShare = "M_Commerce App"
         val shareLink = "http://play.google.com/store/apps/details?id=com.example.mcommerce"

@@ -268,7 +268,7 @@
         android:backgroundTintMode="src_over"
         android:padding="8dp"
         app:layout_constraintWidth_percent="0.7"
-        android:textSize="10sp"
+        android:textSize="14sp"
         app:cornerRadius="10dp"
         android:text="@string/AddToCard"
         app:layout_constraintEnd_toEndOf="parent"

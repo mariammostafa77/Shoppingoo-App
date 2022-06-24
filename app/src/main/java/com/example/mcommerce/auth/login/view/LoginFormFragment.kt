@@ -101,14 +101,6 @@ class LoginFormFragment : Fragment() {
                                 val snack =
                                     Snackbar.make(it, "Login Succefully", Snackbar.LENGTH_LONG)
                                 snack.show()
-                                Log.i(
-                                    "login",
-                                    "test " + customer.customers[i].tags.toString()
-                                )
-                                Log.i(
-                                    "login",
-                                    "login sussessfull: " + customer.customers[i].tags.toString()
-                                )
                                 editor.putString("email", customer.customers[i].email)
                                 editor.putString("password", customer.customers[i].tags)
                                 editor.putString("fname", customer.customers[i].first_name)
@@ -123,14 +115,9 @@ class LoginFormFragment : Fragment() {
                         }
                         if (isSuccess == false) {
                             loginProgressbar.visibility = View.INVISIBLE
-                            val snack = Snackbar.make(
-                                it,
-                                "Email or Password not matched",
-                                Snackbar.LENGTH_LONG
-                            )
+                            val snack = Snackbar.make(it, "Email or Password not matched", Snackbar.LENGTH_LONG)
                             snack.show()
                         }
-
                     }
                 } else {
                     loginvalidatation()

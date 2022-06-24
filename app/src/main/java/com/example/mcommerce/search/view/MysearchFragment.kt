@@ -109,7 +109,6 @@ class MysearchFragment : Fragment() {
                     else{
                         Toast.makeText(requireContext(),"Ops! You Lost internet connection!!!",Toast.LENGTH_LONG).show()
 
-
                     }
                 })
                 searchViewModel.onlineProducts.observe(viewLifecycleOwner) { product ->

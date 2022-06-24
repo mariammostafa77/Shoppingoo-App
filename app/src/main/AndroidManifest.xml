@@ -14,12 +14,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAaA_lkRjuS3w40Z-8Lufy_fZLfllSHCUg" />
-
-
         <activity
             android:name=".me.view.setting.MapActivity"
             android:exported="false" />

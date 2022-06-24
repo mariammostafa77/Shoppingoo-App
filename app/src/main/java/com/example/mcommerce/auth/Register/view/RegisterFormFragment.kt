@@ -114,7 +114,6 @@ class RegisterFormFragment : Fragment() {
                             val snack =
                                 Snackbar.make(it, "Register Succefully", Snackbar.LENGTH_LONG)
                             snack.show()
-                            Log.i("Reg", "messs from success: " + response.body().toString())
                             val editor =
                                 requireContext().getSharedPreferences(
                                     "userAuth",
