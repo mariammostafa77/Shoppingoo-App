@@ -25,6 +25,7 @@ import com.example.mcommerce.auth.login.view.LoginFormFragment
 import com.example.mcommerce.auth.model.*
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
+import com.example.mcommerce.network.CheckInternetConnectionFirstTime
 import com.example.mcommerce.shopping_cart.view.ShoppingCartFragment
 import com.google.android.gms.common.util.CollectionUtils.listOf
 import com.google.android.material.snackbar.Snackbar
@@ -84,62 +85,73 @@ class RegisterFormFragment : Fragment() {
 
 
         btnRegister.setOnClickListener {
-            registerFName = edtFName.text.toString()
-            registerLName = edtLName.text.toString()
-            registerEmail = edtEmail.text.toString()
-            registerPassword = edtPassword.text.toString()
-            registerConfirmPassword = edtConfirmPASS.text.toString()
-            registerPhone = myEdtPhone.text.toString()
-            if (!registerFName.isEmpty() && !registerLName.isEmpty() && !registerPhone.isEmpty() && !registerEmail.isEmpty() &&
-                !registerPassword.isEmpty() && !registerConfirmPassword.isEmpty() && registerConfirmPassword == registerPassword && registerPassword.length >= 6 &&
-                Patterns.EMAIL_ADDRESS.matcher(registerEmail).matches()
-            ) {
+            if (CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
+                registerFName = edtFName.text.toString()
+                registerLName = edtLName.text.toString()
+                registerEmail = edtEmail.text.toString()
+                registerPassword = edtPassword.text.toString()
+                registerConfirmPassword = edtConfirmPASS.text.toString()
+                registerPhone = myEdtPhone.text.toString()
+                if (!registerFName.isEmpty() && !registerLName.isEmpty() && !registerPhone.isEmpty() && !registerEmail.isEmpty() &&
+                    !registerPassword.isEmpty() && !registerConfirmPassword.isEmpty() && registerConfirmPassword == registerPassword && registerPassword.length >= 6 &&
+                    Patterns.EMAIL_ADDRESS.matcher(registerEmail).matches()
+                ) {
+                    registerProgressbar.visibility = View.VISIBLE
+                    var customer = CustomerX()
+                    customer.first_name = registerFName
+                    customer.last_name = registerLName
+                    customer.email = registerEmail
+                    customer.verified_email = true
+                    var phoneNumber: String = registerPhone
+                    customer.phone = phoneNumber
+                    customer.tags = registerPassword
 
-            registerProgressbar.visibility = View.VISIBLE
+                    var customDetai = CustomerDetail(customer)
+                    registerViewModel.postCustomer(customDetai)
+                    registerViewModel.customer.observe(viewLifecycleOwner) { response ->
+                        if (response.isSuccessful) {
+                            registerProgressbar.visibility = View.INVISIBLE
+                            val snack =
+                                Snackbar.make(it, "Register Succefully", Snackbar.LENGTH_LONG)
+                            snack.show()
+                            Log.i("Reg", "messs from success: " + response.body().toString())
+                            val editor =
+                                requireContext().getSharedPreferences(
+                                    "userAuth",
+                                    Context.MODE_PRIVATE
+                                )
+                                    .edit()
+                            editor.putString("email", response.body()!!.customer!!.email)
+                            editor.putString("password", response.body()!!.customer!!.tags)
+                            editor.putString("fname", response.body()!!.customer!!.first_name)
+                            editor.putString("lname", response.body()!!.customer!!.last_name)
+                            editor.putString("phone", response.body()!!.customer!!.phone)
+                            editor.putString(
+                                "cusomerID",
+                                response.body()!!.customer!!.id.toString()
+                            )
+                            editor.putBoolean("isLogin", true)
+                            editor.commit()
+                            startActivity(Intent(requireContext(), HomeActivity::class.java))
 
-            var customer = CustomerX()
-            customer.first_name = registerFName
-            customer.last_name = registerLName
-            customer.email = registerEmail
-            customer.verified_email = true
-            var phoneNumber: String = registerPhone
-            customer.phone = phoneNumber
-            customer.tags = registerPassword
-
-            var customDetai = CustomerDetail(customer)
-            registerViewModel.postCustomer(customDetai)
-            registerViewModel.customer.observe(viewLifecycleOwner) { response ->
-                if (response.isSuccessful) {
-                    registerProgressbar.visibility = View.INVISIBLE
-                    val snack = Snackbar.make(it,"Register Succefully", Snackbar.LENGTH_LONG)
-                    snack.show()
-                    Log.i("Reg", "messs from success: " + response.body().toString())
-                    val editor =
-                        requireContext().getSharedPreferences("userAuth", Context.MODE_PRIVATE)
-                            .edit()
-                    editor.putString("email", response.body()!!.customer!!.email)
-                    editor.putString("password", response.body()!!.customer!!.tags)
-                    editor.putString("fname", response.body()!!.customer!!.first_name)
-                    editor.putString("lname", response.body()!!.customer!!.last_name)
-                    editor.putString("phone", response.body()!!.customer!!.phone)
-                    editor.putString("cusomerID", response.body()!!.customer!!.id.toString())
-                    editor.putBoolean("isLogin", true)
-                    editor.commit()
-                    startActivity(Intent(requireContext(), HomeActivity::class.java))
-
+                        } else {
+                            registerProgressbar.visibility = View.INVISIBLE
+                            val snack = Snackbar.make(
+                                it,
+                                "Email or Phone already Register!!",
+                                Snackbar.LENGTH_LONG
+                            )
+                            snack.show()
+                        }
+                    }
                 } else {
-                    registerProgressbar.visibility = View.INVISIBLE
-                    val snack = Snackbar.make(it,"Email or Phone already Register!!", Snackbar.LENGTH_LONG)
-                    snack.show()
-
+                    registrationValidation()
                 }
+            }else{
+                val snake = Snackbar.make(view, "Ops! You Lost internet connection!!!", Snackbar.LENGTH_LONG)
+                snake.show()
             }
         }
-            else{
-               registrationValidation()
-            }
-        }
-
 
         return view
     }

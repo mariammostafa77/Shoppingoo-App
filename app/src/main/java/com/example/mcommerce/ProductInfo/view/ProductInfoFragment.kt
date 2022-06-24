@@ -48,51 +48,51 @@ import kotlinx.android.synthetic.main.dialog_view.view.*
 
 
 class ProductInfoFragment : Fragment() {
-    lateinit var output:Product
+    lateinit var output: Product
     lateinit var specificProduct: Product
     lateinit var productInfoRecyclerview: RecyclerView
     lateinit var productInfoAdapter: ProductInfoAdapter
     lateinit var linearLayoutManager: LinearLayoutManager
     lateinit var specificProductsFactory: ProductInfoViewModelFactory
     lateinit var specificProductsViewModel: ProductInfoViewModel
-    lateinit var shoppingCartViewModelFactory : ShoppingCartViewModelFactory
+    lateinit var shoppingCartViewModelFactory: ShoppingCartViewModelFactory
     lateinit var shoppingCartViewModel: ShoppingCartViewModel
-    lateinit var productImgArrayList:ArrayList<Image>
-    lateinit var productName:TextView
-    lateinit var productPrice:TextView
-    lateinit var productDesc:TextView
-    lateinit var btnIncrease:ImageView
-    lateinit var btnDecrease:ImageView
-    lateinit var productCount:TextView
-    lateinit var ratBar:RatingBar
-    lateinit var addToFavImg:ImageView
-    lateinit var backImg:ImageView
-    lateinit var cardImg:ImageView
-    lateinit var sizeSpinner:Spinner
-    lateinit var colorSpinner:Spinner
-    lateinit var btnAddToCard:Button
-    var allFavProducts:ArrayList<DraftOrderX> = ArrayList<DraftOrderX>()
-    var allCardProducts:ArrayList<DraftOrderX> = ArrayList<DraftOrderX>()
-    var allVariantsID:ArrayList<Long> = ArrayList<Long>()
-    var allCardVariantsID:ArrayList<Long> = ArrayList<Long>()
-    var allProducts:ArrayList<Product> = ArrayList<Product>()
+    lateinit var productImgArrayList: ArrayList<Image>
+    lateinit var productName: TextView
+    lateinit var productPrice: TextView
+    lateinit var productDesc: TextView
+    lateinit var btnIncrease: ImageView
+    lateinit var btnDecrease: ImageView
+    lateinit var productCount: TextView
+    lateinit var ratBar: RatingBar
+    lateinit var addToFavImg: ImageView
+    lateinit var backImg: ImageView
+    lateinit var cardImg: ImageView
+    lateinit var sizeSpinner: Spinner
+    lateinit var colorSpinner: Spinner
+    lateinit var btnAddToCard: Button
+    var allFavProducts: ArrayList<DraftOrderX> = ArrayList<DraftOrderX>()
+    var allCardProducts: ArrayList<DraftOrderX> = ArrayList<DraftOrderX>()
+    var allVariantsID: ArrayList<Long> = ArrayList<Long>()
+    var allCardVariantsID: ArrayList<Long> = ArrayList<Long>()
+    var allProducts: ArrayList<Product> = ArrayList<Product>()
 
     lateinit var reviewsRecyclerview: RecyclerView
     lateinit var reviewsAdapter: ReviewAdapter
     lateinit var reviewsLinearLayoutManager: LinearLayoutManager
     var allComments: List<Reviews> = ArrayList<Reviews>()
 
-    var isExists=false
-    var myIndex:Long=0
+    var isExists = false
+    var myIndex: Long = 0
 
-    var count:Int=1
-    var totalRate=0
-    var price : Double = 0.0
-    var currency : String = ""
-    var productIndex:Int=0
-    var toCurrency  = ""
-    var convertorResult : Double = 1.0
-    var productID:Long=0
+    var count: Int = 1
+    var totalRate = 0
+    var price: Double = 0.0
+    var currency: String = ""
+    var productIndex: Int = 0
+    var toCurrency = ""
+    var convertorResult: Double = 1.0
+    var productID: Long = 0
     var amount = ""
 
     lateinit var customerViewModel: CustomerViewModel
@@ -104,60 +104,75 @@ class ProductInfoFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        var view =inflater.inflate(R.layout.fragment_product_info, container, false)
-        Log.i("test","test")
+        var view = inflater.inflate(R.layout.fragment_product_info, container, false)
+        Log.i("test", "test")
 
-        productImgArrayList=ArrayList<Image>()
-        productInfoRecyclerview=view.findViewById(R.id.detailsRecyclerView)
-        linearLayoutManager= LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
+        productImgArrayList = ArrayList<Image>()
+        productInfoRecyclerview = view.findViewById(R.id.detailsRecyclerView)
+        linearLayoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         productInfoRecyclerview.setLayoutManager(linearLayoutManager)
-        productInfoAdapter= ProductInfoAdapter()
+        productInfoAdapter = ProductInfoAdapter()
         productInfoRecyclerview.setAdapter(productInfoAdapter)
-        productName=view.findViewById(R.id.txtProductName)
-        btnIncrease=view.findViewById(R.id.btnAdd)
-        btnDecrease=view.findViewById(R.id.btnMins)
-        productCount=view.findViewById(R.id.txtQuantity)
-        productPrice=view.findViewById(R.id.txtPrice)
-        productDesc=view.findViewById(R.id.txtProductDetails)
-        ratBar=view.findViewById(R.id.productRatingBar)
-        backImg=view.findViewById(R.id.backImg)
-        sizeSpinner=view.findViewById(R.id.sizeSpinner)
-        colorSpinner=view.findViewById(R.id.colorSpiner)
-        btnAddToCard=view.findViewById(R.id.btnAddToCard)
-        addToFavImg=view.findViewById(R.id.addToFavImg)
-        cardImg=view.findViewById(R.id.cardDetailsImg)
+        productName = view.findViewById(R.id.txtProductName)
+        btnIncrease = view.findViewById(R.id.btnAdd)
+        btnDecrease = view.findViewById(R.id.btnMins)
+        productCount = view.findViewById(R.id.txtQuantity)
+        productPrice = view.findViewById(R.id.txtPrice)
+        productDesc = view.findViewById(R.id.txtProductDetails)
+        ratBar = view.findViewById(R.id.productRatingBar)
+        backImg = view.findViewById(R.id.backImg)
+        sizeSpinner = view.findViewById(R.id.sizeSpinner)
+        colorSpinner = view.findViewById(R.id.colorSpiner)
+        btnAddToCard = view.findViewById(R.id.btnAddToCard)
+        addToFavImg = view.findViewById(R.id.addToFavImg)
+        cardImg = view.findViewById(R.id.cardDetailsImg)
 
-        reviewsRecyclerview=view.findViewById(R.id.reviewsRecycleView)
-        reviewsLinearLayoutManager= LinearLayoutManager(requireContext())
+        reviewsRecyclerview = view.findViewById(R.id.reviewsRecycleView)
+        reviewsLinearLayoutManager = LinearLayoutManager(requireContext())
         reviewsRecyclerview.setLayoutManager(reviewsLinearLayoutManager)
-        reviewsAdapter= ReviewAdapter()
+        reviewsAdapter = ReviewAdapter()
         reviewsRecyclerview.setAdapter(reviewsAdapter)
-        var review1=Reviews("Zeinab Ibrahim","This is a good product")
-        var review2=Reviews("Asmaa Youssef","I'm love with this product,it looks very cute")
-        var review3=Reviews("Mariam Mostafa","Cute like for points please")
-        allComments=listOf(review2,review3,review1)
-        reviewsAdapter.setComment(allComments,requireContext())
+        var review1 = Reviews("Zeinab Ibrahim", "This is a good product")
+        var review2 = Reviews("Asmaa Youssef", "I'm love with this product,it looks very cute")
+        var review3 = Reviews("Mariam Mostafa", "Cute like for points please")
+        allComments = listOf(review2, review3, review1)
+        reviewsAdapter.setComment(allComments, requireContext())
 
 
-        customerViewModelFactory = CustomerViewModelFactory(Repository.getInstance(AppClient.getInstance(), requireContext()))
-        customerViewModel = ViewModelProvider(this, customerViewModelFactory).get(CustomerViewModel::class.java)
+        customerViewModelFactory = CustomerViewModelFactory(
+            Repository.getInstance(
+                AppClient.getInstance(),
+                requireContext()
+            )
+        )
+        customerViewModel =
+            ViewModelProvider(this, customerViewModelFactory).get(CustomerViewModel::class.java)
 
-        shoppingCartViewModelFactory = ShoppingCartViewModelFactory(Repository.getInstance(AppClient.getInstance(), requireContext()))
-        shoppingCartViewModel = ViewModelProvider(this, shoppingCartViewModelFactory).get(ShoppingCartViewModel::class.java)
+        shoppingCartViewModelFactory = ShoppingCartViewModelFactory(
+            Repository.getInstance(
+                AppClient.getInstance(),
+                requireContext()
+            )
+        )
+        shoppingCartViewModel = ViewModelProvider(
+            this,
+            shoppingCartViewModelFactory
+        ).get(ShoppingCartViewModel::class.java)
 
         toCurrency = loadCurrency(requireContext())
         amount = loadCurrencyResult(requireContext())
 
-        val sharedPreferences = requireContext().getSharedPreferences("userAuth", AppCompatActivity.MODE_PRIVATE)
-        val customerEmail = sharedPreferences.getString("email","").toString()
-        val userId = sharedPreferences.getString("cusomerID","").toString()
+        val sharedPreferences =
+            requireContext().getSharedPreferences("userAuth", AppCompatActivity.MODE_PRIVATE)
+        val customerEmail = sharedPreferences.getString("email", "").toString()
+        val userId = sharedPreferences.getString("cusomerID", "").toString()
         currency = loadCurrency(requireContext())
         val noteStatus = "fav"
-        if(myDetailsFlag==1){
-            productID= arguments?.getLong("productID",0)!!
-        }
-        else {
-            output= arguments?.getSerializable("productInfo") as Product
+        if (myDetailsFlag == 1) {
+            productID = arguments?.getLong("productID", 0)!!
+        } else {
+            output = arguments?.getSerializable("productInfo") as Product
             productID = output?.id!!
         }
 
@@ -166,18 +181,25 @@ class ProductInfoFragment : Fragment() {
         specificProductsFactory = ProductInfoViewModelFactory(
             Repository.getInstance(
                 AppClient.getInstance(),
-                requireContext()))
-        specificProductsViewModel = ViewModelProvider(this, specificProductsFactory).get(ProductInfoViewModel::class.java)
+                requireContext()
+            )
+        )
+        specificProductsViewModel =
+            ViewModelProvider(this, specificProductsFactory).get(ProductInfoViewModel::class.java)
         internetConnectionChecker = InternetConnectionChecker(requireContext())
-        internetConnectionChecker.observe(this,{ isConnected ->
-            if (isConnected){
+        internetConnectionChecker.observe(this, { isConnected ->
+            if (isConnected) {
                 specificProductsViewModel.getSpecificProducts(productID.toString())
                 specificProductsViewModel.getFavProducts()
-            }
-        else{
-                var snake = Snackbar.make(view, "Ops! You Lost internet connection!!!", Snackbar.LENGTH_LONG)
+            } else {
+                var snake = Snackbar.make(
+                    view,
+                    "Ops! You Lost internet connection!!!",
+                    Snackbar.LENGTH_LONG
+                )
                 snake.show()
-        }})
+            }
+        })
 
         specificProductsViewModel.onlineSpecificProducts.observe(viewLifecycleOwner) { product ->
             allProducts.clear()
@@ -188,7 +210,7 @@ class ProductInfoFragment : Fragment() {
                 specificProductsViewModel.onlineFavProduct.observe(viewLifecycleOwner) { favProducts ->
                     allFavProducts.clear()
                     allFavProducts.addAll(favProducts)
-                    for (i in 0..favProducts.size-1) {
+                    for (i in 0..favProducts.size - 1) {
                         if (favProducts.get(i).note == noteStatus && favProducts.get(i).email == customerEmail) {
                             if (product.variants?.get(0)?.id == favProducts[i].line_items!![0].variant_id) {
                                 addToFavImg.setImageResource(R.drawable.ic_favorite)
@@ -196,11 +218,16 @@ class ProductInfoFragment : Fragment() {
                         }
                     }
                 }
-                product.images?.let { it1 -> productInfoAdapter.setProductImages(it1, requireContext()) }
+                product.images?.let { it1 ->
+                    productInfoAdapter.setProductImages(
+                        it1,
+                        requireContext()
+                    )
+                }
                 productName.text = product.title
                 productDesc.text = product.body_html
 
-                amount = getPrice(product.variants?.get(0)?.price!!,requireContext())
+                amount = getPrice(product.variants?.get(0)?.price!!, requireContext())
                 productPrice.text = amount
                 //productPrice.text = product.variants[0].price
                 for (i in 0..product.variants.size - 1) {
@@ -212,21 +239,20 @@ class ProductInfoFragment : Fragment() {
 
             }
             //spinner of color and size
-            var sizeAdapter: ArrayAdapter<String> = ArrayAdapter<String>(requireContext(),
+            var sizeAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
+                requireContext(),
                 android.R.layout.simple_spinner_item,
                 product.options?.get(0)?.values!!
             )
-            var colorAdapter: ArrayAdapter<String> = ArrayAdapter<String>(requireContext(),
+            var colorAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
+                requireContext(),
                 android.R.layout.simple_spinner_item,
-                product.options?.get(1)?.values!!)
+                product.options?.get(1)?.values!!
+            )
             sizeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             colorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             sizeSpinner.adapter = sizeAdapter
             colorSpinner.adapter = colorAdapter
-
-
-
-
             //end
             productCount.text = "1"
             btnIncrease.setOnClickListener {
@@ -248,7 +274,8 @@ class ProductInfoFragment : Fragment() {
 
         loadData()
         btnAddToCard.setOnClickListener {
-            if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
+            var index = 0
+            if (CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
                 if (customerEmail != "") {
 
                     var variantId: Long = 0
@@ -259,98 +286,114 @@ class ProductInfoFragment : Fragment() {
                                 .toString()
                         ) {
                             variantId = allProducts?.get(0)?.variants?.get(i)?.id!!
-
+                            index = i
                             break
                         }
                     }
-                    if (variantId in allCardVariantsID) {
-                        Log.i("exits", "already exists")
-                        for (i in 0..allCardProducts.size - 1) {
-                            if (allCardProducts[i].line_items!![0].variant_id == variantId) {
-                                productIndex = i
-                                break
+                    if (count <= allProducts?.get(0)?.variants?.get(index)?.inventory_quantity!!) {
+
+                        if (variantId in allCardVariantsID) {
+                            Log.i("exits", "already exists")
+                            for (i in 0..allCardProducts.size - 1) {
+                                if (allCardProducts[i].line_items!![0].variant_id == variantId) {
+                                    productIndex = i
+                                    break
+                                }
+                            }
+                            var oldCount = allCardProducts[productIndex].line_items!![0].quantity
+                            var newCount = oldCount!! + count
+                            Log.i("exits", "count: " + newCount)
+                            val newDraftOrder = DraftOrder(allCardProducts[productIndex])
+                            newDraftOrder.draft_order?.line_items!![0].quantity = newCount
+                            shoppingCartViewModel.updateSelectedProduct(
+                                newDraftOrder.draft_order?.id.toString(),
+                                newDraftOrder
+                            )
+                            shoppingCartViewModel.onlineItemUpdated.observe(viewLifecycleOwner) { response ->
+                                if (response.isSuccessful) {
+                                    var snake =
+                                        Snackbar.make(view, "update Success", Snackbar.LENGTH_LONG)
+                                    snake.show()
+                                    loadData()
+
+                                }
+                            }
+
+                        } else {
+                            var variantId: Long = 0
+                            var order = DraftOrderX()
+                            order.note = "card"
+                            order.email = customerEmail
+                            for (i in 0..allProducts[0].variants?.size!! - 1) {
+                                if (allProducts.get(0)?.variants?.get(i)?.option1 == sizeSpinner.getSelectedItem()
+                                        .toString() &&
+                                    allProducts.get(0)?.variants?.get(i)?.option2 == colorSpinner.getSelectedItem()
+                                        .toString()
+                                ) {
+                                    variantId = allProducts[0].variants?.get(i)?.id!!
+                                    Log.i("Index", "index: $variantId")
+                                    // order.line_items!![0].variant_id = variantId
+                                    var lineItem = LineItem()
+                                    lineItem.quantity =
+                                        Integer.parseInt(productCount.text.toString())
+                                    lineItem.variant_id = variantId
+                                    order.line_items = listOf(lineItem)
+                                    break
+                                }
+                            }
+                            // order.line_items!![0].variant_id = 40335555395723
+                            var productImage = NoteAttribute()
+                            productImage.name = "image"
+                            productImage.value = allProducts[0].images?.get(0)?.src
+                            order.note_attributes = listOf(productImage)
+
+                            var draftOrder = DraftOrder(order)
+                            specificProductsViewModel.getCardOrder(draftOrder)
+                            specificProductsViewModel.onlineCardOrder.observe(viewLifecycleOwner) { cardOrder ->
+                                if (cardOrder.isSuccessful) {
+
+                                    var snake = Snackbar.make(
+                                        view,
+                                        "add to card successfull",
+                                        Snackbar.LENGTH_LONG
+                                    )
+                                    snake.show()
+                                    loadData()
+                                } else {
+
+
+                                    var snake = Snackbar.make(
+                                        view,
+                                        "add to card failed",
+                                        Snackbar.LENGTH_LONG
+                                    )
+                                    snake.show()
+                                }
                             }
                         }
-                        var oldCount = allCardProducts[productIndex].line_items!![0].quantity
-                        var newCount = oldCount!! + count
-                        Log.i("exits", "count: " + newCount)
-                        val newDraftOrder = DraftOrder(allCardProducts[productIndex])
-                        newDraftOrder.draft_order?.line_items!![0].quantity = newCount
-                        shoppingCartViewModel.updateSelectedProduct(newDraftOrder.draft_order?.id.toString(),
-                            newDraftOrder)
-                        shoppingCartViewModel.onlineItemUpdated.observe(viewLifecycleOwner) { response ->
-                            if (response.isSuccessful) {
-                                var snake = Snackbar.make(view, "update Success", Snackbar.LENGTH_LONG)
-                                snake.show()
-                                loadData()
-
-                            }
-                        }
-
-                    } else {
-                        var variantId: Long = 0
-                        var order = DraftOrderX()
-                        order.note = "card"
-                        order.email = customerEmail
-                        for (i in 0..allProducts[0].variants?.size!! - 1) {
-                            if (allProducts.get(0)?.variants?.get(i)?.option1 == sizeSpinner.getSelectedItem()
-                                    .toString() &&
-                                allProducts.get(0)?.variants?.get(i)?.option2 == colorSpinner.getSelectedItem()
-                                    .toString()
-                            ) {
-                                variantId = allProducts[0].variants?.get(i)?.id!!
-                                Log.i("Index", "index: $variantId")
-                                // order.line_items!![0].variant_id = variantId
-                                var lineItem = LineItem()
-                                lineItem.quantity = Integer.parseInt(productCount.text.toString())
-                                lineItem.variant_id = variantId
-                                order.line_items = listOf(lineItem)
-                                break
-                            }
-                        }
-                        // order.line_items!![0].variant_id = 40335555395723
-                        var productImage = NoteAttribute()
-                        productImage.name = "image"
-                        productImage.value = allProducts[0].images?.get(0)?.src
-                        order.note_attributes = listOf(productImage)
-
-                        var draftOrder = DraftOrder(order)
-                        specificProductsViewModel.getCardOrder(draftOrder)
-                        specificProductsViewModel.onlineCardOrder.observe(viewLifecycleOwner) { cardOrder ->
-                            if (cardOrder.isSuccessful) {
-
-                                var snake = Snackbar.make(view, "add to card successfull", Snackbar.LENGTH_LONG)
-                                snake.show()
-                                loadData()
-                            } else {
-
-
-                                var snake = Snackbar.make(view, "add to card failed", Snackbar.LENGTH_LONG)
-                                snake.show()
-
-                            }
-                        }
+                    } else{
+                        var snake = Snackbar.make(view, "No such quantity now, but may be provided in future!!", Snackbar.LENGTH_LONG)
+                        snake.show()
                     }
-                } else {
-
-                    showLoginDialog("You can not add to cart without Login", requireContext())
-
-
                 }
-            }
-            else{
+                else {
+                    showLoginDialog("You can not add to cart without Login", requireContext())
+                }
+            } else {
                 var snake = Snackbar.make(view, "Please check internet", Snackbar.LENGTH_LONG)
                 snake.show()
             }
+
         }
         addToFavImg.setOnClickListener {
-            if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
+            if (CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
                 if (customerEmail != "") {
                     if (allProducts[0].variants?.get(0)?.id!! in allVariantsID) {
                         Log.i("exits", "already exists")
                         for (i in 0..allFavProducts.size - 1) {
                             if (allFavProducts[i].line_items!![0].variant_id == allProducts[0].variants?.get(
-                                    0)?.id!!
+                                    0
+                                )?.id!!
                             ) {
                                 productIndex = i
                                 break
@@ -361,7 +404,8 @@ class ProductInfoFragment : Fragment() {
                         specificProductsViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
                             if (response.isSuccessful) {
 
-                                var snake = Snackbar.make(view, "Deleted Success", Snackbar.LENGTH_LONG)
+                                var snake =
+                                    Snackbar.make(view, "Deleted Success", Snackbar.LENGTH_LONG)
                                 snake.show()
 
                                 loadData()
@@ -369,7 +413,8 @@ class ProductInfoFragment : Fragment() {
 
                             } else {
 
-                                var snake = Snackbar.make(view, "Deleted failed", Snackbar.LENGTH_LONG)
+                                var snake =
+                                    Snackbar.make(view, "Deleted failed", Snackbar.LENGTH_LONG)
                                 snake.show()
 
                             }
@@ -402,14 +447,19 @@ class ProductInfoFragment : Fragment() {
                         specificProductsViewModel.onlineCardOrder.observe(viewLifecycleOwner) { fav ->
                             if (fav.isSuccessful) {
 
-                                var snake = Snackbar.make(view, "add to Fav successfull", Snackbar.LENGTH_LONG)
+                                var snake = Snackbar.make(
+                                    view,
+                                    "add to Fav successfull",
+                                    Snackbar.LENGTH_LONG
+                                )
                                 snake.show()
                                 loadData()
 
                             } else {
 
 
-                                var snake = Snackbar.make(view, "add to Fav failed", Snackbar.LENGTH_LONG)
+                                var snake =
+                                    Snackbar.make(view, "add to Fav failed", Snackbar.LENGTH_LONG)
                                 snake.show()
 
                             }
@@ -419,8 +469,7 @@ class ProductInfoFragment : Fragment() {
 
                     showLoginDialog("You can not add to Favourite without Login", requireContext())
                 }
-            }
-            else{
+            } else {
                 var snake = Snackbar.make(view, "Please check internet", Snackbar.LENGTH_LONG)
                 snake.show()
             }
@@ -455,18 +504,20 @@ class ProductInfoFragment : Fragment() {
 
         return view
     }
-    fun loadData(){
-        val sharedPreferences = requireContext().getSharedPreferences("userAuth", AppCompatActivity.MODE_PRIVATE)
-        val customerEmail = sharedPreferences.getString("email","").toString()
+
+    fun loadData() {
+        val sharedPreferences =
+            requireContext().getSharedPreferences("userAuth", AppCompatActivity.MODE_PRIVATE)
+        val customerEmail = sharedPreferences.getString("email", "").toString()
         val noteStatus = "fav"
         internetConnectionChecker = InternetConnectionChecker(requireContext())
-        internetConnectionChecker.observe(this,{ isConnected ->
-            if (isConnected){
+        internetConnectionChecker.observe(this, { isConnected ->
+            if (isConnected) {
                 specificProductsViewModel.getFavProducts()
-            }
-            else{
+            } else {
 
-            }})
+            }
+        })
 
         allFavProducts.clear()
         specificProductsViewModel.onlineFavProduct.observe(viewLifecycleOwner) { allDraftProducts ->
@@ -478,8 +529,7 @@ class ProductInfoFragment : Fragment() {
                 if (allDraftProducts.get(i).note == noteStatus && allDraftProducts.get(i).email == customerEmail) {
                     allFavProducts.add(allDraftProducts.get(i))
                     allVariantsID.add(allDraftProducts.get(i).line_items!![0].variant_id!!)
-                }
-                else if (allDraftProducts.get(i).note == "card" && allDraftProducts.get(i).email == customerEmail) {
+                } else if (allDraftProducts.get(i).note == "card" && allDraftProducts.get(i).email == customerEmail) {
                     allCardProducts.add(allDraftProducts.get(i))
                     allCardVariantsID.add(allDraftProducts.get(i).line_items!![0].variant_id!!)
                 }
@@ -488,7 +538,7 @@ class ProductInfoFragment : Fragment() {
         }
     }
 
-    fun showLoginDialog(dialogInfo: String,context:Context) {
+    fun showLoginDialog(dialogInfo: String, context: Context) {
         val view = View.inflate(context, R.layout.dialog_view, null)
 
         val builder = AlertDialog.Builder(context)

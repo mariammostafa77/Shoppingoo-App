@@ -79,6 +79,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="@string/no_data_to_display"
+        android:textColor="@color/purple_200"
         android:textAlignment="center"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="@+id/imgNoAddressProduct"

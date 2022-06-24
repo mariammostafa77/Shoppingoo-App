@@ -35,7 +35,7 @@ class PaymentAddressFragment : Fragment() {
     lateinit var imgNoAddress: ImageView
     lateinit var paymentAddressProgressBar: ProgressBar
     lateinit var address_back_icon : ImageView
-    lateinit var address_add_new_address : ImageView
+   // lateinit var address_add_new_address : ImageView
     lateinit var btnContinueToPayment : Button
     lateinit var paymentUserAddressesRecyclerView: RecyclerView
     lateinit var noInternetLayoutPaymentAddress: ConstraintLayout
@@ -106,9 +106,11 @@ class PaymentAddressFragment : Fragment() {
                 txtNoAddressDataFound.visibility=View.VISIBLE
             }
         }
+        /*
         address_add_new_address.setOnClickListener {
             replaceFragment(AddNewAddressFragment())
         }
+         */
         btnContinueToPayment.setOnClickListener {
             replaceFragment(AddNewAddressFragment())
         }
@@ -118,7 +120,7 @@ class PaymentAddressFragment : Fragment() {
     private fun initComponent(view: View){
         address_back_icon = view.findViewById(R.id.address_back_icon)
         imgNoAddress = view.findViewById(R.id.imgNoAddress)
-        address_add_new_address = view.findViewById(R.id.address_add_new_address)
+       // address_add_new_address = view.findViewById(R.id.address_add_new_address)
         paymentAddressProgressBar = view.findViewById(R.id.paymentAddressProgressBar)
         txtNoAddressDataFound = view.findViewById(R.id.txtNoAddressDataFound)
         btnContinueToPayment = view.findViewById(R.id.btnContinueToPayment)

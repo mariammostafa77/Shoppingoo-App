@@ -24,6 +24,7 @@ import com.example.mcommerce.auth.login.viewModel.LoginViewModel
 import com.example.mcommerce.auth.login.viewModel.LoginViewModelFactory
 import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
+import com.example.mcommerce.network.CheckInternetConnectionFirstTime
 import com.example.mcommerce.shopping_cart.view.ShoppingCartFragment
 import com.google.android.material.snackbar.Snackbar
 
@@ -66,58 +67,78 @@ class LoginFormFragment : Fragment() {
         }
 
         btnLogin.setOnClickListener {
+            if (CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
+                loginEmail = edtLoginEmail.text.toString()
+                loginPassword = edtLoginPassword.text.toString()
 
-            loginEmail=edtLoginEmail.text.toString()
-            loginPassword=edtLoginPassword.text.toString()
+                if (!loginEmail.isEmpty() && !loginPassword.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(
+                        loginEmail
+                    )
+                        .matches() && loginPassword.length >= 6
+                ) {
+                    loginProgressbar.visibility = View.VISIBLE
+                    loginViewModelFactory = LoginViewModelFactory(
+                        Repository.getInstance(
+                            AppClient.getInstance(),
+                            requireContext()
+                        )
+                    )
+                    loginViewModel =
+                        ViewModelProvider(
+                            this,
+                            loginViewModelFactory
+                        ).get(LoginViewModel::class.java)
+                    loginViewModel.getCustomer()
+                    loginViewModel.customer.observe(viewLifecycleOwner) { customer ->
+                        val editor =
+                            requireContext().getSharedPreferences("userAuth", Context.MODE_PRIVATE)
+                                .edit()
 
-            if (!loginEmail.isEmpty() && !loginPassword.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(loginEmail)
-                    .matches() && loginPassword.length >= 6
-            ) {
-                loginProgressbar.visibility = View.VISIBLE
-                loginViewModelFactory = LoginViewModelFactory(
-                    Repository.getInstance(
-                        AppClient.getInstance(),
-                        requireContext()))
-                loginViewModel =
-                    ViewModelProvider(this, loginViewModelFactory).get(LoginViewModel::class.java)
-                loginViewModel.getCustomer()
-                loginViewModel.customer.observe(viewLifecycleOwner) { customer ->
-                    val editor =
-                        requireContext().getSharedPreferences("userAuth", Context.MODE_PRIVATE)
-                            .edit()
-
-                    for (i in 0..customer.customers.size - 1) {
-                        if (customer.customers[i].email == loginEmail && customer.customers[i].tags == loginPassword) {
-                            isSuccess = true
-                            loginProgressbar.visibility = View.INVISIBLE
-                            val snack = Snackbar.make(it,"Login Succefully", Snackbar.LENGTH_LONG)
-                            snack.show()
-                            Log.i("login",
-                                "test " + customer.customers[i].tags.toString())
-                            Log.i("login",
-                                "login sussessfull: " + customer.customers[i].tags.toString())
-                            editor.putString("email", customer.customers[i].email)
-                            editor.putString("password", customer.customers[i].tags)
-                            editor.putString("fname", customer.customers[i].first_name)
-                            editor.putString("lname", customer.customers[i].last_name)
-                            editor.putString("phone", customer.customers[i].phone)
-                            editor.putString("cusomerID", customer.customers[i].id.toString())
-                            editor.putBoolean("isLogin", true)
-                            editor.commit()
-                            startActivity(Intent(requireContext(), HomeActivity::class.java))
-                            break
+                        for (i in 0..customer.customers.size - 1) {
+                            if (customer.customers[i].email == loginEmail && customer.customers[i].tags == loginPassword) {
+                                isSuccess = true
+                                loginProgressbar.visibility = View.INVISIBLE
+                                val snack =
+                                    Snackbar.make(it, "Login Succefully", Snackbar.LENGTH_LONG)
+                                snack.show()
+                                Log.i(
+                                    "login",
+                                    "test " + customer.customers[i].tags.toString()
+                                )
+                                Log.i(
+                                    "login",
+                                    "login sussessfull: " + customer.customers[i].tags.toString()
+                                )
+                                editor.putString("email", customer.customers[i].email)
+                                editor.putString("password", customer.customers[i].tags)
+                                editor.putString("fname", customer.customers[i].first_name)
+                                editor.putString("lname", customer.customers[i].last_name)
+                                editor.putString("phone", customer.customers[i].phone)
+                                editor.putString("cusomerID", customer.customers[i].id.toString())
+                                editor.putBoolean("isLogin", true)
+                                editor.commit()
+                                startActivity(Intent(requireContext(), HomeActivity::class.java))
+                                break
+                            }
                         }
-                    }
-                    if (isSuccess == false) {
-                        loginProgressbar.visibility = View.INVISIBLE
-                        val snack = Snackbar.make(it,"Email or Password not matched", Snackbar.LENGTH_LONG)
-                        snack.show()
-                    }
+                        if (isSuccess == false) {
+                            loginProgressbar.visibility = View.INVISIBLE
+                            val snack = Snackbar.make(
+                                it,
+                                "Email or Password not matched",
+                                Snackbar.LENGTH_LONG
+                            )
+                            snack.show()
+                        }
 
+                    }
+                } else {
+                    loginvalidatation()
                 }
             }
             else{
-                loginvalidatation()
+                val snake = Snackbar.make(view, "Ops! You Lost internet connection!!!", Snackbar.LENGTH_LONG)
+                snake.show()
             }
         }
 

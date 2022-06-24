@@ -30,6 +30,7 @@ import com.example.mcommerce.network.AppClient
 import com.example.mcommerce.network.CheckInternetConnectionFirstTime
 import com.example.mcommerce.network.InternetConnectionChecker
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.remove_layout.view.*
 
 
 class FavouriteFragment : Fragment(),FavouriteOnClickLisner {
@@ -130,49 +131,47 @@ class FavouriteFragment : Fragment(),FavouriteOnClickLisner {
 
 
     override fun onItemClickListener(draftOrderX: DraftOrderX) {
-        if (CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setMessage("Are you sure you want to delete?")
-                .setTitle("Remove")
-                .setCancelable(false)
-                .setPositiveButton("Yes") { dialog, it ->
+       showDeleteDialog(draftOrderX)
+    }
 
-                    favViewModel.deleteFavProduct(draftOrderX.id.toString())
-                    favViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
-                        if (response.isSuccessful) {
-                            favProducts.remove(draftOrderX)
-                            if (favProducts.isEmpty()) {
-                                noDataImage.visibility = View.VISIBLE
-                                txtNoData.visibility = View.VISIBLE
-                            } else {
-                                noDataImage.visibility = View.INVISIBLE
-                                txtNoData.visibility = View.INVISIBLE
-                            }
-                            favAdapter.setFavtProducts(requireContext(),
-                                favProducts,
-                                favProducts.size)
+    fun showDeleteDialog(draftOrderX: DraftOrderX) {
+        val view = View.inflate(requireContext(), R.layout.remove_layout, null)
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setView(view)
 
+        val dialog = builder.create()
+        dialog.show()
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.setCancelable(false)
 
-                        } else {
-                            Toast.makeText(requireContext(),
-                                "Deleted failed",
-                                Toast.LENGTH_SHORT).show()
-
-                        }
+        view.btn_delete.setOnClickListener {
+            favViewModel.deleteFavProduct(draftOrderX.id.toString())
+            favViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
+                if (response.isSuccessful) {
+                    favProducts.remove(draftOrderX)
+                    if (favProducts.isEmpty()) {
+                        noDataImage.visibility = View.VISIBLE
+                        txtNoData.visibility = View.VISIBLE
+                    } else {
+                        noDataImage.visibility = View.INVISIBLE
+                        txtNoData.visibility = View.INVISIBLE
                     }
-                    dialog.dismiss()
-                }
-                .setNegativeButton("No") { dialog, it ->
-                    dialog.cancel()
-                }
-                .show()
-        }
-        else{
-            Toast.makeText(requireContext(),
-                "Please check internet",
-                Toast.LENGTH_SHORT).show()
-        }
 
+                    favAdapter.setFavtProducts(requireContext(),
+                        favProducts,
+                        favProducts.size)
+
+                } else {
+                    Toast.makeText(requireContext(),
+                        "Deleted failed",
+                        Toast.LENGTH_SHORT).show()
+                }
+                dialog.dismiss()
+            }
+        }
+        view.btn_cancel.setOnClickListener {
+            dialog.dismiss()
+        }
     }
 
 

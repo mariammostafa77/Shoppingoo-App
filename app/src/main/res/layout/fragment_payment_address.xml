@@ -29,6 +29,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+       <!--
         <ImageView
             android:id="@+id/address_add_new_address"
             android:layout_width="wrap_content"
@@ -39,6 +40,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/white"/>
+        -->
         <ImageView
             android:id="@+id/address_back_icon"
             android:layout_width="wrap_content"
@@ -61,6 +63,7 @@
         android:layout_marginVertical="16dp"
         android:paddingHorizontal="4dp"
         android:text="@string/please_select_your_shipping_address"
+        android:textColor="@color/purple_200"
         android:textStyle="bold"
         android:textAlignment="center"
         android:textSize="16sp"/>
@@ -103,6 +106,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="@string/no_data_to_display"
+        android:textColor="@color/purple_200"
         android:visibility="invisible"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="@+id/imgNoAddress"

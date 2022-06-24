@@ -31,6 +31,7 @@ import com.example.mcommerce.shopping_cart.viewmodel.ShoppingCartViewModel
 import com.example.mcommerce.shopping_cart.viewmodel.ShoppingCartViewModelFactory
 import com.google.android.libraries.places.internal.it
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.remove_layout.view.*
 
 class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
 
@@ -178,61 +179,63 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
     }
 
     override fun onDeleteItemClickListener(draftOrder: DraftOrder) {
+        val view = View.inflate(requireContext(), R.layout.remove_layout, null)
         val builder = AlertDialog.Builder(requireContext())
-        builder.setMessage("Are you sure you want to delete?")
-            .setTitle("Alert!!!")
-            .setCancelable(false)
-            .setPositiveButton("Yes") { dialog, it ->
-                if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())){
+        builder.setView(view)
+        val dialog = builder.create()
+        dialog.show()
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.setCancelable(false)
+        view.btn_delete.setOnClickListener {
+            if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())){
+                shoppingCartViewModel.deleteSelectedProduct(draftOrder.draft_order?.id.toString())
+                noInternetLayoutShoppingCart.visibility=View.INVISIBLE
+            }else{
+                noInternetLayoutShoppingCart.visibility=View.VISIBLE
+            }
+            internetConnectionChecker = InternetConnectionChecker(requireContext())
+            internetConnectionChecker.observe(this,{ isConnected ->
+                if (isConnected){
                     shoppingCartViewModel.deleteSelectedProduct(draftOrder.draft_order?.id.toString())
                     noInternetLayoutShoppingCart.visibility=View.INVISIBLE
                 }else{
                     noInternetLayoutShoppingCart.visibility=View.VISIBLE
                 }
-                internetConnectionChecker = InternetConnectionChecker(requireContext())
-                internetConnectionChecker.observe(this,{ isConnected ->
-                    if (isConnected){
-                        shoppingCartViewModel.deleteSelectedProduct(draftOrder.draft_order?.id.toString())
-                        noInternetLayoutShoppingCart.visibility=View.INVISIBLE
-                    }else{
-                        noInternetLayoutShoppingCart.visibility=View.VISIBLE
+            })
+            shoppingCartViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
+                if (response.isSuccessful) {
+                    userShoppingCartProducts.remove(draftOrder)
+                    shoppingCartAdapter.notifyDataSetChanged()
+                    if (userShoppingCartProducts.isEmpty()) {
+                        cartProgressBar.isVisible = false
+                        imgNoCartProduct.visibility = View.VISIBLE
+                        txtNoSDataFound.visibility = View.VISIBLE
+                    } else {
+                        cartProgressBar.isVisible = false
+                        imgNoCartProduct.visibility = View.INVISIBLE
+                        txtNoSDataFound.visibility = View.INVISIBLE
                     }
-                })
-                shoppingCartViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
-                    if (response.isSuccessful) {
-                        userShoppingCartProducts.remove(draftOrder)
-                        shoppingCartAdapter.notifyDataSetChanged()
-                        if (userShoppingCartProducts.isEmpty()) {
-                            cartProgressBar.isVisible = false
-                            imgNoCartProduct.visibility = View.VISIBLE
-                            txtNoSDataFound.visibility = View.VISIBLE
-                        } else {
-                            cartProgressBar.isVisible = false
-                            imgNoCartProduct.visibility = View.INVISIBLE
-                            txtNoSDataFound.visibility = View.INVISIBLE
+                    shoppingCartAdapter.setUserShoppingCartProducts(
+                        requireContext(),
+                        userShoppingCartProducts
+                    )
+                    subTotal = 0.0
+                    for (i in 0..userShoppingCartProducts.size - 1) {
+                        val price =
+                            (userShoppingCartProducts[i].draft_order?.subtotal_price)?.toDouble()!!
+                        if (price != null) {
+                            subTotal += price
                         }
-                        shoppingCartAdapter.setUserShoppingCartProducts(
-                            requireContext(),
-                            userShoppingCartProducts
-                        )
-                        subTotal = 0.0
-                        for (i in 0..userShoppingCartProducts.size - 1) {
-                            val price =
-                                (userShoppingCartProducts[i].draft_order?.subtotal_price)?.toDouble()!!
-                            if (price != null) {
-                                subTotal += price
-                            }
-                        }
-                        amount = SavedSetting.getPrice(subTotal.toString(), requireContext())
-                        txtSubTotal.text = amount
-                    } else { }
-                }
-                dialog.dismiss()
+                    }
+                    amount = SavedSetting.getPrice(subTotal.toString(), requireContext())
+                    txtSubTotal.text = amount
+                } else { }
             }
-            .setNegativeButton("No") { dialog, it ->
-                dialog.cancel()
-            }
-            .show()
+            dialog.dismiss()
+        }
+        view.btn_cancel.setOnClickListener {
+            dialog.dismiss()
+        }
     }
 
     override fun onIncrementClickListener(draftOrder: DraftOrder,position : Int) {

@@ -1,6 +1,7 @@
 package com.example.mcommerce.shopping_cart.view
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +21,7 @@ import com.example.mcommerce.home.view.HomeFragment.Companion.homeAllProducts
 import com.example.mcommerce.me.viewmodel.SavedSetting
 import com.example.mcommerce.model.DiscountCode
 import com.example.mcommerce.model.Product
+import com.example.mcommerce.model.Variant
 import com.example.mcommerce.network.CheckInternetConnectionFirstTime
 import com.google.android.material.snackbar.Snackbar
 
@@ -49,16 +51,23 @@ class ShoppingCartAdapter(var comminicator: Communicator,private val listener: O
 
         holder.shoppingCartIncreaseQuantity.setOnClickListener {
             counter = userShoppingCartProducts[position].draft_order?.line_items?.get(0)?.quantity!!.toInt()
-            var productSelected : Int = 1
+            var productSelected : Int = 0
+            var variants : List<Variant> = ArrayList()
             for(i in 0..homeAllProducts.size-1) {
-                if (homeAllProducts.get(position).title == userShoppingCartProducts[position].draft_order?.line_items?.get(0)?.title) {
-                    productSelected = homeAllProducts.get(position).variants?.get(0)?.inventory_quantity!!
+                if (homeAllProducts.get(i).title == userShoppingCartProducts[position].draft_order?.line_items?.get(0)?.title) {
+                   variants = homeAllProducts.get(position).variants!!
+                    break
+                }
+            }
+            for (i in 0..variants.size-1){
+                if (userShoppingCartProducts[position].draft_order?.line_items?.get(0)?.variant_id == variants.get(i).id){
+                    productSelected = i
                     break
                 }
             }
             if(CheckInternetConnectionFirstTime.checkForInternet(context)){
-                   Toast.makeText(context,productSelected.toString(),Toast.LENGTH_SHORT).show()
-                if (counter < productSelected){
+                val inventory_quantity = variants.get(productSelected).inventory_quantity!!
+                if (counter < inventory_quantity){
                     counter++
                     holder.ShoppingCartProductQuantity.text = counter.toString()
                     listener.onIncrementClickListener(userShoppingCartProducts[position],position)
