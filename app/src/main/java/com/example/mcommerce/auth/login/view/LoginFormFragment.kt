@@ -60,7 +60,6 @@ class LoginFormFragment : Fragment() {
 
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
             transaction.replace(R.id.fragmentContainerView, RegisterFormFragment())
-            transaction.addToBackStack(null);
             transaction.commit()
 
 
@@ -91,8 +90,8 @@ class LoginFormFragment : Fragment() {
                         if (customer.customers[i].email == loginEmail && customer.customers[i].tags == loginPassword) {
                             isSuccess = true
                             loginProgressbar.visibility = View.INVISIBLE
-                            Toast.makeText(requireContext(), "Login Successful", Toast.LENGTH_LONG)
-                                .show()
+                            val snack = Snackbar.make(it,"Login Succefully", Snackbar.LENGTH_LONG)
+                            snack.show()
                             Log.i("login",
                                 "test " + customer.customers[i].tags.toString())
                             Log.i("login",
@@ -110,6 +109,7 @@ class LoginFormFragment : Fragment() {
                         }
                     }
                     if (isSuccess == false) {
+                        loginProgressbar.visibility = View.INVISIBLE
                         val snack = Snackbar.make(it,"Email or Password not matched", Snackbar.LENGTH_LONG)
                         snack.show()
                     }

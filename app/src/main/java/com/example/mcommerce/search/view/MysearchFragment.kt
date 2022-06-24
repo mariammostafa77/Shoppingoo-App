@@ -50,7 +50,7 @@ class MysearchFragment : Fragment() {
     lateinit var categoriesProductViewModel: CategoriesViewModel
 //lateinit var linearLayoutManager:LinearLayoutManager
     lateinit var edtSearch:AutoCompleteTextView
-    lateinit var btnSearch:Button
+    lateinit var btnSearch:ImageView
     lateinit var output:String
     var productID:String=""
     var brandName:String=""

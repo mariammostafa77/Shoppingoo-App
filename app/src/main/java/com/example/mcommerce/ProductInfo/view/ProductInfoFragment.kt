@@ -132,8 +132,10 @@ class ProductInfoFragment : Fragment() {
         reviewsRecyclerview.setLayoutManager(reviewsLinearLayoutManager)
         reviewsAdapter= ReviewAdapter()
         reviewsRecyclerview.setAdapter(reviewsAdapter)
-        var reviews=Reviews("Zeinab Ibrahim","Good")
-        allComments=listOf(reviews)
+        var review1=Reviews("Zeinab Ibrahim","This is a good product")
+        var review2=Reviews("Asmaa Youssef","I'm love with this product,it looks very cute")
+        var review3=Reviews("Mariam Mostafa","Cute like for points please")
+        allComments=listOf(review2,review3,review1)
         reviewsAdapter.setComment(allComments,requireContext())
 
 

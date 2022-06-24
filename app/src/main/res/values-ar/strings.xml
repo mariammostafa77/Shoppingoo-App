@@ -14,8 +14,10 @@
     <string name="register">التسجيل</string>
     <string name="forgetPass">نسيت الباسورد</string>
     <string name="login">تسجيل الدخول</string>
-    <string name="createNewAcc">إذا لم يكن لديك حساب يرجى الضغط هنا</string>
-    <string name="haveAcc">إذا كان لديك بالفعل حساب انقر هنا</string>
+    <string name="createNewAcc"><u>إذا لم يكن لديك حساب يرجى الضغط هنا</u></string>
+    <string name="haveAcc"><u>إذا كان لديك بالفعل حساب انقر هنا</u></string>
+    <string name="removeItem">حذف العنصر</string>
+    <string name="message">هل انت متاكد من حذف العنصر؟</string>
     <string name="search">ابحث هنا</string>
     <string name="All">الكل</string>
     <string name="Me">أنا</string>
@@ -106,6 +108,7 @@
     <string name="cash">نقدا</string>
     <string name="payment_method">طريقة الدفع</string>
     <string name="confirm_payment">تأكيد الدفع</string>
+    <string name="delete">Delete</string>
     <string name="continue_to_payment">التكملة الى الدفع</string>
 
     <string-array name="currency_options">
