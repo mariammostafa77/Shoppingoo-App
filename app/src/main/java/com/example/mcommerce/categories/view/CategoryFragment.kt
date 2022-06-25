@@ -383,6 +383,7 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
     override fun onBrandNameClick(brandName: String) {
         if (CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
             this.brandName=brandName
+            subCategorySelected=""
             categoriesProductViewModel.getCategoriesProduct(brandName,subCategorySelected, collectionId)
             getSubTypes()
             if(brandName.isEmpty()){
