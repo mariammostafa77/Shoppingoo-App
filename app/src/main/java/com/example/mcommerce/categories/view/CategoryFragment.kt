@@ -385,16 +385,17 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
             this.brandName=brandName
             categoriesProductViewModel.getCategoriesProduct(brandName,subCategorySelected, collectionId)
             getSubTypes()
-            dialog.dismiss()
             if(brandName.isEmpty()){
                 categoryBarTitle.text="All Brands"
             }else{
                 categoryBarTitle.text=brandName
-
             }
+            dialog.dismiss()
             noInternetCategoryLayout.visibility = View.INVISIBLE
         } else {
             noInternetCategoryLayout.visibility = View.VISIBLE
+            dialog.dismiss()
+
         }
     }
 
