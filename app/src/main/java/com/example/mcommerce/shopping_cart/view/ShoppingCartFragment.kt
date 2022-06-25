@@ -104,7 +104,7 @@ class ShoppingCartFragment : Fragment(), OnShoppingCartClickListener {
                 shoppingCartViewModel.getShoppingCardProducts()
                 noInternetLayoutShoppingCart.visibility=View.INVISIBLE
             }else{
-                var snake = Snackbar.make(view, "Ops! You Lost internet connection!!!", Snackbar.LENGTH_LONG)
+                val snake = Snackbar.make(view, "Ops! You Lost internet connection!!!", Snackbar.LENGTH_LONG)
                 snake.show()
             }
         })

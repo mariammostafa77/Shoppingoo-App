@@ -34,6 +34,7 @@ import org.json.JSONObject
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import com.android.volley.AuthFailureError
 import com.android.volley.Request
@@ -69,6 +70,7 @@ class PaymentFragment : Fragment() {
     lateinit var txtDiscountCount: TextView
     lateinit var confirm_payment_back_icon: ImageView
     lateinit var noInternetLayoutPayment: ConstraintLayout
+    lateinit var paymentProgressBar: ProgressBar
 
     lateinit var couponsFactory: HomeViewModelFactory
     lateinit var couponsViewModel: HomeViewModel
@@ -117,7 +119,6 @@ class PaymentFragment : Fragment() {
 
         initComponent(view)
         communicator = activity as Communicator
-
         PaymentConfiguration.init(requireContext(), PUBLISH_KEY)
         paymentSheet = PaymentSheet(this, ::onPaymentSheetResult)
 
@@ -162,6 +163,7 @@ class PaymentFragment : Fragment() {
         btnApplyDiscount.setOnClickListener {
             etCouponsField.onEditorAction(EditorInfo.IME_ACTION_DONE)
             if (CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
+
                 applyDiscount(it)
            }
             else{
@@ -175,8 +177,8 @@ class PaymentFragment : Fragment() {
         radioVisa.setOnClickListener {
             paymentMethod = "Visa"
             if (CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
-                val request: StringRequest =
-                    object :
+                paymentProgressBar.isVisible = true
+                val request: StringRequest = object :
                         StringRequest(Request.Method.POST, "https://api.stripe.com/v1/customers",
                             Response.Listener { response ->
                                 try {
@@ -222,7 +224,7 @@ class PaymentFragment : Fragment() {
     }
 
     private fun initComponent(view: View) {
-        //paymentTitleTxt = view.findViewById(R.id.paymentTitleTxt)
+        paymentProgressBar = view.findViewById(R.id.paymentProgressBar)
         txtSubTotalText = view.findViewById(R.id.txtSubTotalText)
         txtFeesText = view.findViewById(R.id.txtFeesText)
         txtTotalText = view.findViewById(R.id.txtTotalText)
@@ -367,6 +369,7 @@ class PaymentFragment : Fragment() {
                     try {
                         val jsonObject = JSONObject(response)
                         clientSecret = jsonObject.getString("client_secret")
+                        paymentProgressBar.isVisible = false
                     } catch (e: JSONException) {
                         e.printStackTrace()
                     }
