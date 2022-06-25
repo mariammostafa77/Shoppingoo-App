@@ -38,6 +38,7 @@ import com.example.mcommerce.orders.viewModel.OrdersViewFactory
 import com.example.mcommerce.orders.viewModel.OrdersViewModel
 import com.example.mcommerce.shopping_cart.view.ShoppingCartFragment
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.remove_layout.view.*
 
 class MeWithLogin : Fragment(), FavouriteOnClickLisner, OnOrderClickListenerInterface {
 
@@ -208,32 +209,40 @@ class MeWithLogin : Fragment(), FavouriteOnClickLisner, OnOrderClickListenerInte
         transaction.addToBackStack(null)
         transaction.commit()
     }
-    override fun onItemClickListener(draftOrderX: DraftOrderX) {
-        Toast.makeText(requireContext(),"clicked",Toast.LENGTH_LONG).show()
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setMessage("Are you sure you want to delete?")
-            .setTitle("Remove")
-            .setCancelable(false)
-            .setPositiveButton("Yes"){ dialog , it ->
-                favViewModel.deleteFavProduct(draftOrderX.id.toString())
-                favViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
-                    if(response.isSuccessful){
-                        favProducts.remove(draftOrderX)
-                        favAdapter.setFavtProducts(requireContext(),favProducts,4)
 
-                        Toast.makeText(requireContext(),"Deleted Success!!!: "+response.code().toString(),Toast.LENGTH_SHORT).show()
-                    }
-                    else{
-                        Toast.makeText(requireContext(),"Deleted failed: "+response.code().toString(),Toast.LENGTH_SHORT).show()
-                    }
-                }
-                dialog.dismiss()
-            }
-            .setNegativeButton("No"){ dialog , it ->
-                dialog.cancel()
-            }
-            .show()
+    override fun onItemClickListener(draftOrderX: DraftOrderX) {
+        showDeleteDialog(draftOrderX)
     }
+
+    fun showDeleteDialog(draftOrderX: DraftOrderX) {
+        val view = View.inflate(requireContext(), R.layout.remove_layout, null)
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setView(view)
+
+        val dialog = builder.create()
+        dialog.show()
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.setCancelable(false)
+
+        view.btn_delete.setOnClickListener {
+            favViewModel.deleteFavProduct(draftOrderX.id.toString())
+            favViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
+                if(response.isSuccessful){
+                    favProducts.remove(draftOrderX)
+                    favAdapter.setFavtProducts(requireContext(),favProducts,4)
+
+                }
+                else{
+                    Toast.makeText(requireContext(),"Deleted failed",Toast.LENGTH_SHORT).show()
+                }
+            }
+            dialog.dismiss()
+        }
+        view.btn_cancel.setOnClickListener {
+            dialog.dismiss()
+        }
+    }
+
 
     override fun onOrderClickListener(order: Order) {
         communicator.goToOrderDetails(order)

@@ -111,6 +111,8 @@
     <string name="reload">اعادةالتحميل</string>
     <string name="delete">Delete</string>
     <string name="continue_to_payment">التكملة الى الدفع</string>
+    <string name="choose">اختار ماركتك المفضلة</string>
+
 
     <string-array name="currency_options">
     <item>جنيه مصرى</item>

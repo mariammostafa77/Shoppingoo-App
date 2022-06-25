@@ -31,6 +31,7 @@ import com.example.mcommerce.draftModel.DraftOrderX
 import com.example.mcommerce.draftModel.LineItem
 import com.example.mcommerce.draftModel.NoteAttribute
 import com.example.mcommerce.favourite.view.FavouriteFragment
+import com.example.mcommerce.home.view.HomeFragment
 import com.example.mcommerce.me.viewmodel.CustomerViewModel
 import com.example.mcommerce.me.viewmodel.CustomerViewModelFactory
 import com.example.mcommerce.me.viewmodel.SavedSetting
@@ -47,13 +48,15 @@ import com.google.android.material.slider.RangeSlider
 import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
+import kotlinx.android.synthetic.main.brand_name_item.*
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.FieldPosition
 
-class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface {
+class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, OnBrandNameClickListener {
     private lateinit var brandProductsAdapter: BrandProductsAdapter
     private lateinit var subCategoriesAdapter: SubCategoriesAdapter
+    private lateinit var brandsAdapter: BrandsAdapter
     private lateinit var categoriesProductFactory: CategoriesViewFactory
     private lateinit var categoriesProductViewModel: CategoriesViewModel
     private lateinit var noInternetCategoryLayout:ConstraintLayout
@@ -66,6 +69,7 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface {
     private lateinit var imgNoData:ImageView
     private lateinit var tvNoData:TextView
     private lateinit var applayBtn:Button
+    private lateinit var dropDownBtn:ImageView
     private lateinit var reloadBtn:Button
     private lateinit var communicator:Communicator
     private lateinit var categoryBarTitle:TextView
@@ -102,6 +106,7 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface {
             Repository.getInstance(AppClient.getInstance(), requireContext())
         )
         subCategoriesAdapter= SubCategoriesAdapter()
+        brandsAdapter= BrandsAdapter()
         brandProductsAdapter= BrandProductsAdapter()
         categoryRecyclerView.adapter = brandProductsAdapter
         communicator = activity as Communicator
@@ -114,7 +119,12 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface {
                 requireContext()))
         categoriesProductViewModel =
             ViewModelProvider(this, categoriesProductFactory)[CategoriesViewModel::class.java]
-        categoryBarTitle.text=brandName
+        if(brandName.isEmpty()){
+            categoryBarTitle.text="All Brands"
+        }else{
+            categoryBarTitle.text=brandName
+
+        }
         callData()
         reloadBtn.setOnClickListener {
             callData()
@@ -191,6 +201,12 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface {
 
             }
         })
+        dropDownBtn.setOnClickListener {
+            showBrands()
+        }
+        categoryBarTitle.setOnClickListener {
+            showBrands()
+        }
         searchIcon.setOnClickListener {
             if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
                 mySearchFlag = 2
@@ -257,6 +273,7 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface {
         tvNoData = view.findViewById(R.id.tvNoData)
         imgNoData=view.findViewById(R.id.imgNoData)
         reloadBtn=view.findViewById(R.id.reloadBtn)
+        dropDownBtn=view.findViewById(R.id.dropDownBtn)
         noInternetCategoryLayout=view.findViewById(R.id.noInternetCategoryLayout)
 
     }
@@ -346,6 +363,38 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface {
             noInternetCategoryLayout.visibility=View.INVISIBLE
         }else{
             noInternetCategoryLayout.visibility=View.VISIBLE
+        }
+    }
+    private fun showBrands() {
+        val view = layoutInflater.inflate(R.layout.brands_buttom_sheet, null)
+        val brandsNameRecycle: RecyclerView = view.findViewById(R.id.brandsNameRecycle)
+        brandsNameRecycle.adapter = brandsAdapter
+        brandsAdapter.setUpdatedData(HomeFragment.allBrandsList,requireContext(),this)
+        if (CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
+            dialog.setContentView(view)
+            dialog.show()
+            noInternetCategoryLayout.visibility = View.INVISIBLE
+        } else {
+            noInternetCategoryLayout.visibility = View.VISIBLE
+        }
+
+    }
+
+    override fun onBrandNameClick(brandName: String) {
+        if (CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
+            this.brandName=brandName
+            categoriesProductViewModel.getCategoriesProduct(brandName,subCategorySelected, collectionId)
+            getSubTypes()
+            dialog.dismiss()
+            if(brandName.isEmpty()){
+                categoryBarTitle.text="All Brands"
+            }else{
+                categoryBarTitle.text=brandName
+
+            }
+            noInternetCategoryLayout.visibility = View.INVISIBLE
+        } else {
+            noInternetCategoryLayout.visibility = View.VISIBLE
         }
     }
 

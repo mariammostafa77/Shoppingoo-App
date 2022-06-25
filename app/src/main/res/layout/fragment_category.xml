@@ -65,11 +65,22 @@
             android:id="@+id/filterImg"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
             android:src="@drawable/filter"
-            app:layout_constraintBottom_toBottomOf="@+id/shipping_bag_icon"
-            app:layout_constraintEnd_toStartOf="@+id/shipping_bag_icon"
-            app:layout_constraintTop_toTopOf="@+id/shipping_bag_icon" />
+            app:layout_constraintBottom_toBottomOf="@+id/search_icon"
+            app:layout_constraintStart_toEndOf="@+id/search_icon"
+            app:layout_constraintTop_toTopOf="@+id/search_icon" />
+
+        <ImageView
+            android:id="@+id/dropDownBtn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:paddingTop="2dp"
+            android:src="@drawable/arrow_drop_down"
+            app:layout_constraintBottom_toBottomOf="@+id/categoryBarTitle"
+            app:layout_constraintStart_toEndOf="@+id/categoryBarTitle"
+            app:layout_constraintTop_toTopOf="@+id/categoryBarTitle"
+            app:tint="@color/white" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.tabs.TabLayout

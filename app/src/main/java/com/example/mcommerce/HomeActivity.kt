@@ -58,9 +58,6 @@ class HomeActivity : AppCompatActivity(),Communicator {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-//        val favSharedPreferences = getSharedPreferences("favourite", AppCompatActivity.MODE_PRIVATE)
-//       myFavFlag= favSharedPreferences.getBoolean("favStatue",false)
-
         SavedSetting.loadLocale(this)
 
         val sharedPreferences: SharedPreferences = getSharedPreferences("userAuth", Context.MODE_PRIVATE)

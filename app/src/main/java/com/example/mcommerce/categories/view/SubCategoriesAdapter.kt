@@ -24,6 +24,7 @@ class SubCategoriesAdapter : RecyclerView.Adapter<SubCategoriesAdapter.ViewHolde
     var allTypes:List<String> = ArrayList<String>()
     lateinit var context: Context
     lateinit var onClickAction: OnSubCategoryClickInterface
+    var index:Int = -1
 
     fun setUpdatedData(allTypes:List<String>,context: Context,onClickAction: OnSubCategoryClickInterface){
         this.allTypes=allTypes
@@ -37,15 +38,19 @@ class SubCategoriesAdapter : RecyclerView.Adapter<SubCategoriesAdapter.ViewHolde
         var subCategoryConstraintLayout : ConstraintLayout=itemView.findViewById(R.id.subCategoryConstraintLayout)
 
         fun bind(data: String) {
-            subCategoryConstraintLayout.background= ContextCompat.getDrawable(context, R.color.gray_edit_text)
             tvType.text = allTypes[position]
-            Log.i("TAG","adapter on bind ${allTypes[position]}")
             tvType.setOnClickListener(View.OnClickListener {
-                notifyItemChanged(position)
+                index=position
+                notifyDataSetChanged()
                 onClickAction.onSubCategoryClick(allTypes[position])
-                subCategoryConstraintLayout.background= ContextCompat.getDrawable(context, R.color.buttons)
-
             })
+            if (index==position){
+                index=-1
+                subCategoryConstraintLayout.background= ContextCompat.getDrawable(context, R.color.buttons)
+            }else{
+                subCategoryConstraintLayout.background= ContextCompat.getDrawable(context, R.color.gray_edit_text)
+
+            }
         }
 
     }

@@ -37,6 +37,7 @@ import androidx.fragment.app.FragmentTransaction
 import com.example.mcommerce.categories.viewModel.CategoriesViewFactory
 import com.example.mcommerce.categories.viewModel.CategoriesViewModel
 import com.example.mcommerce.favourite.view.FavouriteFragment
+import com.example.mcommerce.home.model.SmartCollection
 import com.example.mcommerce.model.Product
 import com.example.mcommerce.network.CheckInternetConnectionFirstTime
 import com.example.mcommerce.network.InternetConnectionChecker
@@ -57,23 +58,23 @@ class HomeFragment : Fragment() {
     lateinit var cardImg:ImageView
     lateinit var favImg:ImageView
     lateinit var noInternetLayout:ConstraintLayout
-
     lateinit var homeFactory: HomeViewModelFactory
     lateinit var homeViewModel: HomeViewModel
     lateinit var categoriesViewModel: CategoriesViewModel
     lateinit var categoriesViewFactory: CategoriesViewFactory
     lateinit var communicator: Communicator
-
     private lateinit var  adsViewPager: ViewPager2
     private lateinit var handler : Handler
     private lateinit var adsImageList:ArrayList<Int>
     private lateinit var adsAdapter: AdsAdapter
     lateinit var couponsLayoutManager: LinearLayoutManager
+    private lateinit var smartCollectionItem:SmartCollection
 
     private lateinit var internetConnectionChecker: InternetConnectionChecker
 
     companion object{
         var homeAllProducts:ArrayList<Product> = ArrayList<Product>()
+        var allBrandsList:ArrayList<SmartCollection> = ArrayList<SmartCollection>()
     }
 
     private val runnable = Runnable {
@@ -89,6 +90,7 @@ class HomeFragment : Fragment() {
         initComponent(view)
         initAdsViewPager(view)
         setUpTransformer()
+        smartCollectionItem=SmartCollection(title="")
         adsViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
@@ -144,7 +146,11 @@ class HomeFragment : Fragment() {
         }
 
         homeViewModel.onlineBrands.observe(viewLifecycleOwner) { brands ->
-            homeViewModel.onlineBrands.value?.let { brandAdapter.setUpdatedData(it,requireContext(),communicator) }
+            allBrandsList.clear()
+            allBrandsList.add(smartCollectionItem)
+            allBrandsList.addAll(brands)
+            homeViewModel.onlineBrands.value?.let {
+                brandAdapter.setUpdatedData(it,requireContext(),communicator) }
         }
 
         categoriesViewModel.onlinesubcategoriesProduct.observe(viewLifecycleOwner){ allProducts ->

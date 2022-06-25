@@ -251,6 +251,7 @@
                 android:id="@+id/reviewsRecycleView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:nestedScrollingEnabled="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtComment" />
@@ -266,7 +267,7 @@
         android:layout_marginTop="25dp"
         android:backgroundTint="@color/buttons"
         android:backgroundTintMode="src_over"
-        android:padding="8dp"
+        android:padding="12dp"
         app:layout_constraintWidth_percent="0.7"
         android:textSize="14sp"
         app:cornerRadius="10dp"
