@@ -49,10 +49,11 @@ class PaymentAddressFragment : Fragment(), PaymentAddressClickListener {
     lateinit var communicator: Communicator
     private lateinit var internetConnectionChecker: InternetConnectionChecker
 
-    var lineItems : ArrayList<LineItem> = ArrayList()
-    var orderPrices : ArrayList<OrderPrices> = ArrayList()
+    companion object {
+        var lineItems: ArrayList<LineItem> = ArrayList()
+        var orderPrices: ArrayList<OrderPrices> = ArrayList()
+    }
     var selectedAddressFromAdapter: Addresse = Addresse()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

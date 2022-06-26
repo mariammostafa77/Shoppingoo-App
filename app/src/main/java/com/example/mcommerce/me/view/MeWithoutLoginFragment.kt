@@ -1,5 +1,6 @@
 package com.example.mcommerce.me.view
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -7,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import com.example.mcommerce.AuthActivity
 import com.example.mcommerce.R
 import com.example.mcommerce.auth.login.view.LoginFormFragment
 import com.example.mcommerce.me.view.setting.WithLoginAppSettingFragment
@@ -35,15 +37,11 @@ class MeWithoutLoginFragment : Fragment() {
         }
         btnGoToLogin.setOnClickListener {
             if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())){
-                val transaction = requireActivity().supportFragmentManager.beginTransaction()
-                transaction.replace(R.id.frameLayout, LoginFormFragment())
-                transaction.addToBackStack(null)
-                transaction.commit()
+                startActivity(Intent(requireContext(), AuthActivity::class.java))
             }else{
-                var snake = Snackbar.make(view, "Check internet connection", Snackbar.LENGTH_LONG)
+                val snake = Snackbar.make(view, "Check internet connection", Snackbar.LENGTH_LONG)
                 snake.show()
             }
-
         }
         return view
     }
