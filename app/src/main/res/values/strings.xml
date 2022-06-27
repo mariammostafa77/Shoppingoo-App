@@ -29,7 +29,7 @@
     <string name="Price">Price </string>
     <string name="CreatedBy">Created at: </string>
     <string name="removeItem">Delete Item</string>
-    <string name="message">Are Yoy Sure you want to delete Iteme?</string>
+    <string name="message">Are you sure, you want to delete iteme?</string>
     <string name="noResultFound">No Result Found </string>
     <!--
     <string name="TotalPrice">Total Price:</string>
@@ -46,6 +46,7 @@
     <string name="yourAddress">Your Address</string>
     <string name="paymentMethod">Payment Method</string>
     <string name="noData">"Not available yet!"</string>
+    <string name="noItem">"No product in your shopping cart!"</string>
     <string name="noOrder">"You have no order in progress!"</string>
     <string name="noWhishlist">"You have no Favourite in progress!"</string>
     <string name="noFav">"You currently have nothing saved to your Favourite list!"</string>
@@ -132,6 +133,8 @@
     <string name="choose">Choose your favourite brand</string>
     <string name="Home">Home</string>
     <string name="Category">Category</string>
+    <string name="share_our_app">Share Our App</string>
+    <string name="orderId">Order Id</string>
 
     <!-- Arrays -->
 

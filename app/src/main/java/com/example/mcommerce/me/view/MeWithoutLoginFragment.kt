@@ -37,11 +37,14 @@ class MeWithoutLoginFragment : Fragment() {
         }
         btnGoToLogin.setOnClickListener {
             if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())){
+                requireActivity().finish()
                 startActivity(Intent(requireContext(), AuthActivity::class.java))
+
             }else{
-                val snake = Snackbar.make(view, "Check internet connection", Snackbar.LENGTH_LONG)
+                var snake = Snackbar.make(view, "Check internet connection", Snackbar.LENGTH_LONG)
                 snake.show()
             }
+
         }
         return view
     }

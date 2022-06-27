@@ -87,6 +87,7 @@
     <string name="noData">لم يتم العثور علي شئ</string>
     <string name="noOrder">"لا توجد طلبات جارية"</string>
     <string name="applay">تطبيق</string>
+    <string name="noItem">"لا يوجد منتج في سلتك"</string>
     <string name="noResultFound">لا يوجد نواتج بحث </string>
     <string name="noWhishlist">لا يوجد مفضلة لديك</string>
     <string name="noFav">"حاليا لا يوجد محفوظ في المضلة لديك"</string>
@@ -114,6 +115,8 @@
     <string name="choose">اختار ماركتك المفضلة</string>
     <string name="Home">الرئيسية</string>
     <string name="Category">التصنيفات</string>
+    <string name="share_our_app">مشاركة التطبيق</string>
+    <string name="orderId">Order Id</string>
 
 
     <string-array name="currency_options">

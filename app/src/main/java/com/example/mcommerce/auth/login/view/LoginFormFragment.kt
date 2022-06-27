@@ -109,6 +109,7 @@ class LoginFormFragment : Fragment() {
                                 editor.putString("cusomerID", customer.customers[i].id.toString())
                                 editor.putBoolean("isLogin", true)
                                 editor.commit()
+                                requireActivity().finish()
                                 startActivity(Intent(requireContext(), HomeActivity::class.java))
                                 break
                             }

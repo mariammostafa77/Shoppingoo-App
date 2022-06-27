@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.fragment.NavHostFragment
 import com.example.mcommerce.ProductInfo.view.Communicator
 import com.example.mcommerce.ProductInfo.view.ProductInfoFragment
@@ -54,12 +55,16 @@ class HomeActivity : AppCompatActivity(),Communicator {
     }
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-        SavedSetting.loadLocale(this)
 
+        var transaction = supportFragmentManager.beginTransaction()
+        transaction.add(R.id.frameLayout, homeFragment, "HELLO")
+        transaction.commit()
+
+
+        SavedSetting.loadLocale(this)
         val sharedPreferences: SharedPreferences = getSharedPreferences("userAuth", Context.MODE_PRIVATE)
         userId = sharedPreferences.getString("cusomerID","").toString()
         bottomNavigationView = findViewById(R.id.buttomNav)
@@ -67,6 +72,10 @@ class HomeActivity : AppCompatActivity(),Communicator {
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.homeTab -> {
+                    val fm: FragmentManager = this.getSupportFragmentManager()
+                    for (i in 0 until fm.getBackStackEntryCount()) {
+                        fm.popBackStack()
+                    }
                     replaceFragmentWithoutAddToBackStack(homeFragment)
                     true
                 }
@@ -218,13 +227,18 @@ class HomeActivity : AppCompatActivity(),Communicator {
         bundle.putString("paymentMethod",paymentMethod)
         val confirmOrderFragment= ConfirmOrderFragment()
         confirmOrderFragment.arguments=bundle
-        replaceFragment(confirmOrderFragment)
+        val fm: FragmentManager = this.getSupportFragmentManager()
+        for (i in 1 until fm.getBackStackEntryCount()) {
+            fm.popBackStack()
+        }
+        replaceFragmentWithoutAddToBackStack(confirmOrderFragment)
         Log.i("TAG","order from activity $order")
     }
 
 
     override fun goToHome() {
-        replaceFragment(homeFragment)
+        bottomNavigationView.setSelectedItemId(R.id.homeTab)
+        //replaceFragment(homeFragment)
     }
 
     override fun goToProductDetails(id: Long) {

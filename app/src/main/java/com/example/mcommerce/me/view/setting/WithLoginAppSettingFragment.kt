@@ -42,6 +42,7 @@ class WithLoginAppSettingFragment : Fragment() {
     lateinit var txtLastAddress: TextView
     lateinit var txtSignOutText: TextView
 
+    lateinit var logoutCard:CardView
     lateinit var txtCurrency : TextView
     lateinit var txtUserEmail: TextView
     lateinit var currencySpinner: Spinner
@@ -152,11 +153,12 @@ class WithLoginAppSettingFragment : Fragment() {
         shareAppCard.setOnClickListener {
             shareOurApp()
         }
-        txtSignOutText.setOnClickListener {
+        logoutCard.setOnClickListener {
             val sharedPreferences: SharedPreferences =
                 context!!.getSharedPreferences("userAuth", Context.MODE_PRIVATE)
-            val editor =
-                requireContext().getSharedPreferences("userAuth", Context.MODE_PRIVATE).edit()
+            val editor = requireContext().getSharedPreferences("userAuth", Context.MODE_PRIVATE).edit()
+            val editor1 =
+                requireContext().getSharedPreferences("settings", Context.MODE_PRIVATE).edit()
             val isLogin = sharedPreferences.getBoolean("isLogin", true)
             if (isLogin == true) {
                 editor.remove("email")
@@ -165,8 +167,11 @@ class WithLoginAppSettingFragment : Fragment() {
                 editor.remove("lname")
                 editor.remove("phone")
                 editor.remove("cusomerID")
+                editor1.remove("currency_to")
                 editor.putBoolean("isLogin", false)
                 editor.commit()
+                editor1.commit()
+                requireActivity().finish()
                 startActivity(Intent(requireContext(), AuthActivity::class.java))
             }
         }
@@ -194,6 +199,7 @@ class WithLoginAppSettingFragment : Fragment() {
         txtSignOutText = view.findViewById(R.id.txtSignOutText)
         txtCurrency = view.findViewById(R.id.txtCurrency)
         currencySpinner = view.findViewById(R.id.currencySpinner)
+        logoutCard=view.findViewById(R.id.logoutCard)
     }
 
     fun replaceFragment(fragment: Fragment) {

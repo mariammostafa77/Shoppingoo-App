@@ -79,6 +79,7 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
     private lateinit var customerViewModelFactory: CustomerViewModelFactory
     lateinit var searchFactor: SearchViewModelFactory
     lateinit var searchViewModel: SearchViewModel
+    lateinit var tvCurrency:TextView
     private var  collectionId:String=""
     private var brandName:String=""
     private var subCategorySelected:String=""
@@ -134,11 +135,13 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
             val subTypeRecycle:RecyclerView=view.findViewById(R.id.subTypeRecycle)
             applayBtn=view.findViewById(R.id.applayBtn)
             priceSlider=view.findViewById(R.id.priceSlider)
+            tvCurrency=view.findViewById(R.id.tvCurrency)
             priceSlider.valueFrom = 0.0F
             if(CheckInternetConnectionFirstTime.checkForInternet(requireContext())){
                 val strPrice =  SavedSetting.getPrice(maxPrice.toString(), requireContext())
                 val delim = " "
                 val list = strPrice.split(delim)
+                tvCurrency.text=list[1]
                 priceSlider.valueTo =list[0].toFloat()
                 priceSlider.addOnChangeListener { rangeSlider, value, fromUser ->
                     priceSliderPrice= value.toDouble()

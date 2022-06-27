@@ -52,36 +52,47 @@
             app:layout_constraintTop_toBottomOf="@+id/shoppingCartProductTitle"
             />
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/shoppingCartProductPrice"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="4dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/shoppingCartProductPrice">
+
             <ImageView
                 android:id="@+id/shoppingCartIncreaseQuantity"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/plus"
-                />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/ShoppingCartProductQuantity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0"
                 android:layout_marginHorizontal="6dp"
-                android:textSize="23sp"
-                android:textStyle="bold"/>
+                android:text="0"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/shoppingCartDecreaseQuantity"
+                app:layout_constraintStart_toEndOf="@+id/shoppingCartIncreaseQuantity"
+                app:layout_constraintTop_toTopOf="@+id/shoppingCartIncreaseQuantity" />
+
             <ImageView
                 android:id="@+id/shoppingCartDecreaseQuantity"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/minus"
-                />
-        </LinearLayout>
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ImageView
             android:id="@+id/deleteProductImage"

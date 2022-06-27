@@ -161,9 +161,8 @@ class PaymentFragment : Fragment() {
         }
 
         btnApplyDiscount.setOnClickListener {
-            etCouponsField.onEditorAction(EditorInfo.IME_ACTION_DONE)
             if (CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
-
+                etCouponsField.onEditorAction(EditorInfo.IME_ACTION_DONE)
                 applyDiscount(it)
            }
             else{
@@ -249,34 +248,28 @@ class PaymentFragment : Fragment() {
     private fun applyDiscount(view: View) {
         var discountCode = etCouponsField.text.toString()
         couponsViewModel.getDiscountCoupons()
-        var validDiscount = false
         couponsViewModel.onlineDiscountCodes.observe(viewLifecycleOwner) { coupons ->
             if (coupons != null) {
                 for (i in 0..coupons.size - 1) {
                     if (coupons[i].code.equals(discountCode)) {
-                        validDiscount = true
+                        btnApplyDiscount.setText("Verified!")
+                        etCouponsField.setEnabled(false)
+                        discountCode = etCouponsField.text.toString()
+                        txtDiscountCount.text = (total * 0.1).toString()
+                        total = total.toDouble() - txtDiscountCount.text.toString().toDouble()
+                        val df = DecimalFormat("#.##")
+                        df.roundingMode = RoundingMode.UP
+                        val roundoff = df.format(total)
+                        txtTotalText.text = SavedSetting.getPrice(roundoff.toString(), requireContext())
                         break
                     }else{
-                        validDiscount= false
+                        val snake = Snackbar.make(view, "Invalid Coupons.", Snackbar.LENGTH_LONG)
+                        snake.show()
                     }
                 }
             }
         }
-        if(validDiscount==true){
-            btnApplyDiscount.setText("Verified!")
-            etCouponsField.setEnabled(false)
-            discountCode = etCouponsField.text.toString()
-            txtDiscountCount.text = (total * 0.1).toString()
-            total = total.toDouble() - txtDiscountCount.text.toString().toDouble()
-            val df = DecimalFormat("#.##")
-            df.roundingMode = RoundingMode.UP
-            val roundoff = df.format(total)
-            txtTotalText.text = SavedSetting.getPrice(roundoff.toString(), requireContext())
-        }else{
-            val snake = Snackbar.make(view, "Invalid Coupons.", Snackbar.LENGTH_LONG)
-            snake.show()
 
-        }
     }
     /// Stripe Methods
     fun onPaymentSheetResult(paymentSheetResult: PaymentSheetResult) {

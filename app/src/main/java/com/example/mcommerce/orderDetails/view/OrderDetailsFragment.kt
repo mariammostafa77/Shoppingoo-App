@@ -2,6 +2,7 @@ package com.example.mcommerce.orderDetails.view
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -27,6 +28,7 @@ class OrderDetailsFragment : Fragment() {
     private lateinit var orderItemsAdapter: OrderItemsAdapter
     private lateinit var communicator:Communicator
     private lateinit var orderDetailsBackIcon:ImageView
+    private lateinit var tvOrderId:TextView
 
     lateinit var selectedOrder: Order
 
@@ -65,7 +67,7 @@ class OrderDetailsFragment : Fragment() {
 
         val amount = SavedSetting.getPrice(selectedOrder.current_total_price.toString(), requireContext())
         tvOrderTotalPrice.text = amount
-
+        tvOrderId.text= selectedOrder.id.toString()
         orderItemsAdapter.setUpdatedData(selectedOrder.line_items!!,requireContext(),communicator)
 
         return view
@@ -75,6 +77,8 @@ class OrderDetailsFragment : Fragment() {
         tvOrderCreatedAt=view.findViewById(R.id.tvOrderCreatedAt)
         orderItemsRecycle=view.findViewById(R.id.orderItemsRecycle)
         tvOrderTotalPrice=view.findViewById(R.id.tvOrderTotalPrice)
+        tvOrderId=view.findViewById(R.id.tvOrderId)
         orderDetailsBackIcon=view.findViewById(R.id.orderDetailsBackIcon)
     }
+
 }

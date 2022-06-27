@@ -131,6 +131,7 @@ class RegisterFormFragment : Fragment() {
                             )
                             editor.putBoolean("isLogin", true)
                             editor.commit()
+                            requireActivity().finish()
                             startActivity(Intent(requireContext(), HomeActivity::class.java))
 
                         } else {
