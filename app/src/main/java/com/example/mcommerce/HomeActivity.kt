@@ -195,7 +195,7 @@ class HomeActivity : AppCompatActivity(),Communicator {
         bundle.putSerializable("line_items",lineItems)
         bundle.putSerializable("order_price",orderPrices)
         paymentAddressFragment.arguments = bundle
-        replaceFragment(paymentAddressFragment)
+        replaceFragmentWithoutAddToBackStack(paymentAddressFragment)
     }
 
     override fun goToPaymentFromAddress(selectedAddress: Addresse , lineItems: ArrayList<LineItem> ,orderPrices: ArrayList<OrderPrices>){
@@ -262,8 +262,6 @@ class HomeActivity : AppCompatActivity(),Communicator {
         val bundle: Bundle? = intent.extras
         if (bundle != null) {
             val userAdress = intent.getStringArrayListExtra("userAddress")
-            Log.i("Testttt","from Home Activity ${userAdress?.get(0)}")
-
             val mBundle = Bundle()
             val addressFragment = AddNewAddressFragment()
             mBundle.putStringArrayList("adress",userAdress)

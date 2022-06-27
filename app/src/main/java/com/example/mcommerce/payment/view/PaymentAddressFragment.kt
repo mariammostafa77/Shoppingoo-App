@@ -31,6 +31,7 @@ import com.example.mcommerce.model.Repository
 import com.example.mcommerce.network.AppClient
 import com.example.mcommerce.network.CheckInternetConnectionFirstTime
 import com.example.mcommerce.network.InternetConnectionChecker
+import com.google.android.material.snackbar.Snackbar
 
 class PaymentAddressFragment : Fragment(), PaymentAddressClickListener {
 
@@ -119,14 +120,21 @@ class PaymentAddressFragment : Fragment(), PaymentAddressClickListener {
         }
 
         btnContinueToPayment.setOnClickListener {
-            myDetailsFlag=0
-            val bundle=Bundle()
-            val paymentFragment = PaymentFragment()
-            bundle.putSerializable("selectedAddress", selectedAddressFromAdapter)
-            bundle.putSerializable("lineItems",lineItems)
-            bundle.putSerializable("orderPrice",orderPrices)
-            paymentFragment.arguments=bundle
-            replaceFragment(paymentFragment)
+            if(selectedAddressFromAdapter.city.isNullOrEmpty()){
+                var snake = Snackbar.make(view, "Please select address", Snackbar.LENGTH_LONG)
+                snake.show()
+            }
+            else{
+                myDetailsFlag=0
+                val bundle=Bundle()
+                val paymentFragment = PaymentFragment()
+                bundle.putSerializable("selectedAddress", selectedAddressFromAdapter)
+                bundle.putSerializable("lineItems",lineItems)
+                bundle.putSerializable("orderPrice",orderPrices)
+                paymentFragment.arguments=bundle
+                replaceFragment(paymentFragment)
+            }
+
         }
         return view
     }
