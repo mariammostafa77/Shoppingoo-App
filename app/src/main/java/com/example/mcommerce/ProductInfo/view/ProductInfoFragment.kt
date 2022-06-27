@@ -186,20 +186,9 @@ class ProductInfoFragment : Fragment() {
         )
         specificProductsViewModel =
             ViewModelProvider(this, specificProductsFactory).get(ProductInfoViewModel::class.java)
-        internetConnectionChecker = InternetConnectionChecker(requireContext())
-        internetConnectionChecker.observe(this, { isConnected ->
-            if (isConnected) {
-                specificProductsViewModel.getSpecificProducts(productID.toString())
-                specificProductsViewModel.getFavProducts()
-            } else {
-                var snake = Snackbar.make(
-                    view,
-                    "Ops! You Lost internet connection!!!",
-                    Snackbar.LENGTH_LONG
-                )
-                snake.show()
-            }
-        })
+        specificProductsViewModel.getSpecificProducts(productID.toString())
+        specificProductsViewModel.getFavProducts()
+
 
         specificProductsViewModel.onlineSpecificProducts.observe(viewLifecycleOwner) { product ->
             allProducts.clear()
@@ -270,8 +259,6 @@ class ProductInfoFragment : Fragment() {
             }
 
         }
-
-
         loadData()
         btnAddToCard.setOnClickListener {
             var index = 0
@@ -403,7 +390,6 @@ class ProductInfoFragment : Fragment() {
                         specificProductsViewModel.deleteFavProduct(allFavProducts.get(productIndex).id.toString())
                         specificProductsViewModel.selectedItem.observe(viewLifecycleOwner) { response ->
                             if (response.isSuccessful) {
-
                                 var snake =
                                     Snackbar.make(view, "Deleted Success", Snackbar.LENGTH_LONG)
                                 snake.show()
@@ -510,14 +496,8 @@ class ProductInfoFragment : Fragment() {
             requireContext().getSharedPreferences("userAuth", AppCompatActivity.MODE_PRIVATE)
         val customerEmail = sharedPreferences.getString("email", "").toString()
         val noteStatus = "fav"
-        internetConnectionChecker = InternetConnectionChecker(requireContext())
-        internetConnectionChecker.observe(this, { isConnected ->
-            if (isConnected) {
-                specificProductsViewModel.getFavProducts()
-            } else {
 
-            }
-        })
+        specificProductsViewModel.getFavProducts()
 
         allFavProducts.clear()
         specificProductsViewModel.onlineFavProduct.observe(viewLifecycleOwner) { allDraftProducts ->

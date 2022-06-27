@@ -297,22 +297,22 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
                 true
             }
             1 -> {
-                collectionId="273053712523"
+                collectionId="274329436299"
                 onTabSelected(brandName,collectionId)
                 true
             }
             2 -> {
-                collectionId="273053679755"
+                collectionId="274329403531"
                 onTabSelected(brandName,collectionId)
                 true
             }
             3 -> {
-                collectionId="273053745291"
+                collectionId="274329469067"
                 onTabSelected(brandName,collectionId)
                 true
             }
             4 -> {
-                collectionId="273053778059"
+                collectionId="274329501835"
                 onTabSelected(brandName,collectionId)
                 true
             }
