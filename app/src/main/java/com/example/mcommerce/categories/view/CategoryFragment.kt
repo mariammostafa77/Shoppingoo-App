@@ -293,6 +293,7 @@ class CategoryFragment(var flag:Int) : Fragment() ,OnSubCategoryClickInterface, 
         when (tab.position) {
             0 -> {
                 collectionId=""
+
                 onTabSelected(brandName,collectionId)
                 true
             }
