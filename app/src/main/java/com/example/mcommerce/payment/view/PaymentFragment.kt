@@ -164,7 +164,7 @@ class PaymentFragment : Fragment() {
             if (CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
                 etCouponsField.onEditorAction(EditorInfo.IME_ACTION_DONE)
                 applyDiscount(it)
-           }
+            }
             else{
                 val snake = Snackbar.make(it, "Ops! You Lost internet connection!!!", Snackbar.LENGTH_LONG)
                 snake.show()
@@ -178,25 +178,25 @@ class PaymentFragment : Fragment() {
             if (CheckInternetConnectionFirstTime.checkForInternet(requireContext())) {
                 paymentProgressBar.isVisible = true
                 val request: StringRequest = object :
-                        StringRequest(Request.Method.POST, "https://api.stripe.com/v1/customers",
-                            Response.Listener { response ->
-                                try {
-                                    val jsonObject = JSONObject(response)
-                                    customerId = jsonObject.getString("id")
-                                    getEphericalKey(customerId)
-                                } catch (e: JSONException) {
-                                    e.printStackTrace()
-                                }
-                            },
-                            Response.ErrorListener {
-                            }) {
-                        @Throws(AuthFailureError::class)
-                        override fun getHeaders(): Map<String, String> {
-                            val header: HashMap<String, String> = HashMap<String, String>()
-                            header.put("Authorization", "Bearer $SECRET_KEY")
-                            return header
-                        }
+                    StringRequest(Request.Method.POST, "https://api.stripe.com/v1/customers",
+                        Response.Listener { response ->
+                            try {
+                                val jsonObject = JSONObject(response)
+                                customerId = jsonObject.getString("id")
+                                getEphericalKey(customerId)
+                            } catch (e: JSONException) {
+                                e.printStackTrace()
+                            }
+                        },
+                        Response.ErrorListener {
+                        }) {
+                    @Throws(AuthFailureError::class)
+                    override fun getHeaders(): Map<String, String> {
+                        val header: HashMap<String, String> = HashMap<String, String>()
+                        header.put("Authorization", "Bearer $SECRET_KEY")
+                        return header
                     }
+                }
                 val requestQueue = Volley.newRequestQueue(requireContext())
                 requestQueue.add(request)
             }else{
@@ -217,7 +217,6 @@ class PaymentFragment : Fragment() {
                     Snackbar.make(it, "Ops! You Lost internet connection!!!", Snackbar.LENGTH_LONG)
                 snake.show()
             }
-
         }
         return view
     }
@@ -250,15 +249,16 @@ class PaymentFragment : Fragment() {
         couponsViewModel.getDiscountCoupons()
         couponsViewModel.onlineDiscountCodes.observe(viewLifecycleOwner) { coupons ->
             if (coupons != null) {
+                val df = DecimalFormat("#.##")
+                df.roundingMode = RoundingMode.UP
                 for (i in 0..coupons.size - 1) {
                     if (coupons[i].code.equals(discountCode)) {
                         btnApplyDiscount.setText("Verified!")
                         etCouponsField.setEnabled(false)
                         discountCode = etCouponsField.text.toString()
-                        txtDiscountCount.text = (total * 0.1).toString()
+                        val roundoff1 = df.format(total * 0.1)
+                        txtDiscountCount.text = roundoff1
                         total = total.toDouble() - txtDiscountCount.text.toString().toDouble()
-                        val df = DecimalFormat("#.##")
-                        df.roundingMode = RoundingMode.UP
                         val roundoff = df.format(total)
                         txtTotalText.text = SavedSetting.getPrice(roundoff.toString(), requireContext())
                         break
