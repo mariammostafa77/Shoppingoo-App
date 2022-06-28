@@ -386,6 +386,7 @@ class PaymentFragment : Fragment() {
                     param.put("amount", "${list.get(0)}${list.get(1)}0")
                     param.put("currency", loadCurrency(requireContext()))
                     param.put("automatic_payment_methods[enabled]", "true")
+
                     return param
                 }
             }
